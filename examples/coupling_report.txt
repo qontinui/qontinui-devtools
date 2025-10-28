@@ -1,0 +1,371 @@
+================================================================================
+COUPLING & COHESION ANALYSIS REPORT
+================================================================================
+
+COUPLING METRICS
+--------------------------------------------------------------------------------
+
+Module: qontinui.state_execution_api
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/state_execution_api.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 9
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: GOOD
+
+Module: qontinui.model.state.state
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/model/state/state.py
+  Afferent Coupling (Ca): 14
+  Efferent Coupling (Ce): 9
+  Instability (I): 0.391
+  Abstractness (A): 0.000
+  Distance from Main: 0.609
+  Score: POOR
+
+Module: qontinui.model.state.state_store
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/model/state/state_store.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 8
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: GOOD
+
+Module: qontinui.exceptions
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/exceptions.py
+  Afferent Coupling (Ca): 2
+  Efferent Coupling (Ce): 7
+  Instability (I): 0.778
+  Abstractness (A): 0.000
+  Distance from Main: 0.222
+  Score: POOR
+
+Module: qontinui.api.execution_manager
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/api/execution_manager.py
+  Afferent Coupling (Ca): 6
+  Efferent Coupling (Ce): 7
+  Instability (I): 0.538
+  Abstractness (A): 0.000
+  Distance from Main: 0.462
+  Score: POOR
+
+Module: qontinui.find.find
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/find/find.py
+  Afferent Coupling (Ca): 1
+  Efferent Coupling (Ce): 7
+  Instability (I): 0.875
+  Abstractness (A): 0.000
+  Distance from Main: 0.125
+  Score: GOOD
+
+Module: qontinui.persistence.test_refactoring
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/persistence/test_refactoring.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 7
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: GOOD
+
+Module: qontinui.config.models.action
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/config/models/action.py
+  Afferent Coupling (Ca): 1
+  Efferent Coupling (Ce): 7
+  Instability (I): 0.875
+  Abstractness (A): 0.000
+  Distance from Main: 0.125
+  Score: GOOD
+
+Module: qontinui.navigation_api
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/navigation_api.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 6
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: GOOD
+
+Module: qontinui.actions.action
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/actions/action.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 6
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: GOOD
+
+Module: qontinui.persistence.storage
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/persistence/storage.py
+  Afferent Coupling (Ca): 1
+  Efferent Coupling (Ce): 6
+  Instability (I): 0.857
+  Abstractness (A): 0.000
+  Distance from Main: 0.143
+  Score: GOOD
+
+Module: qontinui.runner.dsl.statements.statement
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/runner/dsl/statements/statement.py
+  Afferent Coupling (Ca): 6
+  Efferent Coupling (Ce): 6
+  Instability (I): 0.500
+  Abstractness (A): 0.000
+  Distance from Main: 0.500
+  Score: POOR
+
+Module: qontinui.test_migration.validation.coverage_tracker
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/test_migration/validation/coverage_tracker.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 6
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: GOOD
+
+Module: qontinui.annotations.annotation_processor
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/annotations/annotation_processor.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 5
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: EXCELLENT
+
+Module: qontinui.api.execution_controller
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/api/execution_controller.py
+  Afferent Coupling (Ca): 1
+  Efferent Coupling (Ce): 5
+  Instability (I): 0.833
+  Abstractness (A): 0.000
+  Distance from Main: 0.167
+  Score: GOOD
+
+Module: qontinui.config.state_loader
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/config/state_loader.py
+  Afferent Coupling (Ca): 1
+  Efferent Coupling (Ce): 5
+  Instability (I): 0.833
+  Abstractness (A): 0.000
+  Distance from Main: 0.167
+  Score: GOOD
+
+Module: qontinui.multistate_integration.enhanced_transition_executor
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/multistate_integration/enhanced_transition_executor.py
+  Afferent Coupling (Ca): 1
+  Efferent Coupling (Ce): 5
+  Instability (I): 0.833
+  Abstractness (A): 0.000
+  Distance from Main: 0.167
+  Score: GOOD
+
+Module: qontinui.navigation.transition_executor
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/navigation/transition_executor.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 5
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: EXCELLENT
+
+Module: qontinui.test_migration.orchestrator
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/test_migration/orchestrator.py
+  Afferent Coupling (Ca): 2
+  Efferent Coupling (Ce): 5
+  Instability (I): 0.714
+  Abstractness (A): 0.000
+  Distance from Main: 0.286
+  Score: FAIR
+
+Module: qontinui.test_migration.test_system
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/test_migration/test_system.py
+  Afferent Coupling (Ca): 0
+  Efferent Coupling (Ce): 5
+  Instability (I): 1.000
+  Abstractness (A): 0.000
+  Distance from Main: 0.000
+  Score: EXCELLENT
+
+
+COHESION METRICS
+--------------------------------------------------------------------------------
+
+Class: ActionInterface
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/actions/action_interface.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: Key
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/actions/keys.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 5.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: ResultExtractor
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/actions/result_extractors.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 8.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: ResultMerger
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/actions/result_mergers.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 3.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: VerificationOptions
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/actions/verification_options.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: QontinuiSettings
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/config/settings.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 1.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: ExecutionController
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/control/execution_controller.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 10.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: DiagnosticReporter
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/diagnostic_reporter.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 8.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: DiagnosticStrategy
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/diagnostic_strategies.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: EnvironmentStrategy
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/diagnostic_strategies.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: PathConfigurationStrategy
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/diagnostic_strategies.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: DirectoryStructureStrategy
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/diagnostic_strategies.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: ErrorCategorizer
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/error_categorizer.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 4.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: FixSuggester
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/error_categorizer.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: PathValidator
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/image_validator.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 3.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: DirectoryAnalyzer
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/diagnostics/image_validator.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 3.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: OutputResolver
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/execution/output_resolver.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 5.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: StateFactory
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/factory/state_factory.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 3.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: Qontinui
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/fluent/qontinui.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+Class: HALContainer
+  File: /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/hal/container.py
+  LCOM: 1.000 (lower is better)
+  LCOM4: 2.0 (1 is ideal)
+  TCC: 0.000 (higher is better)
+  LCC: 0.000 (higher is better)
+  Score: POOR
+
+
+SUMMARY STATISTICS
+--------------------------------------------------------------------------------
+
+Modules analyzed: 780
+Average Efferent Coupling: 0.92
+Average Afferent Coupling: 0.90
+Average Instability: 0.373
+Average Distance from Main: 0.608
+
+⚠️  539 modules with poor coupling
+
+Classes analyzed: 1222
+Average LCOM: 0.245
+Average LCOM4: 1.78
+Average TCC: 0.652
+
+⚠️  315 classes with poor cohesion
+
+================================================================================

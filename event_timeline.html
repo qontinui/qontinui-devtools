@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Event Timeline - Qontinui DevTools</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .timeline {
+            margin-top: 20px;
+        }
+
+        .trace-row {
+            fill: #4CAF50;
+            opacity: 0.8;
+        }
+
+        .trace-row:hover {
+            opacity: 1;
+        }
+
+        .trace-row.incomplete {
+            fill: #f44336;
+        }
+
+        .axis text {
+            font-size: 11px;
+        }
+
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .checkpoint-marker {
+            fill: #2196F3;
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 12px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Event Timeline</h1>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="timeline" id="timeline"></div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color" style="background: #4CAF50;"></span>
+                <span>Completed</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #f44336;"></span>
+                <span>Incomplete</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #2196F3;"></span>
+                <span>Checkpoint</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const traces = [{"event_id": "evt_000", "event_type": "drag", "created_at": 1761650376.3922396, "completed": true, "total_latency": 0.10996174812316895, "checkpoints": [{"name": "trace_start", "timestamp": 1761650376.3922465, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650376.3922572, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650376.394257, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650376.397828, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650376.406124, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 2}}, {"name": "hal_call", "timestamp": 1761650376.4880948, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=348, y=745"}}, {"name": "hal_complete", "timestamp": 1761650376.48957, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650376.4964628, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650376.4978275, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650376.500813, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650376.5021846, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_001", "event_type": "keypress", "created_at": 1761650376.5123992, "completed": true, "total_latency": 0.09051203727722168, "checkpoints": [{"name": "trace_start", "timestamp": 1761650376.5124147, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650376.5124242, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650376.5153377, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650376.5175788, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650376.5257041, "thread_id": 135939183090560, "metadata": {"action_type": "keypress", "queue_depth": 1}}, {"name": "hal_call", "timestamp": 1761650376.5922542, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1620, y=599"}}, {"name": "hal_complete", "timestamp": 1761650376.5956037, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650376.5979946, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650376.60001, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650376.6013868, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650376.602908, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_002", "event_type": "keypress", "created_at": 1761650376.6130958, "completed": true, "total_latency": 0.12364029884338379, "checkpoints": [{"name": "trace_start", "timestamp": 1761650376.6131134, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650376.6131253, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650376.615276, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650376.6195786, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650376.6319213, "thread_id": 135939183090560, "metadata": {"action_type": "keypress", "queue_depth": 3}}, {"name": "hal_call", "timestamp": 1761650376.7205129, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=553, y=955"}}, {"name": "hal_complete", "timestamp": 1761650376.7231185, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650376.7307158, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650376.7323265, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650376.734839, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650376.7367449, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_003", "event_type": "keypress", "created_at": 1761650376.7470183, "completed": true, "total_latency": 0.060390472412109375, "checkpoints": [{"name": "trace_start", "timestamp": 1761650376.747034, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650376.747044, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650376.749773, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650376.75338, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650376.7631426, "thread_id": 135939183090560, "metadata": {"action_type": "keypress", "queue_depth": 2}}, {"name": "hal_call", "timestamp": 1761650376.7964296, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=649, y=731"}}, {"name": "hal_complete", "timestamp": 1761650376.7998707, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650376.802694, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650376.8046327, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650376.8059769, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650376.8074152, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_004", "event_type": "drag", "created_at": 1761650376.8175788, "completed": true, "total_latency": 0.058073997497558594, "checkpoints": [{"name": "trace_start", "timestamp": 1761650376.8175938, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650376.817604, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650376.8187866, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650376.8209543, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650376.8274536, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 1}}, {"name": "hal_call", "timestamp": 1761650376.8632061, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=902, y=972"}}, {"name": "hal_complete", "timestamp": 1761650376.8650954, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650376.8692496, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650376.8715708, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650376.8735409, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650376.8756516, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_005", "event_type": "drag", "created_at": 1761650376.8859763, "completed": true, "total_latency": 0.10907578468322754, "checkpoints": [{"name": "trace_start", "timestamp": 1761650376.8859942, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650376.886005, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650376.8887603, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650376.8933432, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650376.9081914, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 4}}, {"name": "hal_call", "timestamp": 1761650376.9796915, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1074, y=51"}}, {"name": "hal_complete", "timestamp": 1761650376.9813364, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650376.988951, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650376.9913096, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650376.993176, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650376.995058, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_006", "event_type": "click", "created_at": 1761650377.0052772, "completed": true, "total_latency": 0.11816191673278809, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.005297, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.005308, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.0083728, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.0115497, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.0172236, "thread_id": 135939183090560, "metadata": {"action_type": "click", "queue_depth": 1}}, {"name": "hal_call", "timestamp": 1761650377.1094089, "thread_id": 135939183090560, "metadata": {"operation": "move_mouse", "target": "x=572, y=526"}}, {"name": "hal_complete", "timestamp": 1761650377.1135054, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.116351, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.1187825, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.1214116, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.1234522, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_007", "event_type": "drag", "created_at": 1761650377.133614, "completed": true, "total_latency": 0.10515069961547852, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.1336284, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.1336367, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.1363733, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.1409724, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.1489637, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 3}}, {"name": "hal_call", "timestamp": 1761650377.2229402, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1601, y=771"}}, {"name": "hal_complete", "timestamp": 1761650377.2251496, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.2314951, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.2342913, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.2372117, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.2387686, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_008", "event_type": "click", "created_at": 1761650377.2489572, "completed": true, "total_latency": 0.06392264366149902, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.2489746, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.2489867, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.251147, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.2552097, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.270054, "thread_id": 135939183090560, "metadata": {"action_type": "click", "queue_depth": 0}}, {"name": "hal_call", "timestamp": 1761650377.2974255, "thread_id": 135939183090560, "metadata": {"operation": "move_mouse", "target": "x=181, y=187"}}, {"name": "hal_complete", "timestamp": 1761650377.3008106, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.3070326, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.3097246, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.310836, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.312892, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_009", "event_type": "keypress", "created_at": 1761650377.323082, "completed": true, "total_latency": 0.10221982002258301, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.3231206, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.323131, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.3252285, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.3295069, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.338358, "thread_id": 135939183090560, "metadata": {"action_type": "keypress", "queue_depth": 2}}, {"name": "hal_call", "timestamp": 1761650377.415261, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1501, y=939"}}, {"name": "hal_complete", "timestamp": 1761650377.417641, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.4201643, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.421487, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.4236493, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.4253323, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_010", "event_type": "click", "created_at": 1761650377.4355125, "completed": true, "total_latency": 0.0866551399230957, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.435528, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.4355376, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.4376872, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.442497, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.457462, "thread_id": 135939183090560, "metadata": {"action_type": "click", "queue_depth": 3}}, {"name": "hal_call", "timestamp": 1761650377.5078416, "thread_id": 135939183090560, "metadata": {"operation": "move_mouse", "target": "x=1383, y=171"}}, {"name": "hal_complete", "timestamp": 1761650377.5125928, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.5165381, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.5178368, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.520434, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.5221708, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_011", "event_type": "keypress", "created_at": 1761650377.532427, "completed": true, "total_latency": 0.08857560157775879, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.5324392, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.532446, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.5348225, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.5378854, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.5505993, "thread_id": 135939183090560, "metadata": {"action_type": "keypress", "queue_depth": 0}}, {"name": "hal_call", "timestamp": 1761650377.6090553, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=82, y=529"}}, {"name": "hal_complete", "timestamp": 1761650377.6118736, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.6156082, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.6176848, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.6195495, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.62101, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_012", "event_type": "click", "created_at": 1761650377.6312268, "completed": true, "total_latency": 0.06748652458190918, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.6312394, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.6312582, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.6334772, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.6378388, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.6503377, "thread_id": 135939183090560, "metadata": {"action_type": "click", "queue_depth": 1}}, {"name": "hal_call", "timestamp": 1761650377.6837304, "thread_id": 135939183090560, "metadata": {"operation": "move_mouse", "target": "x=1691, y=598"}}, {"name": "hal_complete", "timestamp": 1761650377.68693, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.6933527, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.6953194, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.6974094, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.6987216, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_013", "event_type": "scroll", "created_at": 1761650377.7089984, "completed": true, "total_latency": 0.09378576278686523, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.7090201, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.7090554, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.7121937, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.7154818, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.727044, "thread_id": 135939183090560, "metadata": {"action_type": "scroll", "queue_depth": 4}}, {"name": "hal_call", "timestamp": 1761650377.7901754, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1163, y=334"}}, {"name": "hal_complete", "timestamp": 1761650377.793422, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.7959585, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.7985697, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.8016164, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.8027925, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_014", "event_type": "keypress", "created_at": 1761650377.812997, "completed": true, "total_latency": 0.049219369888305664, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.8130224, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.813039, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.8150089, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.8185897, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.8274524, "thread_id": 135939183090560, "metadata": {"action_type": "keypress", "queue_depth": 3}}, {"name": "hal_call", "timestamp": 1761650377.8494413, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=942, y=251"}}, {"name": "hal_complete", "timestamp": 1761650377.8514159, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.8568144, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.8596358, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.860842, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.8622372, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_015", "event_type": "drag", "created_at": 1761650377.872431, "completed": true, "total_latency": 0.07486462593078613, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.8724551, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.8724651, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.8739984, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.8779664, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.886002, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 0}}, {"name": "hal_call", "timestamp": 1761650377.9340088, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=774, y=816"}}, {"name": "hal_complete", "timestamp": 1761650377.9377778, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650377.9410594, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650377.9440114, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650377.9454966, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650377.9473104, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_016", "event_type": "drag", "created_at": 1761650377.9575298, "completed": true, "total_latency": 0.06251144409179688, "checkpoints": [{"name": "trace_start", "timestamp": 1761650377.9575489, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650377.957559, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650377.9597483, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650377.9644172, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650377.9713113, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 3}}, {"name": "hal_call", "timestamp": 1761650378.0032187, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1421, y=317"}}, {"name": "hal_complete", "timestamp": 1761650378.0063498, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650378.014278, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650378.017119, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650378.0182884, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650378.0200546, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_017", "event_type": "scroll", "created_at": 1761650378.0302198, "completed": true, "total_latency": 0.08891844749450684, "checkpoints": [{"name": "trace_start", "timestamp": 1761650378.0302393, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650378.030251, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650378.0329607, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650378.0353348, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650378.040577, "thread_id": 135939183090560, "metadata": {"action_type": "scroll", "queue_depth": 1}}, {"name": "hal_call", "timestamp": 1761650378.1021752, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1736, y=716"}}, {"name": "hal_complete", "timestamp": 1761650378.106845, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650378.1133654, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650378.1147938, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650378.117312, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650378.1191466, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_018", "event_type": "drag", "created_at": 1761650378.1293378, "completed": true, "total_latency": 0.08135342597961426, "checkpoints": [{"name": "trace_start", "timestamp": 1761650378.1293569, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650378.1293685, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650378.1312242, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650378.13595, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650378.1492512, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 2}}, {"name": "hal_call", "timestamp": 1761650378.1984236, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1315, y=1033"}}, {"name": "hal_complete", "timestamp": 1761650378.2003005, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650378.20314, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650378.205938, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650378.208844, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650378.2107005, "thread_id": 135939183090560, "metadata": {}}]}, {"event_id": "evt_019", "event_type": "drag", "created_at": 1761650378.2209198, "completed": true, "total_latency": 0.10708856582641602, "checkpoints": [{"name": "trace_start", "timestamp": 1761650378.2209377, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_emit", "timestamp": 1761650378.220948, "thread_id": 135939183090560, "metadata": {"component": "Button", "action": "click"}}, {"name": "tauri_receive", "timestamp": 1761650378.2225227, "thread_id": 135939183090560, "metadata": {"process": "main", "thread": "ipc_handler"}}, {"name": "python_receive", "timestamp": 1761650378.2265227, "thread_id": 135939183090560, "metadata": {"handler": "event_dispatcher"}}, {"name": "executor_start", "timestamp": 1761650378.2340226, "thread_id": 135939183090560, "metadata": {"action_type": "drag", "queue_depth": 0}}, {"name": "hal_call", "timestamp": 1761650378.311528, "thread_id": 135939183090560, "metadata": {"operation": "key_press", "target": "x=1352, y=325"}}, {"name": "hal_complete", "timestamp": 1761650378.3142204, "thread_id": 135939183090560, "metadata": {"status": "success"}}, {"name": "executor_complete", "timestamp": 1761650378.3200762, "thread_id": 135939183090560, "metadata": {}}, {"name": "python_send", "timestamp": 1761650378.3231483, "thread_id": 135939183090560, "metadata": {}}, {"name": "tauri_send", "timestamp": 1761650378.3261495, "thread_id": 135939183090560, "metadata": {}}, {"name": "frontend_receive", "timestamp": 1761650378.3280194, "thread_id": 135939183090560, "metadata": {}}]}];
+
+        // Calculate statistics
+        const stats = {
+            total: traces.length,
+            completed: traces.filter(t => t.completed).length,
+            avgLatency: traces.reduce((sum, t) => sum + t.total_latency, 0) / traces.length,
+            maxLatency: Math.max(...traces.map(t => t.total_latency))
+        };
+
+        // Render statistics
+        const statsContainer = d3.select('#stats');
+
+        statsContainer.append('div')
+            .attr('class', 'stat-card')
+            .html(`
+                <div class="stat-label">Total Events</div>
+                <div class="stat-value">${stats.total}</div>
+            `);
+
+        statsContainer.append('div')
+            .attr('class', 'stat-card')
+            .html(`
+                <div class="stat-label">Completed</div>
+                <div class="stat-value">${stats.completed}</div>
+            `);
+
+        statsContainer.append('div')
+            .attr('class', 'stat-card')
+            .html(`
+                <div class="stat-label">Avg Latency</div>
+                <div class="stat-value">${(stats.avgLatency * 1000).toFixed(2)}ms</div>
+            `);
+
+        statsContainer.append('div')
+            .attr('class', 'stat-card')
+            .html(`
+                <div class="stat-label">Max Latency</div>
+                <div class="stat-value">${(stats.maxLatency * 1000).toFixed(2)}ms</div>
+            `);
+
+        // Timeline visualization
+        const margin = {top: 20, right: 20, bottom: 50, left: 150};
+        const width = 1200 - margin.left - margin.right;
+        const height = Math.max(400, traces.length * 30) - margin.top - margin.bottom;
+
+        const svg = d3.select('#timeline')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        // Time scale
+        const minTime = Math.min(...traces.flatMap(t =>
+            t.checkpoints.map(c => c.timestamp)
+        ));
+        const maxTime = Math.max(...traces.flatMap(t =>
+            t.checkpoints.map(c => c.timestamp)
+        ));
+
+        const xScale = d3.scaleLinear()
+            .domain([0, (maxTime - minTime) * 1000])  // Convert to ms
+            .range([0, width]);
+
+        const yScale = d3.scaleBand()
+            .domain(traces.map((_, i) => i))
+            .range([0, height])
+            .padding(0.2);
+
+        // Axes
+        const xAxis = d3.axisBottom(xScale)
+            .ticks(10)
+            .tickFormat(d => `${d.toFixed(0)}ms`);
+
+        svg.append('g')
+            .attr('class', 'axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(xAxis);
+
+        const yAxis = d3.axisLeft(yScale)
+            .tickFormat((_, i) => traces[i].event_id);
+
+        svg.append('g')
+            .attr('class', 'axis')
+            .call(yAxis);
+
+        // Tooltip
+        const tooltip = d3.select('#tooltip');
+
+        // Draw traces
+        traces.forEach((trace, i) => {
+            if (trace.checkpoints.length < 2) return;
+
+            const startTime = trace.checkpoints[0].timestamp;
+            const endTime = trace.checkpoints[trace.checkpoints.length - 1].timestamp;
+
+            // Trace bar
+            svg.append('rect')
+                .attr('class', `trace-row ${trace.completed ? '' : 'incomplete'}`)
+                .attr('x', xScale((startTime - minTime) * 1000))
+                .attr('y', yScale(i))
+                .attr('width', xScale((endTime - startTime) * 1000))
+                .attr('height', yScale.bandwidth())
+                .on('mouseover', function(event) {
+                    tooltip
+                        .style('opacity', 1)
+                        .html(`
+                            <strong>${trace.event_id}</strong><br>
+                            Type: ${trace.event_type}<br>
+                            Latency: ${(trace.total_latency * 1000).toFixed(2)}ms<br>
+                            Status: ${trace.completed ? 'Completed' : 'Incomplete'}
+                        `)
+                        .style('left', (event.pageX + 10) + 'px')
+                        .style('top', (event.pageY - 10) + 'px');
+                })
+                .on('mouseout', function() {
+                    tooltip.style('opacity', 0);
+                });
+
+            // Checkpoint markers
+            trace.checkpoints.forEach(checkpoint => {
+                svg.append('circle')
+                    .attr('class', 'checkpoint-marker')
+                    .attr('cx', xScale((checkpoint.timestamp - minTime) * 1000))
+                    .attr('cy', yScale(i) + yScale.bandwidth() / 2)
+                    .attr('r', 4)
+                    .on('mouseover', function(event) {
+                        tooltip
+                            .style('opacity', 1)
+                            .html(`
+                                <strong>${checkpoint.name}</strong><br>
+                                Time: ${((checkpoint.timestamp - startTime) * 1000).toFixed(2)}ms
+                            `)
+                            .style('left', (event.pageX + 10) + 'px')
+                            .style('top', (event.pageY - 10) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        tooltip.style('opacity', 0);
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

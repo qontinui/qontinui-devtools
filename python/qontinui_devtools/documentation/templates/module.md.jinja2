@@ -1,0 +1,155 @@
+# {{ module.name }}
+
+{% if module.summary %}
+{{ module.summary }}
+{% endif %}
+
+{% if module.description and module.description != module.summary %}
+{{ module.description }}
+{% endif %}
+
+**File:** `{{ module.file_path }}`
+
+---
+
+## Classes
+
+{% for cls in classes|sort(attribute='name') %}
+### `{{ cls.name }}`
+
+{% if cls.summary %}
+{{ cls.summary }}
+{% endif %}
+
+{% if cls.description and cls.description != cls.summary %}
+{{ cls.description }}
+{% endif %}
+
+{% if cls.decorators %}
+**Decorators:** {{ cls.decorators|join(', ') }}
+{% endif %}
+
+{% if cls.methods %}
+#### Methods
+
+{% for method in cls.methods|sort(attribute='name') %}
+{% if not method.name.startswith('_') or (method.name.startswith('__') and method.name.endswith('__')) %}
+##### `{{ method.signature }}`
+
+{% if method.is_property %}**Property**{% endif %}
+{% if method.is_async %}**Async**{% endif %}
+{% if method.is_classmethod %}**Class Method**{% endif %}
+{% if method.is_staticmethod %}**Static Method**{% endif %}
+
+{% if method.summary %}
+{{ method.summary }}
+{% endif %}
+
+{% if method.parameters %}
+**Parameters:**
+
+{% for param in method.parameters %}
+- `{{ param.name }}`{% if param.type_hint %} ({{ param.type_hint }}){% endif %}{% if param.description %}: {{ param.description }}{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if method.return_type or method.return_description %}
+**Returns:**
+
+{% if method.return_type %}- Type: `{{ method.return_type }}`{% endif %}
+{% if method.return_description %}- {{ method.return_description }}{% endif %}
+{% endif %}
+
+{% if method.raises %}
+**Raises:**
+
+{% for exc_type, exc_desc in method.raises %}
+- `{{ exc_type }}`: {{ exc_desc }}
+{% endfor %}
+{% endif %}
+
+{% if method.examples %}
+**Examples:**
+
+{% for example in method.examples %}
+```python
+{{ example.code }}
+```
+{% endfor %}
+{% endif %}
+
+{% if method.notes %}
+> **Note:** {{ method.notes|join(' ') }}
+{% endif %}
+
+{% if method.warnings %}
+> **Warning:** {{ method.warnings|join(' ') }}
+{% endif %}
+
+---
+
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+
+## Functions
+
+{% for func in functions|sort(attribute='name') %}
+### `{{ func.signature }}`
+
+{% if func.is_async %}**Async Function**{% endif %}
+
+{% if func.summary %}
+{{ func.summary }}
+{% endif %}
+
+{% if func.description and func.description != func.summary %}
+{{ func.description }}
+{% endif %}
+
+{% if func.parameters %}
+**Parameters:**
+
+{% for param in func.parameters %}
+- `{{ param.name }}`{% if param.type_hint %} ({{ param.type_hint }}){% endif %}{% if param.description %}: {{ param.description }}{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if func.return_type or func.return_description %}
+**Returns:**
+
+{% if func.return_type %}- Type: `{{ func.return_type }}`{% endif %}
+{% if func.return_description %}- {{ func.return_description }}{% endif %}
+{% endif %}
+
+{% if func.raises %}
+**Raises:**
+
+{% for exc_type, exc_desc in func.raises %}
+- `{{ exc_type }}`: {{ exc_desc }}
+{% endfor %}
+{% endif %}
+
+{% if func.examples %}
+**Examples:**
+
+{% for example in func.examples %}
+```python
+{{ example.code }}
+```
+{% endfor %}
+{% endif %}
+
+{% if func.notes %}
+> **Note:** {{ func.notes|join(' ') }}
+{% endif %}
+
+{% if func.warnings %}
+> **Warning:** {{ func.warnings|join(' ') }}
+{% endif %}
+
+---
+
+{% endfor %}

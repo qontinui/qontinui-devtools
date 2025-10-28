@@ -1,0 +1,256 @@
+# GitLab CI/CD Configuration Example for qontinui-devtools
+# Copy this file to .gitlab-ci.yml and customize as needed
+
+stages:
+  - setup
+  - test
+  - analyze
+  - report
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  QONTINUI_OUTPUT_DIR: "analysis-results"
+
+# Cache pip packages
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+# Job template for Python setup
+.python-setup:
+  image: python:3.11
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install qontinui-devtools
+    - qontinui-devtools --version
+    - mkdir -p $QONTINUI_OUTPUT_DIR
+
+# Circular Dependency Analysis
+circular-dependencies:
+  extends: .python-setup
+  stage: analyze
+  script:
+    - |
+      qontinui-devtools import-cmd check . \
+        --output $QONTINUI_OUTPUT_DIR/circular-deps.json \
+        --format json
+    - |
+      # Count and display results
+      CYCLE_COUNT=$(python -c "import json; data=json.load(open('$QONTINUI_OUTPUT_DIR/circular-deps.json')); print(len(data.get('cycles', [])))")
+      echo "Found $CYCLE_COUNT circular dependencies"
+  artifacts:
+    paths:
+      - $QONTINUI_OUTPUT_DIR/circular-deps.json
+    reports:
+      dotenv: $QONTINUI_OUTPUT_DIR/circular-deps.env
+    expire_in: 1 week
+  allow_failure: true
+
+# God Class Detection
+god-classes:
+  extends: .python-setup
+  stage: analyze
+  script:
+    - |
+      qontinui-devtools architecture god-classes . \
+        --min-lines 500 \
+        --min-methods 30 \
+        --output $QONTINUI_OUTPUT_DIR/god-classes.json \
+        --format json
+    - |
+      # Count and display results
+      GOD_COUNT=$(python -c "import json; data=json.load(open('$QONTINUI_OUTPUT_DIR/god-classes.json')); print(len(data.get('god_classes', [])))")
+      echo "Found $GOD_COUNT god classes"
+  artifacts:
+    paths:
+      - $QONTINUI_OUTPUT_DIR/god-classes.json
+    expire_in: 1 week
+  allow_failure: true
+
+# Race Condition Detection
+race-conditions:
+  extends: .python-setup
+  stage: analyze
+  script:
+    - |
+      qontinui-devtools concurrency check . \
+        --output $QONTINUI_OUTPUT_DIR/race-conditions.json \
+        --format json
+    - |
+      # Count critical races
+      CRITICAL_COUNT=$(python -c "import json; data=json.load(open('$QONTINUI_OUTPUT_DIR/race-conditions.json')); print(len([r for r in data.get('races', []) if r.get('severity') == 'critical']))")
+      echo "Found $CRITICAL_COUNT critical race conditions"
+  artifacts:
+    paths:
+      - $QONTINUI_OUTPUT_DIR/race-conditions.json
+    expire_in: 1 week
+  allow_failure: true
+
+# Complexity Analysis
+complexity-analysis:
+  extends: .python-setup
+  stage: analyze
+  script:
+    - pip install radon
+    - |
+      radon cc . -a -j > $QONTINUI_OUTPUT_DIR/complexity.json || echo '{"average_complexity": 0, "functions": []}' > $QONTINUI_OUTPUT_DIR/complexity.json
+    - |
+      # Display average complexity
+      AVG_COMPLEXITY=$(python -c "import json; data=json.load(open('$QONTINUI_OUTPUT_DIR/complexity.json')); print(data.get('average_complexity', 0))")
+      echo "Average complexity: $AVG_COMPLEXITY"
+  artifacts:
+    paths:
+      - $QONTINUI_OUTPUT_DIR/complexity.json
+    expire_in: 1 week
+  allow_failure: true
+
+# Quality Gates Check
+quality-gates:
+  extends: .python-setup
+  stage: report
+  dependencies:
+    - circular-dependencies
+    - god-classes
+    - race-conditions
+    - complexity-analysis
+  script:
+    - |
+      python -m qontinui_devtools.ci.quality_gates \
+        --circular-deps $QONTINUI_OUTPUT_DIR/circular-deps.json \
+        --god-classes $QONTINUI_OUTPUT_DIR/god-classes.json \
+        --race-conditions $QONTINUI_OUTPUT_DIR/race-conditions.json \
+        --complexity $QONTINUI_OUTPUT_DIR/complexity.json \
+        --max-circular 0 \
+        --max-god-classes 5 \
+        --max-race-critical 0 \
+        --max-race-high 10 \
+        --max-avg-complexity 10
+  allow_failure: false
+
+# Generate Comprehensive Report
+generate-report:
+  extends: .python-setup
+  stage: report
+  dependencies:
+    - circular-dependencies
+    - god-classes
+    - race-conditions
+  script:
+    - |
+      qontinui-devtools analyze . \
+        --output $QONTINUI_OUTPUT_DIR/analysis-report.html \
+        --format html
+    - |
+      # Generate MR comment if in merge request context
+      if [ -n "$CI_MERGE_REQUEST_IID" ]; then
+        python -m qontinui_devtools.ci.pr_comment \
+          --circular-deps $QONTINUI_OUTPUT_DIR/circular-deps.json \
+          --god-classes $QONTINUI_OUTPUT_DIR/god-classes.json \
+          --race-conditions $QONTINUI_OUTPUT_DIR/race-conditions.json \
+          --pr-number $CI_MERGE_REQUEST_IID \
+          --pr-title "$CI_MERGE_REQUEST_TITLE" \
+          --output $QONTINUI_OUTPUT_DIR/mr-comment.md
+      fi
+  artifacts:
+    paths:
+      - $QONTINUI_OUTPUT_DIR/analysis-report.html
+      - $QONTINUI_OUTPUT_DIR/mr-comment.md
+    reports:
+      codequality: $QONTINUI_OUTPUT_DIR/codequality.json
+    expire_in: 30 days
+  allow_failure: true
+
+# Post Merge Request Comment (requires GitLab API token)
+post-mr-comment:
+  extends: .python-setup
+  stage: report
+  dependencies:
+    - generate-report
+  only:
+    - merge_requests
+  script:
+    - |
+      if [ -f "$QONTINUI_OUTPUT_DIR/mr-comment.md" ]; then
+        # Install curl for API calls
+        apt-get update && apt-get install -y curl
+
+        # Post comment to MR
+        COMMENT_BODY=$(cat $QONTINUI_OUTPUT_DIR/mr-comment.md | jq -Rs .)
+
+        curl --request POST \
+          --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+          --header "Content-Type: application/json" \
+          --data "{\"body\": $COMMENT_BODY}" \
+          "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
+      fi
+  allow_failure: true
+
+# Code Quality Report (GitLab Code Quality widget)
+code-quality:
+  extends: .python-setup
+  stage: report
+  dependencies:
+    - circular-dependencies
+    - god-classes
+    - race-conditions
+  script:
+    - |
+      # Convert results to GitLab Code Quality format
+      python - <<'EOF'
+      import json
+      from pathlib import Path
+
+      issues = []
+
+      # Load circular deps
+      circular_file = Path("$QONTINUI_OUTPUT_DIR/circular-deps.json")
+      if circular_file.exists():
+          data = json.loads(circular_file.read_text())
+          for cycle in data.get("cycles", []):
+              issues.append({
+                  "description": f"Circular dependency: {' -> '.join(cycle)}",
+                  "severity": "major",
+                  "fingerprint": hash(' -> '.join(cycle)),
+                  "location": {
+                      "path": cycle[0] if cycle else "unknown",
+                      "lines": {"begin": 1}
+                  }
+              })
+
+      # Load god classes
+      god_file = Path("$QONTINUI_OUTPUT_DIR/god-classes.json")
+      if god_file.exists():
+          data = json.loads(god_file.read_text())
+          for god_class in data.get("god_classes", []):
+              issues.append({
+                  "description": f"God class: {god_class['name']} ({god_class['line_count']} lines)",
+                  "severity": "minor",
+                  "fingerprint": hash(god_class['name']),
+                  "location": {
+                      "path": god_class.get('file_path', 'unknown'),
+                      "lines": {"begin": 1}
+                  }
+              })
+
+      # Write Code Quality report
+      Path("$QONTINUI_OUTPUT_DIR/codequality.json").write_text(json.dumps(issues, indent=2))
+      EOF
+  artifacts:
+    reports:
+      codequality: $QONTINUI_OUTPUT_DIR/codequality.json
+    expire_in: 1 week
+
+# Optional: Run on schedule for trend tracking
+schedule:quality-analysis:
+  extends: .python-setup
+  stage: analyze
+  only:
+    - schedules
+  script:
+    - echo "Running scheduled quality analysis..."
+    - qontinui-devtools analyze . --output scheduled-report.html
+  artifacts:
+    paths:
+      - scheduled-report.html
+    expire_in: 90 days

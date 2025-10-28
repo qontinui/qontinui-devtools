@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tree.package_name or 'Documentation' }} API Reference</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background: #ffffff;
+            --surface: #f8f9fa;
+            --text: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border: #e1e4e8;
+            --code-bg: #f6f8fa;
+            --link: #3498db;
+            --link-hover: #2980b9;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #ecf0f1;
+            --secondary-color: #3498db;
+            --background: #1a1a1a;
+            --surface: #2d2d2d;
+            --text: #ecf0f1;
+            --text-secondary: #95a5a6;
+            --border: #404040;
+            --code-bg: #2d2d2d;
+            --link: #5dade2;
+            --link-hover: #85c1e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-header {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .version {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--background);
+            color: var(--text);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list a {
+            color: var(--text);
+            text-decoration: none;
+            display: block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+
+        .nav-list a:hover {
+            background: var(--background);
+            color: var(--link);
+        }
+
+        /* Main content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--background);
+        }
+
+        /* Documentation items */
+        .doc-section {
+            margin-bottom: 50px;
+        }
+
+        .doc-section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .doc-item {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: var(--surface);
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .doc-item h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .signature {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        .description {
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .parameters, .returns, .raises, .examples {
+            margin-top: 20px;
+        }
+
+        .parameters h4, .returns h4, .raises h4, .examples h4 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .param-list, .raise-list {
+            list-style: none;
+            margin-left: 20px;
+        }
+
+        .param-list li, .raise-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .param-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+
+        .param-name, .exception-type {
+            font-family: 'Courier New', monospace;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .param-type {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .example-code {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin-top: 10px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-property {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .badge-async {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .badge-classmethod {
+            background: #f39c12;
+            color: white;
+        }
+
+        .badge-staticmethod {
+            background: #16a085;
+            color: white;
+        }
+
+        .notes, .warnings {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .notes {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .warnings {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        [data-theme="dark"] .notes {
+            background: #1e3a2a;
+            color: #a8e6b8;
+        }
+
+        [data-theme="dark"] .warnings {
+            background: #3a2f1e;
+            color: #ffd966;
+        }
+
+        /* Search results */
+        .search-results {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 5px;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: var(--background);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .search-result-type {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-left: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>{{ tree.package_name or 'Documentation' }}</h1>
+                {% if tree.version %}
+                <div class="version">Version {{ tree.version }}</div>
+                {% endif %}
+            </div>
+
+            <div style="position: relative;">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search documentation...">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
+            {% if tree.modules %}
+            <nav class="nav-section">
+                <h3>Modules</h3>
+                <ul class="nav-list">
+                    {% for name, module in tree.modules.items()|sort %}
+                    <li><a href="#module-{{ name }}">{{ name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% if tree.classes %}
+            <nav class="nav-section">
+                <h3>Classes</h3>
+                <ul class="nav-list">
+                    {% for name, cls in tree.classes.items()|sort %}
+                    <li><a href="#class-{{ name }}">{{ cls.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% if tree.functions %}
+            <nav class="nav-section">
+                <h3>Functions</h3>
+                <ul class="nav-list">
+                    {% for name, func in tree.functions.items()|sort %}
+                    <li><a href="#function-{{ name }}">{{ func.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+        </aside>
+
+        <main class="main-content">
+            <div class="header">
+                <h1>{{ tree.package_name or 'API Reference' }}</h1>
+                <p>Complete API documentation</p>
+            </div>
+
+            {% if tree.modules %}
+            <section class="doc-section">
+                <h2>Modules</h2>
+                {% for name, module in tree.modules.items()|sort %}
+                <div class="doc-item" id="module-{{ name }}">
+                    <h3>{{ module.name }}</h3>
+                    {% if module.summary %}
+                    <div class="description">{{ module.summary }}</div>
+                    {% endif %}
+                    {% if module.description and module.description != module.summary %}
+                    <div class="description">{{ module.description }}</div>
+                    {% endif %}
+                    <div class="param-type">{{ module.file_path }}</div>
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+            {% if tree.classes %}
+            <section class="doc-section">
+                <h2>Classes</h2>
+                {% for name, cls in tree.classes.items()|sort %}
+                <div class="doc-item" id="class-{{ name }}">
+                    <h3>{{ cls.name }}</h3>
+                    {% if cls.summary %}
+                    <div class="description">{{ cls.summary }}</div>
+                    {% endif %}
+                    {% if cls.description and cls.description != cls.summary %}
+                    <div class="description">{{ cls.description }}</div>
+                    {% endif %}
+
+                    {% if cls.methods %}
+                    <div class="parameters">
+                        <h4>Methods</h4>
+                        {% for method in cls.methods|sort(attribute='name') %}
+                        {% if not method.name.startswith('_') or method.name.startswith('__') and method.name.endswith('__') %}
+                        <div style="margin-top: 20px;">
+                            <div class="signature">
+                                {{ method.signature }}
+                                {% if method.is_property %}<span class="badge badge-property">property</span>{% endif %}
+                                {% if method.is_async %}<span class="badge badge-async">async</span>{% endif %}
+                                {% if method.is_classmethod %}<span class="badge badge-classmethod">classmethod</span>{% endif %}
+                                {% if method.is_staticmethod %}<span class="badge badge-staticmethod">staticmethod</span>{% endif %}
+                            </div>
+                            {% if method.summary %}
+                            <div class="description">{{ method.summary }}</div>
+                            {% endif %}
+
+                            {% if method.parameters %}
+                            <div class="parameters">
+                                <h4>Parameters</h4>
+                                <ul class="param-list">
+                                    {% for param in method.parameters %}
+                                    <li>
+                                        <span class="param-name">{{ param.name }}</span>
+                                        {% if param.type_hint %}<span class="param-type">({{ param.type_hint }})</span>{% endif %}
+                                        {% if param.description %} - {{ param.description }}{% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            {% if method.return_type or method.return_description %}
+                            <div class="returns">
+                                <h4>Returns</h4>
+                                {% if method.return_type %}<div class="param-type">{{ method.return_type }}</div>{% endif %}
+                                {% if method.return_description %}<div>{{ method.return_description }}</div>{% endif %}
+                            </div>
+                            {% endif %}
+
+                            {% if method.raises %}
+                            <div class="raises">
+                                <h4>Raises</h4>
+                                <ul class="raise-list">
+                                    {% for exc_type, exc_desc in method.raises %}
+                                    <li>
+                                        <span class="exception-type">{{ exc_type }}</span> - {{ exc_desc }}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            {% if method.examples %}
+                            <div class="examples">
+                                <h4>Examples</h4>
+                                {% for example in method.examples %}
+                                <div class="example-code">{{ example.code }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if cls.notes %}
+                    <div class="notes">
+                        <strong>Note:</strong> {{ cls.notes|join(', ') }}
+                    </div>
+                    {% endif %}
+
+                    {% if cls.warnings %}
+                    <div class="warnings">
+                        <strong>Warning:</strong> {{ cls.warnings|join(', ') }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+            {% if tree.functions %}
+            <section class="doc-section">
+                <h2>Functions</h2>
+                {% for name, func in tree.functions.items()|sort %}
+                <div class="doc-item" id="function-{{ name }}">
+                    <h3>{{ func.name }}</h3>
+                    <div class="signature">
+                        {{ func.signature }}
+                        {% if func.is_async %}<span class="badge badge-async">async</span>{% endif %}
+                    </div>
+                    {% if func.summary %}
+                    <div class="description">{{ func.summary }}</div>
+                    {% endif %}
+                    {% if func.description and func.description != func.summary %}
+                    <div class="description">{{ func.description }}</div>
+                    {% endif %}
+
+                    {% if func.parameters %}
+                    <div class="parameters">
+                        <h4>Parameters</h4>
+                        <ul class="param-list">
+                            {% for param in func.parameters %}
+                            <li>
+                                <span class="param-name">{{ param.name }}</span>
+                                {% if param.type_hint %}<span class="param-type">({{ param.type_hint }})</span>{% endif %}
+                                {% if param.description %} - {{ param.description }}{% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    {% if func.return_type or func.return_description %}
+                    <div class="returns">
+                        <h4>Returns</h4>
+                        {% if func.return_type %}<div class="param-type">{{ func.return_type }}</div>{% endif %}
+                        {% if func.return_description %}<div>{{ func.return_description }}</div>{% endif %}
+                    </div>
+                    {% endif %}
+
+                    {% if func.raises %}
+                    <div class="raises">
+                        <h4>Raises</h4>
+                        <ul class="raise-list">
+                            {% for exc_type, exc_desc in func.raises %}
+                            <li>
+                                <span class="exception-type">{{ exc_type }}</span> - {{ exc_desc }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    {% if func.examples %}
+                    <div class="examples">
+                        <h4>Examples</h4>
+                        {% for example in func.examples %}
+                        <div class="example-code">{{ example.code }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+        </main>
+    </div>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Search functionality
+        const searchBox = document.getElementById('searchBox');
+        const searchResults = document.getElementById('searchResults');
+
+        // Build search index from items
+        const allItems = {
+            {% for name, item in tree.all_items.items() %}
+            "{{ name }}": {
+                "name": "{{ item.name }}",
+                "type": "{{ item.type.value }}",
+                "qualified_name": "{{ item.qualified_name }}"
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        };
+
+        searchBox.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+
+            if (query.length < 2) {
+                searchResults.classList.remove('active');
+                return;
+            }
+
+            const matches = [];
+            for (const [name, item] of Object.entries(allItems)) {
+                if (name.toLowerCase().includes(query) ||
+                    item.name.toLowerCase().includes(query)) {
+                    matches.push(item);
+                }
+            }
+
+            if (matches.length > 0) {
+                searchResults.innerHTML = matches.slice(0, 10).map(item => `
+                    <div class="search-result-item" onclick="navigateTo('${item.type}-${item.qualified_name}')">
+                        <span class="search-result-name">${item.name}</span>
+                        <span class="search-result-type">${item.type}</span>
+                    </div>
+                `).join('');
+                searchResults.classList.add('active');
+            } else {
+                searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+                searchResults.classList.add('active');
+            }
+        });
+
+        function navigateTo(id) {
+            searchResults.classList.remove('active');
+            searchBox.value = '';
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Close search results when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchBox.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

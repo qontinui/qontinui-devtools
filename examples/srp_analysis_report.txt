@@ -1,0 +1,70 @@
+================================================================================
+SRP VIOLATION REPORT
+================================================================================
+
+Total violations: 1
+
+Critical: 1
+High:     0
+Medium:   0
+
+================================================================================
+
+CRITICAL SEVERITY VIOLATIONS
+--------------------------------------------------------------------------------
+
+Class: UserManager
+File:  /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/python/tests/fixtures/srp/multi_responsibility.py:4
+Responsibilities: 5
+
+  1. Data Access (6 methods, confidence: 0.42)
+     - get_user
+     - find_users
+     - fetch_user_data
+     - query_users_by_email
+     - retrieve_user_profile
+     ... and 1 more
+
+  2. Persistence (5 methods, confidence: 0.40)
+     - save_to_database
+     - load_from_cache
+     - store_in_cache
+     - persist_user_changes
+     - delete_user_data
+
+  3. Validation (4 methods, confidence: 0.41)
+     - validate_email
+     - check_password_strength
+     - verify_user_credentials
+     - assert_user_exists
+
+  4. Business Logic (4 methods, confidence: 0.39)
+     - calculate_user_score
+     - process_registration
+     - compute_user_rank
+     - execute_user_migration
+
+  5. Presentation (4 methods, confidence: 0.36)
+     - format_user_display
+     - render_profile
+     - display_user_summary
+     - show_user_stats
+
+Recommendation: Critical: UserManager has 5 distinct responsibilities. Consider splitting into multiple classes, each with a single, well-defined responsibility.
+
+Suggested Refactorings:
+  - Extract Data Access responsibility (6 methods) into a new class 'UserRepository'
+  - Extract Persistence responsibility (5 methods) into a new class 'UserPersister'
+  - Extract Validation responsibility (4 methods) into a new class 'UserValidator'
+  - Extract Business Logic responsibility (4 methods) into a new class 'UserService'
+  - Extract Presentation responsibility (4 methods) into a new class 'UserFormatter'
+  - Consider using a Facade or Coordinator pattern to manage interactions between the extracted classes
+
+--------------------------------------------------------------------------------
+
+================================================================================
+Analysis Statistics:
+  Files analyzed:   3
+  Classes analyzed: 3
+  Violations found: 1
+================================================================================

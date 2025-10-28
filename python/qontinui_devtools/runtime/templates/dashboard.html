@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qontinui Performance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f1419 100%);
+            color: #eee;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            min-height: 100vh;
+        }
+        .card {
+            background: linear-gradient(135deg, #16213e 0%, #0f1829 100%);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-top: 8px;
+        }
+        .metric-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        .status-good { color: #4ade80; }
+        .status-warn { color: #fbbf24; }
+        .status-error { color: #f87171; }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .status-indicator.connected {
+            background: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+        .status-indicator.disconnected {
+            background: #f87171;
+            box-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
+            animation: none;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .header-bar {
+            background: rgba(22, 33, 62, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px 28px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+        .secondary-metric {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+        .current-action {
+            font-size: 0.75rem;
+            color: #60a5fa;
+            margin-top: 4px;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="p-6">
+    <!-- Header -->
+    <div class="header-bar">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold mb-1">Qontinui Performance Dashboard</h1>
+                <p class="text-sm text-gray-400">Real-time system and application metrics</p>
+            </div>
+            <div class="flex items-center bg-black bg-opacity-30 px-4 py-2 rounded-lg">
+                <span class="status-indicator connected" id="connection-status"></span>
+                <span id="connection-text" class="font-medium">Connected</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Primary Metric Cards -->
+    <div class="grid grid-cols-4 gap-6 mb-6">
+        <div class="card">
+            <div class="metric-label">CPU Usage</div>
+            <div id="cpu-value" class="metric-value">0%</div>
+            <div class="secondary-metric">
+                <span id="thread-count">0</span> threads
+            </div>
+        </div>
+        <div class="card">
+            <div class="metric-label">Memory</div>
+            <div id="memory-value" class="metric-value">0 MB</div>
+            <div class="secondary-metric">
+                <span id="memory-percent">0.0</span>% used
+            </div>
+        </div>
+        <div class="card">
+            <div class="metric-label">Actions/min</div>
+            <div id="actions-value" class="metric-value">0</div>
+            <div class="secondary-metric">
+                Avg: <span id="avg-duration">0</span>ms
+            </div>
+        </div>
+        <div class="card">
+            <div class="metric-label">Success Rate</div>
+            <div id="success-rate" class="metric-value status-good">100%</div>
+            <div class="secondary-metric">
+                <span id="total-actions">0</span> total actions
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Metric Cards -->
+    <div class="grid grid-cols-4 gap-6 mb-6">
+        <div class="card">
+            <div class="metric-label">Action Queue</div>
+            <div id="action-queue" class="metric-value">0</div>
+            <div class="current-action" id="current-action">Idle</div>
+        </div>
+        <div class="card">
+            <div class="metric-label">Event Queue</div>
+            <div id="event-queue" class="metric-value">0</div>
+            <div class="secondary-metric">
+                <span id="events-processed">0</span> processed
+            </div>
+        </div>
+        <div class="card">
+            <div class="metric-label">Error Count</div>
+            <div id="error-count" class="metric-value">0</div>
+            <div class="secondary-metric">
+                <span id="events-failed">0</span> event failures
+            </div>
+        </div>
+        <div class="card">
+            <div class="metric-label">Processes</div>
+            <div id="process-count" class="metric-value">1</div>
+            <div class="secondary-metric">
+                Active processes
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-2 gap-6">
+        <div class="card">
+            <h3 class="text-lg font-bold mb-4">System Resources</h3>
+            <div class="chart-container">
+                <canvas id="systemChart"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <h3 class="text-lg font-bold mb-4">Action Performance</h3>
+            <div class="chart-container">
+                <canvas id="actionChart"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <h3 class="text-lg font-bold mb-4">Queue Depth</h3>
+            <div class="chart-container">
+                <canvas id="queueChart"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <h3 class="text-lg font-bold mb-4">Error Tracking</h3>
+            <div class="chart-container">
+                <canvas id="errorChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket connection management
+        let ws = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 10;
+        const reconnectDelay = 2000;
+
+        function connect() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+
+            console.log(`Connecting to ${wsUrl}`);
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                console.log('Connected to dashboard server');
+                reconnectAttempts = 0;
+                updateConnectionStatus(true);
+            };
+
+            ws.onclose = () => {
+                console.log('Disconnected from dashboard server');
+                updateConnectionStatus(false);
+
+                // Attempt reconnection
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    console.log(`Reconnecting... attempt ${reconnectAttempts}`);
+                    setTimeout(connect, reconnectDelay * reconnectAttempts);
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const metrics = JSON.parse(event.data);
+                    updateDashboard(metrics);
+                } catch (e) {
+                    console.error('Error parsing metrics:', e);
+                }
+            };
+        }
+
+        function updateConnectionStatus(connected) {
+            const indicator = document.getElementById('connection-status');
+            const text = document.getElementById('connection-text');
+
+            if (connected) {
+                indicator.className = 'status-indicator connected';
+                text.textContent = 'Connected';
+            } else {
+                indicator.className = 'status-indicator disconnected';
+                text.textContent = 'Disconnected';
+            }
+        }
+
+        // Chart configurations
+        const chartConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#eee',
+                        font: { size: 12 }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        color: '#999',
+                        font: { size: 11 }
+                    },
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                },
+                x: {
+                    ticks: {
+                        color: '#999',
+                        font: { size: 10 },
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 10
+                    },
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                }
+            }
+        };
+
+        // System chart (CPU & Memory)
+        const systemChart = new Chart(document.getElementById('systemChart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'CPU %',
+                        data: [],
+                        borderColor: '#4ade80',
+                        backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Memory %',
+                        data: [],
+                        borderColor: '#60a5fa',
+                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    ...chartConfig.scales,
+                    y: { ...chartConfig.scales.y, min: 0, max: 100 }
+                }
+            }
+        });
+
+        // Action chart
+        const actionChart = new Chart(document.getElementById('actionChart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Actions/min',
+                        data: [],
+                        borderColor: '#a78bfa',
+                        backgroundColor: 'rgba(167, 139, 250, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Avg Duration (ms)',
+                        data: [],
+                        borderColor: '#fbbf24',
+                        backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    y: {
+                        ...chartConfig.scales.y,
+                        position: 'left',
+                        title: { display: true, text: 'Actions/min', color: '#999' }
+                    },
+                    y1: {
+                        ...chartConfig.scales.y,
+                        position: 'right',
+                        title: { display: true, text: 'Duration (ms)', color: '#999' },
+                        grid: { display: false }
+                    },
+                    x: chartConfig.scales.x
+                }
+            }
+        });
+
+        // Queue chart
+        const queueChart = new Chart(document.getElementById('queueChart'), {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Action Queue',
+                        data: [],
+                        backgroundColor: 'rgba(167, 139, 250, 0.7)',
+                        borderColor: '#a78bfa',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Event Queue',
+                        data: [],
+                        backgroundColor: 'rgba(96, 165, 250, 0.7)',
+                        borderColor: '#60a5fa',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    ...chartConfig.scales,
+                    y: { ...chartConfig.scales.y, min: 0 }
+                }
+            }
+        });
+
+        // Error chart
+        const errorChart = new Chart(document.getElementById('errorChart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Error Count',
+                        data: [],
+                        borderColor: '#f87171',
+                        backgroundColor: 'rgba(248, 113, 113, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    ...chartConfig.scales,
+                    y: { ...chartConfig.scales.y, min: 0 }
+                }
+            }
+        });
+
+        // Update dashboard with new metrics
+        function updateDashboard(metrics) {
+            if (!metrics) return;
+
+            // Update system metrics
+            if (metrics.system) {
+                const cpuValue = document.getElementById('cpu-value');
+                cpuValue.textContent = `${metrics.system.cpu_percent.toFixed(1)}%`;
+
+                // Color code CPU usage
+                if (metrics.system.cpu_percent > 80) {
+                    cpuValue.className = 'metric-value status-error';
+                } else if (metrics.system.cpu_percent > 50) {
+                    cpuValue.className = 'metric-value status-warn';
+                } else {
+                    cpuValue.className = 'metric-value status-good';
+                }
+
+                document.getElementById('memory-value').textContent =
+                    `${metrics.system.memory_mb} MB`;
+                document.getElementById('memory-percent').textContent =
+                    `${metrics.system.memory_percent.toFixed(1)}`;
+                document.getElementById('thread-count').textContent =
+                    `${metrics.system.thread_count}`;
+                document.getElementById('process-count').textContent =
+                    `${metrics.system.process_count}`;
+            }
+
+            // Update action metrics
+            if (metrics.actions) {
+                document.getElementById('actions-value').textContent =
+                    `${metrics.actions.actions_per_minute.toFixed(1)}`;
+                document.getElementById('avg-duration').textContent =
+                    `${(metrics.actions.avg_duration * 1000).toFixed(1)}`;
+                document.getElementById('total-actions').textContent =
+                    `${metrics.actions.total_actions}`;
+
+                const successRate = metrics.actions.success_rate;
+                const successElem = document.getElementById('success-rate');
+                successElem.textContent = `${successRate.toFixed(1)}%`;
+
+                // Color code success rate
+                if (successRate >= 95) {
+                    successElem.className = 'metric-value status-good';
+                } else if (successRate >= 80) {
+                    successElem.className = 'metric-value status-warn';
+                } else {
+                    successElem.className = 'metric-value status-error';
+                }
+
+                document.getElementById('action-queue').textContent =
+                    `${metrics.actions.queue_depth}`;
+                document.getElementById('error-count').textContent =
+                    `${metrics.actions.error_count}`;
+
+                // Update current action
+                const currentAction = metrics.actions.current_action;
+                const currentActionElem = document.getElementById('current-action');
+                currentActionElem.textContent = currentAction || 'Idle';
+            }
+
+            // Update event metrics
+            if (metrics.events) {
+                document.getElementById('event-queue').textContent =
+                    `${metrics.events.queue_depth}`;
+                document.getElementById('events-processed').textContent =
+                    `${metrics.events.events_processed}`;
+                document.getElementById('events-failed').textContent =
+                    `${metrics.events.events_failed}`;
+            }
+
+            // Update charts
+            const now = new Date().toLocaleTimeString();
+            const maxPoints = 60; // Keep 60 data points
+
+            // System chart
+            systemChart.data.labels.push(now);
+            systemChart.data.datasets[0].data.push(metrics.system?.cpu_percent || 0);
+            systemChart.data.datasets[1].data.push(metrics.system?.memory_percent || 0);
+
+            if (systemChart.data.labels.length > maxPoints) {
+                systemChart.data.labels.shift();
+                systemChart.data.datasets.forEach(d => d.data.shift());
+            }
+            systemChart.update('none');
+
+            // Action chart
+            actionChart.data.labels.push(now);
+            actionChart.data.datasets[0].data.push(metrics.actions?.actions_per_minute || 0);
+            actionChart.data.datasets[1].data.push((metrics.actions?.avg_duration || 0) * 1000);
+
+            if (actionChart.data.labels.length > maxPoints) {
+                actionChart.data.labels.shift();
+                actionChart.data.datasets.forEach(d => d.data.shift());
+            }
+            actionChart.update('none');
+
+            // Queue chart
+            queueChart.data.labels.push(now);
+            queueChart.data.datasets[0].data.push(metrics.actions?.queue_depth || 0);
+            queueChart.data.datasets[1].data.push(metrics.events?.queue_depth || 0);
+
+            if (queueChart.data.labels.length > maxPoints) {
+                queueChart.data.labels.shift();
+                queueChart.data.datasets.forEach(d => d.data.shift());
+            }
+            queueChart.update('none');
+
+            // Error chart
+            errorChart.data.labels.push(now);
+            errorChart.data.datasets[0].data.push(metrics.actions?.error_count || 0);
+
+            if (errorChart.data.labels.length > maxPoints) {
+                errorChart.data.labels.shift();
+                errorChart.data.datasets.forEach(d => d.data.shift());
+            }
+            errorChart.update('none');
+        }
+
+        // Connect on page load
+        connect();
+
+        // Periodic ping to keep connection alive
+        setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

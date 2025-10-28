@@ -1,0 +1,110 @@
+# Pre-commit hooks configuration for qontinui-devtools
+# See https://pre-commit.com for more information
+
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+
+  # Python code formatting
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        language_version: python3.11
+
+  # Import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+
+  # Linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        args: ['--max-line-length=100', '--extend-ignore=E203,W503']
+
+  # Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-all]
+        args: ["--ignore-missing-imports", "--no-strict-optional"]
+
+  # qontinui-devtools specific checks
+  - repo: local
+    hooks:
+      - id: check-circular-imports
+        name: Check for circular imports
+        entry: python -m qontinui_devtools.ci.pre_commit_hooks check-circular-imports
+        language: system
+        types: [python]
+        pass_filenames: true
+
+      - id: check-god-classes
+        name: Check for god classes
+        entry: python -m qontinui_devtools.ci.pre_commit_hooks check-new-god-classes
+        language: system
+        types: [python]
+        pass_filenames: true
+        args: ["--min-lines=500", "--min-methods=30"]
+
+      - id: check-race-conditions
+        name: Check for race conditions
+        entry: python -m qontinui_devtools.ci.pre_commit_hooks check-race-conditions
+        language: system
+        types: [python]
+        pass_filenames: true
+        args: ["--severity=high"]
+
+      - id: check-complexity
+        name: Check cyclomatic complexity
+        entry: python -m qontinui_devtools.ci.pre_commit_hooks check-complexity
+        language: system
+        types: [python]
+        pass_filenames: true
+        args: ["--max-complexity=15"]
+
+# Global settings
+default_language_version:
+  python: python3.11
+
+# Skip certain files
+exclude: |
+  (?x)^(
+      \.git/|
+      \.pytest_cache/|
+      __pycache__/|
+      \.venv/|
+      venv/|
+      build/|
+      dist/|
+      \.eggs/|
+      .*\.egg-info/
+  )
+
+# Configuration for specific hooks
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

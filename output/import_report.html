@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Import Analysis Report</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .circular-deps {
+            background-color: #ffe6e6;
+            border: 2px solid #ff4444;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .circular-deps h2 {
+            color: #cc0000;
+            margin-top: 0;
+        }
+        .cycle {
+            font-family: monospace;
+            margin: 10px 0;
+            padding: 5px;
+            background-color: white;
+            border-radius: 3px;
+        }
+        #graph {
+            border: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        .node {
+            cursor: pointer;
+        }
+        .node circle {
+            fill: #69b3a2;
+            stroke: #333;
+            stroke-width: 2px;
+        }
+        .node.cycle-node circle {
+            fill: #ff4444;
+            stroke: #cc0000;
+        }
+        .node text {
+            font-size: 12px;
+            font-family: monospace;
+        }
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+            stroke-width: 2px;
+            fill: none;
+        }
+        .link.cycle-link {
+            stroke: #ff4444;
+            stroke-width: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Import Analysis Report</h1>
+
+    <div style="background-color: #e6ffe6; padding: 15px; border-radius: 5px;">
+<h2 style="color: #006600;">✓ No Circular Dependencies</h2>
+</div>
+
+
+    <h2>Import Graph</h2>
+    <svg id="graph" width="1200" height="800"></svg>
+
+    <script>
+        const graphData = {"nodes": ["qontinui_devtools.import_analysis.import_tracer", "fixtures", "fixtures.circular_a", "fixtures.circular_b"], "edges": [{"source": "qontinui_devtools.import_analysis.import_tracer", "target": "fixtures"}, {"source": "qontinui_devtools.import_analysis.import_tracer", "target": "fixtures.circular_a"}, {"source": "qontinui_devtools.import_analysis.import_tracer", "target": "fixtures.circular_b"}]};
+        const cycles = [];
+
+        // Create set of nodes and edges in cycles
+        const cycleNodes = new Set();
+        const cycleEdges = new Set();
+        cycles.forEach(cycle => {
+            cycle.forEach(node => cycleNodes.add(node));
+            for (let i = 0; i < cycle.length - 1; i++) {
+                cycleEdges.add(`${cycle[i]}->${cycle[i+1]}`);
+            }
+        });
+
+        // Prepare data for D3
+        const nodes = graphData.nodes.map(name => ({
+            id: name,
+            name: name,
+            inCycle: cycleNodes.has(name)
+        }));
+
+        const links = graphData.edges.map(edge => ({
+            source: edge.source,
+            target: edge.target,
+            inCycle: cycleEdges.has(`${edge.source}->${edge.target}`)
+        }));
+
+        // Set up SVG
+        const svg = d3.select("#graph");
+        const width = 1200;
+        const height = 800;
+
+        // Create force simulation
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide().radius(50));
+
+        // Create arrow markers
+        svg.append("defs").selectAll("marker")
+            .data(["arrow", "arrow-cycle"])
+            .enter().append("marker")
+            .attr("id", d => d)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 25)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", d => d === "arrow-cycle" ? "#ff4444" : "#999");
+
+        // Create links
+        const link = svg.append("g")
+            .selectAll("path")
+            .data(links)
+            .enter().append("path")
+            .attr("class", d => d.inCycle ? "link cycle-link" : "link")
+            .attr("marker-end", d => d.inCycle ? "url(#arrow-cycle)" : "url(#arrow)");
+
+        // Create nodes
+        const node = svg.append("g")
+            .selectAll("g")
+            .data(nodes)
+            .enter().append("g")
+            .attr("class", d => d.inCycle ? "node cycle-node" : "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("r", 8);
+
+        node.append("text")
+            .attr("dx", 12)
+            .attr("dy", 4)
+            .text(d => d.name);
+
+        // Update positions on simulation tick
+        simulation.on("tick", () => {
+            link.attr("d", d => {
+                const dx = d.target.x - d.source.x;
+                const dy = d.target.y - d.source.y;
+                const dr = Math.sqrt(dx * dx + dy * dy);
+                return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+            });
+
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+    </script>
+</body>
+</html>
