@@ -1,0 +1,5150 @@
+{
+  "traceEvents": [
+    {
+      "name": "drag:evt_000",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650376392239,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_000",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.10996174812316895
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376392246,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376392246,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376392257,
+      "dur": 1999,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376392257,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376394257,
+      "dur": 3571,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376394257,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376397828,
+      "dur": 8296,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376397828,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376406124,
+      "dur": 81970,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376406124,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376488094,
+      "dur": 1475,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=348, y=745"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376488094,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=348, y=745"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376489570,
+      "dur": 6892,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376489570,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376496462,
+      "dur": 1364,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376496462,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376497827,
+      "dur": 2985,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376497827,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376500813,
+      "dur": 1371,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376500813,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376502184,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "keypress:evt_001",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650376512399,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_001",
+        "event_type": "keypress",
+        "completed": true,
+        "total_latency": 0.09051203727722168
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376512414,
+      "dur": 9,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376512414,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376512424,
+      "dur": 2913,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376512424,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376515337,
+      "dur": 2241,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376515337,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376517578,
+      "dur": 8125,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376517578,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376525704,
+      "dur": 66550,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376525704,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376592254,
+      "dur": 3349,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1620, y=599"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376592254,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1620, y=599"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376595603,
+      "dur": 2390,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376595603,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376597994,
+      "dur": 2015,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376597994,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376600010,
+      "dur": 1376,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376600010,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376601386,
+      "dur": 1521,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376601386,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376602908,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "keypress:evt_002",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650376613095,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_002",
+        "event_type": "keypress",
+        "completed": true,
+        "total_latency": 0.12364029884338379
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376613113,
+      "dur": 11,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376613113,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376613125,
+      "dur": 2150,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376613125,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376615276,
+      "dur": 4302,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376615276,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376619578,
+      "dur": 12342,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376619578,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376631921,
+      "dur": 88591,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376631921,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376720512,
+      "dur": 2605,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=553, y=955"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376720512,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=553, y=955"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376723118,
+      "dur": 7597,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376723118,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376730715,
+      "dur": 1610,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376730715,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376732326,
+      "dur": 2512,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376732326,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376734839,
+      "dur": 1905,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376734839,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376736745,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "keypress:evt_003",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650376747018,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_003",
+        "event_type": "keypress",
+        "completed": true,
+        "total_latency": 0.060390472412109375
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376747034,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376747034,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376747044,
+      "dur": 2728,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376747044,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376749773,
+      "dur": 3607,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376749773,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376753380,
+      "dur": 9762,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376753380,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376763142,
+      "dur": 33287,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376763142,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376796429,
+      "dur": 3441,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=649, y=731"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376796429,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=649, y=731"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376799870,
+      "dur": 2823,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376799870,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376802694,
+      "dur": 1938,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376802694,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376804632,
+      "dur": 1344,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376804632,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650376805976,
+      "dur": 1438,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376805976,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650376807415,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "drag:evt_004",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650376817578,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_004",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.058073997497558594
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376817593,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376817593,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376817604,
+      "dur": 1182,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376817604,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376818786,
+      "dur": 2167,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376818786,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376820954,
+      "dur": 6499,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376820954,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376827453,
+      "dur": 35752,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376827453,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376863206,
+      "dur": 1889,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=902, y=972"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376863206,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=902, y=972"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376865095,
+      "dur": 4154,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376865095,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376869249,
+      "dur": 2321,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376869249,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376871570,
+      "dur": 1970,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376871570,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376873541,
+      "dur": 2110,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376873541,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376875651,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "drag:evt_005",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650376885976,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_005",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.10907578468322754
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376885994,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376885994,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376886005,
+      "dur": 2755,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376886005,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376888760,
+      "dur": 4582,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376888760,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376893343,
+      "dur": 14848,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376893343,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376908191,
+      "dur": 71500,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 4
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376908191,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 4
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376979691,
+      "dur": 1644,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1074, y=51"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376979691,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1074, y=51"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376981336,
+      "dur": 7614,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376981336,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376988951,
+      "dur": 2358,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376988951,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376991309,
+      "dur": 1866,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376991309,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650376993176,
+      "dur": 1882,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376993176,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650376995058,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "click:evt_006",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377005277,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_006",
+        "event_type": "click",
+        "completed": true,
+        "total_latency": 0.11816191673278809
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377005297,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377005297,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377005308,
+      "dur": 3064,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377005308,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377008372,
+      "dur": 3176,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377008372,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377011549,
+      "dur": 5673,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377011549,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377017223,
+      "dur": 92185,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "click",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377017223,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "click",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377109408,
+      "dur": 4096,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=572, y=526"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377109408,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=572, y=526"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377113505,
+      "dur": 2845,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377113505,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377116351,
+      "dur": 2431,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377116351,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377118782,
+      "dur": 2629,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377118782,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377121411,
+      "dur": 2040,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377121411,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377123452,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "drag:evt_007",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377133614,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_007",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.10515069961547852
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377133628,
+      "dur": 8,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377133628,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377133636,
+      "dur": 2736,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377133636,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377136373,
+      "dur": 4599,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377136373,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377140972,
+      "dur": 7991,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377140972,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377148963,
+      "dur": 73976,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377148963,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377222940,
+      "dur": 2209,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1601, y=771"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377222940,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1601, y=771"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377225149,
+      "dur": 6345,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377225149,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377231495,
+      "dur": 2796,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377231495,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377234291,
+      "dur": 2920,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377234291,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377237211,
+      "dur": 1556,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377237211,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377238768,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "click:evt_008",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377248957,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_008",
+        "event_type": "click",
+        "completed": true,
+        "total_latency": 0.06392264366149902
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377248974,
+      "dur": 12,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377248974,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377248986,
+      "dur": 2160,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377248986,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377251147,
+      "dur": 4062,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377251147,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377255209,
+      "dur": 14844,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377255209,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377270054,
+      "dur": 27371,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "click",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377270054,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "click",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377297425,
+      "dur": 3385,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=181, y=187"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377297425,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=181, y=187"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377300810,
+      "dur": 6222,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377300810,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377307032,
+      "dur": 2691,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377307032,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377309724,
+      "dur": 1111,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377309724,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377310836,
+      "dur": 2055,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377310836,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377312892,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "keypress:evt_009",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377323082,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_009",
+        "event_type": "keypress",
+        "completed": true,
+        "total_latency": 0.10221982002258301
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377323120,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377323120,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377323131,
+      "dur": 2097,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377323131,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377325228,
+      "dur": 4278,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377325228,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377329506,
+      "dur": 8851,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377329506,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377338358,
+      "dur": 76903,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377338358,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377415261,
+      "dur": 2379,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1501, y=939"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377415261,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1501, y=939"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377417641,
+      "dur": 2523,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377417641,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377420164,
+      "dur": 1322,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377420164,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377421487,
+      "dur": 2162,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377421487,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377423649,
+      "dur": 1682,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377423649,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377425332,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "click:evt_010",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377435512,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_010",
+        "event_type": "click",
+        "completed": true,
+        "total_latency": 0.0866551399230957
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377435528,
+      "dur": 9,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377435528,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377435537,
+      "dur": 2149,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377435537,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377437687,
+      "dur": 4809,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377437687,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377442497,
+      "dur": 14965,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377442497,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377457462,
+      "dur": 50379,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "click",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377457462,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "click",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377507841,
+      "dur": 4751,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=1383, y=171"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377507841,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=1383, y=171"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377512592,
+      "dur": 3945,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377512592,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377516538,
+      "dur": 1298,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377516538,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377517836,
+      "dur": 2597,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377517836,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377520434,
+      "dur": 1736,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377520434,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377522170,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "keypress:evt_011",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377532427,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_011",
+        "event_type": "keypress",
+        "completed": true,
+        "total_latency": 0.08857560157775879
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377532439,
+      "dur": 6,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377532439,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377532446,
+      "dur": 2376,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377532446,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377534822,
+      "dur": 3062,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377534822,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377537885,
+      "dur": 12713,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377537885,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377550599,
+      "dur": 58455,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377550599,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377609055,
+      "dur": 2818,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=82, y=529"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377609055,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=82, y=529"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377611873,
+      "dur": 3734,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377611873,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377615608,
+      "dur": 2076,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377615608,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377617684,
+      "dur": 1864,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377617684,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377619549,
+      "dur": 1460,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377619549,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377621010,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "click:evt_012",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377631226,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_012",
+        "event_type": "click",
+        "completed": true,
+        "total_latency": 0.06748652458190918
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377631239,
+      "dur": 18,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377631239,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377631258,
+      "dur": 2218,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377631258,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377633477,
+      "dur": 4361,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377633477,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377637838,
+      "dur": 12498,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377637838,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377650337,
+      "dur": 33392,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "click",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377650337,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "click",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377683730,
+      "dur": 3199,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=1691, y=598"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377683730,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "move_mouse",
+        "target": "x=1691, y=598"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377686930,
+      "dur": 6422,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377686930,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377693352,
+      "dur": 1966,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377693352,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377695319,
+      "dur": 2089,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377695319,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "click",
+      "ph": "X",
+      "ts": 1761650377697409,
+      "dur": 1312,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377697409,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "click",
+      "ph": "i",
+      "ts": 1761650377698721,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "scroll:evt_013",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377708998,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_013",
+        "event_type": "scroll",
+        "completed": true,
+        "total_latency": 0.09378576278686523
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377709020,
+      "dur": 35,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377709020,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377709055,
+      "dur": 3138,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377709055,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377712193,
+      "dur": 3288,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377712193,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377715481,
+      "dur": 11562,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377715481,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377727044,
+      "dur": 63131,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "scroll",
+        "queue_depth": 4
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377727044,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "scroll",
+        "queue_depth": 4
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377790175,
+      "dur": 3246,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1163, y=334"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377790175,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1163, y=334"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377793422,
+      "dur": 2536,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377793422,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377795958,
+      "dur": 2611,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377795958,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377798569,
+      "dur": 3046,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377798569,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650377801616,
+      "dur": 1176,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377801616,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650377802792,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "keypress:evt_014",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377812997,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_014",
+        "event_type": "keypress",
+        "completed": true,
+        "total_latency": 0.049219369888305664
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377813022,
+      "dur": 16,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377813022,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377813039,
+      "dur": 1969,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377813039,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377815009,
+      "dur": 3580,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377815009,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377818589,
+      "dur": 8862,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377818589,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377827452,
+      "dur": 21988,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377827452,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "keypress",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377849441,
+      "dur": 1974,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=942, y=251"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377849441,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=942, y=251"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377851415,
+      "dur": 5398,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377851415,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377856814,
+      "dur": 2821,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377856814,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377859635,
+      "dur": 1206,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377859635,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "keypress",
+      "ph": "X",
+      "ts": 1761650377860842,
+      "dur": 1395,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377860842,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "keypress",
+      "ph": "i",
+      "ts": 1761650377862237,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "drag:evt_015",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377872431,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_015",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.07486462593078613
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377872455,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377872455,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377872465,
+      "dur": 1533,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377872465,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377873998,
+      "dur": 3968,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377873998,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377877966,
+      "dur": 8035,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377877966,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377886002,
+      "dur": 48006,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377886002,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377934008,
+      "dur": 3768,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=774, y=816"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377934008,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=774, y=816"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377937777,
+      "dur": 3281,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377937777,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377941059,
+      "dur": 2952,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377941059,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377944011,
+      "dur": 1485,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377944011,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377945496,
+      "dur": 1813,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377945496,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377947310,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "drag:evt_016",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650377957529,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_016",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.06251144409179688
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377957548,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377957548,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377957559,
+      "dur": 2189,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377957559,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377959748,
+      "dur": 4668,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377959748,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377964417,
+      "dur": 6894,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377964417,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650377971311,
+      "dur": 31907,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650377971311,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 3
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378003218,
+      "dur": 3131,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1421, y=317"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378003218,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1421, y=317"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378006349,
+      "dur": 7928,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378006349,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378014278,
+      "dur": 2840,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378014278,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378017119,
+      "dur": 1169,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378017119,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378018288,
+      "dur": 1766,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378018288,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378020054,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "scroll:evt_017",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650378030219,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_017",
+        "event_type": "scroll",
+        "completed": true,
+        "total_latency": 0.08891844749450684
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378030239,
+      "dur": 11,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378030239,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378030251,
+      "dur": 2709,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378030251,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378032960,
+      "dur": 2374,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378032960,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378035334,
+      "dur": 5242,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378035334,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378040577,
+      "dur": 61598,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "scroll",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378040577,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "scroll",
+        "queue_depth": 1
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378102175,
+      "dur": 4669,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1736, y=716"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378102175,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1736, y=716"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378106845,
+      "dur": 6520,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378106845,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378113365,
+      "dur": 1428,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378113365,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378114793,
+      "dur": 2518,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378114793,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "scroll",
+      "ph": "X",
+      "ts": 1761650378117312,
+      "dur": 1834,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378117312,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "scroll",
+      "ph": "i",
+      "ts": 1761650378119146,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "drag:evt_018",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650378129337,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_018",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.08135342597961426
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378129356,
+      "dur": 11,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378129356,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378129368,
+      "dur": 1855,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378129368,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378131224,
+      "dur": 4725,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378131224,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378135950,
+      "dur": 13301,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378135950,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378149251,
+      "dur": 49172,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378149251,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 2
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378198423,
+      "dur": 1876,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1315, y=1033"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378198423,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1315, y=1033"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378200300,
+      "dur": 2839,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378200300,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378203140,
+      "dur": 2798,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378203140,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378205938,
+      "dur": 2905,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378205938,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378208844,
+      "dur": 1856,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378208844,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378210700,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "drag:evt_019",
+      "cat": "metadata",
+      "ph": "i",
+      "ts": 1761650378220919,
+      "pid": 0,
+      "tid": 0,
+      "s": "g",
+      "args": {
+        "event_id": "evt_019",
+        "event_type": "drag",
+        "completed": true,
+        "total_latency": 0.10708856582641602
+      }
+    },
+    {
+      "name": "trace_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378220937,
+      "dur": 10,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:trace_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378220937,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "frontend_emit",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378220948,
+      "dur": 1574,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "checkpoint:frontend_emit",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378220948,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "component": "Button",
+        "action": "click"
+      }
+    },
+    {
+      "name": "tauri_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378222522,
+      "dur": 3999,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "checkpoint:tauri_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378222522,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "process": "main",
+        "thread": "ipc_handler"
+      }
+    },
+    {
+      "name": "python_receive",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378226522,
+      "dur": 7499,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "checkpoint:python_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378226522,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "handler": "event_dispatcher"
+      }
+    },
+    {
+      "name": "executor_start",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378234022,
+      "dur": 77505,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "checkpoint:executor_start",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378234022,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "action_type": "drag",
+        "queue_depth": 0
+      }
+    },
+    {
+      "name": "hal_call",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378311528,
+      "dur": 2692,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "operation": "key_press",
+        "target": "x=1352, y=325"
+      }
+    },
+    {
+      "name": "checkpoint:hal_call",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378311528,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "operation": "key_press",
+        "target": "x=1352, y=325"
+      }
+    },
+    {
+      "name": "hal_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378314220,
+      "dur": 5855,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "checkpoint:hal_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378314220,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {
+        "status": "success"
+      }
+    },
+    {
+      "name": "executor_complete",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378320076,
+      "dur": 3072,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:executor_complete",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378320076,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "python_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378323148,
+      "dur": 3001,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:python_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378323148,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "tauri_send",
+      "cat": "drag",
+      "ph": "X",
+      "ts": 1761650378326149,
+      "dur": 1869,
+      "pid": 0,
+      "tid": 135939183090560,
+      "args": {}
+    },
+    {
+      "name": "checkpoint:tauri_send",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378326149,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    },
+    {
+      "name": "checkpoint:frontend_receive",
+      "cat": "drag",
+      "ph": "i",
+      "ts": 1761650378328019,
+      "pid": 0,
+      "tid": 135939183090560,
+      "s": "t",
+      "args": {}
+    }
+  ],
+  "displayTimeUnit": "ms",
+  "systemTraceEvents": "SystemTraceData",
+  "otherData": {
+    "version": "qontinui-devtools-1.0",
+    "trace_count": 20
+  }
+}

@@ -1,0 +1,13 @@
+// Import Graph
+digraph {
+	concentrate=true rankdir=LR
+	node [fillcolor=lightblue shape=box style="rounded,filled"]
+	edge [color=gray]
+	"qontinui_devtools.import_analysis.import_tracer" [label="qontinui_devtools.import_analysis.import_tracer"]
+	fixtures [label=fixtures]
+	"fixtures.circular_a" [label="fixtures.circular_a"]
+	"fixtures.circular_b" [label="fixtures.circular_b"]
+	"qontinui_devtools.import_analysis.import_tracer" -> fixtures
+	"qontinui_devtools.import_analysis.import_tracer" -> "fixtures.circular_a"
+	"qontinui_devtools.import_analysis.import_tracer" -> "fixtures.circular_b"
+}

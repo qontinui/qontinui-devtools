@@ -1,0 +1,192 @@
+name: Code Quality Analysis
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    name: Analyze Code Quality
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for trend analysis
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install qontinui-devtools
+        run: |
+          python -m pip install --upgrade pip
+          pip install qontinui-devtools
+          qontinui-devtools --version
+
+      - name: Create output directory
+        run: mkdir -p analysis-results
+
+      - name: Check for circular dependencies
+        id: circular-deps
+        continue-on-error: true
+        run: |
+          qontinui-devtools import-cmd check . \
+            --output analysis-results/circular-deps.json \
+            --format json
+
+          # Count cycles for summary
+          CYCLE_COUNT=$(python -c "import json; data=json.load(open('analysis-results/circular-deps.json')); print(len(data.get('cycles', [])))")
+          echo "cycle_count=$CYCLE_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Detect god classes
+        id: god-classes
+        continue-on-error: true
+        run: |
+          qontinui-devtools architecture god-classes . \
+            --min-lines 500 \
+            --min-methods 30 \
+            --output analysis-results/god-classes.json \
+            --format json
+
+          # Count god classes for summary
+          GOD_COUNT=$(python -c "import json; data=json.load(open('analysis-results/god-classes.json')); print(len(data.get('god_classes', [])))")
+          echo "god_count=$GOD_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Check for race conditions
+        id: race-conditions
+        continue-on-error: true
+        run: |
+          qontinui-devtools concurrency check . \
+            --output analysis-results/race-conditions.json \
+            --format json
+
+          # Count critical races for summary
+          CRITICAL_COUNT=$(python -c "import json; data=json.load(open('analysis-results/race-conditions.json')); print(len([r for r in data.get('races', []) if r.get('severity') == 'critical']))")
+          echo "critical_count=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Run complexity analysis
+        id: complexity
+        continue-on-error: true
+        run: |
+          # Install radon for complexity analysis
+          pip install radon
+          radon cc . -a -j > analysis-results/complexity.json || echo '{"average_complexity": 0, "functions": []}' > analysis-results/complexity.json
+
+      - name: Generate comprehensive report
+        continue-on-error: true
+        run: |
+          qontinui-devtools analyze . \
+            --output analysis-results/analysis-report.html \
+            --format html
+
+      - name: Upload analysis artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: code-quality-report
+          path: analysis-results/
+          retention-days: 30
+
+      - name: Check quality gates
+        id: quality-gates
+        continue-on-error: true
+        run: |
+          python -m qontinui_devtools.ci.quality_gates \
+            --circular-deps analysis-results/circular-deps.json \
+            --god-classes analysis-results/god-classes.json \
+            --race-conditions analysis-results/race-conditions.json \
+            --max-circular 0 \
+            --max-god-classes 5 \
+            --max-race-critical 0 \
+            --max-race-high 10
+
+      - name: Generate PR comment
+        id: generate-comment
+        if: github.event_name == 'pull_request'
+        run: |
+          python -m qontinui_devtools.ci.pr_comment \
+            --circular-deps analysis-results/circular-deps.json \
+            --god-classes analysis-results/god-classes.json \
+            --race-conditions analysis-results/race-conditions.json \
+            --pr-number ${{ github.event.pull_request.number }} \
+            --pr-title "${{ github.event.pull_request.title }}" \
+            --output analysis-results/pr-comment.md
+
+      - name: Post PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // Read the generated comment
+            const commentPath = 'analysis-results/pr-comment.md';
+            if (!fs.existsSync(commentPath)) {
+              console.log('No PR comment file found');
+              return;
+            }
+
+            const comment = fs.readFileSync(commentPath, 'utf8');
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('Code Quality Analysis')
+            );
+
+            // Update or create comment
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+              console.log('Updated existing comment');
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+              console.log('Created new comment');
+            }
+
+      - name: Add workflow summary
+        if: always()
+        run: |
+          echo "## 📊 Code Quality Analysis Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Count | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Circular Dependencies | ${{ steps.circular-deps.outputs.cycle_count || 0 }} | ${{ steps.circular-deps.outputs.cycle_count == '0' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| God Classes | ${{ steps.god-classes.outputs.god_count || 0 }} | ${{ steps.god-classes.outputs.god_count <= 5 && '✅' || '⚠️' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Critical Race Conditions | ${{ steps.race-conditions.outputs.critical_count || 0 }} | ${{ steps.race-conditions.outputs.critical_count == '0' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📁 [View detailed report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+
+      - name: Fail if quality gates failed
+        if: steps.quality-gates.outcome == 'failure'
+        run: |
+          echo "❌ Quality gates failed. Please review the analysis results."
+          exit 1

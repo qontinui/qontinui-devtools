@@ -1,0 +1,13 @@
+{
+  "session_id": null,
+  "session_start": null,
+  "profiles": [],
+  "summary": {
+    "total_actions": 0,
+    "total_duration": 0.0,
+    "total_cpu_time": 0.0,
+    "total_memory_delta": 0,
+    "successful_actions": 0,
+    "failed_actions": 0
+  }
+}

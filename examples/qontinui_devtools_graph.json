@@ -1,0 +1,664 @@
+{
+  "nodes": [
+    {
+      "id": "cli",
+      "label": "cli",
+      "node_type": "module",
+      "metrics": {
+        "imports": 11,
+        "in_degree": 0,
+        "out_degree": 4,
+        "total_degree": 4
+      },
+      "color": null,
+      "size": 20,
+      "package": ""
+    },
+    {
+      "id": "architecture.ast_metrics",
+      "label": "ast_metrics",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.clustering",
+      "label": "clustering",
+      "node_type": "module",
+      "metrics": {
+        "imports": 4,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.coupling_analyzer",
+      "label": "coupling_analyzer",
+      "node_type": "module",
+      "metrics": {
+        "imports": 7,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.dependency_graph",
+      "label": "dependency_graph",
+      "node_type": "module",
+      "metrics": {
+        "imports": 5,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.god_class_detector",
+      "label": "god_class_detector",
+      "node_type": "module",
+      "metrics": {
+        "imports": 6,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.graphviz_gen",
+      "label": "graphviz_gen",
+      "node_type": "module",
+      "metrics": {
+        "imports": 2,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.graph_visualizer",
+      "label": "graph_visualizer",
+      "node_type": "module",
+      "metrics": {
+        "imports": 10,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.html_graph",
+      "label": "html_graph",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.layouts",
+      "label": "layouts",
+      "node_type": "module",
+      "metrics": {
+        "imports": 4,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.metrics_utils",
+      "label": "metrics_utils",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.semantic_utils",
+      "label": "semantic_utils",
+      "node_type": "module",
+      "metrics": {
+        "imports": 2,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture.srp_analyzer",
+      "label": "srp_analyzer",
+      "node_type": "module",
+      "metrics": {
+        "imports": 7,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "architecture"
+    },
+    {
+      "id": "architecture",
+      "label": "architecture",
+      "node_type": "module",
+      "metrics": {
+        "imports": 7,
+        "in_degree": 2,
+        "out_degree": 0,
+        "total_degree": 2
+      },
+      "color": null,
+      "size": 10,
+      "package": ""
+    },
+    {
+      "id": "ci.pre_commit_hooks",
+      "label": "pre_commit_hooks",
+      "node_type": "module",
+      "metrics": {
+        "imports": 8,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "ci"
+    },
+    {
+      "id": "ci.pr_comment",
+      "label": "pr_comment",
+      "node_type": "module",
+      "metrics": {
+        "imports": 6,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "ci"
+    },
+    {
+      "id": "ci.quality_gates",
+      "label": "quality_gates",
+      "node_type": "module",
+      "metrics": {
+        "imports": 6,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "ci"
+    },
+    {
+      "id": "ci",
+      "label": "ci",
+      "node_type": "module",
+      "metrics": {
+        "imports": 1,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": ""
+    },
+    {
+      "id": "concurrency.ast_analyzer",
+      "label": "ast_analyzer",
+      "node_type": "module",
+      "metrics": {
+        "imports": 4,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "concurrency"
+    },
+    {
+      "id": "concurrency.decorators",
+      "label": "decorators",
+      "node_type": "module",
+      "metrics": {
+        "imports": 2,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "concurrency"
+    },
+    {
+      "id": "concurrency.heuristics",
+      "label": "heuristics",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "concurrency"
+    },
+    {
+      "id": "concurrency.instrumentation",
+      "label": "instrumentation",
+      "node_type": "module",
+      "metrics": {
+        "imports": 4,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "concurrency"
+    },
+    {
+      "id": "concurrency.race_detector",
+      "label": "race_detector",
+      "node_type": "module",
+      "metrics": {
+        "imports": 5,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "concurrency"
+    },
+    {
+      "id": "concurrency.race_tester",
+      "label": "race_tester",
+      "node_type": "module",
+      "metrics": {
+        "imports": 9,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "concurrency"
+    },
+    {
+      "id": "concurrency.scenarios",
+      "label": "scenarios",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "concurrency"
+    },
+    {
+      "id": "concurrency",
+      "label": "concurrency",
+      "node_type": "module",
+      "metrics": {
+        "imports": 4,
+        "in_degree": 2,
+        "out_degree": 0,
+        "total_degree": 2
+      },
+      "color": null,
+      "size": 10,
+      "package": ""
+    },
+    {
+      "id": "import_analysis.ast_utils",
+      "label": "ast_utils",
+      "node_type": "module",
+      "metrics": {
+        "imports": 4,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "import_analysis"
+    },
+    {
+      "id": "import_analysis.circular_detector",
+      "label": "circular_detector",
+      "node_type": "module",
+      "metrics": {
+        "imports": 9,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "import_analysis"
+    },
+    {
+      "id": "import_analysis.fix_suggester",
+      "label": "fix_suggester",
+      "node_type": "module",
+      "metrics": {
+        "imports": 5,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "import_analysis"
+    },
+    {
+      "id": "import_analysis.import_tracer",
+      "label": "import_tracer",
+      "node_type": "module",
+      "metrics": {
+        "imports": 8,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "import_analysis"
+    },
+    {
+      "id": "import_analysis.visualizer",
+      "label": "visualizer",
+      "node_type": "module",
+      "metrics": {
+        "imports": 6,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "import_analysis"
+    },
+    {
+      "id": "import_analysis",
+      "label": "import_analysis",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 2,
+        "out_degree": 0,
+        "total_degree": 2
+      },
+      "color": null,
+      "size": 10,
+      "package": ""
+    },
+    {
+      "id": "reporting.aggregator",
+      "label": "aggregator",
+      "node_type": "module",
+      "metrics": {
+        "imports": 9,
+        "in_degree": 0,
+        "out_degree": 3,
+        "total_degree": 3
+      },
+      "color": null,
+      "size": 15,
+      "package": "reporting"
+    },
+    {
+      "id": "reporting.charts",
+      "label": "charts",
+      "node_type": "module",
+      "metrics": {
+        "imports": 1,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "reporting"
+    },
+    {
+      "id": "reporting.html_reporter",
+      "label": "html_reporter",
+      "node_type": "module",
+      "metrics": {
+        "imports": 7,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "reporting"
+    },
+    {
+      "id": "reporting",
+      "label": "reporting",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 1,
+        "out_degree": 0,
+        "total_degree": 1
+      },
+      "color": null,
+      "size": 10,
+      "package": ""
+    },
+    {
+      "id": "testing.fixtures",
+      "label": "fixtures",
+      "node_type": "module",
+      "metrics": {
+        "imports": 8,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "testing"
+    },
+    {
+      "id": "testing.mock_hal",
+      "label": "mock_hal",
+      "node_type": "module",
+      "metrics": {
+        "imports": 7,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "testing"
+    },
+    {
+      "id": "testing.mock_input_controller",
+      "label": "mock_input_controller",
+      "node_type": "module",
+      "metrics": {
+        "imports": 5,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "testing"
+    },
+    {
+      "id": "testing.mock_ocr_engine",
+      "label": "mock_ocr_engine",
+      "node_type": "module",
+      "metrics": {
+        "imports": 6,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "testing"
+    },
+    {
+      "id": "testing.mock_pattern_matcher",
+      "label": "mock_pattern_matcher",
+      "node_type": "module",
+      "metrics": {
+        "imports": 8,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "testing"
+    },
+    {
+      "id": "testing.mock_platform_specific",
+      "label": "mock_platform_specific",
+      "node_type": "module",
+      "metrics": {
+        "imports": 3,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "testing"
+    },
+    {
+      "id": "testing.mock_screen_capture",
+      "label": "mock_screen_capture",
+      "node_type": "module",
+      "metrics": {
+        "imports": 4,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": "testing"
+    },
+    {
+      "id": "testing",
+      "label": "testing",
+      "node_type": "module",
+      "metrics": {
+        "imports": 6,
+        "in_degree": 0,
+        "out_degree": 0,
+        "total_degree": 0
+      },
+      "color": null,
+      "size": 10,
+      "package": ""
+    }
+  ],
+  "edges": [
+    {
+      "source": "cli",
+      "target": "concurrency",
+      "edge_type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "cli",
+      "target": "reporting",
+      "edge_type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "cli",
+      "target": "architecture",
+      "edge_type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "cli",
+      "target": "import_analysis",
+      "edge_type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "reporting.aggregator",
+      "target": "concurrency",
+      "edge_type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "reporting.aggregator",
+      "target": "architecture",
+      "edge_type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "reporting.aggregator",
+      "target": "import_analysis",
+      "edge_type": "imports",
+      "weight": 1
+    }
+  ]
+}

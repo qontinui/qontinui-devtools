@@ -1,0 +1,63 @@
+{
+  "start_time": 1761642461.4629226,
+  "duration": 0.2106914520263672,
+  "events": [
+    {
+      "module_name": "fixtures",
+      "importer": "qontinui_devtools.import_analysis.import_tracer",
+      "timestamp": 1761642461.471596,
+      "thread_id": 133725859339136,
+      "stack_trace": [
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 255, in <module>\n    main()\n",
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 242, in main\n    tracer = example_trace_imports()\n",
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 42, in example_trace_imports\n    import fixtures.circular_a  # noqa: F401\n"
+      ]
+    },
+    {
+      "module_name": "fixtures.circular_a",
+      "importer": "qontinui_devtools.import_analysis.import_tracer",
+      "timestamp": 1761642461.4847677,
+      "thread_id": 133725859339136,
+      "stack_trace": [
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 255, in <module>\n    main()\n",
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 242, in main\n    tracer = example_trace_imports()\n",
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 42, in example_trace_imports\n    import fixtures.circular_a  # noqa: F401\n"
+      ]
+    },
+    {
+      "module_name": "fixtures.circular_b",
+      "importer": "qontinui_devtools.import_analysis.import_tracer",
+      "timestamp": 1761642461.4999926,
+      "thread_id": 133725859339136,
+      "stack_trace": [
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 255, in <module>\n    main()\n",
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 242, in main\n    tracer = example_trace_imports()\n",
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/examples/detect_circular_imports.py\", line 42, in example_trace_imports\n    import fixtures.circular_a  # noqa: F401\n",
+        "  File \"/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/python/tests/fixtures/circular_a.py\", line 15, in <module>\n    from fixtures import circular_b  # noqa: E402, F401\n"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      "qontinui_devtools.import_analysis.import_tracer",
+      "fixtures",
+      "fixtures.circular_a",
+      "fixtures.circular_b"
+    ],
+    "edges": [
+      {
+        "source": "qontinui_devtools.import_analysis.import_tracer",
+        "target": "fixtures"
+      },
+      {
+        "source": "qontinui_devtools.import_analysis.import_tracer",
+        "target": "fixtures.circular_a"
+      },
+      {
+        "source": "qontinui_devtools.import_analysis.import_tracer",
+        "target": "fixtures.circular_b"
+      }
+    ]
+  },
+  "circular_dependencies": []
+}

@@ -1,0 +1,172 @@
+# God Class Detection Report
+
+Found 6 god classes violating Single Responsibility Principle.
+
+## Summary
+
+- **Total Classes Analyzed**: 6
+- **Critical Severity**: 0
+- **High Severity**: 0
+- **Medium Severity**: 6
+
+## Thresholds Used
+
+- **Minimum Lines**: 500
+- **Minimum Methods**: 5
+- **Maximum LCOM**: 0.8
+
+## Detailed Analysis
+
+### 1. PixelLocation [MEDIUM]
+
+**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/pixel_location.py:30`
+
+**Metrics**:
+- Lines of Code: 271
+- Method Count: 38
+- Attribute Count: 0
+- Cyclomatic Complexity: 67
+- LCOM (Lack of Cohesion): 0.608
+
+**Detected Responsibilities**:
+
+- Data Access
+- From Operations
+
+**Extraction Suggestions**:
+
+- **DataAccessor**
+  - Responsibility: DataAccessor
+  - Methods to Extract: 6
+  - Estimated Lines: 78
+  - Methods: `get_centroid, get_overlap_percentage, get_area, get_perimeter, get_compactness, get_contour`
+
+---
+
+### 2. SemanticObject [MEDIUM]
+
+**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/semantic_object.py:38`
+
+**Metrics**:
+- Lines of Code: 235
+- Method Count: 44
+- Attribute Count: 0
+- Cyclomatic Complexity: 30
+- LCOM (Lack of Cohesion): 0.736
+
+**Detected Responsibilities**:
+
+- Data Access
+
+**Extraction Suggestions**:
+
+- **DataAccessor**
+  - Responsibility: DataAccessor
+  - Methods to Extract: 9
+  - Estimated Lines: 66
+  - Methods: `get_bounding_box, get_attribute, set_object_type, set_interactable, set_color, get_color, set_text, get_text, get_overlap_percentage`
+
+---
+
+### 3. SemanticScene [MEDIUM]
+
+**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/semantic_scene.py:26`
+
+**Metrics**:
+- Lines of Code: 201
+- Method Count: 48
+- Attribute Count: 0
+- Cyclomatic Complexity: 28
+- LCOM (Lack of Cohesion): 0.623
+
+**Detected Responsibilities**:
+
+- Data Access
+
+**Extraction Suggestions**:
+
+- **DataAccessor**
+  - Responsibility: DataAccessor
+  - Methods to Extract: 15
+  - Estimated Lines: 120
+  - Methods: `get_object_by_id, find_by_description, find_by_type, find_in_region, find_closest_to, find_interactable, find_with_text, get_objects_above, get_objects_below, get_objects_left_of`
+
+---
+
+### 4. SceneAnalyzer [MEDIUM]
+
+**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/scene_analyzer.py:13`
+
+**Metrics**:
+- Lines of Code: 156
+- Method Count: 12
+- Attribute Count: 1
+- Cyclomatic Complexity: 51
+- LCOM (Lack of Cohesion): 0.000
+
+---
+
+### 5. SceneQueryService [MEDIUM]
+
+**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/scene_query_service.py:13`
+
+**Metrics**:
+- Lines of Code: 154
+- Method Count: 24
+- Attribute Count: 1
+- Cyclomatic Complexity: 54
+- LCOM (Lack of Cohesion): 0.000
+
+**Detected Responsibilities**:
+
+- Data Access
+
+**Extraction Suggestions**:
+
+- **DataAccessor**
+  - Responsibility: DataAccessor
+  - Methods to Extract: 11
+  - Estimated Lines: 140
+  - Methods: `find_by_description, find_by_type, find_in_region, find_closest_to, find_interactable, find_with_text, get_objects_above, get_objects_below, get_objects_left_of, get_objects_right_of`
+
+---
+
+### 6. SceneObjectStore [MEDIUM]
+
+**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/scene_object_store.py:11`
+
+**Metrics**:
+- Lines of Code: 100
+- Method Count: 24
+- Attribute Count: 0
+- Cyclomatic Complexity: 22
+- LCOM (Lack of Cohesion): 0.379
+
+**Detected Responsibilities**:
+
+- Data Access
+
+**Extraction Suggestions**:
+
+- **DataAccessor**
+  - Responsibility: DataAccessor
+  - Methods to Extract: 4
+  - Estimated Lines: 28
+  - Methods: `get_by_id, get_by_type, get_all, get_type_counts`
+
+---
+
+## Recommendations
+
+1. **Refactor Critical Classes First**: Focus on classes with 'critical' severity.
+2. **Extract Responsibilities**: Use the extraction suggestions to create new, focused classes.
+3. **Apply Single Responsibility Principle**: Each class should have one reason to change.
+4. **Improve Cohesion**: Methods in a class should work together on related data.
+5. **Use Composition**: Break large classes into smaller, composable components.
+
+## LCOM Interpretation
+
+- **0.0 - 0.3**: Good cohesion (methods work together)
+- **0.3 - 0.6**: Moderate cohesion (some refactoring may help)
+- **0.6 - 0.8**: Poor cohesion (strong candidate for refactoring)
+- **0.8 - 1.0**: Very poor cohesion (urgent refactoring needed)

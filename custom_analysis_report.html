@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Project - Code Quality Report</title>
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .metric-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .severity-error {
+            background-color: #fee2e2;
+            border-left-color: #dc2626;
+        }
+        .severity-warning {
+            background-color: #fef3c7;
+            border-left-color: #f59e0b;
+        }
+        .severity-success {
+            background-color: #d1fae5;
+            border-left-color: #10b981;
+        }
+        .severity-info {
+            background-color: #dbeafe;
+            border-left-color: #3b82f6;
+        }
+        .nav-link {
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            transition: color 0.2s, background-color 0.2s;
+            display: block;
+        }
+        .nav-link:hover {
+            color: #2563eb;
+            background-color: #f3f4f6;
+        }
+        .nav-link.active {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+        }
+        .section-content {
+            line-height: 1.8;
+        }
+        .section-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .section-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+        .section-content code {
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 shadow-lg">
+        <div class="container mx-auto">
+            <h1 class="text-4xl font-bold mb-2">Example Project</h1>
+            <p class="text-blue-100">Code Quality Report - 2025-10-28 10:49:46</p>
+            <p class="text-sm text-blue-200 mt-1">Project: /example/project</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-10">
+        <div class="container mx-auto">
+            <ul class="flex flex-wrap">
+                <li><a href="#summary" class="nav-link">Summary</a></li>
+                <li><a href="#imports" class="nav-link">Imports</a></li>
+                <li><a href="#architecture" class="nav-link">Architecture</a></li>
+                <li><a href="#quality" class="nav-link">Code Quality</a></li>
+                <li><a href="#concurrency" class="nav-link">Concurrency</a></li>
+                <li><a href="#recommendations" class="nav-link">Recommendations</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- Executive Summary -->
+        <section id="summary" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">Executive Summary</h2>
+
+            <!-- Overall Status -->
+            <div class="bg-green-100 border-l-4 border-green-500 p-6 mb-8 rounded-r-lg shadow">
+                <p class="font-bold text-green-700 text-xl">
+                    ✅ Good with Minor Issues (2 warnings)
+                </p>
+            </div>
+
+            <!-- Key Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Total Issues</h3>
+                    <p class="text-4xl font-bold text-yellow-600 mb-2">2</p>
+                    <p class="text-sm text-gray-500">0 errors, 2 warnings</p>
+                </div>
+
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Files Analyzed</h3>
+                    <p class="text-4xl font-bold text-blue-600 mb-2">150</p>
+                    <p class="text-sm text-gray-500">Source files scanned</p>
+                </div>
+
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Quality Score</h3>
+                    <p class="text-4xl font-bold text-yellow-600 mb-2">76.0/100</p>
+                    <p class="text-sm text-gray-500">Overall code quality rating</p>
+                </div>
+
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Critical Issues</h3>
+                    <p class="text-4xl font-bold text-red-600 mb-2">1</p>
+                    <p class="text-sm text-gray-500">Issues requiring immediate attention</p>
+                </div>
+
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800">Issue Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="issueChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800">Severity Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="imports" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Import Analysis</h2>
+
+            <div class="severity-warning border-l-4 rounded-r-lg shadow-lg p-6 bg-white">
+                <div class="section-content">
+                    
+        <h3>Circular Dependencies</h3>
+        <p>Found 1 circular dependency that needs attention:</p>
+        <ul>
+            <li><code>module_a → module_b → module_a</code></li>
+        </ul>
+        <h3>Recommendations</h3>
+        <ul>
+            <li>Extract common code to a new module</li>
+            <li>Use dependency injection to break the cycle</li>
+        </ul>
+        
+                </div>
+            </div>
+
+            <!-- Section Metrics -->
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Circular Dependencies</p>
+                    <p class="text-2xl font-bold text-gray-800">1</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Total Imports</p>
+                    <p class="text-2xl font-bold text-gray-800">450</p>
+                </div>
+
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                <h3 class="text-lg font-bold mb-4 text-gray-800">Import Analysis Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="importsChart"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="architecture" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Architecture Quality</h2>
+
+            <div class="severity-warning border-l-4 rounded-r-lg shadow-lg p-6 bg-white">
+                <div class="section-content">
+                    
+        <h3>God Classes Detected</h3>
+        <p>Found 2 god classes that violate the Single Responsibility Principle:</p>
+        <ul>
+            <li><strong>UserManager</strong> - 45 methods, 850 lines
+                <br>Responsibilities: user auth, profile management, notifications, logging
+            </li>
+            <li><strong>DataProcessor</strong> - 32 methods, 650 lines
+                <br>Responsibilities: data validation, transformation, export, caching
+            </li>
+        </ul>
+        <h3>Refactoring Suggestions</h3>
+        <ul>
+            <li>Extract NotificationService from UserManager</li>
+            <li>Extract CacheManager from DataProcessor</li>
+        </ul>
+        
+                </div>
+            </div>
+
+            <!-- Section Metrics -->
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">God Classes</p>
+                    <p class="text-2xl font-bold text-gray-800">2</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Srp Violations</p>
+                    <p class="text-2xl font-bold text-gray-800">5</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Average Class Size</p>
+                    <p class="text-2xl font-bold text-gray-800">185</p>
+                </div>
+
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                <h3 class="text-lg font-bold mb-4 text-gray-800">Architecture Quality Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="architectureChart"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="quality" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Code Quality</h2>
+
+            <div class="severity-success border-l-4 rounded-r-lg shadow-lg p-6 bg-white">
+                <div class="section-content">
+                    
+        <h3>Code Quality Metrics</h3>
+        <p>Overall code quality is good with minor issues:</p>
+        <ul>
+            <li>Average cyclomatic complexity: 3.2 (good)</li>
+            <li>Code duplication: 2.5% (acceptable)</li>
+            <li>Documentation coverage: 78% (good)</li>
+            <li>Type hints coverage: 85% (very good)</li>
+        </ul>
+        <h3>Issues Found</h3>
+        <ul>
+            <li>5 TODO comments requiring attention</li>
+            <li>3 wildcard imports should be made explicit</li>
+            <li>12 functions missing docstrings</li>
+        </ul>
+        
+                </div>
+            </div>
+
+            <!-- Section Metrics -->
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Total Files</p>
+                    <p class="text-2xl font-bold text-gray-800">150</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Total Lines</p>
+                    <p class="text-2xl font-bold text-gray-800">15000</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Complexity Avg</p>
+                    <p class="text-2xl font-bold text-gray-800">3.2</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Duplication</p>
+                    <p class="text-2xl font-bold text-gray-800">2.5</p>
+                </div>
+
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                <h3 class="text-lg font-bold mb-4 text-gray-800">Code Quality Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="qualityChart"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="concurrency" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Concurrency Analysis</h2>
+
+            <div class="severity-success border-l-4 rounded-r-lg shadow-lg p-6 bg-white">
+                <div class="section-content">
+                    
+        <h3>Race Conditions</h3>
+        <p>✅ No race conditions detected!</p>
+        <p>All shared state access is properly synchronized:</p>
+        <ul>
+            <li>All shared dictionaries use locks</li>
+            <li>Thread-safe data structures used appropriately</li>
+            <li>No unsynchronized counter updates</li>
+        </ul>
+        <h3>Best Practices Followed</h3>
+        <ul>
+            <li>Using threading.Lock for critical sections</li>
+            <li>Leveraging queue.Queue for thread communication</li>
+            <li>Proper use of threading.Event for signaling</li>
+        </ul>
+        
+                </div>
+            </div>
+
+            <!-- Section Metrics -->
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Race Conditions</p>
+                    <p class="text-2xl font-bold text-gray-800">0</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Shared State Accesses</p>
+                    <p class="text-2xl font-bold text-gray-800">45</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Locks Used</p>
+                    <p class="text-2xl font-bold text-gray-800">8</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="recommendations" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Recommendations</h2>
+
+            <div class="severity-info border-l-4 rounded-r-lg shadow-lg p-6 bg-white">
+                <div class="section-content">
+                    
+        <h3>Priority Actions</h3>
+        <ol>
+            <li><strong>Break circular dependency</strong>
+                <br>Refactor module_a and module_b to eliminate circular import
+                <br>Priority: High | Estimated effort: 2-4 hours
+            </li>
+            <li><strong>Refactor UserManager god class</strong>
+                <br>Extract NotificationService and improve separation of concerns
+                <br>Priority: Medium | Estimated effort: 1 day
+            </li>
+            <li><strong>Refactor DataProcessor god class</strong>
+                <br>Extract CacheManager and DataValidator
+                <br>Priority: Medium | Estimated effort: 1 day
+            </li>
+            <li><strong>Address TODO comments</strong>
+                <br>Review and resolve 5 TODO items
+                <br>Priority: Low | Estimated effort: 2-3 hours
+            </li>
+        </ol>
+        <h3>Long-term Improvements</h3>
+        <ul>
+            <li>Increase test coverage to 85%+</li>
+            <li>Add docstrings to remaining functions</li>
+            <li>Set up automated code quality checks in CI/CD</li>
+        </ul>
+        
+                </div>
+            </div>
+
+            <!-- Section Metrics -->
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Total Recommendations</p>
+                    <p class="text-2xl font-bold text-gray-800">4</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">High Priority</p>
+                    <p class="text-2xl font-bold text-gray-800">1</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-sm text-gray-600 font-medium">Medium Priority</p>
+                    <p class="text-2xl font-bold text-gray-800">2</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-6 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-lg font-semibold mb-2">Generated by qontinui-devtools v1.0.0</p>
+            <p class="text-sm text-gray-400">
+                Report generated on 2025-10-28 10:49:46
+            </p>
+            <p class="text-xs text-gray-500 mt-4">
+                This report is for informational purposes. Always review code manually.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize charts
+        
+        const issueCtx = document.getElementById('issueChart');
+        if (issueCtx) {
+            new Chart(issueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ["Import Analysis", "Architecture Quality", "Code Quality", "Concurrency Analysis", "Recommendations"],
+                    datasets: [{
+                        label: 'Issues by Category',
+                        data: [2, 3, 4, 3, 3],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)',
+                            'rgba(16, 185, 129, 0.7)',
+                            'rgba(245, 158, 11, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(139, 92, 246, 0.7)',
+                            'rgba(236, 72, 153, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(236, 72, 153, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        const severityCtx = document.getElementById('severityChart');
+        if (severityCtx) {
+            new Chart(severityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Error', 'Warning', 'Info', 'Success'],
+                    datasets: [{
+                        label: 'Severity Distribution',
+                        data: [0, 2, 1, 2],
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(16, 185, 129, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+
+        const importsCtx = document.getElementById('importsChart');
+        if (importsCtx) {
+            new Chart(importsCtx, {"type": "bar", "data": {"labels": ["Module A", "Module B", "Module C", "Module D"], "datasets": [{"label": "Imports per Module", "data": [45, 38, 52, 31], "backgroundColor": "rgba(59, 130, 246, 0.7)", "borderColor": "rgba(59, 130, 246, 1)", "borderWidth": 2}]}, "options": {"responsive": true, "maintainAspectRatio": false, "plugins": {"title": {"display": true, "text": "Imports per Module", "font": {"size": 16}}, "legend": {"display": false}}, "scales": {"y": {"beginAtZero": true, "ticks": {"precision": 0}}}}});
+        }
+
+
+        const architectureCtx = document.getElementById('architectureChart');
+        if (architectureCtx) {
+            new Chart(architectureCtx, {"type": "pie", "data": {"labels": ["Small Classes", "Medium Classes", "Large Classes", "God Classes"], "datasets": [{"label": "Class Size Distribution", "data": [85, 42, 21, 2], "backgroundColor": ["rgba(239, 68, 68, 0.8)", "rgba(245, 158, 11, 0.8)", "rgba(59, 130, 246, 0.8)", "rgba(16, 185, 129, 0.8)"], "borderColor": ["rgba(239, 68, 68, 1)", "rgba(245, 158, 11, 1)", "rgba(59, 130, 246, 1)", "rgba(16, 185, 129, 1)"], "borderWidth": 2}]}, "options": {"responsive": true, "maintainAspectRatio": false, "plugins": {"title": {"display": true, "text": "Class Size Distribution", "font": {"size": 16}}, "legend": {"position": "bottom"}}}});
+        }
+
+
+        const qualityCtx = document.getElementById('qualityChart');
+        if (qualityCtx) {
+            new Chart(qualityCtx, {"type": "line", "data": {"labels": ["Week 1", "Week 2", "Week 3", "Week 4"], "datasets": [{"label": "Code Quality Score", "data": [72, 75, 78, 82], "backgroundColor": "rgba(16, 185, 129, 0.7)", "borderColor": "rgba(16, 185, 129, 1)", "borderWidth": 2, "fill": false, "tension": 0.4}, {"label": "Test Coverage", "data": [65, 68, 72, 75], "backgroundColor": "rgba(59, 130, 246, 0.7)", "borderColor": "rgba(59, 130, 246, 1)", "borderWidth": 2, "fill": false, "tension": 0.4}]}, "options": {"responsive": true, "maintainAspectRatio": false, "plugins": {"title": {"display": true, "text": "Quality Trends", "font": {"size": 16}}, "legend": {"position": "top"}}, "scales": {"x": {"title": {"display": false, "text": ""}}, "y": {"beginAtZero": true, "title": {"display": true, "text": "Score (%)"}, "ticks": {"precision": 0}}}}});
+        }
+
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Update active link
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Highlight active section on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
