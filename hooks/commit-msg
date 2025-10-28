@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# Git commit-msg hook to prevent commits with "Claude" in the message
+#
+# This hook is called by "git commit" with one argument, the name of the file
+# that has the commit message. Exiting with a non-zero status causes the
+# commit to be aborted.
+#
+# To install this hook, run:
+#   cp hooks/commit-msg .git/hooks/commit-msg
+#   chmod +x .git/hooks/commit-msg
+
+commit_msg_file="$1"
+
+# Check if the commit message contains "Claude" (case-insensitive)
+if grep -iq "claude" "$commit_msg_file"; then
+    echo "ERROR: Commit message contains 'Claude'"
+    echo "Please remove any references to Claude from your commit message."
+    echo ""
+    echo "Your commit message:"
+    cat "$commit_msg_file"
+    exit 1
+fi
+
+exit 0
