@@ -1,0 +1,46 @@
+{
+  "name": "Test Valid Config",
+  "default_workflow": "test_workflow",
+  "workflows": [
+    {
+      "id": "test_workflow",
+      "name": "Test Workflow",
+      "actions": {
+        "action1": {
+          "type": "Click",
+          "name": "Click Button",
+          "searches": [
+            {
+              "type": "Match",
+              "image": "button.png",
+              "threshold": 0.8
+            }
+          ],
+          "coordinates": {
+            "x": 100,
+            "y": 200
+          }
+        },
+        "action2": {
+          "type": "Wait",
+          "name": "Wait for Element",
+          "duration": 1.5
+        }
+      },
+      "connections": {
+        "action1": {
+          "false": [
+            [
+              {
+                "action": "action2",
+                "type": "false",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      },
+      "initial_action": "action1"
+    }
+  ]
+}

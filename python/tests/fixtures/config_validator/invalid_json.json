@@ -1,0 +1,18 @@
+{
+  "name": "Invalid JSON",
+  "default_workflow": "test_workflow",
+  "workflows": [
+    {
+      "id": "test_workflow",
+      "name": "Test Workflow",
+      "actions": {
+        "action1": {
+          "type": "Click",
+          "name": "Click Button"
+        }
+      },
+      "connections": {}
+      "initial_action": "action1"
+    }
+  ]
+}

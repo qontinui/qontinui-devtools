@@ -1,0 +1,23 @@
+{
+  "name": "Missing Required Fields",
+  "default_workflow": "test_workflow",
+  "workflows": [
+    {
+      "id": "test_workflow",
+      "name": "Incomplete Workflow",
+      "actions": {
+        "action1": {
+          "name": "Click Button",
+          "searches": [
+            {
+              "type": "Match",
+              "image": "button.png"
+            }
+          ]
+        }
+      },
+      "connections": {},
+      "initial_action": "action1"
+    }
+  ]
+}
