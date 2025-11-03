@@ -2595,5 +2595,75 @@ def start_dashboard(host: str, port: int, interval: float) -> None:
         sys.exit(1)
 
 
+@main.group()
+def validate() -> None:
+    """Validation commands.
+
+    Tools for validating config files, checking schema compatibility,
+    and detecting breaking changes before execution.
+    """
+    pass
+
+
+@validate.command("config")
+@click.argument("config_path", type=click.Path(exists=True))
+@click.option("--verbose", "-v", is_flag=True, help="Show detailed error information")
+@click.option("--strict", is_flag=True, help="Exit with error code if validation fails")
+@click.option("--qontinui-path", type=click.Path(exists=True), help="Path to qontinui library")
+def validate_config(config_path: str, verbose: bool, strict: bool, qontinui_path: str | None) -> None:
+    """Validate config file against Pydantic schemas.
+
+    Validates Qontinui config files against the current Pydantic models,
+    catching schema mismatches BEFORE runtime execution. This helps detect
+    breaking changes when the config format evolves.
+
+    Examples:
+
+        # Basic validation
+        qontinui-devtools validate config bdo_config.json
+
+        # Verbose output with detailed errors
+        qontinui-devtools validate config bdo_config.json --verbose
+
+        # Strict mode (exit with error code on failure)
+        qontinui-devtools validate config bdo_config.json --strict
+
+        # Specify qontinui library path
+        qontinui-devtools validate config bdo_config.json --qontinui-path ../qontinui/src
+    """
+    try:
+        from .config_validator import ConfigValidator
+    except ImportError:
+        console.print("[red]Error: Config validator module not available[/red]")
+        sys.exit(1)
+
+    try:
+        # Initialize validator
+        qontinui_lib_path = Path(qontinui_path) if qontinui_path else None
+        validator = ConfigValidator(qontinui_path=qontinui_lib_path)
+
+        # Run validation
+        report = validator.validate_file(config_path)
+
+        # Print report
+        report.print_report(verbose=verbose)
+
+        # Exit with appropriate code
+        if strict and not report.is_valid:
+            sys.exit(1)
+        elif not report.is_valid:
+            console.print("\n[yellow]Tip: Use --strict to fail CI/CD on validation errors[/yellow]")
+
+    except FileNotFoundError as e:
+        console.print(f"[red]Error: {e}[/red]")
+        console.print("\n[yellow]Tip: Specify qontinui library path with --qontinui-path[/yellow]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"[red]Unexpected error: {e}[/red]")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     main()

@@ -1,0 +1,77 @@
+# Pre-commit hooks configuration for quality checks in qontinui-devtools
+# See https://pre-commit.com for more information
+#
+# This configuration focuses on project-specific quality checks, particularly
+# for validating Qontinui configuration files.
+#
+# Usage:
+#   Install pre-commit: pip install pre-commit
+#   Install hooks: pre-commit install
+#   Run manually: pre-commit run --all-files
+#   Run on specific files: pre-commit run --files path/to/file.json
+
+repos:
+  # Local qontinui-devtools quality checks
+  - repo: local
+    hooks:
+      # Validate Qontinui config files
+      # This hook validates .json files against the Qontinui Pydantic schema
+      # to catch schema mismatches BEFORE execution, preventing runtime errors.
+      #
+      # The validator:
+      # - Loads config files and validates them using Pydantic models
+      # - Checks workflow structure, connections, and field types
+      # - Provides detailed error messages with fix suggestions
+      # - Detects schema migrations (e.g., v1.x -> v2.0 format changes)
+      #
+      # Exit codes:
+      # - 0: All config files are valid
+      # - 1: One or more config files have validation errors
+      #
+      # Example errors detected:
+      # - Missing required fields (e.g., workflow.id, workflow.name)
+      # - Type mismatches (e.g., string instead of dict)
+      # - Invalid connection formats (old v1.x vs new v2.0)
+      # - Invalid JSON structure
+      - id: validate-config
+        name: Validate Qontinui Config Files
+        description: Validates .json config files against Qontinui Pydantic schemas
+        entry: python -m qontinui_devtools.config_validator
+        language: system
+        files: '\.json$'
+        pass_filenames: true
+        # Optional: Exclude specific JSON files that are not Qontinui configs
+        # exclude: '(package\.json|tsconfig\.json)'
+
+# Global settings
+default_language_version:
+  python: python3.11
+
+# Skip certain files/directories
+exclude: |
+  (?x)^(
+      \.git/|
+      \.pytest_cache/|
+      __pycache__/|
+      \.venv/|
+      venv/|
+      build/|
+      dist/|
+      \.eggs/|
+      .*\.egg-info/|
+      node_modules/|
+      .*\.min\.json
+  )
+
+# Configuration for specific hooks
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

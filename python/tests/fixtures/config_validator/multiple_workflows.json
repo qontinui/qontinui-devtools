@@ -1,0 +1,38 @@
+{
+  "name": "Multiple Workflows Config",
+  "default_workflow": "workflow1",
+  "workflows": [
+    {
+      "id": "workflow1",
+      "name": "First Workflow",
+      "actions": {
+        "action1": {
+          "type": "Click",
+          "name": "Click Button",
+          "searches": [
+            {
+              "type": "Match",
+              "image": "button.png",
+              "threshold": 0.8
+            }
+          ]
+        }
+      },
+      "connections": {},
+      "initial_action": "action1"
+    },
+    {
+      "id": "workflow2",
+      "name": "Second Workflow",
+      "actions": {
+        "action2": {
+          "type": "Wait",
+          "name": "Wait Action",
+          "duration": 1.0
+        }
+      },
+      "connections": {},
+      "initial_action": "action2"
+    }
+  ]
+}

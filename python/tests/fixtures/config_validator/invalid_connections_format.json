@@ -1,0 +1,32 @@
+{
+  "name": "Invalid Connections Format",
+  "default_workflow": "test_workflow",
+  "workflows": [
+    {
+      "id": "test_workflow",
+      "name": "Test Workflow with Old Format",
+      "actions": {
+        "action1": {
+          "type": "Click",
+          "name": "Click Button",
+          "searches": [
+            {
+              "type": "Match",
+              "image": "button.png",
+              "threshold": 0.8
+            }
+          ]
+        },
+        "action2": {
+          "type": "Wait",
+          "name": "Wait for Element",
+          "duration": 1.5
+        }
+      },
+      "connections": {
+        "action1": ["action2:false"]
+      },
+      "initial_action": "action1"
+    }
+  ]
+}
