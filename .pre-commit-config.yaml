@@ -108,3 +108,11 @@ ci:
   autoupdate_schedule: weekly
   skip: []
   submodules: false
+
+  - repo: local
+    hooks:
+      - id: block-claude-attribution
+        name: Block Claude Attribution
+        entry: .pre-commit-hooks/block-claude-attribution.sh
+        language: script
+        stages: [commit-msg]
