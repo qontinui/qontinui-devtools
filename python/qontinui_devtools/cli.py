@@ -2007,18 +2007,20 @@ def check_deps(path: str, update: bool) -> None:
 
     console.print(f"[bold cyan]Checking dependency health:[/bold cyan] {path}\n")
 
-    checker = DependencyHealthChecker(path)
+    checker = DependencyHealthChecker()
     with console.status("[bold green]Analyzing dependencies..."):
-        health = checker.check()
+        health = checker.check_health(path)
 
-    console.print(f"Total dependencies: {health.total}")
-    console.print(f"Outdated: {health.outdated}")
-    console.print(f"Vulnerabilities: {health.vulnerabilities}")
+    console.print(f"Total dependencies: {health.total_dependencies}")
+    console.print(f"Outdated: {health.outdated_count}")
+    console.print(f"Vulnerabilities: {health.total_vulnerabilities}")
 
-    if update and health.outdated > 0:
+    if update and health.outdated_count > 0:
         console.print(f"\n[yellow]Update commands:[/yellow]\n")
-        for cmd in health.update_commands:
-            console.print(f"  {cmd}")
+        outdated_deps = health.get_outdated_dependencies()
+        for dep in outdated_deps:
+            console.print(f"  # Update {dep.name} from {dep.current_version} to {dep.latest_version}")
+            console.print(f"  poetry add {dep.name}@^{dep.latest_version}")
 
 
 @main.group()
@@ -2662,6 +2664,731 @@ def validate_config(config_path: str, verbose: bool, strict: bool, qontinui_path
         console.print(f"[red]Unexpected error: {e}[/red]")
         import traceback
         traceback.print_exc()
+        sys.exit(1)
+
+
+# ============================================================================
+# TypeScript/JavaScript Analysis Commands
+# ============================================================================
+
+
+@main.group()
+def ts() -> None:
+    """TypeScript/JavaScript analysis commands.
+
+    Tools for analyzing TypeScript and JavaScript code, detecting circular
+    dependencies, finding dead code, measuring type coverage, and analyzing
+    code complexity.
+    """
+    pass
+
+
+@ts.command("check")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--strict", is_flag=True, help="Exit with error code if issues found")
+@click.option("--output", type=click.Path(), help="Save report to file")
+@click.option("--format",
+              type=click.Choice(["text", "json"], case_sensitive=False),
+              default="text",
+              help="Output format")
+def ts_check_imports(path: str, strict: bool, output: str | None, format: str) -> None:
+    """Check for circular dependencies in TypeScript/JavaScript code.
+
+    Analyzes TS/JS files to detect circular import dependencies that can
+    cause issues at runtime and make code harder to maintain.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools ts check ./src
+
+        # Strict mode (exit with error if issues found)
+        qontinui-devtools ts check ./src --strict
+
+        # Save report to file
+        qontinui-devtools ts check ./src --output report.txt
+    """
+    try:
+        from .typescript_analysis import CircularDependencyDetector
+    except ImportError:
+        console.print("[red]Error: TypeScript analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        detector = CircularDependencyDetector(path, verbose=True)
+        cycles = detector.analyze()
+
+        # Generate rich report
+        detector.generate_rich_report(cycles)
+
+        # Save report if requested
+        if output:
+            if format == "text":
+                report_text = detector.generate_report(cycles)
+                Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+        # Print statistics
+        stats = detector.get_statistics()
+        console.print("\n[bold]Statistics:[/bold]")
+        console.print(f"  Files scanned: {stats['total_files']}")
+        console.print(f"  Total imports: {stats['total_imports']}")
+        console.print(f"  Total cycles: {stats['total_cycles']}")
+
+        if strict and cycles:
+            sys.exit(1)
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+@ts.command("dead-code")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--strict", is_flag=True, help="Exit with error code if issues found")
+@click.option("--output", type=click.Path(), help="Save report to file")
+@click.option("--min-confidence", type=float, default=0.7,
+              help="Minimum confidence level (0-1) to report")
+def ts_dead_code(path: str, strict: bool, output: str | None, min_confidence: float) -> None:
+    """Find unused exports, functions, and code in TypeScript/JavaScript.
+
+    Analyzes TS/JS files to detect potentially unused exports and code that
+    could be removed.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools ts dead-code ./src
+
+        # Only show high-confidence results
+        qontinui-devtools ts dead-code ./src --min-confidence 0.8
+
+        # Save report to file
+        qontinui-devtools ts dead-code ./src --output report.txt
+    """
+    try:
+        from .typescript_analysis import DeadCodeDetector
+    except ImportError:
+        console.print("[red]Error: TypeScript analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        detector = DeadCodeDetector(path, verbose=True)
+        dead_code = detector.analyze()
+
+        # Filter by confidence
+        filtered_code = [code for code in dead_code if code.confidence >= min_confidence]
+
+        # Generate rich report
+        detector.generate_rich_report(filtered_code)
+
+        # Save report if requested
+        if output:
+            report_text = detector.generate_report(filtered_code)
+            Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+        # Print statistics
+        stats = detector.get_statistics()
+        console.print("\n[bold]Statistics:[/bold]")
+        console.print(f"  Files scanned: {stats['total_files']}")
+        console.print(f"  Total exports: {stats['total_exports']}")
+        console.print(f"  Potentially unused: {len(filtered_code)}")
+
+        if strict and filtered_code:
+            sys.exit(1)
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+@ts.command("types")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--strict", is_flag=True, help="Exit with error code if coverage below threshold")
+@click.option("--threshold", type=float, default=80.0,
+              help="Minimum type coverage percentage (0-100)")
+@click.option("--output", type=click.Path(), help="Save report to file")
+def ts_type_coverage(path: str, strict: bool, threshold: float, output: str | None) -> None:
+    """Analyze TypeScript type coverage.
+
+    Measures how well TypeScript code is typed, including coverage of
+    function parameters, return types, and usage of 'any' type.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools ts types ./src
+
+        # Require minimum 90% coverage
+        qontinui-devtools ts types ./src --threshold 90 --strict
+
+        # Save report to file
+        qontinui-devtools ts types ./src --output coverage.txt
+    """
+    try:
+        from .typescript_analysis import TypeCoverageAnalyzer
+    except ImportError:
+        console.print("[red]Error: TypeScript analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        analyzer = TypeCoverageAnalyzer(path, verbose=True)
+        coverage = analyzer.analyze()
+
+        # Generate rich report
+        analyzer.generate_rich_report(coverage)
+
+        # Save report if requested
+        if output:
+            report_text = analyzer.generate_report(coverage)
+            Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+        # Check threshold
+        if strict and coverage["percentage"] < threshold:
+            console.print(f"\n[red]Type coverage {coverage['percentage']:.1f}% is below threshold {threshold}%[/red]")
+            sys.exit(1)
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+@ts.command("complexity")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--strict", is_flag=True, help="Exit with error code if issues found")
+@click.option("--max-file-lines", type=int, default=500,
+              help="Maximum lines per file")
+@click.option("--max-function-lines", type=int, default=50,
+              help="Maximum lines per function")
+@click.option("--max-complexity", type=int, default=10,
+              help="Maximum cyclomatic complexity")
+@click.option("--output", type=click.Path(), help="Save report to file")
+def ts_complexity(
+    path: str,
+    strict: bool,
+    max_file_lines: int,
+    max_function_lines: int,
+    max_complexity: int,
+    output: str | None,
+) -> None:
+    """Analyze code complexity in TypeScript/JavaScript.
+
+    Measures cyclomatic complexity, file size, function length, and identifies
+    god classes/components.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools ts complexity ./src
+
+        # Custom thresholds
+        qontinui-devtools ts complexity ./src --max-file-lines 300 --max-complexity 15
+
+        # Save report to file
+        qontinui-devtools ts complexity ./src --output complexity.txt
+    """
+    try:
+        from .typescript_analysis import ComplexityAnalyzer
+    except ImportError:
+        console.print("[red]Error: TypeScript analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        analyzer = ComplexityAnalyzer(
+            path,
+            verbose=True,
+            max_file_lines=max_file_lines,
+            max_function_lines=max_function_lines,
+            max_complexity=max_complexity,
+        )
+        results = analyzer.analyze()
+
+        # Generate rich report
+        analyzer.generate_rich_report(results)
+
+        # Save report if requested
+        if output:
+            report_text = analyzer.generate_report(results)
+            Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+        if strict and results["issues"]:
+            sys.exit(1)
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+@ts.command("analyze")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--output", type=click.Path(), help="Save comprehensive report to file")
+@click.option("--skip-circular", is_flag=True, help="Skip circular dependency check")
+@click.option("--skip-dead-code", is_flag=True, help="Skip dead code detection")
+@click.option("--skip-types", is_flag=True, help="Skip type coverage analysis")
+@click.option("--skip-complexity", is_flag=True, help="Skip complexity analysis")
+def ts_analyze(
+    path: str,
+    output: str | None,
+    skip_circular: bool,
+    skip_dead_code: bool,
+    skip_types: bool,
+    skip_complexity: bool,
+) -> None:
+    """Run comprehensive TypeScript/JavaScript analysis.
+
+    Runs all available analyses on the codebase and generates a comprehensive
+    report including circular dependencies, dead code, type coverage, and
+    complexity metrics.
+
+    Examples:
+
+        # Full analysis
+        qontinui-devtools ts analyze ./src
+
+        # Skip specific checks
+        qontinui-devtools ts analyze ./src --skip-dead-code
+
+        # Save comprehensive report
+        qontinui-devtools ts analyze ./src --output full-report.txt
+    """
+    try:
+        from .typescript_analysis import (
+            CircularDependencyDetector,
+            DeadCodeDetector,
+            TypeCoverageAnalyzer,
+            ComplexityAnalyzer,
+        )
+    except ImportError:
+        console.print("[red]Error: TypeScript analysis module not available[/red]")
+        sys.exit(1)
+
+    console.print("\n[bold cyan]Running Comprehensive TypeScript/JavaScript Analysis[/bold cyan]\n")
+
+    report_lines = [
+        "=" * 80,
+        "COMPREHENSIVE TYPESCRIPT/JAVASCRIPT ANALYSIS REPORT",
+        "=" * 80,
+        f"\nAnalyzing: {path}\n",
+    ]
+
+    try:
+        # Circular dependencies
+        if not skip_circular:
+            console.print("[bold]1. Checking for circular dependencies...[/bold]")
+            detector = CircularDependencyDetector(path, verbose=False)
+            cycles = detector.analyze()
+            detector.generate_rich_report(cycles)
+            report_lines.append("\n" + detector.generate_report(cycles))
+
+        # Dead code
+        if not skip_dead_code:
+            console.print("\n[bold]2. Detecting dead code...[/bold]")
+            dead_detector = DeadCodeDetector(path, verbose=False)
+            dead_code = dead_detector.analyze()
+            dead_detector.generate_rich_report(dead_code)
+            report_lines.append("\n" + dead_detector.generate_report(dead_code))
+
+        # Type coverage
+        if not skip_types:
+            console.print("\n[bold]3. Analyzing type coverage...[/bold]")
+            type_analyzer = TypeCoverageAnalyzer(path, verbose=False)
+            coverage = type_analyzer.analyze()
+            type_analyzer.generate_rich_report(coverage)
+            report_lines.append("\n" + type_analyzer.generate_report(coverage))
+
+        # Complexity
+        if not skip_complexity:
+            console.print("\n[bold]4. Analyzing code complexity...[/bold]")
+            complexity_analyzer = ComplexityAnalyzer(path, verbose=False)
+            complexity_results = complexity_analyzer.analyze()
+            complexity_analyzer.generate_rich_report(complexity_results)
+            report_lines.append("\n" + complexity_analyzer.generate_report(complexity_results))
+
+        # Save comprehensive report if requested
+        if output:
+            report_text = "\n".join(report_lines)
+            Path(output).write_text(report_text)
+            console.print(f"\n[green]Comprehensive report saved to:[/green] {output}")
+
+        console.print("\n[bold green]Analysis complete![/bold green]")
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+
+@main.group()
+def rust() -> None:
+    """Rust code analysis commands.
+
+    Tools for analyzing Rust code, detecting circular dependencies,
+    finding dead code, analyzing unsafe usage, and measuring complexity.
+    """
+    pass
+
+
+@rust.command("import")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
+@click.option("--output", type=click.Path(), help="Save report to file")
+def rust_import_check(path: str, verbose: bool, output: str | None) -> None:
+    """Check for circular module dependencies in Rust code.
+
+    Analyzes Rust mod and use statements to detect circular dependencies
+    that can make code harder to maintain and understand.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools rust import check ./src
+
+        # Verbose output
+        qontinui-devtools rust import check ./src --verbose
+
+        # Save report to file
+        qontinui-devtools rust import check ./src --output report.txt
+    """
+    try:
+        from .rust_analysis import CircularDependencyDetector
+    except ImportError:
+        console.print("[red]Error: Rust analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        detector = CircularDependencyDetector(path, verbose=verbose)
+        cycles = detector.analyze()
+
+        # Use the rich report from detector
+        detector.generate_rich_report(cycles)
+
+        # Save report if requested
+        if output:
+            report_text = detector.generate_report(cycles)
+            Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+        # Print statistics
+        stats = detector.get_statistics()
+        console.print("\n[bold]Statistics:[/bold]")
+        console.print(f"  Files scanned: {stats['total_files']}")
+        console.print(f"  Modules: {stats['total_modules']}")
+        console.print(f"  Dependencies: {stats['total_dependencies']}")
+        console.print(f"  Cycles found: {stats['cycles_found']}")
+
+        if cycles:
+            sys.exit(1)
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        if verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+
+
+@rust.command("dead-code")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
+@click.option("--output", type=click.Path(), help="Save report to file")
+@click.option("--min-confidence", type=float, default=0.5, help="Minimum confidence threshold (0-1)")
+def rust_dead_code(path: str, verbose: bool, output: str | None, min_confidence: float) -> None:
+    """Find unused code in Rust projects.
+
+    Detects unused functions, structs, enums, traits, and constants
+    that may be candidates for removal.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools rust dead-code ./src
+
+        # Only high-confidence results
+        qontinui-devtools rust dead-code ./src --min-confidence 0.8
+
+        # Save report to file
+        qontinui-devtools rust dead-code ./src --output dead_code.txt
+    """
+    try:
+        from .rust_analysis import DeadCodeDetector
+    except ImportError:
+        console.print("[red]Error: Rust analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        detector = DeadCodeDetector(path, verbose=verbose)
+        dead_code = detector.analyze()
+
+        # Filter by confidence
+        dead_code = [dc for dc in dead_code if dc.confidence >= min_confidence]
+
+        if not dead_code:
+            console.print("\n[bold green]No dead code found[/bold green]\n")
+        else:
+            console.print(f"\n[bold yellow]Found {len(dead_code)} potentially unused items[/bold yellow]\n")
+
+            # Group by type and display
+            by_type: dict[str, list] = {}
+            for dc in dead_code:
+                by_type.setdefault(dc.type, []).append(dc)
+
+            for code_type, items in sorted(by_type.items()):
+                table = Table(title=f"Unused {code_type.capitalize()}s")
+                table.add_column("Name", style="cyan")
+                table.add_column("Visibility", style="yellow")
+                table.add_column("Confidence", justify="right", style="green")
+                table.add_column("Location", style="dim")
+
+                for item in items[:20]:  # Limit to top 20 per type
+                    rel_path = Path(item.file_path).relative_to(path)
+                    table.add_row(
+                        item.name,
+                        item.visibility,
+                        f"{item.confidence:.0%}",
+                        f"{rel_path}:{item.line_number}"
+                    )
+
+                console.print(table)
+                console.print()
+
+        # Save report if requested
+        if output:
+            report_text = detector.generate_report(dead_code)
+            Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+        # Print statistics
+        stats = detector.get_stats()
+        console.print("[bold]Statistics:[/bold]")
+        console.print(f"  Total: {stats['total']}")
+        console.print(f"  Functions: {stats['functions']}")
+        console.print(f"  Structs: {stats['structs']}")
+        console.print(f"  Enums: {stats['enums']}")
+        console.print(f"  Traits: {stats['traits']}")
+        console.print(f"  Constants: {stats['consts']}")
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        if verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+
+
+@rust.command("unsafe")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
+@click.option("--output", type=click.Path(), help="Save report to file")
+def rust_unsafe(path: str, verbose: bool, output: str | None) -> None:
+    """Analyze unsafe code usage in Rust projects.
+
+    Finds and categorizes all unsafe blocks, functions, and trait
+    implementations to help audit safety-critical code.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools rust unsafe ./src
+
+        # Verbose output
+        qontinui-devtools rust unsafe ./src --verbose
+
+        # Save report to file
+        qontinui-devtools rust unsafe ./src --output unsafe_report.txt
+    """
+    try:
+        from .rust_analysis import UnsafeAnalyzer
+    except ImportError:
+        console.print("[red]Error: Rust analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        analyzer = UnsafeAnalyzer(path, verbose=verbose)
+        unsafe_blocks = analyzer.analyze()
+
+        # Use the rich report from analyzer
+        analyzer.generate_rich_report(unsafe_blocks)
+
+        # Save report if requested
+        if output:
+            report_text = analyzer.generate_report(unsafe_blocks)
+            Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        if verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+
+
+@rust.command("complexity")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
+@click.option("--output", type=click.Path(), help="Save report to file")
+@click.option("--threshold", type=int, default=10, help="Complexity threshold for flagging functions")
+def rust_complexity(path: str, verbose: bool, output: str | None, threshold: int) -> None:
+    """Measure code complexity in Rust projects.
+
+    Analyzes function complexity, file sizes, and complex match statements
+    to identify areas that may need refactoring.
+
+    Examples:
+
+        # Basic check
+        qontinui-devtools rust complexity ./src
+
+        # Custom threshold
+        qontinui-devtools rust complexity ./src --threshold 15
+
+        # Save report to file
+        qontinui-devtools rust complexity ./src --output complexity.txt
+    """
+    try:
+        from .rust_analysis import ComplexityAnalyzer
+    except ImportError:
+        console.print("[red]Error: Rust analysis module not available[/red]")
+        sys.exit(1)
+
+    try:
+        analyzer = ComplexityAnalyzer(path, verbose=verbose, complexity_threshold=threshold)
+        metrics = analyzer.analyze()
+
+        # Use the rich report from analyzer
+        analyzer.generate_rich_report(metrics)
+
+        # Save report if requested
+        if output:
+            report_text = analyzer.generate_report(metrics)
+            Path(output).write_text(report_text)
+            console.print(f"[green]Report saved to:[/green] {output}")
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        if verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+
+
+@rust.command("analyze")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
+@click.option("--output-dir", type=click.Path(), help="Directory to save all reports")
+def rust_analyze(path: str, verbose: bool, output_dir: str | None) -> None:
+    """Run comprehensive Rust code analysis.
+
+    Performs all available Rust analyses: circular dependencies,
+    dead code detection, unsafe code analysis, and complexity metrics.
+
+    Examples:
+
+        # Basic comprehensive analysis
+        qontinui-devtools rust analyze ./src
+
+        # Save all reports to directory
+        qontinui-devtools rust analyze ./src --output-dir ./reports
+    """
+    try:
+        from .rust_analysis import (
+            CircularDependencyDetector,
+            DeadCodeDetector,
+            UnsafeAnalyzer,
+            ComplexityAnalyzer,
+        )
+    except ImportError:
+        console.print("[red]Error: Rust analysis module not available[/red]")
+        sys.exit(1)
+
+    output_path = Path(output_dir) if output_dir else None
+    if output_path:
+        output_path.mkdir(parents=True, exist_ok=True)
+
+    try:
+        console.print("\n[bold blue]Running Comprehensive Rust Analysis[/bold blue]\n")
+
+        # 1. Circular Dependencies
+        console.print("[bold]1. Checking for circular dependencies...[/bold]")
+        detector = CircularDependencyDetector(path, verbose=verbose)
+        cycles = detector.analyze()
+        detector.generate_rich_report(cycles)
+        if output_path:
+            report_file = output_path / "circular_dependencies.txt"
+            report_file.write_text(detector.generate_report(cycles))
+            console.print(f"  Report saved to: {report_file}")
+        console.print()
+
+        # 2. Dead Code
+        console.print("[bold]2. Detecting dead code...[/bold]")
+        dead_detector = DeadCodeDetector(path, verbose=verbose)
+        dead_code = dead_detector.analyze()
+        if not dead_code:
+            console.print("[green]  No dead code found[/green]")
+        else:
+            console.print(f"[yellow]  Found {len(dead_code)} potentially unused items[/yellow]")
+        if output_path:
+            report_file = output_path / "dead_code.txt"
+            report_file.write_text(dead_detector.generate_report(dead_code))
+            console.print(f"  Report saved to: {report_file}")
+        console.print()
+
+        # 3. Unsafe Code
+        console.print("[bold]3. Analyzing unsafe code...[/bold]")
+        unsafe_analyzer = UnsafeAnalyzer(path, verbose=verbose)
+        unsafe_blocks = unsafe_analyzer.analyze()
+        unsafe_analyzer.generate_rich_report(unsafe_blocks)
+        if output_path:
+            report_file = output_path / "unsafe_code.txt"
+            report_file.write_text(unsafe_analyzer.generate_report(unsafe_blocks))
+            console.print(f"  Report saved to: {report_file}")
+        console.print()
+
+        # 4. Complexity
+        console.print("[bold]4. Measuring complexity...[/bold]")
+        complexity_analyzer = ComplexityAnalyzer(path, verbose=verbose)
+        metrics = complexity_analyzer.analyze()
+        complexity_analyzer.generate_rich_report(metrics)
+        if output_path:
+            report_file = output_path / "complexity.txt"
+            report_file.write_text(complexity_analyzer.generate_report(metrics))
+            console.print(f"  Report saved to: {report_file}")
+        console.print()
+
+        # Summary
+        console.print("[bold green]Analysis Complete[/bold green]\n")
+        summary_table = Table(title="Analysis Summary")
+        summary_table.add_column("Analysis", style="cyan")
+        summary_table.add_column("Result", style="yellow")
+
+        summary_table.add_row("Circular Dependencies", str(len(cycles)))
+        summary_table.add_row("Dead Code Items", str(len(dead_code)))
+        summary_table.add_row("Unsafe Blocks", str(len(unsafe_blocks)))
+        summary_table.add_row("Complexity Issues", str(len(metrics)))
+
+        console.print(summary_table)
+
+        if output_path:
+            console.print(f"\n[green]All reports saved to:[/green] {output_path}")
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        if verbose:
+            import traceback
+            traceback.print_exc()
         sys.exit(1)
 
 

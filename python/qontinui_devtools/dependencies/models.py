@@ -183,7 +183,16 @@ class DependencyInfo:
 
         # Deduct for old packages (no release in 2+ years)
         if self.last_release_date:
-            age_days = (datetime.now() - self.last_release_date).days
+            # Handle both timezone-aware and naive datetimes
+            now = datetime.now()
+            last_release = self.last_release_date
+
+            # If last_release is timezone-aware, make now timezone-aware too
+            if last_release.tzinfo is not None and last_release.tzinfo.utcoffset(last_release) is not None:
+                # Convert last_release to naive datetime in UTC
+                last_release = last_release.replace(tzinfo=None)
+
+            age_days = (now - last_release).days
             if age_days > 730:  # 2 years
                 score -= 10
             elif age_days > 365:  # 1 year
