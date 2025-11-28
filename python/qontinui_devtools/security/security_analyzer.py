@@ -460,6 +460,11 @@ class SecurityAnalyzer:
                 # Check for weak hash algorithms
                 for weak_algo, (algo_name, cwe) in self.WEAK_CRYPTO.items():
                     if weak_algo in func_name and 'hashlib' in func_name:
+                        # Check if this is likely non-security use (content hashing, caching, etc.)
+                        # by examining the surrounding context
+                        if self._is_likely_non_security_hash(node):
+                            continue
+
                         self._add_vulnerability(
                             VulnerabilityType.WEAK_CRYPTO,
                             Severity.MEDIUM,
@@ -519,29 +524,41 @@ class SecurityAnalyzer:
             if isinstance(node, ast.Call):
                 func_name = self._get_func_name(node.func)
 
-                # Check each XML parser pattern
+                # Check if this is an actual XML parser call
+                # Must match the full path or end with a known XML module prefix
+                is_xml_parser = False
                 for xml_parser in self.XML_PARSERS:
-                    parts = xml_parser.split('.')
-                    if len(parts) >= 2 and parts[-1] in func_name:
-                        # Check if secure processing is enabled
-                        has_secure_processing = self._has_secure_xml_processing(node)
+                    # Check for exact match or proper suffix match
+                    if func_name == xml_parser:
+                        is_xml_parser = True
+                        break
+                    # Also check if it ends with the parser function and starts with xml/lxml
+                    if func_name.endswith(xml_parser.split('.')[-1]):
+                        # Verify it's actually from an XML module
+                        if any(func_name.startswith(prefix) for prefix in
+                               ['xml.', 'lxml.', 'ElementTree.', 'etree.', 'minidom.']):
+                            is_xml_parser = True
+                            break
 
-                        if not has_secure_processing:
-                            severity = Severity.HIGH
+                if is_xml_parser:
+                    # Check if secure processing is enabled
+                    has_secure_processing = self._has_secure_xml_processing(node)
 
-                            self._add_vulnerability(
-                                VulnerabilityType.XXE,
-                                severity,
-                                node.lineno,
-                                f"{func_name} without secure processing is vulnerable to XXE attacks",
-                                "Disable external entity processing. For xml.etree.ElementTree, use: "
-                                "parser = ET.XMLParser(); parser.entity = {}. "
-                                "For lxml, use: parser = etree.XMLParser(resolve_entities=False). "
-                                "Use defusedxml library for safer XML parsing.",
-                                "CWE-611",
-                                "A05:2021 - Security Misconfiguration"
-                            )
-                            break  # Only report once per call
+                    if not has_secure_processing:
+                        severity = Severity.HIGH
+
+                        self._add_vulnerability(
+                            VulnerabilityType.XXE,
+                            severity,
+                            node.lineno,
+                            f"{func_name} without secure processing is vulnerable to XXE attacks",
+                            "Disable external entity processing. For xml.etree.ElementTree, use: "
+                            "parser = ET.XMLParser(); parser.entity = {}. "
+                            "For lxml, use: parser = etree.XMLParser(resolve_entities=False). "
+                            "Use defusedxml library for safer XML parsing.",
+                            "CWE-611",
+                            "A05:2021 - Security Misconfiguration"
+                        )
 
     def _get_func_name(self, node: ast.AST) -> str:
         """Extract full function name from AST node."""
@@ -623,6 +640,48 @@ class SecurityAnalyzer:
         ]
         text_lower = text.lower()
         return any(fp in text_lower for fp in false_positives)
+
+    def _is_likely_non_security_hash(self, node: ast.Call) -> bool:
+        """
+        Check if a hash function is likely used for non-security purposes.
+
+        Non-security uses include: content fingerprinting, cache keys,
+        deduplication, checksums, etc. These are fine with MD5/SHA1.
+        """
+        # Check the code snippet around this line for context clues
+        snippet = self._get_code_snippet(node.lineno).lower()
+
+        # Keywords suggesting non-security use
+        non_security_keywords = [
+            'hash', 'fingerprint', 'cache', 'checksum', 'digest',
+            'content', 'file_hash', 'image', 'pixel', 'data',
+            'dedupe', 'duplicate', 'etag', 'signature',
+            # Variable names suggesting content hashing
+            'img_hash', 'content_hash', 'file_hash', 'data_hash',
+            'pixel_hash', 'frame_hash', 'state_hash'
+        ]
+
+        if any(keyword in snippet for keyword in non_security_keywords):
+            return True
+
+        # Check if the hash input is image/binary data (tobytes, encode for non-password)
+        for arg in node.args:
+            arg_str = ast.dump(arg).lower()
+            if 'tobytes' in arg_str or 'encode' in arg_str:
+                # Check it's not password-related
+                if 'password' not in snippet and 'passwd' not in snippet:
+                    return True
+
+        # Keywords suggesting security use (should NOT skip)
+        security_keywords = [
+            'password', 'passwd', 'secret', 'token', 'auth',
+            'credential', 'api_key', 'private'
+        ]
+
+        if any(keyword in snippet for keyword in security_keywords):
+            return False
+
+        return False
 
     def _add_vulnerability(
         self,
