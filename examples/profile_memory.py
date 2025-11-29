@@ -8,11 +8,12 @@ This example demonstrates how to use the MemoryProfiler to:
 """
 
 import time
+
 from qontinui_devtools.runtime import (
     MemoryProfiler,
+    classify_leak_severity,
     detect_common_leak_patterns,
     suggest_fixes,
-    classify_leak_severity,
 )
 
 
@@ -76,7 +77,7 @@ def main():
     profiler.start()
 
     baseline = profiler.baseline
-    print(f"Starting leak simulation...")
+    print("Starting leak simulation...")
     print(f"Baseline memory: {baseline.total_mb:.1f} MB")
     print()
 
@@ -119,7 +120,7 @@ def main():
             # Get suggestions
             fixes = suggest_fixes(leak.object_type)
             if fixes:
-                print(f"   Suggestions:")
+                print("   Suggestions:")
                 for fix in fixes[:2]:
                     print(f"     - {fix}")
             print()
@@ -234,7 +235,7 @@ def main():
         )
 
         print(f"HTML report generated: {output_file}")
-        print(f"Plots directory: memory_plots/")
+        print("Plots directory: memory_plots/")
 
     except ImportError as e:
         print(f"Note: HTML report generation requires matplotlib: {e}")

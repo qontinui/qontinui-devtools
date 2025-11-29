@@ -4,16 +4,14 @@ This module provides convenient decorators for marking functions to be
 tested concurrently for race conditions.
 """
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from .race_tester import RaceConditionTester, RaceTestResult
 
 
 def concurrent_test(
-    threads: int = 10,
-    iterations: int = 100,
-    timeout: float = 30.0,
-    track_state: bool = False
+    threads: int = 10, iterations: int = 100, timeout: float = 30.0, track_state: bool = False
 ) -> Callable:
     """Decorator to run test concurrently.
 
@@ -40,13 +38,11 @@ def concurrent_test(
         if result.race_detected:
             print("Race condition found!")
     """
+
     def decorator(func: Callable) -> Callable:
         def wrapper(*args: Any, **kwargs: Any) -> RaceTestResult:
             tester = RaceConditionTester(
-                threads=threads,
-                iterations=iterations,
-                timeout=timeout,
-                track_state=track_state
+                threads=threads, iterations=iterations, timeout=timeout, track_state=track_state
             )
             return tester.test_function(func, *args, **kwargs)
 
@@ -56,14 +52,11 @@ def concurrent_test(
         wrapper.__module__ = func.__module__
 
         return wrapper
+
     return decorator
 
 
-def stress_test(
-    threads: int = 50,
-    iterations: int = 1000,
-    timeout: float = 60.0
-) -> Callable:
+def stress_test(threads: int = 50, iterations: int = 1000, timeout: float = 60.0) -> Callable:
     """Decorator for heavy stress testing.
 
     Similar to concurrent_test but with higher defaults for more
@@ -84,18 +77,11 @@ def stress_test(
             pass
     """
     return concurrent_test(
-        threads=threads,
-        iterations=iterations,
-        timeout=timeout,
-        track_state=False
+        threads=threads, iterations=iterations, timeout=timeout, track_state=False
     )
 
 
-def tracked_test(
-    threads: int = 10,
-    iterations: int = 100,
-    timeout: float = 30.0
-) -> Callable:
+def tracked_test(threads: int = 10, iterations: int = 100, timeout: float = 30.0) -> Callable:
     """Decorator for concurrent test with state tracking.
 
     This decorator enables state instrumentation to detect race conditions
@@ -116,8 +102,5 @@ def tracked_test(
             pass
     """
     return concurrent_test(
-        threads=threads,
-        iterations=iterations,
-        timeout=timeout,
-        track_state=True
+        threads=threads, iterations=iterations, timeout=timeout, track_state=True
     )

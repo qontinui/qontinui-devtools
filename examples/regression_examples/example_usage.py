@@ -1,7 +1,9 @@
 """Example usage of the Regression Detector."""
 
 from pathlib import Path
-from qontinui_devtools.regression import RegressionDetector, ChangeType
+
+from qontinui_devtools.regression import RegressionDetector
+
 
 def main() -> None:
     """Demonstrate regression detection capabilities."""
@@ -12,23 +14,23 @@ def main() -> None:
     # Example 1: Create a baseline snapshot
     print("Creating baseline snapshot...")
     baseline_snapshot = detector.create_snapshot(
-        Path("./my_project/src"),
-        version="v1.0",
-        save=True
+        Path("./my_project/src"), version="v1.0", save=True
     )
-    print(f"Baseline: {len(baseline_snapshot.functions)} functions, "
-          f"{len(baseline_snapshot.classes)} classes")
+    print(
+        f"Baseline: {len(baseline_snapshot.functions)} functions, "
+        f"{len(baseline_snapshot.classes)} classes"
+    )
 
     # Example 2: Compare current code to baseline
     print("\nDetecting regressions...")
     report = detector.detect_regressions(
         source_path=Path("./my_project/src"),
         baseline="v1.0",  # Load from saved snapshot
-        current_version="v2.0"
+        current_version="v2.0",
     )
 
     # Example 3: Analyze results
-    print(f"\n=== Regression Report ===")
+    print("\n=== Regression Report ===")
     print(f"Baseline: {report.baseline_version}")
     print(f"Current: {report.current_version}")
     print(f"Total Issues: {len(report.issues)}")
@@ -70,7 +72,7 @@ def main() -> None:
             function_name="slow_function",
             module_path="my_module",
             execution_time_ms=100.0,
-            memory_usage_mb=10.0
+            memory_usage_mb=10.0,
         )
     }
 
@@ -79,13 +81,11 @@ def main() -> None:
             function_name="slow_function",
             module_path="my_module",
             execution_time_ms=150.0,  # 50% slower!
-            memory_usage_mb=15.0
+            memory_usage_mb=15.0,
         )
     }
 
-    perf_issues = detector.detect_performance_regressions(
-        baseline_metrics, current_metrics
-    )
+    perf_issues = detector.detect_performance_regressions(baseline_metrics, current_metrics)
 
     if perf_issues:
         print(f"\nFound {len(perf_issues)} performance regressions:")
@@ -96,15 +96,11 @@ def main() -> None:
     # Example 9: Dependency change detection
     print("\n=== Dependency Change Example ===")
 
-    baseline_deps = {
-        "requests": "2.28.0",
-        "numpy": "1.24.0",
-        "pandas": "1.5.0"
-    }
+    baseline_deps = {"requests": "2.28.0", "numpy": "1.24.0", "pandas": "1.5.0"}
 
     current_deps = {
         "requests": "2.31.0",  # Minor version bump
-        "numpy": "2.0.0",      # Major version bump!
+        "numpy": "2.0.0",  # Major version bump!
         # pandas removed
     }
 

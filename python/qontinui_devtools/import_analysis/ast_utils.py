@@ -7,7 +7,6 @@ and extracting import information without executing the code.
 import ast
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 
 @dataclass

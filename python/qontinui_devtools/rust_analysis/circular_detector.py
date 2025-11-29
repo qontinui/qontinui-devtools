@@ -17,7 +17,6 @@ except ImportError:
     HAS_NETWORKX = False
 
 from rich.console import Console
-from rich.table import Table
 
 
 @dataclass
@@ -116,7 +115,7 @@ class CircularDependencyDetector:
             file_path: Path to the Rust file
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # Get module name from file path

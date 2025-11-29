@@ -10,7 +10,6 @@ This module provides:
 import gc
 import sys
 from typing import Any
-from collections import deque
 
 
 def analyze_growth_trend(
@@ -40,7 +39,7 @@ def analyze_growth_trend(
     n = len(samples)
     sum_x = sum(times)
     sum_y = sum(values)
-    sum_xy = sum(t * v for t, v in zip(times, values))
+    sum_xy = sum(t * v for t, v in zip(times, values, strict=False))
     sum_xx = sum(t * t for t in times)
 
     # Calculate slope (growth rate)
@@ -56,9 +55,7 @@ def analyze_growth_trend(
     return is_growing, slope
 
 
-def find_reference_chains(
-    obj: Any, max_depth: int = 5, max_chains: int = 10
-) -> list[list[str]]:
+def find_reference_chains(obj: Any, max_depth: int = 5, max_chains: int = 10) -> list[list[str]]:
     """Find reference chains keeping an object alive.
 
     Uses gc.get_referrers() to trace back what's holding references.
@@ -74,9 +71,7 @@ def find_reference_chains(
     chains: list[list[str]] = []
     visited = set()
 
-    def _trace_referrers(
-        current_obj: Any, current_chain: list[str], depth: int
-    ) -> None:
+    def _trace_referrers(current_obj: Any, current_chain: list[str], depth: int) -> None:
         """Recursively trace referrers."""
         if depth >= max_depth or len(chains) >= max_chains:
             return
@@ -119,9 +114,7 @@ def find_reference_chains(
     return chains
 
 
-def find_leaked_objects(
-    baseline_objects: set[int], current_objects: list[Any]
-) -> list[Any]:
+def find_leaked_objects(baseline_objects: set[int], current_objects: list[Any]) -> list[Any]:
     """Find objects that were created after baseline.
 
     Args:
@@ -138,9 +131,7 @@ def find_leaked_objects(
     return leaked
 
 
-def classify_leak_severity(
-    count_increase: int, size_mb: float, growth_rate: float
-) -> str:
+def classify_leak_severity(count_increase: int, size_mb: float, growth_rate: float) -> str:
     """Classify leak severity based on metrics.
 
     Args:
@@ -267,8 +258,9 @@ def get_object_size_deep(obj: Any, seen: set[int] | None = None) -> int:
 
     # Recursively measure referenced objects
     if isinstance(obj, dict):
-        size += sum(get_object_size_deep(k, seen) + get_object_size_deep(v, seen)
-                    for k, v in obj.items())
+        size += sum(
+            get_object_size_deep(k, seen) + get_object_size_deep(v, seen) for k, v in obj.items()
+        )
     elif isinstance(obj, (list, tuple, set, frozenset)):
         size += sum(get_object_size_deep(item, seen) for item in obj)
     elif hasattr(obj, "__dict__"):

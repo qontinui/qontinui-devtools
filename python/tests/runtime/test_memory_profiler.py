@@ -2,13 +2,12 @@
 
 import gc
 import time
-import pytest
-from pathlib import Path
 
+import pytest
 from qontinui_devtools.runtime import (
+    MemoryLeak,
     MemoryProfiler,
     MemorySnapshot,
-    MemoryLeak,
 )
 
 
@@ -337,6 +336,7 @@ class TestMemoryProfiler:
 
         # Simulate noisy data (random fluctuation)
         import random
+
         samples = [(float(i), 100 + random.randint(-10, 10)) for i in range(10)]
 
         is_growing, rate, confidence = profiler._analyze_growth(samples, threshold=5.0)
@@ -362,6 +362,7 @@ class TestMemoryProfiler:
         """Test profiler with tracemalloc enabled."""
         try:
             import tracemalloc
+
             tracemalloc_available = True
         except ImportError:
             tracemalloc_available = False

@@ -3,19 +3,15 @@
 import json
 import threading
 import time
-from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.runtime import (
-    EventTracer,
     EventTrace,
-    EventFlow,
-    Checkpoint,
+    EventTracer,
     analyze_latencies,
-    find_bottleneck,
     detect_anomalies,
     export_chrome_trace,
+    find_bottleneck,
 )
 
 
@@ -24,11 +20,7 @@ class TestEventTrace:
 
     def test_create_trace(self):
         """Test creating an event trace."""
-        trace = EventTrace(
-            event_id="evt_001",
-            event_type="click",
-            created_at=time.time()
-        )
+        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
         assert trace.event_id == "evt_001"
         assert trace.event_type == "click"
@@ -38,11 +30,7 @@ class TestEventTrace:
 
     def test_add_checkpoint(self):
         """Test adding checkpoints to a trace."""
-        trace = EventTrace(
-            event_id="evt_001",
-            event_type="click",
-            created_at=time.time()
-        )
+        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
         # Add checkpoints
         trace.add_checkpoint("frontend_emit")
@@ -59,11 +47,7 @@ class TestEventTrace:
 
     def test_add_checkpoint_with_metadata(self):
         """Test adding checkpoints with metadata."""
-        trace = EventTrace(
-            event_id="evt_001",
-            event_type="click",
-            created_at=time.time()
-        )
+        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
         metadata = {"button": "submit", "x": 100, "y": 200}
         trace.add_checkpoint("frontend_emit", metadata=metadata)
@@ -72,11 +56,7 @@ class TestEventTrace:
 
     def test_get_latency(self):
         """Test calculating latency between checkpoints."""
-        trace = EventTrace(
-            event_id="evt_001",
-            event_type="click",
-            created_at=time.time()
-        )
+        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
         trace.add_checkpoint("frontend_emit")
         time.sleep(0.01)
@@ -93,11 +73,7 @@ class TestEventTrace:
 
     def test_get_latency_invalid_checkpoint(self):
         """Test error handling for invalid checkpoints."""
-        trace = EventTrace(
-            event_id="evt_001",
-            event_type="click",
-            created_at=time.time()
-        )
+        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
         trace.add_checkpoint("frontend_emit")
         trace.add_checkpoint("tauri_receive")
@@ -110,11 +86,7 @@ class TestEventTrace:
 
     def test_get_latency_invalid_order(self):
         """Test error handling for invalid checkpoint order."""
-        trace = EventTrace(
-            event_id="evt_001",
-            event_type="click",
-            created_at=time.time()
-        )
+        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
         trace.add_checkpoint("frontend_emit")
         trace.add_checkpoint("tauri_receive")
@@ -124,11 +96,7 @@ class TestEventTrace:
 
     def test_get_stage_latencies(self):
         """Test getting all stage latencies."""
-        trace = EventTrace(
-            event_id="evt_001",
-            event_type="click",
-            created_at=time.time()
-        )
+        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
         trace.add_checkpoint("frontend_emit")
         time.sleep(0.01)

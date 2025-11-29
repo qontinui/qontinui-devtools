@@ -88,23 +88,23 @@ def test_unsafe_factory():
     tester = RaceConditionTester(threads=20, iterations=50)
     result = tester.test_function(worker)
 
-    print(f"\nTest Results:")
+    print("\nTest Results:")
     print(f"  Total iterations: {result.total_iterations}")
     print(f"  Successful: {result.successful}")
     print(f"  Failed: {result.failed}")
     print(f"  Race detected: {result.race_detected}")
 
-    print(f"\nFactory Statistics:")
+    print("\nFactory Statistics:")
     print(f"  Controller created {HALFactory._creation_count} times")
-    print(f"  Expected: 1 (singleton)")
+    print("  Expected: 1 (singleton)")
     print(f"  Actual: {HALFactory._creation_count}")
 
     if HALFactory._creation_count > 1:
-        print(f"\n  ⚠️  WARNING: Controller created multiple times!")
-        print(f"  This is a race condition in lazy initialization!")
+        print("\n  ⚠️  WARNING: Controller created multiple times!")
+        print("  This is a race condition in lazy initialization!")
 
     if result.execution_times:
-        print(f"\nTiming Statistics:")
+        print("\nTiming Statistics:")
         print(f"  Avg: {result.avg_execution_time*1000:.2f}ms")
         print(f"  Min: {result.min_execution_time*1000:.2f}ms")
         print(f"  Max: {result.max_execution_time*1000:.2f}ms")
@@ -128,23 +128,23 @@ def test_safe_factory():
     tester = RaceConditionTester(threads=20, iterations=50)
     result = tester.test_function(worker)
 
-    print(f"\nTest Results:")
+    print("\nTest Results:")
     print(f"  Total iterations: {result.total_iterations}")
     print(f"  Successful: {result.successful}")
     print(f"  Failed: {result.failed}")
     print(f"  Race detected: {result.race_detected}")
 
-    print(f"\nFactory Statistics:")
+    print("\nFactory Statistics:")
     print(f"  Controller created {SafeHALFactory._creation_count} times")
-    print(f"  Expected: 1 (singleton)")
+    print("  Expected: 1 (singleton)")
     print(f"  Actual: {SafeHALFactory._creation_count}")
 
     if SafeHALFactory._creation_count == 1:
-        print(f"\n  ✅ SUCCESS: Controller created exactly once!")
-        print(f"  Thread-safe implementation working correctly!")
+        print("\n  ✅ SUCCESS: Controller created exactly once!")
+        print("  Thread-safe implementation working correctly!")
 
     if result.execution_times:
-        print(f"\nTiming Statistics:")
+        print("\nTiming Statistics:")
         print(f"  Avg: {result.avg_execution_time*1000:.2f}ms")
         print(f"  Min: {result.min_execution_time*1000:.2f}ms")
         print(f"  Max: {result.max_execution_time*1000:.2f}ms")
@@ -213,6 +213,7 @@ def main():
     except Exception as e:
         print(f"\nError running tests: {e}")
         import traceback
+
         traceback.print_exc()
 
 

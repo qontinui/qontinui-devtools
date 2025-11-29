@@ -13,7 +13,6 @@ from qontinui_devtools.dependencies import (
     DependencyHealthChecker,
     HealthStatus,
     UpdateType,
-    VulnerabilityInfo,
 )
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
 

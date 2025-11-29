@@ -4,7 +4,6 @@ import ast
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.architecture import ClassMetrics, ExtractionSuggestion, GodClassDetector
 from qontinui_devtools.architecture.ast_metrics import (
     calculate_complexity,
@@ -45,7 +44,7 @@ class TestAstMetrics:
 
     def test_count_lines(self, god_class_file: Path) -> None:
         """Test line counting."""
-        with open(god_class_file, "r") as f:
+        with open(god_class_file) as f:
             source = f.read()
 
         tree = ast.parse(source)
@@ -64,7 +63,7 @@ class TestAstMetrics:
 
     def test_count_methods(self, god_class_file: Path) -> None:
         """Test method counting."""
-        with open(god_class_file, "r") as f:
+        with open(god_class_file) as f:
             source = f.read()
 
         tree = ast.parse(source)
@@ -83,7 +82,7 @@ class TestAstMetrics:
 
     def test_count_attributes(self, god_class_file: Path) -> None:
         """Test attribute counting."""
-        with open(god_class_file, "r") as f:
+        with open(god_class_file) as f:
             source = f.read()
 
         tree = ast.parse(source)
@@ -100,7 +99,7 @@ class TestAstMetrics:
 
     def test_extract_method_names(self, god_class_file: Path) -> None:
         """Test method name extraction."""
-        with open(god_class_file, "r") as f:
+        with open(god_class_file) as f:
             source = f.read()
 
         tree = ast.parse(source)
@@ -152,7 +151,7 @@ class TestClass:
 
     def test_calculate_complexity(self, god_class_file: Path) -> None:
         """Test complexity calculation."""
-        with open(god_class_file, "r") as f:
+        with open(god_class_file) as f:
             source = f.read()
 
         tree = ast.parse(source)
@@ -183,9 +182,7 @@ class TestGodClassDetector:
         assert huge_class.line_count > 150  # Adjusted threshold
 
     def test_normal_class_not_detected(
-        self,
-        detector: GodClassDetector,
-        normal_class_file: Path
+        self, detector: GodClassDetector, normal_class_file: Path
     ) -> None:
         """Test that normal classes are not flagged."""
         god_classes = detector.analyze_file(str(normal_class_file))
@@ -204,7 +201,7 @@ class TestGodClassDetector:
 
     def test_calculate_lcom(self, detector: GodClassDetector, god_class_file: Path) -> None:
         """Test LCOM calculation."""
-        with open(god_class_file, "r") as f:
+        with open(god_class_file) as f:
             source = f.read()
 
         tree = ast.parse(source)
@@ -223,12 +220,10 @@ class TestGodClassDetector:
         assert lcom > 0.5
 
     def test_detect_responsibilities(
-        self,
-        detector: GodClassDetector,
-        god_class_file: Path
+        self, detector: GodClassDetector, god_class_file: Path
     ) -> None:
         """Test responsibility detection."""
-        with open(god_class_file, "r") as f:
+        with open(god_class_file) as f:
             source = f.read()
 
         tree = ast.parse(source)
@@ -249,11 +244,7 @@ class TestGodClassDetector:
         assert any("validation" in r for r in resp_lower)
         assert any("persistence" in r for r in resp_lower)
 
-    def test_suggest_extractions(
-        self,
-        detector: GodClassDetector,
-        god_class_file: Path
-    ) -> None:
+    def test_suggest_extractions(self, detector: GodClassDetector, god_class_file: Path) -> None:
         """Test extraction suggestions."""
         god_classes = detector.analyze_file(str(god_class_file))
         huge_class = next((c for c in god_classes if c.name == "HugeClass"), None)
@@ -272,11 +263,7 @@ class TestGodClassDetector:
             assert len(suggestion.responsibility) > 0
             assert suggestion.estimated_lines > 0
 
-    def test_severity_calculation(
-        self,
-        detector: GodClassDetector,
-        god_class_file: Path
-    ) -> None:
+    def test_severity_calculation(self, detector: GodClassDetector, god_class_file: Path) -> None:
         """Test severity level calculation."""
         god_classes = detector.analyze_file(str(god_class_file))
         huge_class = next((c for c in god_classes if c.name == "HugeClass"), None)

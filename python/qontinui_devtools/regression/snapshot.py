@@ -63,7 +63,7 @@ class APISnapshot:
             base_path: Base path for relative module paths
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 source = f.read()
 
             tree = ast.parse(source, filename=str(file_path))
@@ -207,16 +207,14 @@ class APISnapshot:
         if not input_path.exists():
             raise FileNotFoundError(f"Snapshot file not found: {input_path}")
 
-        with open(input_path, "r", encoding="utf-8") as f:
+        with open(input_path, encoding="utf-8") as f:
             data = json.load(f)
 
         self.metadata = data.get("metadata", {})
         self.functions = {
             k: FunctionSignature.from_dict(v) for k, v in data.get("functions", {}).items()
         }
-        self.classes = {
-            k: ClassSignature.from_dict(v) for k, v in data.get("classes", {}).items()
-        }
+        self.classes = {k: ClassSignature.from_dict(v) for k, v in data.get("classes", {}).items()}
 
         logger.info(
             f"Snapshot loaded: {len(self.functions)} functions, {len(self.classes)} classes"
@@ -352,8 +350,6 @@ class APISnapshot:
         filtered.functions = {
             k: v for k, v in self.functions.items() if k.startswith(module_prefix)
         }
-        filtered.classes = {
-            k: v for k, v in self.classes.items() if k.startswith(module_prefix)
-        }
+        filtered.classes = {k: v for k, v in self.classes.items() if k.startswith(module_prefix)}
 
         return filtered

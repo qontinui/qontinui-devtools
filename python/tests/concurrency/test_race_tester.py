@@ -3,8 +3,6 @@
 import threading
 import time
 
-import pytest
-
 from qontinui_devtools.concurrency import (
     RaceConditionTester,
     RaceTestResult,
@@ -78,6 +76,7 @@ def test_race_tester_basic():
 
 def test_race_tester_with_exceptions():
     """Test race tester handles exceptions properly."""
+
     def failing_function():
         raise ValueError("Test error")
 
@@ -92,9 +91,11 @@ def test_race_tester_with_exceptions():
 
 def test_race_tester_timing_variance():
     """Test that timing variance is calculated."""
+
     def variable_time():
         # Simulate variable execution time
         import random
+
         time.sleep(random.uniform(0.001, 0.005))
 
     tester = RaceConditionTester(threads=5, iterations=5)
@@ -132,18 +133,8 @@ def test_stress_test_scenarios():
             call_counts[scenario_name] += 1
 
     scenarios = [
-        {
-            "name": "scenario1",
-            "args": ("scenario1",),
-            "threads": 3,
-            "iterations": 5
-        },
-        {
-            "name": "scenario2",
-            "args": ("scenario2",),
-            "threads": 2,
-            "iterations": 10
-        }
+        {"name": "scenario1", "args": ("scenario1",), "threads": 3, "iterations": 5},
+        {"name": "scenario2", "args": ("scenario2",), "threads": 2, "iterations": 10},
     ]
 
     tester = RaceConditionTester()
@@ -162,7 +153,7 @@ def test_race_test_result_properties():
         successful=90,
         failed=10,
         race_detected=True,
-        execution_times=[0.001, 0.002, 0.003, 0.010]
+        execution_times=[0.001, 0.002, 0.003, 0.010],
     )
 
     assert result.success_rate == 90.0
@@ -180,7 +171,7 @@ def test_race_test_result_string():
         failed=5,
         race_detected=True,
         failure_details=["Error 1", "Error 2"],
-        execution_times=[0.001, 0.002]
+        execution_times=[0.001, 0.002],
     )
 
     result_str = str(result)
@@ -273,6 +264,7 @@ def test_lazy_initialization_race():
 
 def test_race_tester_timeout():
     """Test that race tester respects timeout."""
+
     def slow_function():
         time.sleep(1.0)
 
@@ -305,6 +297,7 @@ def test_function_with_arguments():
 
 def test_race_detection_heuristics():
     """Test race detection heuristics."""
+
     # Test 1: Failures trigger race detection
     def failing():
         raise RuntimeError("Test failure")
@@ -330,18 +323,10 @@ def test_compare_results():
 
     results = [
         RaceTestResult(
-            test_name="test1",
-            total_iterations=100,
-            successful=90,
-            failed=10,
-            race_detected=True
+            test_name="test1", total_iterations=100, successful=90, failed=10, race_detected=True
         ),
         RaceTestResult(
-            test_name="test2",
-            total_iterations=100,
-            successful=100,
-            failed=0,
-            race_detected=False
+            test_name="test2", total_iterations=100, successful=100, failed=0, race_detected=False
         ),
     ]
 

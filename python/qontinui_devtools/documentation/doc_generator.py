@@ -6,7 +6,6 @@ type hints, and code structure from Python source files.
 """
 
 import ast
-import inspect
 import json
 import re
 from pathlib import Path
@@ -143,9 +142,7 @@ class DocstringParser:
             ]:
                 # Save previous section
                 if current_section:
-                    self._process_google_section(
-                        result, current_section, current_content
-                    )
+                    self._process_google_section(result, current_section, current_content)
 
                 in_description = False
                 current_section = stripped[:-1]
@@ -480,7 +477,10 @@ class DocstringParser:
             elif current_exception:
                 # Description
                 if current_exception[1]:
-                    current_exception = (current_exception[0], current_exception[1] + " " + stripped)
+                    current_exception = (
+                        current_exception[0],
+                        current_exception[1] + " " + stripped,
+                    )
                 else:
                     current_exception = (current_exception[0], stripped)
 
@@ -620,9 +620,7 @@ class ASTDocExtractor(ast.NodeVisitor):
         """Visit async function definition."""
         self._visit_function(node, is_async=True)
 
-    def _visit_function(
-        self, node: ast.FunctionDef | ast.AsyncFunctionDef, is_async: bool
-    ) -> None:
+    def _visit_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef, is_async: bool) -> None:
         """Visit function or method."""
         docstring = ast.get_docstring(node)
 
@@ -630,9 +628,7 @@ class ASTDocExtractor(ast.NodeVisitor):
         is_method = self.current_class is not None
         item_type = DocItemType.METHOD if is_method else DocItemType.FUNCTION
 
-        qualified_name = (
-            f"{self.current_class}.{node.name}" if is_method else node.name
-        )
+        qualified_name = f"{self.current_class}.{node.name}" if is_method else node.name
 
         # Parse docstring
         parsed = self.parser.parse(docstring)
@@ -654,9 +650,7 @@ class ASTDocExtractor(ast.NodeVisitor):
         # Extract examples
         examples = []
         for ex in parsed["examples"]:
-            examples.append(
-                Example(code=ex["code"], description=ex.get("description", ""))
-            )
+            examples.append(Example(code=ex["code"], description=ex.get("description", "")))
 
         # Get return description
         return_description = None
@@ -1049,9 +1043,7 @@ class DocumentationGenerator:
 
         return "\n".join(lines)
 
-    def _generate_module_markdown(
-        self, module: DocItem, tree: DocumentationTree
-    ) -> str:
+    def _generate_module_markdown(self, module: DocItem, tree: DocumentationTree) -> str:
         """Generate markdown for a module."""
         lines = []
         lines.append(f"# {module.name}\n")
@@ -1064,7 +1056,8 @@ class DocumentationGenerator:
 
         # Classes
         classes = [
-            item for item in tree.all_items.values()
+            item
+            for item in tree.all_items.values()
             if item.parent == module.qualified_name and item.type == DocItemType.CLASS
         ]
 
@@ -1086,7 +1079,8 @@ class DocumentationGenerator:
 
         # Functions
         functions = [
-            item for item in tree.all_items.values()
+            item
+            for item in tree.all_items.values()
             if item.parent == module.qualified_name and item.type == DocItemType.FUNCTION
         ]
 
@@ -1125,7 +1119,7 @@ class DocumentationGenerator:
         if tree.modules:
             html.append("<h2>Modules</h2>")
             for qualified_name, module in sorted(tree.modules.items()):
-                html.append(f'<div class="item">')
+                html.append('<div class="item">')
                 html.append(f"<h3>{module.name}</h3>")
                 if module.summary:
                     html.append(f"<p>{module.summary}</p>")
@@ -1135,7 +1129,7 @@ class DocumentationGenerator:
         if tree.classes:
             html.append("<h2>Classes</h2>")
             for qualified_name, cls in sorted(tree.classes.items()):
-                html.append(f'<div class="item">')
+                html.append('<div class="item">')
                 html.append(f"<h3>{cls.name}</h3>")
                 if cls.summary:
                     html.append(f"<p>{cls.summary}</p>")

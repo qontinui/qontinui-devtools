@@ -6,6 +6,7 @@ beautiful, interactive visualizations of module, class, and function dependencie
 """
 
 from pathlib import Path
+
 from qontinui_devtools.architecture import DependencyGraphVisualizer
 
 
@@ -111,8 +112,10 @@ def main():
         print("   ⚠️  Graphviz Python package not installed, skipping static visualizations")
         print("   💡 Install with: pip install graphviz")
     except Exception as e:
-        print(f"   ⚠️  Graphviz binaries not found on system PATH, skipping static visualizations")
-        print("   💡 Install graphviz system package (apt install graphviz / brew install graphviz)")
+        print("   ⚠️  Graphviz binaries not found on system PATH, skipping static visualizations")
+        print(
+            "   💡 Install graphviz system package (apt install graphviz / brew install graphviz)"
+        )
         print(f"   Error: {e}")
 
     # Summary
@@ -125,7 +128,7 @@ def main():
     print(f"  - {output_class_html.name} (class relationships)")
     if len(func_nodes) < 200:
         print(f"  - {output_func_html.name} (function calls)")
-    print(f"\nJSON export:")
+    print("\nJSON export:")
     print(f"  - {output_json.name}")
     print("\n💡 Open the HTML files in your browser to:")
     print("   - Zoom and pan around the graph")

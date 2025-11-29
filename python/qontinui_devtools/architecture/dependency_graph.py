@@ -2,9 +2,8 @@
 
 import ast
 import os
-from pathlib import Path
-from typing import Dict, Set, List
 from collections import defaultdict
+from pathlib import Path
 
 
 class DependencyGraphBuilder:
@@ -17,10 +16,10 @@ class DependencyGraphBuilder:
             verbose: If True, print progress information
         """
         self.verbose = verbose
-        self.module_map: Dict[str, str] = {}  # module name -> file path
-        self.reverse_map: Dict[str, str] = {}  # file path -> module name
+        self.module_map: dict[str, str] = {}  # module name -> file path
+        self.reverse_map: dict[str, str] = {}  # file path -> module name
 
-    def build(self, root_path: str) -> Dict[str, Set[str]]:
+    def build(self, root_path: str) -> dict[str, set[str]]:
         """Build dependency graph for all modules in the given path.
 
         Args:
@@ -52,7 +51,7 @@ class DependencyGraphBuilder:
             print(f"Found {len(python_files)} Python files")
 
         # Second pass: build dependency graph
-        graph: Dict[str, Set[str]] = defaultdict(set)
+        graph: dict[str, set[str]] = defaultdict(set)
 
         for file_path in python_files:
             module_name = self.reverse_map[str(file_path)]
@@ -89,18 +88,18 @@ class DependencyGraphBuilder:
         # Remove .py extension
         parts = list(relative.parts)
         if not parts:
-            return ''
+            return ""
 
-        if parts[-1].endswith('.py'):
+        if parts[-1].endswith(".py"):
             parts[-1] = parts[-1][:-3]
 
         # Remove __init__ from module names
-        if parts and parts[-1] == '__init__':
+        if parts and parts[-1] == "__init__":
             parts = parts[:-1]
 
-        return '.'.join(parts) if parts else ''
+        return ".".join(parts) if parts else ""
 
-    def _extract_imports(self, file_path: Path) -> List[str]:
+    def _extract_imports(self, file_path: Path) -> list[str]:
         """Extract all import statements from a file.
 
         Args:
@@ -109,10 +108,10 @@ class DependencyGraphBuilder:
         Returns:
             List of imported module names
         """
-        imports: List[str] = []
+        imports: list[str] = []
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read(), filename=str(file_path))
         except Exception:
             return imports
@@ -126,7 +125,7 @@ class DependencyGraphBuilder:
                     imports.append(node.module)
                     # Also add submodule imports
                     for alias in node.names:
-                        if alias.name != '*':
+                        if alias.name != "*":
                             full_name = f"{node.module}.{alias.name}"
                             imports.append(full_name)
 
@@ -148,24 +147,24 @@ class DependencyGraphBuilder:
             return import_name
 
         # Try to find partial matches (for submodules)
-        parts = import_name.split('.')
+        parts = import_name.split(".")
         for i in range(len(parts), 0, -1):
-            candidate = '.'.join(parts[:i])
+            candidate = ".".join(parts[:i])
             if candidate in self.module_map:
                 return candidate
 
         # Try relative imports
-        from_module = self.reverse_map.get(from_file, '')
+        from_module = self.reverse_map.get(from_file, "")
         if from_module:
-            from_parts = from_module.split('.')
+            from_parts = from_module.split(".")
             # Try same package
-            same_package = '.'.join(from_parts[:-1] + [import_name.split('.')[0]])
+            same_package = ".".join(from_parts[:-1] + [import_name.split(".")[0]])
             if same_package in self.module_map:
                 return same_package
 
         return None
 
-    def calculate_afferent_coupling(self, module: str, graph: Dict[str, Set[str]]) -> int:
+    def calculate_afferent_coupling(self, module: str, graph: dict[str, set[str]]) -> int:
         """Calculate afferent coupling (Ca) - how many modules depend on this module.
 
         Args:
@@ -181,7 +180,7 @@ class DependencyGraphBuilder:
                 count += 1
         return count
 
-    def calculate_efferent_coupling(self, module: str, graph: Dict[str, Set[str]]) -> int:
+    def calculate_efferent_coupling(self, module: str, graph: dict[str, set[str]]) -> int:
         """Calculate efferent coupling (Ce) - how many modules this module depends on.
 
         Args:
@@ -193,7 +192,7 @@ class DependencyGraphBuilder:
         """
         return len(graph.get(module, set()))
 
-    def get_all_modules(self, graph: Dict[str, Set[str]]) -> Set[str]:
+    def get_all_modules(self, graph: dict[str, set[str]]) -> set[str]:
         """Get all unique module paths from the dependency graph.
 
         Args:
@@ -202,12 +201,12 @@ class DependencyGraphBuilder:
         Returns:
             Set of all module paths
         """
-        modules: Set[str] = set(graph.keys())
+        modules: set[str] = set(graph.keys())
         for targets in graph.values():
             modules.update(targets)
         return modules
 
-    def find_cycles(self, graph: Dict[str, Set[str]]) -> List[List[str]]:
+    def find_cycles(self, graph: dict[str, set[str]]) -> list[list[str]]:
         """Find all cycles in the dependency graph.
 
         Args:
@@ -216,10 +215,10 @@ class DependencyGraphBuilder:
         Returns:
             List of cycles, where each cycle is a list of module paths
         """
-        cycles: List[List[str]] = []
-        visited: Set[str] = set()
-        rec_stack: Set[str] = set()
-        path: List[str] = []
+        cycles: list[list[str]] = []
+        visited: set[str] = set()
+        rec_stack: set[str] = set()
+        path: list[str] = []
 
         def dfs(node: str) -> bool:
             visited.add(node)
@@ -257,11 +256,7 @@ class DependencyGraphBuilder:
         """
         return self.reverse_map.get(file_path, os.path.basename(file_path))
 
-    def calculate_fan_in_fan_out(
-        self,
-        module: str,
-        graph: Dict[str, Set[str]]
-    ) -> tuple[int, int]:
+    def calculate_fan_in_fan_out(self, module: str, graph: dict[str, set[str]]) -> tuple[int, int]:
         """Calculate fan-in and fan-out for a module.
 
         Fan-in: Number of modules that call this module

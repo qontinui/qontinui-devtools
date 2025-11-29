@@ -33,7 +33,7 @@ def create_test_config_with_inline_workflow():
                                 "type": "variable",
                                 "variableName": "test_var",
                                 "operator": "==",
-                                "expectedValue": True
+                                "expectedValue": True,
                             },
                             "thenActions": ["action_2"],
                             "elseActions": ["action_3"],
@@ -48,25 +48,21 @@ def create_test_config_with_inline_workflow():
                                         "id": "inline_action_1",
                                         "type": "CLICK",
                                         "config": {
-                                            "target": {
-                                                "type": "coordinates",
-                                                "x": 100,
-                                                "y": 200
-                                            }
-                                        }
+                                            "target": {"type": "coordinates", "x": 100, "y": 200}
+                                        },
                                     }
                                 ],
                                 # Missing "connections" field (required)
-                            }
-                        }
+                            },
+                        },
                     }
                 ],
                 "connections": {
                     "if_action_1": {
                         "true": [[{"action": "action_2", "type": "true", "index": 0}]],
-                        "false": [[{"action": "action_3", "type": "false", "index": 0}]]
+                        "false": [[{"action": "action_3", "type": "false", "index": 0}]],
                     }
-                }
+                },
             }
         ]
     }
@@ -119,6 +115,7 @@ def main():
     except Exception as e:
         print(f"❌ Error during validation: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 

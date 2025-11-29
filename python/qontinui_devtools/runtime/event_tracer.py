@@ -32,10 +32,7 @@ class EventTrace:
     total_latency: float = 0.0
 
     def add_checkpoint(
-        self,
-        name: str,
-        timestamp: float | None = None,
-        metadata: dict[str, Any] | None = None
+        self, name: str, timestamp: float | None = None, metadata: dict[str, Any] | None = None
     ) -> None:
         """Add a checkpoint to the trace.
 
@@ -48,10 +45,7 @@ class EventTrace:
             timestamp = time.time()
 
         checkpoint = Checkpoint(
-            name=name,
-            timestamp=timestamp,
-            metadata=metadata or {},
-            thread_id=threading.get_ident()
+            name=name, timestamp=timestamp, metadata=metadata or {}, thread_id=threading.get_ident()
         )
 
         self.checkpoints.append(checkpoint)
@@ -89,8 +83,7 @@ class EventTrace:
         if to_idx <= from_idx:
             raise ValueError("to_checkpoint must come after from_checkpoint")
 
-        return (self.checkpoints[to_idx].timestamp -
-                self.checkpoints[from_idx].timestamp)
+        return self.checkpoints[to_idx].timestamp - self.checkpoints[from_idx].timestamp
 
     def get_stage_latencies(self) -> dict[str, float]:
         """Get latencies between consecutive checkpoints.
@@ -151,11 +144,7 @@ class EventTracer:
         >>> print(f"Avg latency: {flow.avg_latency:.3f}s")
     """
 
-    def __init__(
-        self,
-        max_traces: int = 10000,
-        enable_metadata: bool = True
-    ) -> None:
+    def __init__(self, max_traces: int = 10000, enable_metadata: bool = True) -> None:
         """Initialize event tracer.
 
         Args:
@@ -168,10 +157,7 @@ class EventTracer:
         self._enable_metadata = enable_metadata
 
     def start_trace(
-        self,
-        event_id: str,
-        event_type: str,
-        metadata: dict[str, Any] | None = None
+        self, event_id: str, event_type: str, metadata: dict[str, Any] | None = None
     ) -> EventTrace:
         """Start tracing an event.
 
@@ -186,15 +172,10 @@ class EventTracer:
         with self._lock:
             # Evict oldest trace if at capacity
             if len(self._traces) >= self._max_traces:
-                oldest_id = min(self._traces.keys(),
-                              key=lambda k: self._traces[k].created_at)
+                oldest_id = min(self._traces.keys(), key=lambda k: self._traces[k].created_at)
                 del self._traces[oldest_id]
 
-            trace = EventTrace(
-                event_id=event_id,
-                event_type=event_type,
-                created_at=time.time()
-            )
+            trace = EventTrace(event_id=event_id, event_type=event_type, created_at=time.time())
 
             self._traces[event_id] = trace
 
@@ -205,10 +186,7 @@ class EventTracer:
             return trace
 
     def checkpoint(
-        self,
-        event_id: str,
-        checkpoint_name: str,
-        metadata: dict[str, Any] | None = None
+        self, event_id: str, checkpoint_name: str, metadata: dict[str, Any] | None = None
     ) -> None:
         """Record a checkpoint for an event.
 
@@ -224,8 +202,7 @@ class EventTracer:
                 trace = self.start_trace(event_id, "unknown")
 
             trace.add_checkpoint(
-                checkpoint_name,
-                metadata=metadata if self._enable_metadata else None
+                checkpoint_name, metadata=metadata if self._enable_metadata else None
             )
 
     def complete_trace(self, event_id: str) -> EventTrace:
@@ -292,7 +269,7 @@ class EventTracer:
                 p95_latency=0.0,
                 p99_latency=0.0,
                 bottleneck_stage="N/A",
-                stage_latencies={}
+                stage_latencies={},
             )
 
         total_events = len(traces)
@@ -325,8 +302,7 @@ class EventTracer:
 
         # Calculate average stage latencies
         avg_stage_latencies = {
-            stage: sum(lats) / len(lats)
-            for stage, lats in stage_latencies.items()
+            stage: sum(lats) / len(lats) for stage, lats in stage_latencies.items()
         }
 
         # Find bottleneck
@@ -342,7 +318,7 @@ class EventTracer:
             p95_latency=p95_latency,
             p99_latency=p99_latency,
             bottleneck_stage=bottleneck_stage,
-            stage_latencies=avg_stage_latencies
+            stage_latencies=avg_stage_latencies,
         )
 
     def find_lost_events(self, timeout: float = 5.0) -> list[EventTrace]:
@@ -398,5 +374,5 @@ class EventTracer:
                 "memory_usage_bytes": sum(
                     len(trace.checkpoints) * 100  # Rough estimate
                     for trace in self._traces.values()
-                )
+                ),
             }

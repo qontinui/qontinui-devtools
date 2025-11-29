@@ -10,10 +10,7 @@ from typing import Any
 from .race_tester import RaceConditionTester, RaceTestResult
 
 
-def test_dictionary_concurrent_access(
-    threads: int = 10,
-    iterations: int = 10
-) -> RaceTestResult:
+def test_dictionary_concurrent_access(threads: int = 10, iterations: int = 10) -> RaceTestResult:
     """Test concurrent dictionary access.
 
     Tests if concurrent reads and writes to a dictionary without
@@ -40,10 +37,7 @@ def test_dictionary_concurrent_access(
     return tester.test_function(worker, 0)
 
 
-def test_check_then_act(
-    threads: int = 10,
-    iterations: int = 100
-) -> RaceTestResult:
+def test_check_then_act(threads: int = 10, iterations: int = 100) -> RaceTestResult:
     """Test classic check-then-act race condition.
 
     This is the classic "if not exists, then create" pattern that
@@ -68,10 +62,7 @@ def test_check_then_act(
     return tester.test_function(worker)
 
 
-def test_check_then_act_safe(
-    threads: int = 10,
-    iterations: int = 100
-) -> RaceTestResult:
+def test_check_then_act_safe(threads: int = 10, iterations: int = 100) -> RaceTestResult:
     """Test thread-safe check-then-act pattern.
 
     Same as test_check_then_act but with proper synchronization.
@@ -97,9 +88,7 @@ def test_check_then_act_safe(
 
 
 def test_counter_increment(
-    threads: int = 10,
-    iterations: int = 100,
-    expected_total: int | None = None
+    threads: int = 10, iterations: int = 100, expected_total: int | None = None
 ) -> RaceTestResult:
     """Test concurrent counter increment.
 
@@ -138,9 +127,7 @@ def test_counter_increment(
 
 
 def test_counter_increment_safe(
-    threads: int = 10,
-    iterations: int = 100,
-    expected_total: int | None = None
+    threads: int = 10, iterations: int = 100, expected_total: int | None = None
 ) -> RaceTestResult:
     """Test thread-safe counter increment.
 
@@ -177,10 +164,7 @@ def test_counter_increment_safe(
     return result
 
 
-def test_lazy_initialization(
-    threads: int = 10,
-    iterations: int = 100
-) -> RaceTestResult:
+def test_lazy_initialization(threads: int = 10, iterations: int = 100) -> RaceTestResult:
     """Test lazy initialization pattern.
 
     Tests if lazy initialization without double-checked locking
@@ -220,10 +204,7 @@ def test_lazy_initialization(
     return result
 
 
-def test_lazy_initialization_safe(
-    threads: int = 10,
-    iterations: int = 100
-) -> RaceTestResult:
+def test_lazy_initialization_safe(threads: int = 10, iterations: int = 100) -> RaceTestResult:
     """Test thread-safe lazy initialization.
 
     Same as test_lazy_initialization but with proper double-checked locking.
@@ -264,10 +245,7 @@ def test_lazy_initialization_safe(
     return result
 
 
-def test_list_append(
-    threads: int = 10,
-    iterations: int = 100
-) -> RaceTestResult:
+def test_list_append(threads: int = 10, iterations: int = 100) -> RaceTestResult:
     """Test concurrent list append.
 
     Tests if concurrent appends to a list cause race conditions.

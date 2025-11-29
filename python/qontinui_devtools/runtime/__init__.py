@@ -21,6 +21,28 @@ from .latency_analyzer import (
     find_bottleneck,
     generate_latency_report,
 )
+from .leak_detector import (
+    analyze_growth_trend,
+    analyze_object_retention,
+    classify_leak_severity,
+    detect_common_leak_patterns,
+    find_cycles_containing,
+    find_leaked_objects,
+    find_reference_chains,
+    get_object_size_deep,
+    suggest_fixes,
+)
+
+# Memory profiling
+from .memory_profiler import MemoryLeak, MemoryProfiler, MemorySnapshot
+from .memory_viz import (
+    generate_html_report,
+    plot_comparison,
+    plot_leak_heatmap,
+    plot_memory_timeline,
+    plot_object_growth,
+    plot_top_objects,
+)
 from .metrics import (
     PerformanceMetrics,
     calculate_action_type_metrics,
@@ -37,28 +59,6 @@ from .metrics_collector import (
     SystemMetrics,
 )
 from .timeline import export_chrome_trace, export_timeline_html
-
-# Memory profiling
-from .memory_profiler import MemoryProfiler, MemorySnapshot, MemoryLeak
-from .leak_detector import (
-    analyze_growth_trend,
-    find_reference_chains,
-    find_leaked_objects,
-    classify_leak_severity,
-    analyze_object_retention,
-    find_cycles_containing,
-    get_object_size_deep,
-    detect_common_leak_patterns,
-    suggest_fixes,
-)
-from .memory_viz import (
-    plot_memory_timeline,
-    plot_object_growth,
-    plot_top_objects,
-    plot_leak_heatmap,
-    plot_comparison,
-    generate_html_report,
-)
 
 __all__ = [
     # Event tracing

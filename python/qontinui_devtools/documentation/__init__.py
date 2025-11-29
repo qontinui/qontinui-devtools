@@ -7,8 +7,8 @@ from Python source code, including docstrings, type hints, and code structure.
 
 from .doc_generator import (
     ASTDocExtractor,
-    DocumentationGenerator,
     DocstringParser,
+    DocumentationGenerator,
 )
 from .models import (
     DocItem,

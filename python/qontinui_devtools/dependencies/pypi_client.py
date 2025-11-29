@@ -103,7 +103,7 @@ class PyPIClient:
             if data:
                 self._save_to_cache(normalized_name, data)
                 return self._parse_package_data(data)
-        except Exception as e:
+        except Exception:
             # Silent failure, return None
             pass
 
@@ -189,9 +189,9 @@ class PyPIClient:
             return None
 
         try:
-            with open(cache_file, "r") as f:
+            with open(cache_file) as f:
                 return json.load(f)
-        except (json.JSONDecodeError, IOError):
+        except (OSError, json.JSONDecodeError):
             return None
 
     def _save_to_cache(self, package_name: str, data: dict[str, Any]) -> None:
@@ -206,7 +206,7 @@ class PyPIClient:
         try:
             with open(cache_file, "w") as f:
                 json.dump(data, f, indent=2, default=str)
-        except IOError:
+        except OSError:
             pass  # Silently fail on cache write errors
 
     def _fetch_from_pypi(self, package_name: str) -> dict[str, Any] | None:
@@ -284,9 +284,7 @@ class PyPIClient:
             if isinstance(req, str):
                 # Parse "package (>=version)" format
                 dep_name = req.split()[0].split("[")[0].strip()
-                if dep_name and not any(
-                    extra in req.lower() for extra in ["extra", "dev", "test"]
-                ):
+                if dep_name and not any(extra in req.lower() for extra in ["extra", "dev", "test"]):
                     dependencies.append(dep_name)
 
         # Extract maintainers
@@ -303,7 +301,8 @@ class PyPIClient:
             release_dates=release_dates,
             license=info_data.get("license"),
             homepage=info_data.get("home_page"),
-            repository=info_data.get("project_url") or info_data.get("project_urls", {}).get("Repository"),
+            repository=info_data.get("project_url")
+            or info_data.get("project_urls", {}).get("Repository"),
             maintainers=maintainers,
             dependencies=dependencies,
             download_count=0,  # PyPI doesn't provide this in JSON API

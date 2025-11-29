@@ -1,13 +1,10 @@
 """Tests for the circular dependency detector."""
 
-import tempfile
 from pathlib import Path
 
 import pytest
-
-from qontinui_devtools.import_analysis import CircularDependency, CircularDependencyDetector
+from qontinui_devtools.import_analysis import CircularDependencyDetector
 from qontinui_devtools.import_analysis.ast_utils import (
-    ImportStatement,
     extract_imports,
     find_python_files,
     module_path_from_file,
@@ -292,7 +289,10 @@ class TestFixSuggester:
         for cycle in cycles:
             if cycle.suggestion.fix_type == "lazy_import":
                 assert cycle.suggestion.code_example is not None
-                assert "def " in cycle.suggestion.code_example or "function" in cycle.suggestion.description.lower()
+                assert (
+                    "def " in cycle.suggestion.code_example
+                    or "function" in cycle.suggestion.description.lower()
+                )
 
     def test_restructure_suggestion(self) -> None:
         """Test that restructure suggestions provide guidance."""

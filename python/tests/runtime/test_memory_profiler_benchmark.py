@@ -4,6 +4,7 @@ Tests profiler overhead and performance characteristics.
 """
 
 import time
+
 import pytest
 from qontinui_devtools.runtime import MemoryProfiler
 
@@ -63,8 +64,9 @@ def test_leak_detection_overhead(benchmark):
 
 def test_profiler_memory_overhead():
     """Test memory overhead of the profiler itself."""
-    import psutil
     import gc
+
+    import psutil
 
     gc.collect()
     process = psutil.Process()

@@ -5,9 +5,6 @@ untyped functions, parameters, and return values.
 """
 
 import ast
-from collections import defaultdict
-from pathlib import Path
-from typing import Any
 
 
 class TypeInferenceEngine:
@@ -149,14 +146,17 @@ class TypeInferenceEngine:
 
         # Check prefix patterns (like is_, has_, can_)
         for prefix, type_hint in self.type_mappings.items():
-            if prefix.startswith("_") and prefix.endswith("_") and name.startswith(prefix.strip("_")):
+            if (
+                prefix.startswith("_")
+                and prefix.endswith("_")
+                and name.startswith(prefix.strip("_"))
+            ):
                 return (type_hint, 0.5)
 
         return (None, 0.0)
 
     def infer_return_type(
-        self,
-        function_node: ast.FunctionDef | ast.AsyncFunctionDef
+        self, function_node: ast.FunctionDef | ast.AsyncFunctionDef
     ) -> tuple[str | None, float, str]:
         """Infer return type from function body.
 
@@ -280,7 +280,9 @@ class TypeInferenceEngine:
 
         elif isinstance(expr, ast.BinOp):
             # Infer from binary operations
-            if isinstance(expr.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.Pow)):
+            if isinstance(
+                expr.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.Pow)
+            ):
                 left_type = self._infer_expr_type(expr.left)
                 right_type = self._infer_expr_type(expr.right)
                 if left_type == right_type and left_type in ("int", "float"):
@@ -306,9 +308,7 @@ class TypeInferenceEngine:
         return None
 
     def infer_parameter_type(
-        self,
-        param: ast.arg,
-        function_node: ast.FunctionDef | ast.AsyncFunctionDef
+        self, param: ast.arg, function_node: ast.FunctionDef | ast.AsyncFunctionDef
     ) -> tuple[str | None, float, str]:
         """Infer parameter type from usage in function body.
 
@@ -333,12 +333,16 @@ class TypeInferenceEngine:
                 if default_idx < len(defaults):
                     inferred_type, confidence = self.infer_from_default(defaults[default_idx])
                     if inferred_type and inferred_type != "None":
-                        return (inferred_type, confidence, f"Inferred from default value")
+                        return (inferred_type, confidence, "Inferred from default value")
                     elif inferred_type == "None":
                         # Try to infer from usage
                         usage_type = self._infer_from_usage(param_name, function_node)
                         if usage_type:
-                            return (f"{usage_type} | None", 0.7, "Inferred from usage with None default")
+                            return (
+                                f"{usage_type} | None",
+                                0.7,
+                                "Inferred from usage with None default",
+                            )
 
         # Try inferring from name
         name_type, name_confidence = self.infer_from_name(param_name)
@@ -359,9 +363,7 @@ class TypeInferenceEngine:
         return (None, 0.0, "Cannot infer type")
 
     def _infer_from_usage(
-        self,
-        param_name: str,
-        function_node: ast.FunctionDef | ast.AsyncFunctionDef
+        self, param_name: str, function_node: ast.FunctionDef | ast.AsyncFunctionDef
     ) -> str | None:
         """Infer type from how parameter is used in function.
 
@@ -381,19 +383,50 @@ class TypeInferenceEngine:
                     if isinstance(node.func.value, ast.Name) and node.func.value.id == param_name:
                         method_name = node.func.attr
                         # String methods
-                        if method_name in ("lower", "upper", "strip", "split", "join", "replace", "startswith", "endswith"):
+                        if method_name in (
+                            "lower",
+                            "upper",
+                            "strip",
+                            "split",
+                            "join",
+                            "replace",
+                            "startswith",
+                            "endswith",
+                        ):
                             return "str"
                         # List methods
-                        elif method_name in ("append", "extend", "pop", "remove", "clear", "index", "count"):
+                        elif method_name in (
+                            "append",
+                            "extend",
+                            "pop",
+                            "remove",
+                            "clear",
+                            "index",
+                            "count",
+                        ):
                             return "list[Any]"
                         # Dict methods
-                        elif method_name in ("get", "keys", "values", "items", "update", "pop", "clear"):
+                        elif method_name in (
+                            "get",
+                            "keys",
+                            "values",
+                            "items",
+                            "update",
+                            "pop",
+                            "clear",
+                        ):
                             return "dict[str, Any]"
                         # Set methods
                         elif method_name in ("add", "remove", "discard", "union", "intersection"):
                             return "set[Any]"
                         # Path methods
-                        elif method_name in ("exists", "is_file", "is_dir", "read_text", "write_text"):
+                        elif method_name in (
+                            "exists",
+                            "is_file",
+                            "is_dir",
+                            "read_text",
+                            "write_text",
+                        ):
                             return "Path"
 
             # Check subscript access

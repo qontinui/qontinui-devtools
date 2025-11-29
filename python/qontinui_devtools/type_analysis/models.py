@@ -226,7 +226,7 @@ class TypeAnalysisReport:
 
         sorted_items = sorted(
             self.untyped_items,
-            key=lambda x: (priority_order.get(x.item_type, 99), x.file_path, x.line_number)
+            key=lambda x: (priority_order.get(x.item_type, 99), x.file_path, x.line_number),
         )
 
         if limit:

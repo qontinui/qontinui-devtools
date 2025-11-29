@@ -9,20 +9,20 @@ This script verifies that all Phase 4 components are properly integrated:
 - Version numbers are correct
 """
 
-import sys
 import subprocess
+import sys
 from pathlib import Path
-from typing import List, Tuple
 
 
 class Color:
     """ANSI color codes."""
-    GREEN = '\033[92m'
-    RED = '\033[91m'
-    YELLOW = '\033[93m'
-    BLUE = '\033[94m'
-    BOLD = '\033[1m'
-    END = '\033[0m'
+
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    BLUE = "\033[94m"
+    BOLD = "\033[1m"
+    END = "\033[0m"
 
 
 def print_header(text: str) -> None:
@@ -52,7 +52,7 @@ def print_info(text: str) -> None:
     print(f"{Color.BLUE}ℹ {text}{Color.END}")
 
 
-def verify_imports() -> Tuple[bool, List[str]]:
+def verify_imports() -> tuple[bool, list[str]]:
     """Verify all Phase 4 modules can be imported."""
     print_header("Verifying Module Imports")
 
@@ -101,12 +101,13 @@ def verify_imports() -> Tuple[bool, List[str]]:
     # Test main package exports
     try:
         from qontinui_devtools import (
-            SecurityAnalyzer,
+            DependencyHealthChecker,
             DocumentationGenerator,
             RegressionDetector,
+            SecurityAnalyzer,
             TypeAnalyzer,
-            DependencyHealthChecker,
         )
+
         print_success("All Phase 4 classes exported from main package")
         success_count += 1
     except ImportError as e:
@@ -119,7 +120,7 @@ def verify_imports() -> Tuple[bool, List[str]]:
     return len(errors) == 0, errors
 
 
-def verify_cli_commands() -> Tuple[bool, List[str]]:
+def verify_cli_commands() -> tuple[bool, list[str]]:
     """Verify CLI commands are available."""
     print_header("Verifying CLI Commands")
 
@@ -137,12 +138,7 @@ def verify_cli_commands() -> Tuple[bool, List[str]]:
 
     for cmd in commands:
         try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=5
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
             if result.returncode == 0:
                 print_success(f"Command available: {' '.join(cmd)}")
                 success_count += 1
@@ -150,7 +146,7 @@ def verify_cli_commands() -> Tuple[bool, List[str]]:
                 error_msg = f"Command failed: {' '.join(cmd)}"
                 print_error(error_msg)
                 errors.append(error_msg)
-        except (subprocess.TimeoutExpired, FileNotFoundError) as e:
+        except (subprocess.TimeoutExpired, FileNotFoundError):
             error_msg = f"Command not found or timed out: {' '.join(cmd)}"
             print_error(error_msg)
             errors.append(error_msg)
@@ -160,7 +156,7 @@ def verify_cli_commands() -> Tuple[bool, List[str]]:
     return len(errors) == 0, errors
 
 
-def verify_version() -> Tuple[bool, List[str]]:
+def verify_version() -> tuple[bool, list[str]]:
     """Verify version numbers are correct."""
     print_header("Verifying Version Numbers")
 
@@ -170,10 +166,13 @@ def verify_version() -> Tuple[bool, List[str]]:
     # Check __init__.py version
     try:
         from qontinui_devtools import __version__
+
         if __version__ == target_version:
             print_success(f"__init__.py version: {__version__}")
         else:
-            error_msg = f"__init__.py version mismatch: expected {target_version}, got {__version__}"
+            error_msg = (
+                f"__init__.py version mismatch: expected {target_version}, got {__version__}"
+            )
             print_error(error_msg)
             errors.append(error_msg)
     except ImportError as e:
@@ -188,7 +187,7 @@ def verify_version() -> Tuple[bool, List[str]]:
         if f'version = "{target_version}"' in content:
             print_success(f"pyproject.toml version: {target_version}")
         else:
-            error_msg = f"pyproject.toml version mismatch"
+            error_msg = "pyproject.toml version mismatch"
             print_error(error_msg)
             errors.append(error_msg)
     else:
@@ -199,15 +198,12 @@ def verify_version() -> Tuple[bool, List[str]]:
     # Check CLI version
     try:
         result = subprocess.run(
-            ["qontinui-devtools", "--version"],
-            capture_output=True,
-            text=True,
-            timeout=5
+            ["qontinui-devtools", "--version"], capture_output=True, text=True, timeout=5
         )
         if target_version in result.output:
             print_success(f"CLI version: {target_version}")
         else:
-            error_msg = f"CLI version mismatch"
+            error_msg = "CLI version mismatch"
             print_error(error_msg)
             errors.append(error_msg)
     except Exception as e:
@@ -218,7 +214,7 @@ def verify_version() -> Tuple[bool, List[str]]:
     return len(errors) == 0, errors
 
 
-def verify_documentation() -> Tuple[bool, List[str]]:
+def verify_documentation() -> tuple[bool, list[str]]:
     """Verify documentation files exist."""
     print_header("Verifying Documentation")
 
@@ -245,8 +241,14 @@ def verify_documentation() -> Tuple[bool, List[str]]:
     readme_path = Path(__file__).parent.parent / "README.md"
     if readme_path.exists():
         content = readme_path.read_text()
-        phase4_keywords = ["Phase 4", "Security Analyzer", "Documentation Generator",
-                           "Regression Detector", "Type Hint Analyzer", "Dependency Health"]
+        phase4_keywords = [
+            "Phase 4",
+            "Security Analyzer",
+            "Documentation Generator",
+            "Regression Detector",
+            "Type Hint Analyzer",
+            "Dependency Health",
+        ]
         found_keywords = [kw for kw in phase4_keywords if kw in content]
 
         if len(found_keywords) >= 4:
@@ -275,11 +277,17 @@ def verify_documentation() -> Tuple[bool, List[str]]:
     return len(errors) == 0, errors
 
 
-def verify_tests() -> Tuple[bool, List[str]]:
+def verify_tests() -> tuple[bool, list[str]]:
     """Verify integration tests exist."""
     print_header("Verifying Integration Tests")
 
-    test_file = Path(__file__).parent.parent / "python" / "tests" / "integration" / "test_phase4_integration.py"
+    test_file = (
+        Path(__file__).parent.parent
+        / "python"
+        / "tests"
+        / "integration"
+        / "test_phase4_integration.py"
+    )
 
     errors = []
 
@@ -308,7 +316,7 @@ def verify_tests() -> Tuple[bool, List[str]]:
     return len(errors) == 0, errors
 
 
-def run_smoke_tests() -> Tuple[bool, List[str]]:
+def run_smoke_tests() -> tuple[bool, list[str]]:
     """Run basic smoke tests."""
     print_header("Running Smoke Tests")
 
@@ -328,12 +336,7 @@ def run_smoke_tests() -> Tuple[bool, List[str]]:
 
     for cmd in commands:
         try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=5
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
             if result.returncode == 0:
                 print_success(f"Smoke test passed: {' '.join(cmd[1:])}")
                 success_count += 1
@@ -395,12 +398,16 @@ def main() -> int:
 
     if passed == total:
         print(f"\n{Color.BOLD}{Color.GREEN}{'=' * 70}{Color.END}")
-        print(f"{Color.BOLD}{Color.GREEN}All verifications passed! Phase 4 integration complete.{Color.END}")
+        print(
+            f"{Color.BOLD}{Color.GREEN}All verifications passed! Phase 4 integration complete.{Color.END}"
+        )
         print(f"{Color.BOLD}{Color.GREEN}{'=' * 70}{Color.END}\n")
         return 0
     else:
         print(f"\n{Color.BOLD}{Color.RED}{'=' * 70}{Color.END}")
-        print(f"{Color.BOLD}{Color.RED}Some verifications failed. Please review errors above.{Color.END}")
+        print(
+            f"{Color.BOLD}{Color.RED}Some verifications failed. Please review errors above.{Color.END}"
+        )
         print(f"{Color.BOLD}{Color.RED}{'=' * 70}{Color.END}\n")
         return 1
 

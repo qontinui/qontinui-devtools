@@ -143,7 +143,7 @@ class UnsafeAnalyzer:
             file_path: Path to the Rust file
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 lines = f.readlines()
                 content = "".join(lines)
 
@@ -350,7 +350,9 @@ class UnsafeAnalyzer:
             self.console.print("\n[bold green]No unsafe code found[/bold green]\n")
             return
 
-        self.console.print(f"\n[bold yellow]Found {len(unsafe_blocks)} unsafe blocks[/bold yellow]\n")
+        self.console.print(
+            f"\n[bold yellow]Found {len(unsafe_blocks)} unsafe blocks[/bold yellow]\n"
+        )
 
         # Statistics
         stats = self.get_statistics()

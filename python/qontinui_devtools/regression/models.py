@@ -61,7 +61,9 @@ class FunctionSignature:
 
     def __hash__(self) -> int:
         """Generate hash for signature."""
-        return hash((self.name, tuple(self.parameters), self.return_type, self.module_path, self.is_async))
+        return hash(
+            (self.name, tuple(self.parameters), self.return_type, self.module_path, self.is_async)
+        )
 
     def to_dict(self) -> dict[str, Any]:
         """Convert signature to dictionary."""
@@ -196,12 +198,8 @@ class RegressionIssue:
             "severity": self.severity.value,
             "affected_modules": self.affected_modules,
             "performance_delta": self.performance_delta,
-            "old_performance": (
-                self.old_performance.to_dict() if self.old_performance else None
-            ),
-            "new_performance": (
-                self.new_performance.to_dict() if self.new_performance else None
-            ),
+            "old_performance": (self.old_performance.to_dict() if self.old_performance else None),
+            "new_performance": (self.new_performance.to_dict() if self.new_performance else None),
         }
 
     @classmethod

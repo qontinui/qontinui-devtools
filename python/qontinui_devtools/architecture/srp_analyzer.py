@@ -6,13 +6,12 @@ of method names and clustering.
 """
 
 import ast
+import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Dict
-import time
+from typing import Optional
 
-from .clustering import MethodCluster, cluster_methods_by_keywords, analyze_cluster_cohesion
-from .semantic_utils import extract_keywords, classify_method
+from .clustering import MethodCluster, cluster_methods_by_keywords
 
 
 @dataclass
@@ -32,10 +31,10 @@ class SRPViolation:
     class_name: str
     file_path: str
     line_number: int
-    clusters: List[MethodCluster]
+    clusters: list[MethodCluster]
     severity: str
     recommendation: str
-    suggested_refactorings: List[str]
+    suggested_refactorings: list[str]
 
     def __post_init__(self):
         """Validate severity."""
@@ -57,15 +56,13 @@ class SRPAnalyzer:
             verbose: Whether to print verbose output during analysis
         """
         self.verbose = verbose
-        self.stats: Dict[str, int] = {
+        self.stats: dict[str, int] = {
             "files_analyzed": 0,
             "classes_analyzed": 0,
             "violations_found": 0,
         }
 
-    def analyze_directory(
-        self, path: str, min_methods: int = 5
-    ) -> List[SRPViolation]:
+    def analyze_directory(self, path: str, min_methods: int = 5) -> list[SRPViolation]:
         """Analyze all Python files in a directory for SRP violations.
 
         Args:
@@ -103,9 +100,7 @@ class SRPAnalyzer:
 
         return violations
 
-    def _analyze_file(
-        self, file_path: str, min_methods: int
-    ) -> List[SRPViolation]:
+    def _analyze_file(self, file_path: str, min_methods: int) -> list[SRPViolation]:
         """Analyze a single Python file for SRP violations.
 
         Args:
@@ -118,7 +113,7 @@ class SRPAnalyzer:
         violations = []
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 source = f.read()
 
             tree = ast.parse(source, filename=file_path)
@@ -160,10 +155,7 @@ class SRPAnalyzer:
         methods = self._extract_methods(class_node)
 
         # Filter out magic methods and private methods for cleaner analysis
-        public_methods = [
-            m for m in methods
-            if not m.startswith("__") and not m.startswith("_")
-        ]
+        public_methods = [m for m in methods if not m.startswith("__") and not m.startswith("_")]
 
         # Skip classes with too few methods
         if len(public_methods) < min_methods:
@@ -184,9 +176,7 @@ class SRPAnalyzer:
 
         # Generate recommendations
         recommendation = self._generate_recommendation(class_node.name, clusters)
-        suggested_refactorings = self._generate_refactoring_suggestions(
-            class_node.name, clusters
-        )
+        suggested_refactorings = self._generate_refactoring_suggestions(class_node.name, clusters)
 
         return SRPViolation(
             class_name=class_node.name,
@@ -198,7 +188,7 @@ class SRPAnalyzer:
             suggested_refactorings=suggested_refactorings,
         )
 
-    def _extract_methods(self, class_node: ast.ClassDef) -> List[str]:
+    def _extract_methods(self, class_node: ast.ClassDef) -> list[str]:
         """Extract method names from a class node.
 
         Args:
@@ -215,7 +205,7 @@ class SRPAnalyzer:
 
         return methods
 
-    def cluster_methods(self, methods: List[str]) -> List[MethodCluster]:
+    def cluster_methods(self, methods: list[str]) -> list[MethodCluster]:
         """Cluster methods by semantic similarity.
 
         Args:
@@ -242,9 +232,7 @@ class SRPAnalyzer:
         else:
             return "medium"
 
-    def _generate_recommendation(
-        self, class_name: str, clusters: List[MethodCluster]
-    ) -> str:
+    def _generate_recommendation(self, class_name: str, clusters: list[MethodCluster]) -> str:
         """Generate a recommendation for fixing the violation.
 
         Args:
@@ -276,8 +264,8 @@ class SRPAnalyzer:
             )
 
     def _generate_refactoring_suggestions(
-        self, class_name: str, clusters: List[MethodCluster]
-    ) -> List[str]:
+        self, class_name: str, clusters: list[MethodCluster]
+    ) -> list[str]:
         """Generate specific refactoring suggestions.
 
         Args:
@@ -302,8 +290,8 @@ class SRPAnalyzer:
         # Add coordination suggestion
         if len(clusters) > 2:
             suggestions.append(
-                f"Consider using a Facade or Coordinator pattern to manage "
-                f"interactions between the extracted classes"
+                "Consider using a Facade or Coordinator pattern to manage "
+                "interactions between the extracted classes"
             )
 
         return suggestions
@@ -341,7 +329,7 @@ class SRPAnalyzer:
         suffix = responsibility_map.get(responsibility, responsibility.replace(" ", ""))
         return f"{base_name}{suffix}"
 
-    def generate_report(self, violations: List[SRPViolation]) -> str:
+    def generate_report(self, violations: list[SRPViolation]) -> str:
         """Generate a human-readable report of violations.
 
         Args:
@@ -384,9 +372,7 @@ class SRPAnalyzer:
                 lines.append("")
                 lines.append(f"Class: {violation.class_name}")
                 lines.append(f"File:  {violation.file_path}:{violation.line_number}")
-                lines.append(
-                    f"Responsibilities: {len(violation.clusters)}"
-                )
+                lines.append(f"Responsibilities: {len(violation.clusters)}")
                 lines.append("")
 
                 for i, cluster in enumerate(violation.clusters, 1):
@@ -398,9 +384,7 @@ class SRPAnalyzer:
                     for method in cluster.methods[:5]:  # Show first 5
                         lines.append(f"     - {method}")
                     if len(cluster.methods) > 5:
-                        lines.append(
-                            f"     ... and {len(cluster.methods) - 5} more"
-                        )
+                        lines.append(f"     ... and {len(cluster.methods) - 5} more")
                     lines.append("")
 
                 lines.append(f"Recommendation: {violation.recommendation}")
@@ -413,7 +397,7 @@ class SRPAnalyzer:
 
         lines.append("")
         lines.append("=" * 80)
-        lines.append(f"Analysis Statistics:")
+        lines.append("Analysis Statistics:")
         lines.append(f"  Files analyzed:   {self.stats['files_analyzed']}")
         lines.append(f"  Classes analyzed: {self.stats['classes_analyzed']}")
         lines.append(f"  Violations found: {self.stats['violations_found']}")
@@ -423,7 +407,7 @@ class SRPAnalyzer:
 
     def analyze_with_timing(
         self, path: str, min_methods: int = 5
-    ) -> tuple[List[SRPViolation], float]:
+    ) -> tuple[list[SRPViolation], float]:
         """Analyze directory and measure execution time.
 
         Args:

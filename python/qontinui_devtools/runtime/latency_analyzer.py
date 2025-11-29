@@ -10,9 +10,7 @@ if TYPE_CHECKING:
     from .event_tracer import EventTrace
 
 
-def analyze_latencies(
-    traces: list["EventTrace"]
-) -> dict[str, dict[str, float]]:
+def analyze_latencies(traces: list["EventTrace"]) -> dict[str, dict[str, float]]:
     """Analyze latencies between all checkpoint pairs.
 
     Args:
@@ -65,7 +63,7 @@ def analyze_latencies(
             "p99": sorted_latencies[int(n * 0.99)] if n > 1 else sorted_latencies[0],
             "min": sorted_latencies[0],
             "max": sorted_latencies[-1],
-            "count": n
+            "count": n,
         }
 
     return result
@@ -97,8 +95,7 @@ def find_bottleneck(traces: list["EventTrace"]) -> str:
 
 
 def detect_anomalies(
-    traces: list["EventTrace"],
-    threshold: float = 2.0  # 2x average
+    traces: list["EventTrace"], threshold: float = 2.0  # 2x average
 ) -> list[tuple[str, "EventTrace", str]]:
     """Detect anomalously slow events.
 
@@ -139,8 +136,7 @@ def detect_anomalies(
 
 
 def calculate_throughput(
-    traces: list["EventTrace"],
-    window_seconds: float = 1.0
+    traces: list["EventTrace"], window_seconds: float = 1.0
 ) -> dict[str, float]:
     """Calculate event throughput over time windows.
 
@@ -179,10 +175,7 @@ def calculate_throughput(
         window_end = current_time + window_seconds
 
         # Count events in this window
-        count = sum(
-            1 for t in traces
-            if current_time <= t.created_at < window_end
-        )
+        count = sum(1 for t in traces if current_time <= t.created_at < window_end)
 
         windows[window_key] = count / window_seconds
         current_time = window_end
@@ -190,10 +183,7 @@ def calculate_throughput(
     return windows
 
 
-def compare_traces(
-    trace1: "EventTrace",
-    trace2: "EventTrace"
-) -> dict[str, dict[str, float]]:
+def compare_traces(trace1: "EventTrace", trace2: "EventTrace") -> dict[str, dict[str, float]]:
     """Compare two traces and show latency differences.
 
     Args:
@@ -232,12 +222,7 @@ def compare_traces(
         diff = lat2 - lat1
         diff_pct = (diff / lat1 * 100) if lat1 > 0 else 0.0
 
-        result[stage] = {
-            "trace1": lat1,
-            "trace2": lat2,
-            "diff": diff,
-            "diff_pct": diff_pct
-        }
+        result[stage] = {"trace1": lat1, "trace2": lat2, "diff": diff, "diff_pct": diff_pct}
 
     return result
 
@@ -277,15 +262,11 @@ def generate_latency_report(traces: list["EventTrace"]) -> str:
         "=" * 60,
         "STAGE LATENCIES",
         "=" * 60,
-        ""
+        "",
     ]
 
     # Sort stages by mean latency (descending)
-    sorted_stages = sorted(
-        latencies.items(),
-        key=lambda x: x[1]["mean"],
-        reverse=True
-    )
+    sorted_stages = sorted(latencies.items(), key=lambda x: x[1]["mean"], reverse=True)
 
     for stage, stats in sorted_stages:
         lines.append(f"\n{stage}")

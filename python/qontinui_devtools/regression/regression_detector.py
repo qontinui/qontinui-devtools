@@ -6,7 +6,6 @@ import subprocess
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 from .models import (
     ChangeType,
@@ -163,8 +162,7 @@ class RegressionDetector:
                     old_signature=old_sig,
                     new_signature=None,
                     impact_description=(
-                        f"Calls to {func_key}() will fail. "
-                        f"This is a breaking API change."
+                        f"Calls to {func_key}() will fail. " f"This is a breaking API change."
                     ),
                     migration_guide=(
                         f"1. Search codebase for calls to {func_key}()\n"
@@ -214,9 +212,7 @@ class RegressionDetector:
         if not self.baseline_snapshot or not self.current_snapshot:
             return issues
 
-        _, _, modified_funcs, _ = self.current_snapshot.compare_snapshots(
-            self.baseline_snapshot
-        )
+        _, _, modified_funcs, _ = self.current_snapshot.compare_snapshots(self.baseline_snapshot)
 
         for func_key in modified_funcs:
             old_sig = self.baseline_snapshot.get_function(func_key)
@@ -258,7 +254,9 @@ class RegressionDetector:
 
                 issue = RegressionIssue(
                     change_type=(
-                        ChangeType.BREAKING if risk_level == RiskLevel.CRITICAL else ChangeType.BEHAVIORAL
+                        ChangeType.BREAKING
+                        if risk_level == RiskLevel.CRITICAL
+                        else ChangeType.BEHAVIORAL
                     ),
                     risk_level=risk_level,
                     description=f"Function '{func_key}' signature changed",
@@ -665,6 +663,6 @@ class RegressionDetector:
         Returns:
             Loaded report
         """
-        with open(input_path, "r", encoding="utf-8") as f:
+        with open(input_path, encoding="utf-8") as f:
             data = json.load(f)
         return RegressionReport.from_dict(data)

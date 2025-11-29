@@ -5,10 +5,9 @@ This module provides a CLI for running dependency health checks on Python projec
 
 import argparse
 import sys
-from pathlib import Path
 
 from .health_checker import DependencyHealthChecker
-from .models import HealthStatus, UpdateType
+from .models import UpdateType
 
 
 def main():

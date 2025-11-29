@@ -38,7 +38,7 @@ def example_1_basic_usage():
     result = tester.test_function(test_function)
 
     # Check results
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Total iterations: {result.total_iterations}")
     print(f"  Successful: {result.successful}")
     print(f"  Failed: {result.failed}")
@@ -77,7 +77,7 @@ def example_2_decorator_usage():
     # Run test (automatically tested concurrently)
     result = test_with_lock()
 
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Total iterations: {result.total_iterations}")
     print(f"  Successful: {result.successful}")
     print(f"  Failed: {result.failed}")
@@ -115,7 +115,7 @@ def example_3_stress_test():
     result = test_cache_operations()
     elapsed = time.time() - start_time
 
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Total iterations: {result.total_iterations}")
     print(f"  Successful: {result.successful}")
     print(f"  Failed: {result.failed}")
@@ -124,7 +124,7 @@ def example_3_stress_test():
     print(f"  Race detected: {result.race_detected}")
 
     if result.execution_times:
-        print(f"\n  Timing statistics:")
+        print("\n  Timing statistics:")
         print(f"    Avg: {result.avg_execution_time*1000:.2f}ms")
         print(f"    Min: {result.min_execution_time*1000:.2f}ms")
         print(f"    Max: {result.max_execution_time*1000:.2f}ms")
@@ -200,24 +200,9 @@ def example_5_multiple_scenarios():
             results_dict[scenario] += count
 
     scenarios = [
-        {
-            "name": "Light load",
-            "args": ("light", 1),
-            "threads": 5,
-            "iterations": 10
-        },
-        {
-            "name": "Medium load",
-            "args": ("medium", 10),
-            "threads": 10,
-            "iterations": 50
-        },
-        {
-            "name": "Heavy load",
-            "args": ("heavy", 100),
-            "threads": 20,
-            "iterations": 100
-        }
+        {"name": "Light load", "args": ("light", 1), "threads": 5, "iterations": 10},
+        {"name": "Medium load", "args": ("medium", 10), "threads": 10, "iterations": 50},
+        {"name": "Heavy load", "args": ("heavy", 100), "threads": 20, "iterations": 100},
     ]
 
     tester = RaceConditionTester()
@@ -256,19 +241,19 @@ def example_6_with_exceptions():
     tester = RaceConditionTester(threads=10, iterations=10)
     result = tester.test_function(buggy_function)
 
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Total iterations: {result.total_iterations}")
     print(f"  Successful: {result.successful}")
     print(f"  Failed: {result.failed}")
     print(f"  Race detected: {result.race_detected}")
 
     if result.exceptions:
-        print(f"\n  Exception types encountered:")
+        print("\n  Exception types encountered:")
         for exc_type in result.exceptions:
             print(f"    - {exc_type}")
 
     if result.failure_details:
-        print(f"\n  Sample failures:")
+        print("\n  Sample failures:")
         for detail in result.failure_details[:3]:
             print(f"    - {detail}")
 
@@ -296,6 +281,7 @@ def main():
     except Exception as e:
         print(f"\nError running examples: {e}")
         import traceback
+
         traceback.print_exc()
 
 

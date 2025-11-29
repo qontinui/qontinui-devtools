@@ -10,10 +10,9 @@ import sys
 import threading
 import time
 import traceback
+from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any, Optional
-from collections import defaultdict
-import inspect
 
 
 @dataclass
@@ -27,6 +26,7 @@ class ImportEvent:
         thread_id: ID of the thread that performed the import
         stack_trace: List of formatted stack frames
     """
+
     module_name: str
     importer: Optional[str]
     timestamp: float
@@ -157,7 +157,7 @@ class ImportHook:
     and record them for analysis.
     """
 
-    def __init__(self, tracer: 'ImportTracer'):
+    def __init__(self, tracer: "ImportTracer"):
         """Initialize the import hook.
 
         Args:
@@ -182,9 +182,11 @@ class ImportHook:
         # Try to determine which module is doing the import
         while frame:
             frame_globals = frame.f_globals
-            if '__name__' in frame_globals:
-                potential_importer = frame_globals['__name__']
-                if potential_importer != '__main__' and not potential_importer.startswith('importlib'):
+            if "__name__" in frame_globals:
+                potential_importer = frame_globals["__name__"]
+                if potential_importer != "__main__" and not potential_importer.startswith(
+                    "importlib"
+                ):
                     importer = potential_importer
                     break
             frame = frame.f_back
@@ -193,8 +195,7 @@ class ImportHook:
         stack = traceback.format_stack()
         # Filter out internal import machinery
         filtered_stack = [
-            frame for frame in stack
-            if 'importlib' not in frame and 'import_tracer.py' not in frame
+            frame for frame in stack if "importlib" not in frame and "import_tracer.py" not in frame
         ]
 
         # Record the import event
@@ -250,7 +251,7 @@ class ImportTracer:
         self._start_time: Optional[float] = None
         self._installed = False
 
-    def __enter__(self) -> 'ImportTracer':
+    def __enter__(self) -> "ImportTracer":
         """Install the import hook when entering context.
 
         Returns:

@@ -1,19 +1,16 @@
 """Coupling and Cohesion analyzer for Python codebases."""
 
 import ast
-import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Tuple, Dict
 
 from .dependency_graph import DependencyGraphBuilder
 from .metrics_utils import (
+    calculate_lcc,
     calculate_lcom,
     calculate_lcom4,
     calculate_tcc,
-    calculate_lcc,
     count_abstract_classes,
-    classify_score,
 )
 
 
@@ -56,9 +53,7 @@ class CouplingCohesionAnalyzer:
         self.verbose = verbose
         self.graph_builder = DependencyGraphBuilder(verbose=verbose)
 
-    def analyze_directory(
-        self, path: str
-    ) -> Tuple[List[CouplingMetrics], List[CohesionMetrics]]:
+    def analyze_directory(self, path: str) -> tuple[list[CouplingMetrics], list[CohesionMetrics]]:
         """Analyze a directory for coupling and cohesion metrics.
 
         Args:
@@ -85,13 +80,13 @@ class CouplingCohesionAnalyzer:
         dep_graph = self.graph_builder.build(str(root))
 
         # Calculate coupling metrics for each module
-        coupling_metrics: List[CouplingMetrics] = []
+        coupling_metrics: list[CouplingMetrics] = []
         for file_path in python_files:
             metrics = self.calculate_coupling(str(file_path), dep_graph)
             coupling_metrics.append(metrics)
 
         # Calculate cohesion metrics for each class
-        cohesion_metrics: List[CohesionMetrics] = []
+        cohesion_metrics: list[CohesionMetrics] = []
         for file_path in python_files:
             class_metrics = self._analyze_file_cohesion(file_path)
             cohesion_metrics.extend(class_metrics)
@@ -103,7 +98,7 @@ class CouplingCohesionAnalyzer:
         return (coupling_metrics, cohesion_metrics)
 
     def calculate_coupling(
-        self, module_path: str, dep_graph: Dict[str, set] | None = None
+        self, module_path: str, dep_graph: dict[str, set] | None = None
     ) -> CouplingMetrics:
         """Calculate coupling metrics for a module.
 
@@ -151,9 +146,7 @@ class CouplingCohesionAnalyzer:
             coupling_score=coupling_score,
         )
 
-    def calculate_cohesion(
-        self, class_node: ast.ClassDef, file_path: str
-    ) -> CohesionMetrics:
+    def calculate_cohesion(self, class_node: ast.ClassDef, file_path: str) -> CohesionMetrics:
         """Calculate cohesion metrics for a class.
 
         Args:
@@ -182,7 +175,7 @@ class CouplingCohesionAnalyzer:
             cohesion_score=cohesion_score,
         )
 
-    def _analyze_file_cohesion(self, file_path: Path) -> List[CohesionMetrics]:
+    def _analyze_file_cohesion(self, file_path: Path) -> list[CohesionMetrics]:
         """Analyze cohesion for all classes in a file.
 
         Args:
@@ -191,10 +184,10 @@ class CouplingCohesionAnalyzer:
         Returns:
             List of CohesionMetrics for all classes in the file
         """
-        metrics: List[CohesionMetrics] = []
+        metrics: list[CohesionMetrics] = []
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read(), filename=str(file_path))
         except Exception:
             return metrics
@@ -206,7 +199,7 @@ class CouplingCohesionAnalyzer:
 
         return metrics
 
-    def build_dependency_graph(self, path: str) -> Dict[str, set]:
+    def build_dependency_graph(self, path: str) -> dict[str, set]:
         """Build dependency graph for a directory.
 
         Args:
@@ -236,9 +229,7 @@ class CouplingCohesionAnalyzer:
             return 0.0
         return ce / total
 
-    def calculate_distance_from_main(
-        self, instability: float, abstractness: float
-    ) -> float:
+    def calculate_distance_from_main(self, instability: float, abstractness: float) -> float:
         """Calculate distance from the main sequence.
 
         The main sequence is the ideal balance: A + I = 1
@@ -253,9 +244,7 @@ class CouplingCohesionAnalyzer:
         """
         return abs(abstractness + instability - 1.0)
 
-    def _classify_coupling(
-        self, ca: int, ce: int, instability: float, distance: float
-    ) -> str:
+    def _classify_coupling(self, ca: int, ce: int, instability: float, distance: float) -> str:
         """Classify coupling quality.
 
         Args:
@@ -292,9 +281,7 @@ class CouplingCohesionAnalyzer:
         else:
             return "poor"
 
-    def _classify_cohesion(
-        self, lcom: float, lcom4: float, tcc: float, lcc: float
-    ) -> str:
+    def _classify_cohesion(self, lcom: float, lcom4: float, tcc: float, lcc: float) -> str:
         """Classify cohesion quality.
 
         Args:
@@ -336,8 +323,8 @@ class CouplingCohesionAnalyzer:
 
     def generate_report(
         self,
-        coupling: List[CouplingMetrics],
-        cohesion: List[CohesionMetrics],
+        coupling: list[CouplingMetrics],
+        cohesion: list[CohesionMetrics],
     ) -> str:
         """Generate a text report of coupling and cohesion metrics.
 
@@ -348,7 +335,7 @@ class CouplingCohesionAnalyzer:
         Returns:
             Formatted text report
         """
-        lines: List[str] = []
+        lines: list[str] = []
 
         lines.append("=" * 80)
         lines.append("COUPLING & COHESION ANALYSIS REPORT")
@@ -362,9 +349,7 @@ class CouplingCohesionAnalyzer:
 
         if coupling:
             # Sort by efferent coupling (highest first)
-            sorted_coupling = sorted(
-                coupling, key=lambda x: x.efferent_coupling, reverse=True
-            )
+            sorted_coupling = sorted(coupling, key=lambda x: x.efferent_coupling, reverse=True)
 
             for metric in sorted_coupling[:20]:  # Top 20
                 lines.append(f"Module: {metric.name}")

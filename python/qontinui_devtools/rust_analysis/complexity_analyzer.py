@@ -157,7 +157,7 @@ class ComplexityAnalyzer:
             file_path: Path to the Rust file
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 lines = f.readlines()
                 content = "".join(lines)
 
@@ -276,9 +276,7 @@ class ComplexityAnalyzer:
 
         # Calculate averages
         functions = [m for m in self._metrics if m.element_type == "function"]
-        avg_complexity = (
-            sum(f.complexity for f in functions) / len(functions) if functions else 0
-        )
+        avg_complexity = sum(f.complexity for f in functions) / len(functions) if functions else 0
         avg_lines = sum(f.lines for f in functions) / len(functions) if functions else 0
 
         # Top complex functions
@@ -290,8 +288,7 @@ class ComplexityAnalyzer:
             "avg_function_complexity": round(avg_complexity, 2),
             "avg_function_lines": round(avg_lines, 2),
             "most_complex": [
-                {"name": m.name, "complexity": m.complexity, "lines": m.lines}
-                for m in top_complex
+                {"name": m.name, "complexity": m.complexity, "lines": m.lines} for m in top_complex
             ],
         }
 
@@ -376,9 +373,7 @@ class ComplexityAnalyzer:
         summary_table.add_column("Value", justify="right", style="green")
 
         summary_table.add_row("Total Issues", str(stats["total_issues"]))
-        summary_table.add_row(
-            "Avg Function Complexity", str(stats["avg_function_complexity"])
-        )
+        summary_table.add_row("Avg Function Complexity", str(stats["avg_function_complexity"]))
         summary_table.add_row("Avg Function Lines", str(stats["avg_function_lines"]))
 
         self.console.print(summary_table)
@@ -392,9 +387,7 @@ class ComplexityAnalyzer:
             complex_table.add_column("Lines", justify="right", style="yellow")
 
             for item in stats["most_complex"][:10]:
-                complex_table.add_row(
-                    item["name"], str(item["complexity"]), str(item["lines"])
-                )
+                complex_table.add_row(item["name"], str(item["complexity"]), str(item["lines"]))
 
             self.console.print(complex_table)
             self.console.print()

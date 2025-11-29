@@ -18,7 +18,7 @@ from pathlib import Path
 # Add parent directory to path to import qontinui_devtools
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 
-from qontinui_devtools.reporting import ReportAggregator, HTMLReportGenerator
+from qontinui_devtools.reporting import HTMLReportGenerator, ReportAggregator
 
 
 def main():
@@ -45,21 +45,13 @@ def main():
     # Display summary
     print("\n2. Analysis Summary:")
     print(f"   - Files analyzed: {report_data.summary_metrics.get('files_analyzed', 0)}")
-    print(
-        f"   - Total lines: {report_data.summary_metrics.get('total_lines', 0):,}"
-    )
+    print(f"   - Total lines: {report_data.summary_metrics.get('total_lines', 0):,}")
     print(
         f"   - Circular dependencies: {report_data.summary_metrics.get('circular_dependencies', 0)}"
     )
-    print(
-        f"   - God classes: {report_data.summary_metrics.get('god_classes', 0)}"
-    )
-    print(
-        f"   - Race conditions: {report_data.summary_metrics.get('race_conditions', 0)}"
-    )
-    print(
-        f"   - Critical issues: {report_data.summary_metrics.get('critical_issues', 0)}"
-    )
+    print(f"   - God classes: {report_data.summary_metrics.get('god_classes', 0)}")
+    print(f"   - Race conditions: {report_data.summary_metrics.get('race_conditions', 0)}")
+    print(f"   - Critical issues: {report_data.summary_metrics.get('critical_issues', 0)}")
 
     # Generate HTML report
     print(f"\n3. Generating HTML report: {output_path}")
@@ -67,7 +59,7 @@ def main():
     generator.generate(report_data, output_path)
 
     print("\n" + "=" * 60)
-    print(f"✅ Report generated successfully!")
+    print("✅ Report generated successfully!")
     print(f"📊 Report location: {Path(output_path).absolute()}")
     print(f"📁 File size: {Path(output_path).stat().st_size:,} bytes")
     print("\n💡 Open the HTML file in your browser to view the interactive report.")

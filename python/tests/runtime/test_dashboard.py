@@ -11,12 +11,10 @@ This module tests:
 import asyncio
 import json
 import time
-from unittest.mock import Mock, patch
 
 import pytest
 from aiohttp import WSMsgType
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
-
 from qontinui_devtools.runtime import (
     ActionMetrics,
     DashboardServer,
@@ -231,9 +229,7 @@ class TestDashboardServer(AioHTTPTestCase):
     async def get_application(self):  # type: ignore
         """Create application for testing."""
         self.collector = MetricsCollector(sample_interval=0.1)
-        self.server = DashboardServer(
-            host="localhost", port=8765, metrics_collector=self.collector
-        )
+        self.server = DashboardServer(host="localhost", port=8765, metrics_collector=self.collector)
         return self.server.app
 
     @unittest_run_loop

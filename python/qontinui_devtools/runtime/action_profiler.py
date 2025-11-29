@@ -5,12 +5,12 @@ analyzing action execution, including timing, CPU usage, memory tracking,
 and flame graph generation.
 """
 
-import sys
 import time
 import uuid
+from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, Iterator
+from typing import Any
 
 import psutil
 
@@ -30,9 +30,7 @@ class ActionProfile:
     memory_delta: int
     peak_memory: int
     phases: dict[str, float] = field(default_factory=dict)  # Phase name → duration
-    stack_samples: list[tuple[float, list[str]]] = field(
-        default_factory=list
-    )  # For flame graph
+    stack_samples: list[tuple[float, list[str]]] = field(default_factory=list)  # For flame graph
     success: bool = True
     error: str | None = None
 

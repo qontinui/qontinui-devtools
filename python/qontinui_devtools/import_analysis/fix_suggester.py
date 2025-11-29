@@ -4,10 +4,7 @@ This module analyzes circular import dependencies and suggests
 appropriate fixes based on usage patterns.
 """
 
-import ast
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any
 
 from .ast_utils import ImportStatement
 
@@ -29,9 +26,7 @@ class FixSuggestion:
     affected_files: list[str]
 
 
-def analyze_cycle(
-    cycle: list[str], import_map: dict[str, list[ImportStatement]]
-) -> FixSuggestion:
+def analyze_cycle(cycle: list[str], import_map: dict[str, list[ImportStatement]]) -> FixSuggestion:
     """Analyze a circular dependency cycle and suggest how to break it.
 
     Args:
@@ -241,9 +236,7 @@ def my_function():
     )
 
 
-def _suggest_restructure_fix(
-    cycle: list[str], imports: list[ImportStatement]
-) -> FixSuggestion:
+def _suggest_restructure_fix(cycle: list[str], imports: list[ImportStatement]) -> FixSuggestion:
     """Suggest restructuring to fix the cycle.
 
     Args:

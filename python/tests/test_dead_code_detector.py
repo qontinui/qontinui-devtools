@@ -1,12 +1,9 @@
 """Tests for dead code detector."""
 
-import tempfile
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.code_quality.dead_code_detector import (
-    DeadCode,
     DeadCodeDetector,
     DefinitionCollector,
     UsageCollector,
@@ -466,20 +463,24 @@ def unused_function():
     def test_multiple_files(self, temp_project: Path) -> None:
         """Test analysis across multiple files."""
         # File 1
-        (temp_project / "file1.py").write_text("""
+        (temp_project / "file1.py").write_text(
+            """
 def func1():
     pass
 
 def func2():
     pass
-""")
+"""
+        )
 
         # File 2
-        (temp_project / "file2.py").write_text("""
+        (temp_project / "file2.py").write_text(
+            """
 from file1 import func1
 
 result = func1()
-""")
+"""
+        )
 
         detector = DeadCodeDetector(str(temp_project))
         dead_code = detector.find_unused_functions()
@@ -519,7 +520,8 @@ def sample_project(tmp_path: Path) -> Path:
     project.mkdir()
 
     # Module with unused code
-    (project / "main.py").write_text("""
+    (project / "main.py").write_text(
+        """
 import os
 import sys
 import json
@@ -555,23 +557,28 @@ def main():
 
 if __name__ == "__main__":
     main()
-""")
+"""
+    )
 
     # Helper module
-    (project / "helpers.py").write_text("""
+    (project / "helpers.py").write_text(
+        """
 def used_helper():
     return "helper"
 
 def unused_helper():
     return "dead"
-""")
+"""
+    )
 
     # Module that uses helpers
-    (project / "user.py").write_text("""
+    (project / "user.py").write_text(
+        """
 from helpers import used_helper
 
 result = used_helper()
-""")
+"""
+    )
 
     return project
 

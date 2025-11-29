@@ -41,7 +41,7 @@ class Severity(Enum):
             Severity.HIGH: 1,
             Severity.MEDIUM: 2,
             Severity.LOW: 3,
-            Severity.INFO: 4
+            Severity.INFO: 4,
         }
         return severity_order[self] < severity_order[other]
 
@@ -60,7 +60,7 @@ class Severity(Enum):
             Severity.HIGH: 1,
             Severity.MEDIUM: 2,
             Severity.LOW: 3,
-            Severity.INFO: 4
+            Severity.INFO: 4,
         }
         return severity_order[self] > severity_order[other]
 
@@ -107,18 +107,18 @@ class Vulnerability:
     def to_dict(self) -> dict:
         """Convert vulnerability to dictionary format."""
         return {
-            'type': self.type.value,
-            'severity': self.severity.value,
-            'file_path': self.file_path,
-            'line_number': self.line_number,
-            'code_snippet': self.code_snippet,
-            'description': self.description,
-            'remediation': self.remediation,
-            'cwe_id': self.cwe_id,
-            'owasp_category': self.owasp_category,
-            'column_offset': self.column_offset,
-            'end_line_number': self.end_line_number,
-            'confidence': self.confidence
+            "type": self.type.value,
+            "severity": self.severity.value,
+            "file_path": self.file_path,
+            "line_number": self.line_number,
+            "code_snippet": self.code_snippet,
+            "description": self.description,
+            "remediation": self.remediation,
+            "cwe_id": self.cwe_id,
+            "owasp_category": self.owasp_category,
+            "column_offset": self.column_offset,
+            "end_line_number": self.end_line_number,
+            "confidence": self.confidence,
         }
 
     def __str__(self) -> str:
@@ -185,16 +185,16 @@ class SecurityReport:
     def to_dict(self) -> dict:
         """Convert report to dictionary format."""
         return {
-            'vulnerabilities': [v.to_dict() for v in self.vulnerabilities],
-            'total_files_scanned': self.total_files_scanned,
-            'total_vulnerabilities': self.total_vulnerabilities,
-            'critical_count': self.critical_count,
-            'high_count': self.high_count,
-            'medium_count': self.medium_count,
-            'low_count': self.low_count,
-            'info_count': self.info_count,
-            'scan_duration': self.scan_duration,
-            'errors': self.errors
+            "vulnerabilities": [v.to_dict() for v in self.vulnerabilities],
+            "total_files_scanned": self.total_files_scanned,
+            "total_vulnerabilities": self.total_vulnerabilities,
+            "critical_count": self.critical_count,
+            "high_count": self.high_count,
+            "medium_count": self.medium_count,
+            "low_count": self.low_count,
+            "info_count": self.info_count,
+            "scan_duration": self.scan_duration,
+            "errors": self.errors,
         }
 
     def __str__(self) -> str:
@@ -211,13 +211,10 @@ class SecurityReport:
             f"  High: {self.high_count}",
             f"  Medium: {self.medium_count}",
             f"  Low: {self.low_count}",
-            f"  Info: {self.info_count}"
+            f"  Info: {self.info_count}",
         ]
 
         if self.errors:
-            lines.extend([
-                "",
-                f"Errors: {len(self.errors)} files could not be analyzed"
-            ])
+            lines.extend(["", f"Errors: {len(self.errors)} files could not be analyzed"])
 
         return "\n".join(lines)

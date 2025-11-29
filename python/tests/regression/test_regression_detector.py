@@ -1,11 +1,9 @@
 """Comprehensive tests for regression detection functionality."""
 
 import json
-import tempfile
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.regression import (
     APISnapshot,
     ChangeType,

@@ -8,10 +8,9 @@ import concurrent.futures
 import statistics
 import threading
 import time
-import traceback
-from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any
 
 from .instrumentation import SharedStateTracker
 
@@ -83,12 +82,14 @@ class RaceTestResult:
         ]
 
         if self.execution_times:
-            lines.extend([
-                f"  Avg Time: {self.avg_execution_time*1000:.2f}ms",
-                f"  Min Time: {self.min_execution_time*1000:.2f}ms",
-                f"  Max Time: {self.max_execution_time*1000:.2f}ms",
-                f"  Variance: {self.timing_variance*1000:.2f}ms",
-            ])
+            lines.extend(
+                [
+                    f"  Avg Time: {self.avg_execution_time*1000:.2f}ms",
+                    f"  Min Time: {self.min_execution_time*1000:.2f}ms",
+                    f"  Max Time: {self.max_execution_time*1000:.2f}ms",
+                    f"  Variance: {self.timing_variance*1000:.2f}ms",
+                ]
+            )
 
         if self.exceptions:
             lines.append(f"  Exceptions: {', '.join(self.exceptions)}")
@@ -133,7 +134,7 @@ class RaceConditionTester:
         threads: int = 10,
         iterations: int = 100,
         timeout: float = 30.0,
-        track_state: bool = False
+        track_state: bool = False,
     ) -> None:
         """Initialize race condition tester.
 
@@ -152,12 +153,7 @@ class RaceConditionTester:
         if track_state:
             self._tracker = SharedStateTracker()
 
-    def test_function(
-        self,
-        func: Callable,
-        *args: Any,
-        **kwargs: Any
-    ) -> RaceTestResult:
+    def test_function(self, func: Callable, *args: Any, **kwargs: Any) -> RaceTestResult:
         """Test a function for race conditions.
 
         Runs the function concurrently with multiple threads and analyzes
@@ -171,7 +167,7 @@ class RaceConditionTester:
         Returns:
             RaceTestResult with test results and analysis
         """
-        test_name = func.__name__ if hasattr(func, '__name__') else "unknown"
+        test_name = func.__name__ if hasattr(func, "__name__") else "unknown"
         total_iterations = self.threads * self.iterations
 
         # Track results
@@ -207,9 +203,7 @@ class RaceConditionTester:
                     with lock:
                         failed += 1
                         exception_types.add(exception_type)
-                        failure_details.append(
-                            f"{exception_type}: {str(e)}"
-                        )
+                        failure_details.append(f"{exception_type}: {str(e)}")
                         execution_times.append(end_time - start_time)
 
         # Run concurrent test
@@ -235,7 +229,7 @@ class RaceConditionTester:
             failed=failed,
             timing_variance=timing_variance,
             execution_times=execution_times,
-            results=results
+            results=results,
         )
 
         # Get conflicts from instrumentation
@@ -255,15 +249,11 @@ class RaceConditionTester:
             timing_variance=timing_variance,
             execution_times=execution_times,
             exceptions=list(exception_types),
-            conflicts=conflicts
+            conflicts=conflicts,
         )
 
     def _detect_race(
-        self,
-        failed: int,
-        timing_variance: float,
-        execution_times: list[float],
-        results: list[Any]
+        self, failed: int, timing_variance: float, execution_times: list[float], results: list[Any]
     ) -> bool:
         """Detect if race condition occurred based on heuristics.
 
@@ -302,9 +292,7 @@ class RaceConditionTester:
         return False
 
     def stress_test(
-        self,
-        target: Callable,
-        scenarios: list[dict[str, Any]]
+        self, target: Callable, scenarios: list[dict[str, Any]]
     ) -> list[RaceTestResult]:
         """Run multiple test scenarios.
 
@@ -323,18 +311,18 @@ class RaceConditionTester:
         results: list[RaceTestResult] = []
 
         for scenario in scenarios:
-            name = scenario.get('name', 'unnamed')
-            args = scenario.get('args', ())
-            kwargs = scenario.get('kwargs', {})
-            threads = scenario.get('threads', self.threads)
-            iterations = scenario.get('iterations', self.iterations)
+            name = scenario.get("name", "unnamed")
+            args = scenario.get("args", ())
+            kwargs = scenario.get("kwargs", {})
+            threads = scenario.get("threads", self.threads)
+            iterations = scenario.get("iterations", self.iterations)
 
             # Create tester with scenario-specific settings
             tester = RaceConditionTester(
                 threads=threads,
                 iterations=iterations,
                 timeout=self.timeout,
-                track_state=self.track_state
+                track_state=self.track_state,
             )
 
             result = tester.test_function(target, *args, **kwargs)
@@ -344,9 +332,7 @@ class RaceConditionTester:
         return results
 
     def concurrent_test(
-        self,
-        threads: int | None = None,
-        iterations: int | None = None
+        self, threads: int | None = None, iterations: int | None = None
     ) -> Callable:
         """Decorator for concurrent testing.
 
@@ -366,6 +352,7 @@ class RaceConditionTester:
 
             result = test_function()
         """
+
         def decorator(func: Callable) -> Callable:
             def wrapper(*args: Any, **kwargs: Any) -> RaceTestResult:
                 # Create tester with specified settings
@@ -373,15 +360,13 @@ class RaceConditionTester:
                 i = iterations if iterations is not None else self.iterations
 
                 tester = RaceConditionTester(
-                    threads=t,
-                    iterations=i,
-                    timeout=self.timeout,
-                    track_state=self.track_state
+                    threads=t, iterations=i, timeout=self.timeout, track_state=self.track_state
                 )
 
                 return tester.test_function(func, *args, **kwargs)
 
             return wrapper
+
         return decorator
 
     def get_tracker(self) -> SharedStateTracker | None:

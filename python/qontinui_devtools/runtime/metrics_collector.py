@@ -8,7 +8,7 @@ import queue
 import threading
 import time
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 import psutil
@@ -81,9 +81,7 @@ class MetricsCollector:
         history_size: Number of historical samples to keep (default: 300)
     """
 
-    def __init__(
-        self, sample_interval: float = 1.0, history_size: int = 300
-    ) -> None:
+    def __init__(self, sample_interval: float = 1.0, history_size: int = 300) -> None:
         """Initialize the metrics collector.
 
         Args:
@@ -213,9 +211,7 @@ class MetricsCollector:
 
             # Filter recent actions
             recent_actions = [
-                action
-                for action in self._action_history
-                if action.timestamp >= window_start
+                action for action in self._action_history if action.timestamp >= window_start
             ]
 
             # Calculate metrics
@@ -224,9 +220,7 @@ class MetricsCollector:
 
             # Calculate average duration
             if recent_actions:
-                avg_duration = sum(a.duration for a in recent_actions) / len(
-                    recent_actions
-                )
+                avg_duration = sum(a.duration for a in recent_actions) / len(recent_actions)
             else:
                 avg_duration = 0.0
 
@@ -238,9 +232,7 @@ class MetricsCollector:
                 success_rate = 100.0
 
             # Count errors
-            error_count = sum(
-                1 for a in self._action_history if not a.success
-            )
+            error_count = sum(1 for a in self._action_history if not a.success)
 
             return ActionMetrics(
                 timestamp=now,
@@ -314,9 +306,7 @@ class MetricsCollector:
             },
         }
 
-    def record_action(
-        self, name: str, duration: float, success: bool = True
-    ) -> None:
+    def record_action(self, name: str, duration: float, success: bool = True) -> None:
         """Record an action execution.
 
         Args:

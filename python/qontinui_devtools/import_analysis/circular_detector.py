@@ -12,7 +12,6 @@ from typing import Any
 import networkx as nx
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.table import Table
 
 from .ast_utils import ImportStatement, extract_imports, find_python_files, module_path_from_file
 from .fix_suggester import FixSuggestion, analyze_cycle, suggest_best_break_point
@@ -101,9 +100,7 @@ class CircularDependencyDetector:
         elapsed = time.time() - start_time
 
         if self.verbose:
-            self.console.print(
-                f"\n[bold green]Analysis complete[/bold green] in {elapsed:.2f}s"
-            )
+            self.console.print(f"\n[bold green]Analysis complete[/bold green] in {elapsed:.2f}s")
             self.console.print(f"Files scanned: {len(self.file_map)}")
             self.console.print(f"Dependencies: {len(self.graph.edges())}")
             self.console.print(f"Cycles found: {len(circular_deps)}")
@@ -415,6 +412,7 @@ class CircularDependencyDetector:
                 nx.write_graphml(self.graph, str(path))
             elif suffix == ".json":
                 import json
+
                 from networkx.readwrite import json_graph
 
                 data = json_graph.node_link_data(self.graph)

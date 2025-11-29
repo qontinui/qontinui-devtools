@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Any
 
 from .html_reporter import ReportData, ReportSection
-from .charts import create_bar_chart, create_pie_chart, create_line_chart
 
 
 class ReportAggregator:
@@ -101,9 +100,7 @@ class ReportAggregator:
                 "circular_dependencies": len(cycles),
                 "cycles": cycles,
                 "graph": detector.graph if hasattr(detector, "graph") else None,
-                "total_imports": len(
-                    detector.graph.edges() if hasattr(detector, "graph") else []
-                ),
+                "total_imports": len(detector.graph.edges() if hasattr(detector, "graph") else []),
             }
         except ImportError:
             return {"error": "Import analysis module not available"}
@@ -242,12 +239,8 @@ class ReportAggregator:
                 "circular_dependencies", 0
             ),
             "god_classes": self.results.get("architecture", {}).get("god_classes", 0),
-            "race_conditions": self.results.get("concurrency", {}).get(
-                "race_conditions", 0
-            ),
-            "srp_violations": self.results.get("architecture", {}).get(
-                "srp_violations", 0
-            ),
+            "race_conditions": self.results.get("concurrency", {}).get("race_conditions", 0),
+            "srp_violations": self.results.get("architecture", {}).get("srp_violations", 0),
             "critical_issues": self._count_critical_issues(),
         }
 
@@ -295,7 +288,9 @@ class ReportAggregator:
             content += "</ul>"
         else:
             severity = "error"
-            content = f"<p>❌ Found {circular_deps} circular dependencies (showing first 5):</p><ul>"
+            content = (
+                f"<p>❌ Found {circular_deps} circular dependencies (showing first 5):</p><ul>"
+            )
             for cycle in cycles[:5]:
                 cycle_str = " → ".join(html.escape(str(c)) for c in cycle)
                 content += f"<li><code>{cycle_str}</code></li>"
@@ -327,7 +322,9 @@ class ReportAggregator:
             content = "<p>✓ Architecture is clean. No god classes or SRP violations detected.</p>"
         elif god_classes <= 2:
             severity = "warning"
-            content = f"<p>⚠ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
+            content = (
+                f"<p>⚠ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
+            )
             if god_class_details:
                 content += "<h3>God Classes:</h3><ul>"
                 for cls in god_class_details[:3]:
@@ -338,7 +335,9 @@ class ReportAggregator:
                 content += "</ul>"
         else:
             severity = "error"
-            content = f"<p>❌ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
+            content = (
+                f"<p>❌ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
+            )
             content += "<p><strong>Critical:</strong> Multiple god classes detected. Consider refactoring.</p>"
             if god_class_details:
                 content += "<h3>Top God Classes:</h3><ul>"

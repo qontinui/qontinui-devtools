@@ -55,8 +55,8 @@ class MockHAL:
         ocr_latency: float = 0.0,
         ocr_accuracy: float = 1.0,
         platform_latency: float = 0.0,
-        config: HALConfig | None = None
-    ) -> 'MockHAL':
+        config: HALConfig | None = None,
+    ) -> "MockHAL":
         """Create mock HAL with default configuration.
 
         Args:
@@ -81,24 +81,19 @@ class MockHAL:
         """
         return cls(
             input_controller=MockInputController(
-                latency=input_latency,
-                failure_rate=input_failure_rate
+                latency=input_latency, failure_rate=input_failure_rate
             ),
             screen_capture=MockScreenCapture(latency=screen_latency),
             pattern_matcher=MockPatternMatcher(
-                default_success_rate=pattern_success_rate,
-                latency=pattern_latency
+                default_success_rate=pattern_success_rate, latency=pattern_latency
             ),
-            ocr_engine=MockOCREngine(
-                accuracy=ocr_accuracy,
-                latency=ocr_latency
-            ),
+            ocr_engine=MockOCREngine(accuracy=ocr_accuracy, latency=ocr_latency),
             platform_specific=MockPlatformSpecific(latency=platform_latency),
-            config=config or HALConfig()
+            config=config or HALConfig(),
         )
 
     @classmethod
-    def create_slow(cls) -> 'MockHAL':
+    def create_slow(cls) -> "MockHAL":
         """Create mock HAL with simulated slow operations.
 
         Returns:
@@ -113,11 +108,11 @@ class MockHAL:
             screen_latency=0.05,  # 50ms
             pattern_latency=0.1,  # 100ms
             ocr_latency=0.2,  # 200ms
-            platform_latency=0.01  # 10ms
+            platform_latency=0.01,  # 10ms
         )
 
     @classmethod
-    def create_unreliable(cls) -> 'MockHAL':
+    def create_unreliable(cls) -> "MockHAL":
         """Create mock HAL with simulated unreliable operations.
 
         Returns:
@@ -130,11 +125,11 @@ class MockHAL:
         return cls.create(
             input_failure_rate=0.1,  # 10% failure rate
             pattern_success_rate=0.8,  # 80% success rate
-            ocr_accuracy=0.9  # 90% accuracy
+            ocr_accuracy=0.9,  # 90% accuracy
         )
 
     @classmethod
-    def create_fast_and_reliable(cls) -> 'MockHAL':
+    def create_fast_and_reliable(cls) -> "MockHAL":
         """Create mock HAL optimized for fast, reliable testing.
 
         Returns:
@@ -164,10 +159,10 @@ class MockHAL:
             Total operation count
         """
         return (
-            self.input_controller.get_action_count() +
-            self.screen_capture.capture_count +
-            len(self.pattern_matcher.match_attempts) +
-            len(self.ocr_engine.ocr_calls)
+            self.input_controller.get_action_count()
+            + self.screen_capture.capture_count
+            + len(self.pattern_matcher.match_attempts)
+            + len(self.ocr_engine.ocr_calls)
         )
 
     def cleanup(self) -> None:
@@ -205,62 +200,62 @@ class MockHALBuilder:
         self._test_image = None
         self._config = None
 
-    def with_input_latency(self, latency: float) -> 'MockHALBuilder':
+    def with_input_latency(self, latency: float) -> "MockHALBuilder":
         """Set input operation latency."""
         self._input_latency = latency
         return self
 
-    def with_input_failure_rate(self, rate: float) -> 'MockHALBuilder':
+    def with_input_failure_rate(self, rate: float) -> "MockHALBuilder":
         """Set input failure rate."""
         self._input_failure_rate = rate
         return self
 
-    def with_screen_latency(self, latency: float) -> 'MockHALBuilder':
+    def with_screen_latency(self, latency: float) -> "MockHALBuilder":
         """Set screen capture latency."""
         self._screen_latency = latency
         return self
 
-    def with_pattern_latency(self, latency: float) -> 'MockHALBuilder':
+    def with_pattern_latency(self, latency: float) -> "MockHALBuilder":
         """Set pattern matching latency."""
         self._pattern_latency = latency
         return self
 
-    def with_pattern_success_rate(self, rate: float) -> 'MockHALBuilder':
+    def with_pattern_success_rate(self, rate: float) -> "MockHALBuilder":
         """Set pattern match success rate."""
         self._pattern_success_rate = rate
         return self
 
-    def with_ocr_latency(self, latency: float) -> 'MockHALBuilder':
+    def with_ocr_latency(self, latency: float) -> "MockHALBuilder":
         """Set OCR processing latency."""
         self._ocr_latency = latency
         return self
 
-    def with_ocr_accuracy(self, accuracy: float) -> 'MockHALBuilder':
+    def with_ocr_accuracy(self, accuracy: float) -> "MockHALBuilder":
         """Set OCR accuracy."""
         self._ocr_accuracy = accuracy
         return self
 
-    def with_ocr_default_text(self, text: str) -> 'MockHALBuilder':
+    def with_ocr_default_text(self, text: str) -> "MockHALBuilder":
         """Set default OCR text."""
         self._ocr_default_text = text
         return self
 
-    def with_platform_latency(self, latency: float) -> 'MockHALBuilder':
+    def with_platform_latency(self, latency: float) -> "MockHALBuilder":
         """Set platform operation latency."""
         self._platform_latency = latency
         return self
 
-    def with_test_image(self, image) -> 'MockHALBuilder':  # type: ignore
+    def with_test_image(self, image) -> "MockHALBuilder":  # type: ignore
         """Set test image for screen capture."""
         self._test_image = image
         return self
 
-    def with_default_test_image(self) -> 'MockHALBuilder':
+    def with_default_test_image(self) -> "MockHALBuilder":
         """Use default test image for screen capture."""
         self._test_image = None  # Will use MockScreenCapture default
         return self
 
-    def with_config(self, config: HALConfig) -> 'MockHALBuilder':
+    def with_config(self, config: HALConfig) -> "MockHALBuilder":
         """Set HAL configuration."""
         self._config = config
         return self
@@ -280,7 +275,7 @@ class MockHALBuilder:
             ocr_latency=self._ocr_latency,
             ocr_accuracy=self._ocr_accuracy,
             platform_latency=self._platform_latency,
-            config=self._config
+            config=self._config,
         )
 
         # Set custom OCR text if specified

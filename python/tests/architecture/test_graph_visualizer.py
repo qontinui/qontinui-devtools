@@ -3,11 +3,12 @@
 import json
 import tempfile
 from pathlib import Path
+
 import pytest
 from qontinui_devtools.architecture import (
     DependencyGraphVisualizer,
-    GraphNode,
     GraphEdge,
+    GraphNode,
 )
 
 
@@ -117,9 +118,7 @@ class TestGraphEdge:
 
     def test_create_edge(self):
         """Test creating a graph edge."""
-        edge = GraphEdge(
-            source="module_a", target="module_b", edge_type="imports", weight=2
-        )
+        edge = GraphEdge(source="module_a", target="module_b", edge_type="imports", weight=2)
 
         assert edge.source == "module_a"
         assert edge.target == "module_b"
@@ -254,7 +253,7 @@ class TestDependencyGraphVisualizer:
             assert Path(output_path).exists()
 
             # Check file contains HTML
-            with open(output_path, "r") as f:
+            with open(output_path) as f:
                 content = f.read()
                 assert "<!DOCTYPE html>" in content
                 assert "d3" in content.lower()  # Check for d3.js reference
@@ -271,9 +270,7 @@ class TestDependencyGraphVisualizer:
             output_path = f.name
 
         try:
-            visualizer.visualize(
-                nodes, edges, output_path, format="html", highlight_cycles=True
-            )
+            visualizer.visualize(nodes, edges, output_path, format="html", highlight_cycles=True)
 
             assert Path(output_path).exists()
         finally:
@@ -293,7 +290,7 @@ class TestDependencyGraphVisualizer:
             assert Path(output_path).exists()
 
             # Check JSON structure
-            with open(output_path, "r") as f:
+            with open(output_path) as f:
                 data = json.load(f)
                 assert "nodes" in data
                 assert "edges" in data
@@ -581,7 +578,7 @@ class TestIntegration:
             assert Path(json_path).exists()
 
             # Verify JSON content
-            with open(json_path, "r") as f:
+            with open(json_path) as f:
                 data = json.load(f)
                 assert len(data["nodes"]) == len(nodes)
                 assert len(data["edges"]) == len(edges)

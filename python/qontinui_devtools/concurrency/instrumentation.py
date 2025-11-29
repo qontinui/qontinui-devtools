@@ -83,7 +83,7 @@ class SharedStateTracker:
         obj_id: int,
         thread_id: int | None = None,
         timestamp: float | None = None,
-        location: str = ""
+        location: str = "",
     ) -> None:
         """Record a read access to shared state.
 
@@ -99,10 +99,7 @@ class SharedStateTracker:
             timestamp = time.time()
 
         access = Access(
-            thread_id=thread_id,
-            timestamp=timestamp,
-            access_type="read",
-            location=location
+            thread_id=thread_id, timestamp=timestamp, access_type="read", location=location
         )
 
         with self._lock:
@@ -115,7 +112,7 @@ class SharedStateTracker:
         obj_id: int,
         thread_id: int | None = None,
         timestamp: float | None = None,
-        location: str = ""
+        location: str = "",
     ) -> None:
         """Record a write access to shared state.
 
@@ -131,10 +128,7 @@ class SharedStateTracker:
             timestamp = time.time()
 
         access = Access(
-            thread_id=thread_id,
-            timestamp=timestamp,
-            access_type="write",
-            location=location
+            thread_id=thread_id, timestamp=timestamp, access_type="write", location=location
         )
 
         with self._lock:
@@ -185,13 +179,15 @@ class SharedStateTracker:
                         conflict_type = "read-write"
 
                     if conflict_type:
-                        conflicts.append(RaceConflict(
-                            obj_id=obj_id,
-                            access_1=access_1,
-                            access_2=access_2,
-                            conflict_type=conflict_type,
-                            time_difference=time_diff
-                        ))
+                        conflicts.append(
+                            RaceConflict(
+                                obj_id=obj_id,
+                                access_1=access_1,
+                                access_2=access_2,
+                                conflict_type=conflict_type,
+                                time_difference=time_diff,
+                            )
+                        )
 
         return conflicts
 
@@ -214,18 +210,18 @@ class SharedStateTracker:
         with self._lock:
             total_accesses = sum(len(accesses) for accesses in self._accesses.values())
             read_count = sum(
-                1 for accesses in self._accesses.values()
-                for a in accesses if a.access_type == "read"
-            )
-            write_count = sum(
-                1 for accesses in self._accesses.values()
-                for a in accesses if a.access_type == "write"
-            )
-            threads = {
-                a.thread_id
+                1
                 for accesses in self._accesses.values()
                 for a in accesses
-            }
+                if a.access_type == "read"
+            )
+            write_count = sum(
+                1
+                for accesses in self._accesses.values()
+                for a in accesses
+                if a.access_type == "write"
+            )
+            threads = {a.thread_id for accesses in self._accesses.values() for a in accesses}
 
             return {
                 "total_accesses": total_accesses,
@@ -233,7 +229,7 @@ class SharedStateTracker:
                 "read_count": read_count,
                 "write_count": write_count,
                 "thread_count": len(threads),
-                "threads": threads
+                "threads": threads,
             }
 
 
@@ -259,45 +255,45 @@ class InstrumentedObject:
             obj: Object to instrument
             tracker: Tracker to record accesses
         """
-        object.__setattr__(self, '_obj', obj)
-        object.__setattr__(self, '_tracker', tracker)
-        object.__setattr__(self, '_obj_id', id(obj))
+        object.__setattr__(self, "_obj", obj)
+        object.__setattr__(self, "_tracker", tracker)
+        object.__setattr__(self, "_obj_id", id(obj))
 
     def __getattribute__(self, name: str) -> Any:
         """Record reads."""
-        if name in ('_obj', '_tracker', '_obj_id'):
+        if name in ("_obj", "_tracker", "_obj_id"):
             return object.__getattribute__(self, name)
 
-        tracker = object.__getattribute__(self, '_tracker')
-        obj_id = object.__getattribute__(self, '_obj_id')
-        obj = object.__getattribute__(self, '_obj')
+        tracker = object.__getattribute__(self, "_tracker")
+        obj_id = object.__getattribute__(self, "_obj_id")
+        obj = object.__getattribute__(self, "_obj")
 
         tracker.record_read(obj_id, location=f"getattr:{name}")
         return getattr(obj, name)
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Record writes."""
-        tracker = object.__getattribute__(self, '_tracker')
-        obj_id = object.__getattribute__(self, '_obj_id')
-        obj = object.__getattribute__(self, '_obj')
+        tracker = object.__getattribute__(self, "_tracker")
+        obj_id = object.__getattribute__(self, "_obj_id")
+        obj = object.__getattribute__(self, "_obj")
 
         tracker.record_write(obj_id, location=f"setattr:{name}")
         setattr(obj, name, value)
 
     def __getitem__(self, key: Any) -> Any:
         """Record reads for container access."""
-        tracker = object.__getattribute__(self, '_tracker')
-        obj_id = object.__getattribute__(self, '_obj_id')
-        obj = object.__getattribute__(self, '_obj')
+        tracker = object.__getattribute__(self, "_tracker")
+        obj_id = object.__getattribute__(self, "_obj_id")
+        obj = object.__getattribute__(self, "_obj")
 
         tracker.record_read(obj_id, location=f"getitem:{key}")
         return obj[key]
 
     def __setitem__(self, key: Any, value: Any) -> None:
         """Record writes for container access."""
-        tracker = object.__getattribute__(self, '_tracker')
-        obj_id = object.__getattribute__(self, '_obj_id')
-        obj = object.__getattribute__(self, '_obj')
+        tracker = object.__getattribute__(self, "_tracker")
+        obj_id = object.__getattribute__(self, "_obj_id")
+        obj = object.__getattribute__(self, "_obj")
 
         tracker.record_write(obj_id, location=f"setitem:{key}")
         obj[key] = value

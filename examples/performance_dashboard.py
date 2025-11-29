@@ -15,8 +15,8 @@ Run this example:
 Then open http://localhost:8765 in your browser to view the dashboard.
 """
 
-import time
 import random
+import time
 from threading import Thread
 
 from qontinui_devtools.runtime import DashboardServer, MetricsCollector
@@ -124,16 +124,12 @@ def main() -> None:
     simulator = Thread(
         target=simulate_application_activity,
         args=(collector, 300),  # Run for 5 minutes
-        daemon=True
+        daemon=True,
     )
     simulator.start()
 
     # Create and start dashboard server
-    server = DashboardServer(
-        host="localhost",
-        port=8765,
-        metrics_collector=collector
-    )
+    server = DashboardServer(host="localhost", port=8765, metrics_collector=collector)
 
     print("Starting dashboard server...")
     print("Open http://localhost:8765 in your browser")

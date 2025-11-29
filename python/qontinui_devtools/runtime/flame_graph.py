@@ -90,11 +90,9 @@ def samples_to_speedscope(
                 "name": name,
                 "unit": "microseconds",
                 "startValue": 0,
-                "endValue": int(
-                    (stack_samples[-1][0] - start_time) * 1_000_000
-                )
-                if stack_samples
-                else 0,
+                "endValue": (
+                    int((stack_samples[-1][0] - start_time) * 1_000_000) if stack_samples else 0
+                ),
                 "samples": [[get_frame_index(f) for f in reversed(s)] for _, s in stack_samples],
                 "weights": [1] * len(stack_samples),
             }
@@ -198,7 +196,7 @@ def samples_to_svg(
             # Truncate frame name if too long
             display_name = frame_name
             if frame_width < 100:
-                display_name = frame_name[:int(frame_width / 8)]
+                display_name = frame_name[: int(frame_width / 8)]
                 if len(display_name) < len(frame_name):
                     display_name += "..."
 
@@ -234,9 +232,7 @@ def _generate_empty_svg(title: str, width: int, height: int) -> str:
 </svg>"""
 
 
-def aggregate_stacks(
-    stack_samples: list[tuple[float, list[str]]]
-) -> dict[tuple[str, ...], int]:
+def aggregate_stacks(stack_samples: list[tuple[float, list[str]]]) -> dict[tuple[str, ...], int]:
     """Aggregate stack samples into counts.
 
     Args:
@@ -267,9 +263,7 @@ def get_hot_paths(
     counts = aggregate_stacks(stack_samples)
     total = len(stack_samples)
 
-    hot_paths = [
-        (stack, count, (count / total) * 100) for stack, count in counts.items()
-    ]
+    hot_paths = [(stack, count, (count / total) * 100) for stack, count in counts.items()]
 
     # Sort by count descending
     hot_paths.sort(key=lambda x: x[1], reverse=True)

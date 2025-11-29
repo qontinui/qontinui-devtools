@@ -6,7 +6,6 @@ import tempfile
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.reporting import ReportAggregator
 
 
@@ -209,9 +208,7 @@ def world():
         """Test creating concurrency section with no race conditions."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
-            aggregator.results = {
-                "concurrency": {"race_conditions": 0, "race_details": []}
-            }
+            aggregator.results = {"concurrency": {"race_conditions": 0, "race_details": []}}
 
             section = aggregator._create_concurrency_section()
 

@@ -1,9 +1,10 @@
 """Custom layout algorithms for dependency graphs."""
 
 import math
-from typing import Any
+
 import networkx as nx
-from .graph_visualizer import GraphNode, GraphEdge
+
+from .graph_visualizer import GraphEdge, GraphNode
 
 
 def force_directed_layout(
@@ -33,7 +34,9 @@ def force_directed_layout(
         G.add_edge(edge.source, edge.target)
 
     # Use networkx's spring layout (Fruchterman-Reingold)
-    pos = nx.spring_layout(G, k=2 / math.sqrt(len(nodes)), iterations=iterations, scale=min(width, height) / 2)
+    pos = nx.spring_layout(
+        G, k=2 / math.sqrt(len(nodes)), iterations=iterations, scale=min(width, height) / 2
+    )
 
     # Scale to canvas size and center
     result: dict[str, tuple[float, float]] = {}

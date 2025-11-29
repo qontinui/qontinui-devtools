@@ -19,8 +19,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 
 from qontinui_devtools.import_analysis import (
     ImportTracer,
-    visualize_import_graph,
     generate_html_report,
+    visualize_import_graph,
 )
 
 
@@ -168,8 +168,7 @@ def example_simulated_qontinui_issue():
     print()
 
     # Remove modules if cached
-    for mod in ["fixtures.circular_c", "fixtures.circular_d",
-                "fixtures.circular_e"]:
+    for mod in ["fixtures.circular_c", "fixtures.circular_d", "fixtures.circular_e"]:
         if mod in sys.modules:
             del sys.modules[mod]
 
@@ -190,7 +189,7 @@ def example_simulated_qontinui_issue():
                 print("  Detected cycle:")
                 for i, node in enumerate(cycle):
                     if i > 0:
-                        print(f"    ↓")
+                        print("    ↓")
                     print(f"    {node}")
         print()
         print("With this tool, you would have seen this warning BEFORE the freeze!")

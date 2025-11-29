@@ -3,8 +3,6 @@
 import threading
 import time
 
-import pytest
-
 from qontinui_devtools.concurrency.instrumentation import (
     Access,
     InstrumentedObject,
@@ -202,7 +200,7 @@ def test_race_conflict_repr():
         access_1=access_1,
         access_2=access_2,
         conflict_type="write-write",
-        time_difference=0.001
+        time_difference=0.001,
     )
 
     repr_str = repr(conflict)
@@ -312,10 +310,7 @@ def test_concurrent_tracking():
             shared_dict["value"] += 1
             tracker.record_write(obj_id, thread_id=thread_id)
 
-    threads = [
-        threading.Thread(target=worker, args=(i,))
-        for i in range(5)
-    ]
+    threads = [threading.Thread(target=worker, args=(i,)) for i in range(5)]
 
     for t in threads:
         t.start()

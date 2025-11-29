@@ -6,12 +6,10 @@ against Pydantic schemas, catching schema mismatches before execution.
 """
 
 import json
-import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from qontinui_devtools.config_validator import ConfigValidator, ValidationError, ValidationReport
 
 
@@ -35,40 +33,17 @@ def valid_config_file(tmp_path: Path) -> Path:
                     "action1": {
                         "type": "Click",
                         "name": "Click Button",
-                        "searches": [
-                            {
-                                "type": "Match",
-                                "image": "button.png",
-                                "threshold": 0.8
-                            }
-                        ],
-                        "coordinates": {
-                            "x": 100,
-                            "y": 200
-                        }
+                        "searches": [{"type": "Match", "image": "button.png", "threshold": 0.8}],
+                        "coordinates": {"x": 100, "y": 200},
                     },
-                    "action2": {
-                        "type": "Wait",
-                        "name": "Wait for Element",
-                        "duration": 1.5
-                    }
+                    "action2": {"type": "Wait", "name": "Wait for Element", "duration": 1.5},
                 },
                 "connections": {
-                    "action1": {
-                        "false": [
-                            [
-                                {
-                                    "action": "action2",
-                                    "type": "false",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    }
+                    "action1": {"false": [[{"action": "action2", "type": "false", "index": 0}]]}
                 },
-                "initial_action": "action1"
+                "initial_action": "action1",
             }
-        ]
+        ],
     }
 
     config_file = tmp_path / "valid_config.json"
@@ -92,26 +67,14 @@ def invalid_connections_file(tmp_path: Path) -> Path:
                     "action1": {
                         "type": "Click",
                         "name": "Click Button",
-                        "searches": [
-                            {
-                                "type": "Match",
-                                "image": "button.png",
-                                "threshold": 0.8
-                            }
-                        ]
+                        "searches": [{"type": "Match", "image": "button.png", "threshold": 0.8}],
                     },
-                    "action2": {
-                        "type": "Wait",
-                        "name": "Wait for Element",
-                        "duration": 1.5
-                    }
+                    "action2": {"type": "Wait", "name": "Wait for Element", "duration": 1.5},
                 },
-                "connections": {
-                    "action1": ["action2:false"]
-                },
-                "initial_action": "action1"
+                "connections": {"action1": ["action2:false"]},
+                "initial_action": "action1",
             }
-        ]
+        ],
     }
 
     config_file = tmp_path / "invalid_connections.json"
@@ -134,18 +97,13 @@ def missing_required_fields_file(tmp_path: Path) -> Path:
                 "actions": {
                     "action1": {
                         "name": "Click Button",
-                        "searches": [
-                            {
-                                "type": "Match",
-                                "image": "button.png"
-                            }
-                        ]
+                        "searches": [{"type": "Match", "image": "button.png"}],
                     }
                 },
                 "connections": {},
-                "initial_action": "action1"
+                "initial_action": "action1",
             }
-        ]
+        ],
     }
 
     config_file = tmp_path / "missing_fields.json"
@@ -179,31 +137,20 @@ def multiple_workflows_file(tmp_path: Path) -> Path:
                     "action1": {
                         "type": "Click",
                         "name": "Click Button",
-                        "searches": [
-                            {
-                                "type": "Match",
-                                "image": "button.png",
-                                "threshold": 0.8
-                            }
-                        ]
+                        "searches": [{"type": "Match", "image": "button.png", "threshold": 0.8}],
                     }
                 },
                 "connections": {},
-                "initial_action": "action1"
+                "initial_action": "action1",
             },
             {
                 "id": "workflow2",
                 "name": "Invalid Workflow",
-                "actions": {
-                    "action2": {
-                        "name": "Missing Type",
-                        "searches": []
-                    }
-                },
+                "actions": {"action2": {"name": "Missing Type", "searches": []}},
                 "connections": {},
-                "initial_action": "action2"
-            }
-        ]
+                "initial_action": "action2",
+            },
+        ],
     }
 
     config_file = tmp_path / "multiple_workflows.json"
@@ -216,8 +163,10 @@ def multiple_workflows_file(tmp_path: Path) -> Path:
 @pytest.fixture
 def mock_validator():
     """Create a mock validator that doesn't require qontinui library."""
-    with patch.object(ConfigValidator, '_find_qontinui_path') as mock_find, \
-         patch.object(ConfigValidator, '_setup_imports') as mock_setup:
+    with (
+        patch.object(ConfigValidator, "_find_qontinui_path") as mock_find,
+        patch.object(ConfigValidator, "_setup_imports") as mock_setup,
+    ):
 
         mock_find.return_value = Path("/mock/qontinui/path")
 
@@ -240,14 +189,16 @@ class TestConfigValidatorInitialization:
         """Test initialization with explicit qontinui path."""
         test_path = Path("/test/qontinui/path")
 
-        with patch.object(ConfigValidator, '_setup_imports'):
+        with patch.object(ConfigValidator, "_setup_imports"):
             validator = ConfigValidator(qontinui_path=test_path)
             assert validator.qontinui_path == test_path
 
     def test_init_auto_detect_path(self) -> None:
         """Test initialization with auto-detection of qontinui path."""
-        with patch.object(ConfigValidator, '_find_qontinui_path') as mock_find, \
-             patch.object(ConfigValidator, '_setup_imports'):
+        with (
+            patch.object(ConfigValidator, "_find_qontinui_path") as mock_find,
+            patch.object(ConfigValidator, "_setup_imports"),
+        ):
 
             mock_find.return_value = Path("/auto/detected/path")
             validator = ConfigValidator()
@@ -257,8 +208,10 @@ class TestConfigValidatorInitialization:
 
     def test_auto_detect_qontinui_path_success(self) -> None:
         """Test successful auto-detection of qontinui path."""
-        with patch.object(ConfigValidator, '_setup_imports'), \
-             patch('pathlib.Path.exists') as mock_exists:
+        with (
+            patch.object(ConfigValidator, "_setup_imports"),
+            patch("pathlib.Path.exists") as mock_exists,
+        ):
 
             # Mock that the second candidate path exists
             mock_exists.side_effect = [False, True]
@@ -270,8 +223,10 @@ class TestConfigValidatorInitialization:
 
     def test_auto_detect_qontinui_path_failure(self) -> None:
         """Test auto-detection failure when qontinui not found."""
-        with patch.object(ConfigValidator, '_setup_imports'), \
-             patch('pathlib.Path.exists', return_value=False):
+        with (
+            patch.object(ConfigValidator, "_setup_imports"),
+            patch("pathlib.Path.exists", return_value=False),
+        ):
 
             with pytest.raises(FileNotFoundError, match="Could not find qontinui library"):
                 ConfigValidator()
@@ -284,9 +239,9 @@ class TestConfigValidatorInitialization:
         original_path = sys.path.copy()
 
         try:
-            with patch.object(ConfigValidator, '_find_qontinui_path', return_value=test_path):
+            with patch.object(ConfigValidator, "_find_qontinui_path", return_value=test_path):
                 # Mock the actual imports to avoid ImportError
-                with patch('builtins.__import__'):
+                with patch("builtins.__import__"):
                     validator = ConfigValidator()
 
                     # Should have added test_path to sys.path
@@ -299,7 +254,9 @@ class TestConfigValidatorInitialization:
 class TestValidateValidConfig:
     """Tests for validating valid configuration files."""
 
-    def test_validate_valid_config(self, valid_config_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_valid_config(
+        self, valid_config_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation of a completely valid config file."""
         # Mock successful validation
         mock_validator.Workflow.model_validate.return_value = MagicMock()
@@ -314,7 +271,9 @@ class TestValidateValidConfig:
         assert len(report.errors) == 0
         assert report.config_path == valid_config_file
 
-    def test_validate_multiple_valid_workflows(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_multiple_valid_workflows(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation of config with multiple valid workflows."""
         config = {
             "name": "Multi Workflow",
@@ -325,10 +284,10 @@ class TestValidateValidConfig:
                     "name": f"Workflow {i}",
                     "actions": {},
                     "connections": {},
-                    "initial_action": "action1"
+                    "initial_action": "action1",
                 }
                 for i in range(5)
-            ]
+            ],
         }
 
         config_file = tmp_path / "multi_valid.json"
@@ -360,12 +319,11 @@ class TestValidateInvalidConfigs:
             "type": "dict_type",
             "loc": ("connections", "action1"),
             "msg": "Input should be a valid dictionary",
-            "input": ["action2:false"]
+            "input": ["action2:false"],
         }
 
-        mock_validator.Workflow.model_validate.side_effect = PydanticValidationError.from_exception_data(
-            "ValidationError",
-            [error_dict]
+        mock_validator.Workflow.model_validate.side_effect = (
+            PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
         report = mock_validator.validate_file(invalid_connections_file)
@@ -388,12 +346,11 @@ class TestValidateInvalidConfigs:
             "type": "missing",
             "loc": ("actions", "action1", "type"),
             "msg": "Field required",
-            "input": {}
+            "input": {},
         }
 
-        mock_validator.Workflow.model_validate.side_effect = PydanticValidationError.from_exception_data(
-            "ValidationError",
-            [error_dict]
+        mock_validator.Workflow.model_validate.side_effect = (
+            PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
         report = mock_validator.validate_file(missing_required_fields_file)
@@ -422,7 +379,7 @@ class TestValidateInvalidConfigs:
                     "type": "missing",
                     "loc": ("actions", "action2", "type"),
                     "msg": "Field required",
-                    "input": {}
+                    "input": {},
                 }
                 raise PydanticValidationError.from_exception_data("ValidationError", [error_dict])
 
@@ -452,7 +409,9 @@ class TestValidateNonexistentFile:
         assert len(report.warnings) > 0
         assert "not found" in report.warnings[0].lower()
 
-    def test_validate_invalid_json(self, invalid_json_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_invalid_json(
+        self, invalid_json_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of invalid JSON syntax."""
         report = mock_validator.validate_file(invalid_json_file)
 
@@ -461,13 +420,11 @@ class TestValidateNonexistentFile:
         assert len(report.warnings) > 0
         assert "json" in report.warnings[0].lower()
 
-    def test_validate_empty_workflows(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_empty_workflows(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of config with no workflows."""
-        config = {
-            "name": "Empty Config",
-            "default_workflow": "none",
-            "workflows": []
-        }
+        config = {"name": "Empty Config", "default_workflow": "none", "workflows": []}
 
         config_file = tmp_path / "empty.json"
         with open(config_file, "w", encoding="utf-8") as f:
@@ -483,20 +440,22 @@ class TestValidateNonexistentFile:
 class TestValidationReportFormat:
     """Tests for ValidationReport structure and formatting."""
 
-    def test_validation_report_structure(self, valid_config_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validation_report_structure(
+        self, valid_config_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test that ValidationReport has correct structure."""
         mock_validator.Workflow.model_validate.return_value = MagicMock()
 
         report = mock_validator.validate_file(valid_config_file)
 
         # Check all required fields exist
-        assert hasattr(report, 'config_path')
-        assert hasattr(report, 'is_valid')
-        assert hasattr(report, 'total_workflows')
-        assert hasattr(report, 'valid_workflows')
-        assert hasattr(report, 'invalid_workflows')
-        assert hasattr(report, 'errors')
-        assert hasattr(report, 'warnings')
+        assert hasattr(report, "config_path")
+        assert hasattr(report, "is_valid")
+        assert hasattr(report, "total_workflows")
+        assert hasattr(report, "valid_workflows")
+        assert hasattr(report, "invalid_workflows")
+        assert hasattr(report, "errors")
+        assert hasattr(report, "warnings")
 
         # Check types
         assert isinstance(report.config_path, Path)
@@ -507,7 +466,9 @@ class TestValidationReportFormat:
         assert isinstance(report.errors, list)
         assert isinstance(report.warnings, list)
 
-    def test_validation_error_structure(self, invalid_connections_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validation_error_structure(
+        self, invalid_connections_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test that ValidationError has correct structure."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -515,12 +476,11 @@ class TestValidationReportFormat:
             "type": "dict_type",
             "loc": ("connections", "action1"),
             "msg": "Invalid type",
-            "input": ["wrong"]
+            "input": ["wrong"],
         }
 
-        mock_validator.Workflow.model_validate.side_effect = PydanticValidationError.from_exception_data(
-            "ValidationError",
-            [error_dict]
+        mock_validator.Workflow.model_validate.side_effect = (
+            PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
         report = mock_validator.validate_file(invalid_connections_file)
@@ -529,17 +489,17 @@ class TestValidationReportFormat:
 
         error = report.errors[0]
         assert isinstance(error, ValidationError)
-        assert hasattr(error, 'workflow_id')
-        assert hasattr(error, 'workflow_name')
-        assert hasattr(error, 'field')
-        assert hasattr(error, 'error_type')
-        assert hasattr(error, 'message')
-        assert hasattr(error, 'current_value')
-        assert hasattr(error, 'expected_type')
-        assert hasattr(error, 'location')
-        assert hasattr(error, 'is_inline')
-        assert hasattr(error, 'parent_action_id')
-        assert hasattr(error, 'inline_workflow_context')
+        assert hasattr(error, "workflow_id")
+        assert hasattr(error, "workflow_name")
+        assert hasattr(error, "field")
+        assert hasattr(error, "error_type")
+        assert hasattr(error, "message")
+        assert hasattr(error, "current_value")
+        assert hasattr(error, "expected_type")
+        assert hasattr(error, "location")
+        assert hasattr(error, "is_inline")
+        assert hasattr(error, "parent_action_id")
+        assert hasattr(error, "inline_workflow_context")
 
         assert isinstance(error.location, list)
         assert error.workflow_id == "test_workflow"
@@ -567,12 +527,11 @@ class TestValidationReportFormat:
             "type": "dict_type",
             "loc": ("connections", "action1"),
             "msg": "Invalid connections format",
-            "input": ["wrong"]
+            "input": ["wrong"],
         }
 
-        mock_validator.Workflow.model_validate.side_effect = PydanticValidationError.from_exception_data(
-            "ValidationError",
-            [error_dict]
+        mock_validator.Workflow.model_validate.side_effect = (
+            PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
         report = mock_validator.validate_file(invalid_connections_file)
@@ -593,12 +552,11 @@ class TestValidationReportFormat:
             "loc": ("connections", "action1"),
             "msg": "Invalid type",
             "input": ["wrong"],
-            "expected": "dict"
+            "expected": "dict",
         }
 
-        mock_validator.Workflow.model_validate.side_effect = PydanticValidationError.from_exception_data(
-            "ValidationError",
-            [error_dict]
+        mock_validator.Workflow.model_validate.side_effect = (
+            PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
         report = mock_validator.validate_file(invalid_connections_file)
@@ -615,25 +573,14 @@ class TestGetNestedValue:
 
     def test_get_nested_value_dict(self, mock_validator: ConfigValidator) -> None:
         """Test getting nested value from dict."""
-        data = {
-            "level1": {
-                "level2": {
-                    "level3": "value"
-                }
-            }
-        }
+        data = {"level1": {"level2": {"level3": "value"}}}
 
         value = mock_validator._get_nested_value(data, ("level1", "level2", "level3"))
         assert value == "value"
 
     def test_get_nested_value_list(self, mock_validator: ConfigValidator) -> None:
         """Test getting nested value with list index."""
-        data = {
-            "items": [
-                {"name": "item1"},
-                {"name": "item2"}
-            ]
-        }
+        data = {"items": [{"name": "item1"}, {"name": "item2"}]}
 
         value = mock_validator._get_nested_value(data, ("items", 1, "name"))
         assert value == "item2"
@@ -669,11 +616,7 @@ class TestEdgeCases:
 
     def test_config_with_unicode(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
         """Test handling of config with unicode characters."""
-        config = {
-            "name": "Unicode Config 你好",
-            "default_workflow": "test",
-            "workflows": []
-        }
+        config = {"name": "Unicode Config 你好", "default_workflow": "test", "workflows": []}
 
         config_file = tmp_path / "unicode.json"
         with open(config_file, "w", encoding="utf-8") as f:
@@ -696,25 +639,19 @@ class TestEdgeCases:
                     "name": "Workflow without ID",
                     "actions": {},
                     "connections": {},
-                    "initial_action": "action1"
+                    "initial_action": "action1",
                 }
-            ]
+            ],
         }
 
         config_file = tmp_path / "no_id.json"
         with open(config_file, "w", encoding="utf-8") as f:
             json.dump(config, f)
 
-        error_dict = {
-            "type": "missing",
-            "loc": ("id",),
-            "msg": "Field required",
-            "input": {}
-        }
+        error_dict = {"type": "missing", "loc": ("id",), "msg": "Field required", "input": {}}
 
-        mock_validator.Workflow.model_validate.side_effect = PydanticValidationError.from_exception_data(
-            "ValidationError",
-            [error_dict]
+        mock_validator.Workflow.model_validate.side_effect = (
+            PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
         report = mock_validator.validate_file(config_file)
@@ -734,17 +671,13 @@ class TestEdgeCases:
                     "id": f"workflow_{i}",
                     "name": f"Workflow {i}",
                     "actions": {
-                        f"action_{j}": {
-                            "type": "Click",
-                            "name": f"Action {j}"
-                        }
-                        for j in range(10)
+                        f"action_{j}": {"type": "Click", "name": f"Action {j}"} for j in range(10)
                     },
                     "connections": {},
-                    "initial_action": "action_0"
+                    "initial_action": "action_0",
                 }
                 for i in range(50)
-            ]
+            ],
         }
 
         config_file = tmp_path / "large.json"
@@ -762,7 +695,9 @@ class TestEdgeCases:
 class TestIntegrationWithFixtures:
     """Integration tests using pre-created fixture files."""
 
-    def test_fixture_valid_config(self, fixtures_dir: Path, mock_validator: ConfigValidator) -> None:
+    def test_fixture_valid_config(
+        self, fixtures_dir: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation using fixture valid config file."""
         fixture_file = fixtures_dir / "valid_config.json"
 
@@ -776,7 +711,9 @@ class TestIntegrationWithFixtures:
         assert isinstance(report, ValidationReport)
         assert report.config_path == fixture_file
 
-    def test_fixture_invalid_connections(self, fixtures_dir: Path, mock_validator: ConfigValidator) -> None:
+    def test_fixture_invalid_connections(
+        self, fixtures_dir: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation using fixture invalid connections file."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -789,12 +726,11 @@ class TestIntegrationWithFixtures:
             "type": "dict_type",
             "loc": ("connections",),
             "msg": "Invalid connections",
-            "input": {}
+            "input": {},
         }
 
-        mock_validator.Workflow.model_validate.side_effect = PydanticValidationError.from_exception_data(
-            "ValidationError",
-            [error_dict]
+        mock_validator.Workflow.model_validate.side_effect = (
+            PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
         report = mock_validator.validate_file(fixture_file)

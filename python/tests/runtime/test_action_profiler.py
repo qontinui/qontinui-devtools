@@ -5,11 +5,9 @@ import time
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.runtime import (
     ActionProfile,
     ActionProfiler,
-    PerformanceMetrics,
     ProfilingSession,
     calculate_action_type_metrics,
     calculate_metrics,
@@ -118,9 +116,7 @@ class TestActionProfiler:
 
     def test_profiler_initialization(self) -> None:
         """Test profiler initialization."""
-        profiler = ActionProfiler(
-            sample_interval=0.001, enable_memory=True, enable_cpu=True
-        )
+        profiler = ActionProfiler(sample_interval=0.001, enable_memory=True, enable_cpu=True)
 
         assert profiler.sample_interval == 0.001
         assert profiler.enable_memory is True

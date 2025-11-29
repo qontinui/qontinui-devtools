@@ -20,39 +20,38 @@ This package provides comprehensive tooling for:
 __version__ = "1.1.0"
 
 # Phase 1: Critical Tools
-from .import_analysis import CircularDependencyDetector, ImportTracer
-from .concurrency import RaceConditionDetector, RaceConditionTester
-from .testing import MockHAL
-
 # Phase 2: Architecture Analysis
 from .architecture import (
-    GodClassDetector,
-    SRPAnalyzer,
     CouplingCohesionAnalyzer,
     DependencyGraphVisualizer,
+    GodClassDetector,
+    SRPAnalyzer,
 )
+
+# Code Quality
+from .code_quality import DeadCodeDetector
+from .concurrency import RaceConditionDetector, RaceConditionTester
+from .dependencies import DependencyHealthChecker
+from .documentation import DocumentationGenerator
+from .import_analysis import CircularDependencyDetector, ImportTracer
+from .regression import RegressionDetector
+
+# Reporting
+from .reporting import HTMLReportGenerator, ReportAggregator
 
 # Phase 3: Runtime Monitoring
 from .runtime import (
     ActionProfiler,
+    DashboardServer,
     EventTracer,
     MemoryProfiler,
-    DashboardServer,
     MetricsCollector,
 )
 
 # Phase 4: Advanced Analysis
 from .security import SecurityAnalyzer
-from .documentation import DocumentationGenerator
-from .regression import RegressionDetector
+from .testing import MockHAL
 from .type_analysis import TypeAnalyzer
-from .dependencies import DependencyHealthChecker
-
-# Code Quality
-from .code_quality import DeadCodeDetector
-
-# Reporting
-from .reporting import HTMLReportGenerator, ReportAggregator
 
 __all__ = [
     # Version

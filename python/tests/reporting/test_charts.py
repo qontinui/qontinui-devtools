@@ -4,13 +4,13 @@ Tests for chart generation utilities.
 
 from qontinui_devtools.reporting.charts import (
     create_bar_chart,
-    create_pie_chart,
     create_doughnut_chart,
     create_line_chart,
+    create_multi_axis_chart,
+    create_pie_chart,
+    create_radar_chart,
     create_scatter_chart,
     create_stacked_bar_chart,
-    create_radar_chart,
-    create_multi_axis_chart,
 )
 
 
