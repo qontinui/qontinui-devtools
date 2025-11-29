@@ -10,7 +10,6 @@ import time
 from typing import Any
 
 from PIL import Image
-
 from qontinui.hal.interfaces import IOCREngine, TextMatch, TextRegion
 
 
@@ -37,7 +36,7 @@ class MockOCREngine(IOCREngine):
         default_text: str = "Mock OCR Text",
         accuracy: float = 1.0,
         latency: float = 0.0,
-        supported_languages: list[str] | None = None
+        supported_languages: list[str] | None = None,
     ) -> None:
         """Initialize mock OCR engine.
 
@@ -73,11 +72,7 @@ class MockOCREngine(IOCREngine):
 
     def _record_call(self, call_type: str, **kwargs: Any) -> None:
         """Record an OCR call."""
-        self.ocr_calls.append({
-            "type": call_type,
-            "timestamp": time.time(),
-            **kwargs
-        })
+        self.ocr_calls.append({"type": call_type, "timestamp": time.time(), **kwargs})
 
     def _add_noise(self, text: str) -> str:
         """Add OCR errors based on accuracy.
@@ -143,7 +138,7 @@ class MockOCREngine(IOCREngine):
             "get_text_regions",
             image_size=image.size,
             languages=languages,
-            min_confidence=min_confidence
+            min_confidence=min_confidence,
         )
 
         # Check if configured for this image
@@ -156,15 +151,17 @@ class MockOCREngine(IOCREngine):
         # Return default single region
         text = self.extract_text(image, languages)
         width, height = image.size
-        return [TextRegion(
-            text=text,
-            x=10,
-            y=10,
-            width=min(len(text) * 10, width - 20),
-            height=30,
-            confidence=self.accuracy,
-            language=languages[0] if languages else "en"
-        )]
+        return [
+            TextRegion(
+                text=text,
+                x=10,
+                y=10,
+                width=min(len(text) * 10, width - 20),
+                height=30,
+                confidence=self.accuracy,
+                language=languages[0] if languages else "en",
+            )
+        ]
 
     def find_text(
         self, image: Image.Image, text: str, case_sensitive: bool = False, confidence: float = 0.8
@@ -186,7 +183,7 @@ class MockOCREngine(IOCREngine):
             image_size=image.size,
             text=text,
             case_sensitive=case_sensitive,
-            confidence=confidence
+            confidence=confidence,
         )
 
         # Get all regions
@@ -199,11 +196,7 @@ class MockOCREngine(IOCREngine):
 
             if search_text in region_text:
                 similarity = 1.0 if region_text == search_text else 0.9
-                return TextMatch(
-                    text=region.text,
-                    region=region,
-                    similarity=similarity
-                )
+                return TextMatch(text=region.text, region=region, similarity=similarity)
 
         return None
 
@@ -227,7 +220,7 @@ class MockOCREngine(IOCREngine):
             image_size=image.size,
             text=text,
             case_sensitive=case_sensitive,
-            confidence=confidence
+            confidence=confidence,
         )
 
         # Get all regions
@@ -241,11 +234,7 @@ class MockOCREngine(IOCREngine):
 
             if search_text in region_text:
                 similarity = 1.0 if region_text == search_text else 0.9
-                matches.append(TextMatch(
-                    text=region.text,
-                    region=region,
-                    similarity=similarity
-                ))
+                matches.append(TextMatch(text=region.text, region=region, similarity=similarity))
 
         return matches
 
@@ -267,10 +256,7 @@ class MockOCREngine(IOCREngine):
         """
         self._simulate_latency()
         self._record_call(
-            "extract_text_from_region",
-            image_size=image.size,
-            region=region,
-            languages=languages
+            "extract_text_from_region", image_size=image.size, region=region, languages=languages
         )
 
         # Crop image to region
@@ -312,7 +298,7 @@ class MockOCREngine(IOCREngine):
             image_size=image.size,
             grayscale=grayscale,
             denoise=denoise,
-            threshold=threshold
+            threshold=threshold,
         )
 
         result = image.copy()
@@ -342,7 +328,7 @@ class MockOCREngine(IOCREngine):
         return {
             "angle": random.choice([0, 90, 180, 270]),
             "confidence": self.accuracy,
-            "script": "Latin"
+            "script": "Latin",
         }
 
     # Test helper methods

@@ -31,6 +31,7 @@ class InputAction:
 
 class InputControlError(Exception):
     """Exception raised when simulated input failure occurs."""
+
     pass
 
 
@@ -55,10 +56,7 @@ class MockInputController(IInputController):
     """
 
     def __init__(
-        self,
-        latency: float = 0.0,
-        failure_rate: float = 0.0,
-        simulate_errors: bool = False
+        self, latency: float = 0.0, failure_rate: float = 0.0, simulate_errors: bool = False
     ) -> None:
         """Initialize mock input controller.
 
@@ -87,11 +85,9 @@ class MockInputController(IInputController):
 
     def _record_action(self, action_type: str, **params: Any) -> None:
         """Record an action."""
-        self.actions.append(InputAction(
-            action_type=action_type,
-            timestamp=time.time(),
-            params=params
-        ))
+        self.actions.append(
+            InputAction(action_type=action_type, timestamp=time.time(), params=params)
+        )
 
     def _check_failure(self) -> bool:
         """Check for failure and handle accordingly."""
@@ -148,7 +144,7 @@ class MockInputController(IInputController):
             y=self._mouse_position.y,
             button=button.value,
             clicks=clicks,
-            interval=interval
+            interval=interval,
         )
         return True
 
@@ -164,10 +160,7 @@ class MockInputController(IInputController):
             self._mouse_position = MousePosition(x=x, y=y)
 
         self._record_action(
-            "mouse_down",
-            x=self._mouse_position.x,
-            y=self._mouse_position.y,
-            button=button.value
+            "mouse_down", x=self._mouse_position.x, y=self._mouse_position.y, button=button.value
         )
         return True
 
@@ -183,10 +176,7 @@ class MockInputController(IInputController):
             self._mouse_position = MousePosition(x=x, y=y)
 
         self._record_action(
-            "mouse_up",
-            x=self._mouse_position.x,
-            y=self._mouse_position.y,
-            button=button.value
+            "mouse_up", x=self._mouse_position.x, y=self._mouse_position.y, button=button.value
         )
         return True
 
@@ -212,7 +202,7 @@ class MockInputController(IInputController):
             end_x=end_x,
             end_y=end_y,
             button=button.value,
-            duration=duration
+            duration=duration,
         )
         return True
 
@@ -226,10 +216,7 @@ class MockInputController(IInputController):
             self._mouse_position = MousePosition(x=x, y=y)
 
         self._record_action(
-            "mouse_scroll",
-            clicks=clicks,
-            x=self._mouse_position.x,
-            y=self._mouse_position.y
+            "mouse_scroll", clicks=clicks, x=self._mouse_position.x, y=self._mouse_position.y
         )
         return True
 
@@ -326,9 +313,7 @@ class MockInputController(IInputController):
             List of all text strings that were typed
         """
         return [
-            action.params["text"]
-            for action in self.actions
-            if action.action_type == "type_text"
+            action.params["text"] for action in self.actions if action.action_type == "type_text"
         ]
 
     def get_clicks(self) -> list[dict[str, Any]]:
@@ -337,11 +322,7 @@ class MockInputController(IInputController):
         Returns:
             List of click action parameters
         """
-        return [
-            action.params
-            for action in self.actions
-            if action.action_type == "mouse_click"
-        ]
+        return [action.params for action in self.actions if action.action_type == "mouse_click"]
 
     def assert_clicked_at(self, x: int, y: int, button: str = "left") -> None:
         """Assert that a click occurred at coordinates.
@@ -409,9 +390,7 @@ class MockInputController(IInputController):
         ]
         key_tuple = tuple(keys)
         if key_tuple not in hotkeys:
-            raise AssertionError(
-                f"Hotkey {key_tuple} not pressed. Pressed hotkeys: {hotkeys}"
-            )
+            raise AssertionError(f"Hotkey {key_tuple} not pressed. Pressed hotkeys: {hotkeys}")
 
     def get_actions_by_type(self, action_type: str) -> list[InputAction]:
         """Get all actions of a specific type.

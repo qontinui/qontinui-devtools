@@ -83,7 +83,9 @@ class TypeCoverageAnalyzer:
             Dictionary with coverage metrics and issues
         """
         if self.verbose:
-            self.console.print(f"\n[bold]Analyzing TypeScript type coverage:[/bold] {self.root_path}")
+            self.console.print(
+                f"\n[bold]Analyzing TypeScript type coverage:[/bold] {self.root_path}"
+            )
 
         # Find TypeScript files (not JavaScript)
         all_files = find_ts_js_files(self.root_path)
@@ -112,7 +114,7 @@ class TypeCoverageAnalyzer:
         coverage = self._calculate_coverage()
 
         if self.verbose:
-            self.console.print(f"\n[green]Analysis complete[/green]")
+            self.console.print("\n[green]Analysis complete[/green]")
             self.console.print(f"Type coverage: {coverage['percentage']:.1f}%")
 
         return coverage
@@ -138,9 +140,9 @@ class TypeCoverageAnalyzer:
                 continue
 
             # Check for 'any' usage
-            if re.search(r'\bany\b', stripped):
+            if re.search(r"\bany\b", stripped):
                 # Make sure it's actually the 'any' type, not part of a word
-                if re.search(r':\s*any\b|<any>|\bany\[\]', stripped):
+                if re.search(r":\s*any\b|<any>|\bany\[\]", stripped):
                     self.metrics["any_count"] += 1
                     self.issues.append(
                         TypeIssue(
@@ -153,13 +155,13 @@ class TypeCoverageAnalyzer:
                     )
 
             # Check for 'unknown' type (better than 'any')
-            if re.search(r':\s*unknown\b', stripped):
+            if re.search(r":\s*unknown\b", stripped):
                 self.metrics["unknown_count"] += 1
 
             # Check for function definitions
             func_match = re.search(
-                r'(?:function|const|let|var)\s+(\w+)\s*[=:]?\s*(?:async\s*)?\(([^)]*)\)(?:\s*:\s*([^{;=]+))?',
-                stripped
+                r"(?:function|const|let|var)\s+(\w+)\s*[=:]?\s*(?:async\s*)?\(([^)]*)\)(?:\s*:\s*([^{;=]+))?",
+                stripped,
             )
             if func_match:
                 params_str = func_match.group(2)
@@ -206,8 +208,8 @@ class TypeCoverageAnalyzer:
 
             # Check for arrow functions
             arrow_match = re.search(
-                r'(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?\(([^)]*)\)(?:\s*:\s*([^=]+))?\s*=>',
-                stripped
+                r"(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?\(([^)]*)\)(?:\s*:\s*([^=]+))?\s*=>",
+                stripped,
             )
             if arrow_match:
                 params_str = arrow_match.group(2)
@@ -273,10 +275,16 @@ class TypeCoverageAnalyzer:
         self.console.print("\n[bold]TypeScript Type Coverage Report[/bold]\n")
 
         # Summary
-        self.console.print(f"[bold cyan]Overall Coverage: {coverage['percentage']:.1f}%[/bold cyan]")
+        self.console.print(
+            f"[bold cyan]Overall Coverage: {coverage['percentage']:.1f}%[/bold cyan]"
+        )
         self.console.print(f"  Files analyzed: {coverage['total_files']}")
-        self.console.print(f"  Functions: {coverage['typed_functions']}/{coverage['total_functions']} typed")
-        self.console.print(f"  Parameters: {coverage['typed_parameters']}/{coverage['total_parameters']} typed")
+        self.console.print(
+            f"  Functions: {coverage['typed_functions']}/{coverage['total_functions']} typed"
+        )
+        self.console.print(
+            f"  Parameters: {coverage['typed_parameters']}/{coverage['total_parameters']} typed"
+        )
         self.console.print(f"  'any' usage: {coverage['any_count']} occurrences")
         self.console.print(f"  'unknown' usage: {coverage['unknown_count']} occurrences")
 
@@ -301,7 +309,11 @@ class TypeCoverageAnalyzer:
             table.add_column("Severity", style="red")
 
             for issue in top_issues:
-                rel_path = issue.file_path.relative_to(self.root_path) if issue.file_path.is_relative_to(self.root_path) else issue.file_path
+                rel_path = (
+                    issue.file_path.relative_to(self.root_path)
+                    if issue.file_path.is_relative_to(self.root_path)
+                    else issue.file_path
+                )
                 table.add_row(
                     issue.type,
                     str(rel_path),
@@ -347,7 +359,11 @@ class TypeCoverageAnalyzer:
 
             lines.append("\nTop Issues:")
             for issue in self.issues[:20]:
-                rel_path = issue.file_path.relative_to(self.root_path) if issue.file_path.is_relative_to(self.root_path) else issue.file_path
+                rel_path = (
+                    issue.file_path.relative_to(self.root_path)
+                    if issue.file_path.is_relative_to(self.root_path)
+                    else issue.file_path
+                )
                 lines.append(f"  {rel_path}:{issue.line_number} - {issue.type} ({issue.severity})")
 
             if len(self.issues) > 20:

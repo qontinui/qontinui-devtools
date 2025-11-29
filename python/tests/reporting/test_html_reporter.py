@@ -7,7 +7,6 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.reporting import (
     HTMLReportGenerator,
     ReportData,
@@ -241,9 +240,7 @@ class TestHTMLReportGenerator:
         )
 
         # Generate report
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".html", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
             output_path = f.name
 
         try:
@@ -474,9 +471,7 @@ class TestReportGeneration:
             report_data.add_section(section)
 
         # Generate report
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".html", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
             output_path = f.name
 
         try:
@@ -518,9 +513,7 @@ class TestReportGeneration:
             analysis_date=datetime.now(),
         )
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".html", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
             output_path = f.name
 
         try:

@@ -6,8 +6,6 @@ import json
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from qontinui_devtools.documentation import (
     ASTDocExtractor,
     DocItem,
@@ -582,7 +580,9 @@ class MyClass:
         extractor = ASTDocExtractor("test.py", source)
         items = extractor.extract()
 
-        method_items = [item for item in items if item.type in (DocItemType.METHOD, DocItemType.PROPERTY)]
+        method_items = [
+            item for item in items if item.type in (DocItemType.METHOD, DocItemType.PROPERTY)
+        ]
 
         prop = next(item for item in method_items if item.name == "value")
         assert prop.is_property
@@ -618,7 +618,8 @@ class TestDocumentationGenerator:
     def test_generate_docs_from_file(self):
         """Test generating docs from a file."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write('''"""Test module."""
+            f.write(
+                '''"""Test module."""
 
 def foo(x: int) -> int:
     """Foo function.
@@ -630,7 +631,8 @@ def foo(x: int) -> int:
         Result
     """
     return x * 2
-''')
+'''
+            )
             f.flush()
 
             gen = DocumentationGenerator()
@@ -648,19 +650,23 @@ def foo(x: int) -> int:
         """Test generating docs from a directory."""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create test files
-            (Path(tmpdir) / "module1.py").write_text('''"""Module 1."""
+            (Path(tmpdir) / "module1.py").write_text(
+                '''"""Module 1."""
 
 def func1():
     """Function 1."""
     pass
-''')
+'''
+            )
 
-            (Path(tmpdir) / "module2.py").write_text('''"""Module 2."""
+            (Path(tmpdir) / "module2.py").write_text(
+                '''"""Module 2."""
 
 class MyClass:
     """A class."""
     pass
-''')
+'''
+            )
 
             gen = DocumentationGenerator()
             tree = gen.generate_docs(tmpdir)
@@ -672,7 +678,8 @@ class MyClass:
     def test_exclude_private_members(self):
         """Test excluding private members."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write('''"""Test module."""
+            f.write(
+                '''"""Test module."""
 
 def public_func():
     """Public function."""
@@ -681,7 +688,8 @@ def public_func():
 def _private_func():
     """Private function."""
     pass
-''')
+'''
+            )
             f.flush()
 
             gen = DocumentationGenerator()
@@ -697,7 +705,8 @@ def _private_func():
     def test_include_private_members(self):
         """Test including private members."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write('''"""Test module."""
+            f.write(
+                '''"""Test module."""
 
 def public_func():
     """Public function."""
@@ -706,7 +715,8 @@ def public_func():
 def _private_func():
     """Private function."""
     pass
-''')
+'''
+            )
             f.flush()
 
             gen = DocumentationGenerator()
@@ -910,7 +920,8 @@ class TestEndToEnd:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create a test module
             source_file = Path(tmpdir) / "mylib.py"
-            source_file.write_text('''"""My Library.
+            source_file.write_text(
+                '''"""My Library.
 
 A library for doing cool things.
 """
@@ -964,7 +975,8 @@ def multiply(x: int, y: int) -> int:
         ValueError: If inputs are invalid
     """
     return x * y
-''')
+'''
+            )
 
             # Generate documentation
             gen = DocumentationGenerator()
@@ -1014,7 +1026,8 @@ def multiply(x: int, y: int) -> int:
     def test_numpy_style_docstrings(self):
         """Test with NumPy-style docstrings."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write('''"""Module with NumPy docstrings."""
+            f.write(
+                '''"""Module with NumPy docstrings."""
 
 def calculate(x, y):
     """
@@ -1038,7 +1051,8 @@ def calculate(x, y):
         If inputs are invalid
     """
     return x + y
-''')
+'''
+            )
             f.flush()
 
             gen = DocumentationGenerator(DocstringStyle.NUMPY)

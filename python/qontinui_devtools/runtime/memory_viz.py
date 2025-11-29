@@ -7,20 +7,21 @@ This module provides:
 - Interactive HTML reports
 """
 
-from typing import Any
 from pathlib import Path
+from typing import Any
 
 try:
     import matplotlib
-    matplotlib.use('Agg')  # Non-interactive backend
-    import matplotlib.pyplot as plt
+
+    matplotlib.use("Agg")  # Non-interactive backend
     import matplotlib.dates as mdates
+    import matplotlib.pyplot as plt
     from matplotlib.figure import Figure
+
     MATPLOTLIB_AVAILABLE = True
 except ImportError:
     MATPLOTLIB_AVAILABLE = False
 
-from datetime import datetime
 
 
 def plot_memory_timeline(
@@ -37,8 +38,7 @@ def plot_memory_timeline(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. "
-            "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
         )
 
     if not snapshots:
@@ -54,30 +54,30 @@ def plot_memory_timeline(
     fig, ax = plt.subplots(figsize=(12, 6))
 
     # Plot lines
-    ax.plot(times, memory_mb, marker='o', label='Total Memory', linewidth=2)
-    ax.plot(times, rss_mb, marker='s', label='RSS', linewidth=1.5, alpha=0.7)
-    ax.plot(times, vms_mb, marker='^', label='VMS', linewidth=1.5, alpha=0.7)
+    ax.plot(times, memory_mb, marker="o", label="Total Memory", linewidth=2)
+    ax.plot(times, rss_mb, marker="s", label="RSS", linewidth=1.5, alpha=0.7)
+    ax.plot(times, vms_mb, marker="^", label="VMS", linewidth=1.5, alpha=0.7)
 
     # Formatting
-    ax.set_xlabel('Time (seconds)', fontsize=12)
-    ax.set_ylabel('Memory (MB)', fontsize=12)
-    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.set_xlabel("Time (seconds)", fontsize=12)
+    ax.set_ylabel("Memory (MB)", fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight="bold")
     ax.grid(True, alpha=0.3)
-    ax.legend(loc='best')
+    ax.legend(loc="best")
 
     # Add min/max annotations
     max_idx = memory_mb.index(max(memory_mb))
     ax.annotate(
-        f'Peak: {memory_mb[max_idx]:.1f} MB',
+        f"Peak: {memory_mb[max_idx]:.1f} MB",
         xy=(times[max_idx], memory_mb[max_idx]),
         xytext=(10, 10),
-        textcoords='offset points',
-        bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.7),
-        arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0'),
+        textcoords="offset points",
+        bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
+        arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
     )
 
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -97,8 +97,7 @@ def plot_object_growth(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. "
-            "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
         )
 
     if not snapshots:
@@ -115,13 +114,13 @@ def plot_object_growth(
     fig, ax = plt.subplots(figsize=(12, 6))
 
     # Plot
-    ax.plot(times, counts, marker='o', linewidth=2, color='#2E86AB')
-    ax.fill_between(times, counts, alpha=0.3, color='#2E86AB')
+    ax.plot(times, counts, marker="o", linewidth=2, color="#2E86AB")
+    ax.fill_between(times, counts, alpha=0.3, color="#2E86AB")
 
     # Formatting
-    ax.set_xlabel('Time (seconds)', fontsize=12)
-    ax.set_ylabel(f'{object_type} Count', fontsize=12)
-    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.set_xlabel("Time (seconds)", fontsize=12)
+    ax.set_ylabel(f"{object_type} Count", fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight="bold")
     ax.grid(True, alpha=0.3)
 
     # Add growth rate annotation
@@ -129,15 +128,16 @@ def plot_object_growth(
         growth = counts[-1] - counts[0]
         rate = growth / times[-1] if times[-1] > 0 else 0
         ax.text(
-            0.02, 0.98,
-            f'Growth: {growth:+d} objects\nRate: {rate:.1f} obj/s',
+            0.02,
+            0.98,
+            f"Growth: {growth:+d} objects\nRate: {rate:.1f} obj/s",
             transform=ax.transAxes,
-            verticalalignment='top',
-            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5),
+            verticalalignment="top",
+            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
         )
 
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -157,8 +157,7 @@ def plot_top_objects(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. "
-            "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
         )
 
     if not snapshots:
@@ -177,7 +176,7 @@ def plot_top_objects(
     if not sorted_objects:
         return
 
-    types, counts = zip(*sorted_objects)
+    types, counts = zip(*sorted_objects, strict=False)
 
     # Create figure
     fig, ax = plt.subplots(figsize=(12, 8))
@@ -190,16 +189,16 @@ def plot_top_objects(
     ax.set_yticks(y_pos)
     ax.set_yticklabels(types)
     ax.invert_yaxis()  # Labels read top-to-bottom
-    ax.set_xlabel('Count', fontsize=12)
-    ax.set_title(title, fontsize=14, fontweight='bold')
-    ax.grid(True, axis='x', alpha=0.3)
+    ax.set_xlabel("Count", fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight="bold")
+    ax.grid(True, axis="x", alpha=0.3)
 
     # Add count labels
     for i, (obj_type, count) in enumerate(sorted_objects):
-        ax.text(count, i, f' {count:,}', va='center', fontsize=9)
+        ax.text(count, i, f" {count:,}", va="center", fontsize=9)
 
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -219,8 +218,7 @@ def plot_leak_heatmap(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. "
-            "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
         )
 
     if not snapshots or len(snapshots) < 2:
@@ -255,7 +253,7 @@ def plot_leak_heatmap(
     fig, ax = plt.subplots(figsize=(14, 10))
 
     # Heatmap
-    im = ax.imshow(data, cmap='RdYlGn_r', aspect='auto', interpolation='nearest')
+    im = ax.imshow(data, cmap="RdYlGn_r", aspect="auto", interpolation="nearest")
 
     # Set ticks
     ax.set_xticks(range(len(snapshots)))
@@ -264,16 +262,16 @@ def plot_leak_heatmap(
     ax.set_yticklabels(tracked_types)
 
     # Labels
-    ax.set_xlabel('Snapshot', fontsize=12)
-    ax.set_ylabel('Object Type', fontsize=12)
-    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.set_xlabel("Snapshot", fontsize=12)
+    ax.set_ylabel("Object Type", fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight="bold")
 
     # Colorbar
     cbar = plt.colorbar(im, ax=ax)
-    cbar.set_label('Growth (%)', rotation=270, labelpad=20)
+    cbar.set_label("Growth (%)", rotation=270, labelpad=20)
 
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -295,14 +293,11 @@ def plot_comparison(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. "
-            "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
         )
 
     # Calculate differences
-    all_types = set(snapshot1.objects_by_type.keys()) | set(
-        snapshot2.objects_by_type.keys()
-    )
+    all_types = set(snapshot1.objects_by_type.keys()) | set(snapshot2.objects_by_type.keys())
 
     diffs = {}
     for obj_type in all_types:
@@ -318,32 +313,32 @@ def plot_comparison(
     if not sorted_diffs:
         return
 
-    types, changes = zip(*sorted_diffs)
+    types, changes = zip(*sorted_diffs, strict=False)
 
     # Create figure with two subplots
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
 
     # Left: Object count differences
-    colors = ['green' if c > 0 else 'red' for c in changes]
+    colors = ["green" if c > 0 else "red" for c in changes]
     y_pos = range(len(types))
 
     ax1.barh(y_pos, changes, color=colors, alpha=0.7)
     ax1.set_yticks(y_pos)
     ax1.set_yticklabels(types)
     ax1.invert_yaxis()
-    ax1.set_xlabel('Count Change', fontsize=12)
-    ax1.set_title('Object Count Changes', fontsize=12, fontweight='bold')
-    ax1.grid(True, axis='x', alpha=0.3)
-    ax1.axvline(x=0, color='black', linewidth=0.5)
+    ax1.set_xlabel("Count Change", fontsize=12)
+    ax1.set_title("Object Count Changes", fontsize=12, fontweight="bold")
+    ax1.grid(True, axis="x", alpha=0.3)
+    ax1.axvline(x=0, color="black", linewidth=0.5)
 
     # Add labels
     for i, change in enumerate(changes):
         ax1.text(
             change,
             i,
-            f' {change:+d}',
-            va='center',
-            ha='left' if change > 0 else 'right',
+            f" {change:+d}",
+            va="center",
+            ha="left" if change > 0 else "right",
             fontsize=9,
         )
 
@@ -351,22 +346,22 @@ def plot_comparison(
     time_diff = snapshot2.timestamp - snapshot1.timestamp
     mem_diff = snapshot2.total_mb - snapshot1.total_mb
 
-    categories = ['Total MB', 'RSS MB', 'VMS MB']
+    categories = ["Total MB", "RSS MB", "VMS MB"]
     before = [snapshot1.total_mb, snapshot1.rss_mb, snapshot1.vms_mb]
     after = [snapshot2.total_mb, snapshot2.rss_mb, snapshot2.vms_mb]
 
     x = range(len(categories))
     width = 0.35
 
-    ax2.bar([i - width/2 for i in x], before, width, label='Before', alpha=0.8)
-    ax2.bar([i + width/2 for i in x], after, width, label='After', alpha=0.8)
+    ax2.bar([i - width / 2 for i in x], before, width, label="Before", alpha=0.8)
+    ax2.bar([i + width / 2 for i in x], after, width, label="After", alpha=0.8)
 
-    ax2.set_ylabel('Memory (MB)', fontsize=12)
-    ax2.set_title('Memory Usage Comparison', fontsize=12, fontweight='bold')
+    ax2.set_ylabel("Memory (MB)", fontsize=12)
+    ax2.set_title("Memory Usage Comparison", fontsize=12, fontweight="bold")
     ax2.set_xticks(x)
     ax2.set_xticklabels(categories)
     ax2.legend()
-    ax2.grid(True, axis='y', alpha=0.3)
+    ax2.grid(True, axis="y", alpha=0.3)
 
     # Add summary text
     summary = (
@@ -375,17 +370,18 @@ def plot_comparison(
         f"Rate: {mem_diff / time_diff:.2f} MB/s"
     )
     ax2.text(
-        0.02, 0.98,
+        0.02,
+        0.98,
         summary,
         transform=ax2.transAxes,
-        verticalalignment='top',
-        bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5),
+        verticalalignment="top",
+        bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
         fontsize=10,
     )
 
-    plt.suptitle(title, fontsize=14, fontweight='bold')
+    plt.suptitle(title, fontsize=14, fontweight="bold")
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -551,7 +547,9 @@ def generate_html_report(
         <h2>Detected Memory Leaks ({len(leaks)})</h2>
 """
         for i, leak in enumerate(leaks[:10], 1):
-            severity = "high" if leak.confidence > 0.9 else "medium" if leak.confidence > 0.7 else "low"
+            severity = (
+                "high" if leak.confidence > 0.9 else "medium" if leak.confidence > 0.7 else "low"
+            )
             html += f"""
         <div class="leak leak-{severity}">
             <strong>{i}. {leak.object_type}</strong><br>
@@ -609,7 +607,7 @@ def generate_html_report(
     changes.sort(key=lambda x: abs(x[3]), reverse=True)
 
     for obj_type, initial, final, change in changes[:30]:
-        change_class = 'positive' if change < 0 else 'negative'
+        change_class = "positive" if change < 0 else "negative"
         html += f"""
             <tr>
                 <td>{obj_type}</td>

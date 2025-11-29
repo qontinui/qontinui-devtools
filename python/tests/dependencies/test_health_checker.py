@@ -13,10 +13,9 @@ import json
 import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
-
 from qontinui_devtools.dependencies import (
     CircularDependency,
     DependencyHealthChecker,
@@ -650,9 +649,7 @@ setup(
 
     def test_determine_health_status_deprecated(self, checker):
         """Test determining health status for deprecated package."""
-        status = checker._determine_health_status(
-            "1.0.0", "1.0.0", [], "Use pytest instead"
-        )
+        status = checker._determine_health_status("1.0.0", "1.0.0", [], "Use pytest instead")
         assert status == HealthStatus.DEPRECATED
 
     def test_determine_health_status_outdated(self, checker):

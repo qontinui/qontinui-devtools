@@ -26,9 +26,9 @@ if str(fixtures_dir) not in sys.path:
     sys.path.insert(0, str(fixtures_dir))
 
 from qontinui_devtools.import_analysis import (
-    ImportTracer,
     ImportEvent,
     ImportGraph,
+    ImportTracer,
 )
 
 
@@ -171,6 +171,7 @@ class TestImportGraph(unittest.TestCase):
 
     def test_thread_safety(self):
         """Test that graph is thread-safe."""
+
         def add_imports(start_idx):
             for i in range(start_idx, start_idx + 100):
                 self.graph.add_import(f"module_{i}", f"module_{i+1}")
@@ -215,7 +216,7 @@ class TestImportTracer(unittest.TestCase):
         module_names = [e.module_name for e in events]
         self.assertTrue(
             any("simple_module" in name for name in module_names),
-            f"simple_module not found in: {module_names}"
+            f"simple_module not found in: {module_names}",
         )
 
     def test_detect_circular_import_simple(self):
@@ -244,15 +245,13 @@ class TestImportTracer(unittest.TestCase):
                     break
 
             self.assertTrue(
-                found_ab_cycle,
-                f"Should detect circular_a <-> circular_b cycle. Found: {cycles}"
+                found_ab_cycle, f"Should detect circular_a <-> circular_b cycle. Found: {cycles}"
             )
 
     def test_detect_circular_import_complex(self):
         """Test detecting complex three-way circular dependency C -> D -> E -> C."""
         # Remove modules if they exist
-        for mod in ["fixtures.circular_c", "fixtures.circular_d",
-                    "fixtures.circular_e"]:
+        for mod in ["fixtures.circular_c", "fixtures.circular_d", "fixtures.circular_e"]:
             if mod in sys.modules:
                 del sys.modules[mod]
 
@@ -275,8 +274,7 @@ class TestImportTracer(unittest.TestCase):
                     break
 
             self.assertTrue(
-                found_cde_cycle,
-                f"Should detect C -> D -> E -> C cycle. Found: {cycles}"
+                found_cde_cycle, f"Should detect C -> D -> E -> C cycle. Found: {cycles}"
             )
 
     def test_generate_report(self):
@@ -326,6 +324,7 @@ class TestImportTracer(unittest.TestCase):
 
         def import_in_thread(tracer):
             import fixtures.simple_module  # noqa: F401
+
             events_collected.extend(tracer.get_events())
 
         with ImportTracer() as tracer:
@@ -359,14 +358,12 @@ class TestImportTracer(unittest.TestCase):
         # There should be no cycles for a simple module
         # (Note: There might be cycles in stdlib or other dependencies,
         # but not in our simple_module itself)
-        simple_cycles = [
-            c for c in cycles
-            if any("simple_module" in node for node in c)
-        ]
+        simple_cycles = [c for c in cycles if any("simple_module" in node for node in c)]
 
         self.assertEqual(
-            len(simple_cycles), 0,
-            f"simple_module should not have circular dependencies: {simple_cycles}"
+            len(simple_cycles),
+            0,
+            f"simple_module should not have circular dependencies: {simple_cycles}",
         )
 
 

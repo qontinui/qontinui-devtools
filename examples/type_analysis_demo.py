@@ -15,7 +15,8 @@ def create_sample_code(tmp_dir: Path) -> None:
     """Create sample Python files with varying type coverage."""
 
     # Fully typed module
-    (tmp_dir / "fully_typed.py").write_text("""
+    (tmp_dir / "fully_typed.py").write_text(
+        """
 def add(x: int, y: int) -> int:
     '''Add two numbers.'''
     return x + y
@@ -36,10 +37,12 @@ class Calculator:
         if y == 0:
             raise ValueError("Cannot divide by zero")
         return x / y
-""")
+"""
+    )
 
     # Partially typed module
-    (tmp_dir / "partially_typed.py").write_text("""
+    (tmp_dir / "partially_typed.py").write_text(
+        """
 def process_data(data, format="json"):
     '''Process data in various formats.'''
     if format == "json":
@@ -59,10 +62,12 @@ class DataProcessor:
     def process(self, items: list) -> dict:
         '''Process items.'''
         return {"count": len(items), "items": items}
-""")
+"""
+    )
 
     # Untyped module
-    (tmp_dir / "untyped.py").write_text("""
+    (tmp_dir / "untyped.py").write_text(
+        """
 def fetch_data(url, timeout=30):
     '''Fetch data from URL.'''
     return {"status": "ok", "data": []}
@@ -86,10 +91,12 @@ class Cache:
     def set(self, key, value):
         '''Set value in cache.'''
         self.data[key] = value
-""")
+"""
+    )
 
     # Module with Any usage
-    (tmp_dir / "uses_any.py").write_text("""
+    (tmp_dir / "uses_any.py").write_text(
+        """
 from typing import Any
 
 def process(data: Any) -> Any:
@@ -99,7 +106,8 @@ def process(data: Any) -> Any:
 def handle_request(request: dict[str, Any]) -> dict[str, Any]:
     '''Handle a request.'''
     return {"status": "ok", "data": request.get("data")}
-""")
+"""
+    )
 
 
 def main() -> None:
@@ -138,7 +146,9 @@ def main() -> None:
         print(f"  Return coverage: {summary['return_coverage']:.1f}%")
         print()
         print(f"  Total functions: {summary['total_functions']}")
-        print(f"  Fully typed: {summary['fully_typed_functions']} ({summary['fully_typed_functions']/summary['total_functions']*100:.1f}%)")
+        print(
+            f"  Fully typed: {summary['fully_typed_functions']} ({summary['fully_typed_functions']/summary['total_functions']*100:.1f}%)"
+        )
         print(f"  Partially typed: {summary['typed_functions'] - summary['fully_typed_functions']}")
         print(f"  Untyped: {summary['total_functions'] - summary['typed_functions']}")
         print()
@@ -188,7 +198,7 @@ def main() -> None:
         print("=" * 80)
         print("RECOMMENDATIONS")
         print("=" * 80)
-        cov_pct = summary['coverage_percentage']
+        cov_pct = summary["coverage_percentage"]
         if cov_pct >= 90:
             print("✓ Excellent type coverage! Your code is well-typed.")
         elif cov_pct >= 70:

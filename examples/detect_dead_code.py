@@ -5,6 +5,7 @@ unused functions, classes, imports, and variables in a codebase.
 """
 
 from pathlib import Path
+
 from qontinui_devtools.code_quality import DeadCodeDetector
 
 

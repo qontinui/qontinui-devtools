@@ -12,7 +12,6 @@ from typing import Any
 import networkx as nx
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.table import Table
 
 from .ts_utils import (
     ImportStatement,
@@ -85,7 +84,9 @@ class CircularDependencyDetector:
         start_time = time.time()
 
         if self.verbose:
-            self.console.print(f"\n[bold]Analyzing TypeScript/JavaScript project:[/bold] {self.root_path}")
+            self.console.print(
+                f"\n[bold]Analyzing TypeScript/JavaScript project:[/bold] {self.root_path}"
+            )
 
         # Step 1: Scan directory for TS/JS files
         self._scan_directory()
@@ -237,14 +238,18 @@ class CircularDependencyDetector:
             else:
                 color = "blue"
 
-            self.console.print(f"[bold {color}]{i}. Cycle (severity: {cycle.severity}):[/bold {color}]")
+            self.console.print(
+                f"[bold {color}]{i}. Cycle (severity: {cycle.severity}):[/bold {color}]"
+            )
 
             # Print the cycle
             for j, module in enumerate(cycle.cycle[:-1]):
                 self.console.print(f"   {module}")
                 if j < len(cycle.import_chain):
                     imp = cycle.import_chain[j]
-                    self.console.print(f"      -> imports from '{imp.source}' (line {imp.line_number})")
+                    self.console.print(
+                        f"      -> imports from '{imp.source}' (line {imp.line_number})"
+                    )
 
             self.console.print()
 

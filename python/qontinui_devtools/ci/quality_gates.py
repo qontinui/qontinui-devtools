@@ -4,15 +4,14 @@ This module provides quality gate enforcement for qontinui-devtools in CI/CD env
 It checks various metrics against configurable thresholds and fails the build if exceeded.
 """
 
-import sys
 import json
+import sys
 from pathlib import Path
-from typing import Any
 
 import click
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
+from rich.table import Table
 
 console = Console()
 
@@ -20,13 +19,7 @@ console = Console()
 class QualityGate:
     """Represents a single quality gate check."""
 
-    def __init__(
-        self,
-        name: str,
-        actual: int,
-        threshold: int,
-        severity: str = "error"
-    ):
+    def __init__(self, name: str, actual: int, threshold: int, severity: str = "error"):
         self.name = name
         self.actual = actual
         self.threshold = threshold
@@ -53,23 +46,14 @@ class QualityGateChecker:
         """Add a warning message."""
         self.warnings.append(message)
 
-    def check_circular_dependencies(
-        self,
-        file_path: str,
-        max_allowed: int
-    ) -> None:
+    def check_circular_dependencies(self, file_path: str, max_allowed: int) -> None:
         """Check circular dependency count."""
         try:
             data = json.loads(Path(file_path).read_text())
             cycles = data.get("cycles", [])
             count = len(cycles)
 
-            gate = QualityGate(
-                "Circular Dependencies",
-                count,
-                max_allowed,
-                "error"
-            )
+            gate = QualityGate("Circular Dependencies", count, max_allowed, "error")
             self.add_gate(gate)
 
             if not gate.passed:
@@ -82,23 +66,14 @@ class QualityGateChecker:
         except json.JSONDecodeError:
             console.print(f"[yellow]Warning: {file_path} is not valid JSON[/yellow]")
 
-    def check_god_classes(
-        self,
-        file_path: str,
-        max_allowed: int
-    ) -> None:
+    def check_god_classes(self, file_path: str, max_allowed: int) -> None:
         """Check god class count."""
         try:
             data = json.loads(Path(file_path).read_text())
             god_classes = data.get("god_classes", [])
             count = len(god_classes)
 
-            gate = QualityGate(
-                "God Classes",
-                count,
-                max_allowed,
-                "error"
-            )
+            gate = QualityGate("God Classes", count, max_allowed, "error")
             self.add_gate(gate)
 
             if not gate.passed:
@@ -111,12 +86,7 @@ class QualityGateChecker:
         except json.JSONDecodeError:
             console.print(f"[yellow]Warning: {file_path} is not valid JSON[/yellow]")
 
-    def check_race_conditions(
-        self,
-        file_path: str,
-        max_critical: int,
-        max_high: int
-    ) -> None:
+    def check_race_conditions(self, file_path: str, max_critical: int, max_high: int) -> None:
         """Check race condition count by severity."""
         try:
             data = json.loads(Path(file_path).read_text())
@@ -125,20 +95,10 @@ class QualityGateChecker:
             critical = len([r for r in races if r.get("severity") == "critical"])
             high = len([r for r in races if r.get("severity") == "high"])
 
-            critical_gate = QualityGate(
-                "Critical Race Conditions",
-                critical,
-                max_critical,
-                "error"
-            )
+            critical_gate = QualityGate("Critical Race Conditions", critical, max_critical, "error")
             self.add_gate(critical_gate)
 
-            high_gate = QualityGate(
-                "High Severity Race Conditions",
-                high,
-                max_high,
-                "error"
-            )
+            high_gate = QualityGate("High Severity Race Conditions", high, max_high, "error")
             self.add_gate(high_gate)
 
             if not critical_gate.passed:
@@ -157,11 +117,7 @@ class QualityGateChecker:
         except json.JSONDecodeError:
             console.print(f"[yellow]Warning: {file_path} is not valid JSON[/yellow]")
 
-    def check_code_coverage(
-        self,
-        file_path: str,
-        min_coverage: float
-    ) -> None:
+    def check_code_coverage(self, file_path: str, min_coverage: float) -> None:
         """Check code coverage percentage."""
         try:
             data = json.loads(Path(file_path).read_text())
@@ -169,10 +125,7 @@ class QualityGateChecker:
 
             # Convert to inverted gate (higher is better)
             gate = QualityGate(
-                "Code Coverage",
-                int(100 - coverage),
-                int(100 - min_coverage),
-                "warning"
+                "Code Coverage", int(100 - coverage), int(100 - min_coverage), "warning"
             )
             self.add_gate(gate)
 
@@ -191,7 +144,7 @@ class QualityGateChecker:
         file_path: str,
         max_average: int,
         max_functions_over_threshold: int,
-        threshold: int = 15
+        threshold: int = 15,
     ) -> None:
         """Check cyclomatic complexity."""
         try:
@@ -199,25 +152,19 @@ class QualityGateChecker:
 
             if "average_complexity" in data:
                 avg = data["average_complexity"]
-                gate = QualityGate(
-                    "Average Complexity",
-                    int(avg),
-                    max_average,
-                    "warning"
-                )
+                gate = QualityGate("Average Complexity", int(avg), max_average, "warning")
                 self.add_gate(gate)
 
             if "functions" in data:
-                high_complexity = len([
-                    f for f in data["functions"]
-                    if f.get("complexity", 0) > threshold
-                ])
+                high_complexity = len(
+                    [f for f in data["functions"] if f.get("complexity", 0) > threshold]
+                )
 
                 gate = QualityGate(
                     f"Functions Over Complexity {threshold}",
                     high_complexity,
                     max_functions_over_threshold,
-                    "warning"
+                    "warning",
                 )
                 self.add_gate(gate)
         except FileNotFoundError:
@@ -244,7 +191,7 @@ class QualityGateChecker:
                 gate.name,
                 str(gate.actual),
                 str(gate.threshold),
-                f"[{result_style}]{result_text}[/{result_style}]"
+                f"[{result_style}]{result_text}[/{result_style}]",
             )
 
         console.print(table)
@@ -262,20 +209,15 @@ class QualityGateChecker:
     def exit(self) -> None:
         """Exit with appropriate code based on results."""
         if self.passed():
-            console.print(
-                "\n[green]✅ All quality gates PASSED![/green]",
-                style="bold"
-            )
+            console.print("\n[green]✅ All quality gates PASSED![/green]", style="bold")
             sys.exit(0)
         else:
             failed_count = sum(1 for gate in self.gates if not gate.passed)
             console.print(
                 f"\n[red]❌ Quality gates FAILED ({failed_count}/{len(self.gates)} checks failed)[/red]",
-                style="bold"
+                style="bold",
             )
-            console.print(
-                "[yellow]Fix the issues above before merging.[/yellow]"
-            )
+            console.print("[yellow]Fix the issues above before merging.[/yellow]")
             sys.exit(1)
 
 
@@ -283,80 +225,49 @@ class QualityGateChecker:
 @click.option(
     "--circular-deps",
     type=click.Path(exists=True),
-    help="Path to circular dependencies JSON output"
+    help="Path to circular dependencies JSON output",
+)
+@click.option("--god-classes", type=click.Path(exists=True), help="Path to god classes JSON output")
+@click.option(
+    "--race-conditions", type=click.Path(exists=True), help="Path to race conditions JSON output"
+)
+@click.option("--coverage", type=click.Path(exists=True), help="Path to coverage JSON output")
+@click.option("--complexity", type=click.Path(exists=True), help="Path to complexity JSON output")
+@click.option(
+    "--max-circular", type=int, default=0, help="Maximum allowed circular dependencies (default: 0)"
 )
 @click.option(
-    "--god-classes",
-    type=click.Path(exists=True),
-    help="Path to god classes JSON output"
+    "--max-god-classes", type=int, default=5, help="Maximum allowed god classes (default: 5)"
 )
 @click.option(
-    "--race-conditions",
-    type=click.Path(exists=True),
-    help="Path to race conditions JSON output"
-)
-@click.option(
-    "--coverage",
-    type=click.Path(exists=True),
-    help="Path to coverage JSON output"
-)
-@click.option(
-    "--complexity",
-    type=click.Path(exists=True),
-    help="Path to complexity JSON output"
-)
-@click.option(
-    "--max-circular",
-    type=int,
-    default=0,
-    help="Maximum allowed circular dependencies (default: 0)"
-)
-@click.option(
-    "--max-god-classes",
-    type=int,
-    default=5,
-    help="Maximum allowed god classes (default: 5)"
-)
-@click.option(
-    "--max-race-critical",
-    type=int,
-    default=0,
-    help="Maximum critical race conditions (default: 0)"
+    "--max-race-critical", type=int, default=0, help="Maximum critical race conditions (default: 0)"
 )
 @click.option(
     "--max-race-high",
     type=int,
     default=10,
-    help="Maximum high severity race conditions (default: 10)"
+    help="Maximum high severity race conditions (default: 10)",
 )
 @click.option(
     "--min-coverage",
     type=float,
     default=80.0,
-    help="Minimum code coverage percentage (default: 80)"
+    help="Minimum code coverage percentage (default: 80)",
 )
 @click.option(
     "--max-avg-complexity",
     type=int,
     default=10,
-    help="Maximum average cyclomatic complexity (default: 10)"
+    help="Maximum average cyclomatic complexity (default: 10)",
 )
 @click.option(
     "--max-complex-functions",
     type=int,
     default=5,
-    help="Maximum functions over complexity threshold (default: 5)"
+    help="Maximum functions over complexity threshold (default: 5)",
 )
-@click.option(
-    "--fail-on-warnings",
-    is_flag=True,
-    help="Fail on warnings in addition to errors"
-)
-@click.option(
-    "--strict",
-    is_flag=True,
-    help="Enable strict mode (all thresholds set to 0)"
-)
+@click.option("--fail-on-warnings", is_flag=True, help="Fail on warnings in addition to errors")
+@click.option("--strict", is_flag=True, help="Enable strict mode (all thresholds set to 0)")
 def check_gates(
     circular_deps: str | None,
     god_classes: str | None,
@@ -388,7 +299,7 @@ def check_gates(
     console.print(
         Panel(
             "[bold cyan]Code Quality Gates Check[/bold cyan]",
-            subtitle="Enforcing quality standards"
+            subtitle="Enforcing quality standards",
         )
     )
 
@@ -414,11 +325,7 @@ def check_gates(
 
     # Check race conditions
     if race_conditions:
-        checker.check_race_conditions(
-            race_conditions,
-            max_race_critical,
-            max_race_high
-        )
+        checker.check_race_conditions(race_conditions, max_race_critical, max_race_high)
 
     # Check code coverage
     if coverage:
@@ -426,11 +333,7 @@ def check_gates(
 
     # Check complexity
     if complexity:
-        checker.check_complexity(
-            complexity,
-            max_avg_complexity,
-            max_complex_functions
-        )
+        checker.check_complexity(complexity, max_avg_complexity, max_complex_functions)
 
     # Print results
     checker.print_results()

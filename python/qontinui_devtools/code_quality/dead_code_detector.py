@@ -13,7 +13,6 @@ definitions and usages across the codebase.
 import ast
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 
 @dataclass
@@ -28,6 +27,7 @@ class DeadCode:
         reason: Explanation of why this is considered dead code
         confidence: Confidence level (0-1) that this is truly dead code
     """
+
     type: str
     name: str
     file_path: str
@@ -211,7 +211,7 @@ class DeadCodeDetector:
             AST node or None if parsing fails
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 source = f.read()
             return ast.parse(source, filename=str(file_path))
         except (SyntaxError, UnicodeDecodeError):

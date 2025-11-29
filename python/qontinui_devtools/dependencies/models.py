@@ -5,8 +5,8 @@ including health status enums, update types, and comprehensive dependency report
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
+from enum import Enum
 from typing import Any
 
 
@@ -64,7 +64,7 @@ class LicenseCategory(Enum):
     """License category for compatibility checking."""
 
     PERMISSIVE = "permissive"  # MIT, BSD, Apache
-    COPYLEFT = "copyleft"      # GPL, LGPL, AGPL
+    COPYLEFT = "copyleft"  # GPL, LGPL, AGPL
     PROPRIETARY = "proprietary"
     UNKNOWN = "unknown"
 
@@ -188,7 +188,10 @@ class DependencyInfo:
             last_release = self.last_release_date
 
             # If last_release is timezone-aware, make now timezone-aware too
-            if last_release.tzinfo is not None and last_release.tzinfo.utcoffset(last_release) is not None:
+            if (
+                last_release.tzinfo is not None
+                and last_release.tzinfo.utcoffset(last_release) is not None
+            ):
                 # Convert last_release to naive datetime in UTC
                 last_release = last_release.replace(tzinfo=None)
 
@@ -256,7 +259,7 @@ class DependencyHealthReport:
             f"Total Dependencies: {self.total_dependencies}",
             f"Overall Health Score: {self.overall_health_score:.1f}/100",
             "",
-            f"Status Breakdown:",
+            "Status Breakdown:",
             f"  Healthy:     {self.healthy_count}",
             f"  Outdated:    {self.outdated_count}",
             f"  Vulnerable:  {self.vulnerable_count}",
@@ -264,23 +267,29 @@ class DependencyHealthReport:
         ]
 
         if self.total_vulnerabilities > 0:
-            lines.extend([
-                "",
-                f"Total Vulnerabilities: {self.total_vulnerabilities}",
-                f"  Critical: {self.critical_vulnerabilities}",
-            ])
+            lines.extend(
+                [
+                    "",
+                    f"Total Vulnerabilities: {self.total_vulnerabilities}",
+                    f"  Critical: {self.critical_vulnerabilities}",
+                ]
+            )
 
         if self.circular_dependencies:
-            lines.extend([
-                "",
-                f"Circular Dependencies: {len(self.circular_dependencies)}",
-            ])
+            lines.extend(
+                [
+                    "",
+                    f"Circular Dependencies: {len(self.circular_dependencies)}",
+                ]
+            )
 
         if self.license_conflicts:
-            lines.extend([
-                "",
-                f"License Conflicts: {len(self.license_conflicts)}",
-            ])
+            lines.extend(
+                [
+                    "",
+                    f"License Conflicts: {len(self.license_conflicts)}",
+                ]
+            )
 
         return "\n".join(lines)
 

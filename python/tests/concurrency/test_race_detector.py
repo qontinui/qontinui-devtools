@@ -4,8 +4,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
-
-from qontinui_devtools.concurrency import RaceCondition, RaceConditionDetector, SharedState
+from qontinui_devtools.concurrency import RaceConditionDetector
 
 
 class TestRaceDetectorBasics:
@@ -13,7 +12,7 @@ class TestRaceDetectorBasics:
 
     def test_detect_unprotected_class_variable(self, tmp_path: Path) -> None:
         """Test detection of class variable without lock."""
-        test_code = '''
+        test_code = """
 class Cache:
     _data = {}
 
@@ -22,7 +21,7 @@ class Cache:
 
     def set(self, key, value):
         self._data[key] = value  # Race condition!
-'''
+"""
         test_file = tmp_path / "cache.py"
         test_file.write_text(test_code)
 
@@ -37,14 +36,14 @@ class Cache:
 
     def test_detect_module_global_race(self, tmp_path: Path) -> None:
         """Test detection of module-level global race condition."""
-        test_code = '''
+        test_code = """
 _instances = {}
 
 def get_instance(key):
     if key not in _instances:  # Check
         _instances[key] = create()  # Act - Race condition!
     return _instances[key]
-'''
+"""
         test_file = tmp_path / "singleton.py"
         test_file.write_text(test_code)
 
@@ -59,7 +58,7 @@ def get_instance(key):
 
     def test_detect_protected_state(self, tmp_path: Path) -> None:
         """Test that properly locked state is not flagged."""
-        test_code = '''
+        test_code = """
 import threading
 
 class Cache:
@@ -70,7 +69,7 @@ class Cache:
     def set(self, key, value):
         with self._lock:
             self._data[key] = value  # Properly locked!
-'''
+"""
         test_file = tmp_path / "safe_cache.py"
         test_file.write_text(test_code)
 
@@ -85,14 +84,14 @@ class Cache:
 
     def test_immutable_types_ignored(self, tmp_path: Path) -> None:
         """Test that immutable types are not flagged."""
-        test_code = '''
+        test_code = """
 class Config:
     MAX_SIZE = 100  # Immutable int
     API_URL = "https://api.example.com"  # Immutable str
 
     def get_max(self):
         return self.MAX_SIZE
-'''
+"""
         test_file = tmp_path / "config.py"
         test_file.write_text(test_code)
 
@@ -108,7 +107,7 @@ class TestRacePatterns:
 
     def test_check_then_act_pattern(self, tmp_path: Path) -> None:
         """Test detection of check-then-act race condition."""
-        test_code = '''
+        test_code = """
 class Cache:
     _cache = {}
 
@@ -116,7 +115,7 @@ class Cache:
         if key not in self._cache:  # Check
             self._cache[key] = expensive_operation()  # Act
         return self._cache[key]
-'''
+"""
         test_file = tmp_path / "check_act.py"
         test_file.write_text(test_code)
 
@@ -129,7 +128,7 @@ class Cache:
 
     def test_double_checked_locking(self, tmp_path: Path) -> None:
         """Test detection of double-checked locking pattern."""
-        test_code = '''
+        test_code = """
 import threading
 
 class Singleton:
@@ -143,7 +142,7 @@ class Singleton:
                 if cls._instance is None:  # Second check (protected)
                     cls._instance = Singleton()  # Create
         return cls._instance
-'''
+"""
         test_file = tmp_path / "dcl.py"
         test_file.write_text(test_code)
 
@@ -158,7 +157,7 @@ class Singleton:
 
     def test_write_write_conflict(self, tmp_path: Path) -> None:
         """Test detection of write-write conflicts."""
-        test_code = '''
+        test_code = """
 class Counter:
     _count = 0
 
@@ -167,7 +166,7 @@ class Counter:
 
     def decrement(self):
         self._count -= 1  # Write
-'''
+"""
         test_file = tmp_path / "counter.py"
         test_file.write_text(test_code)
 
@@ -180,7 +179,7 @@ class Counter:
 
     def test_read_write_conflict(self, tmp_path: Path) -> None:
         """Test detection of read-write conflicts."""
-        test_code = '''
+        test_code = """
 class SharedBuffer:
     _buffer = []
 
@@ -189,7 +188,7 @@ class SharedBuffer:
 
     def get_all(self):
         return self._buffer[:]  # Read
-'''
+"""
         test_file = tmp_path / "buffer.py"
         test_file.write_text(test_code)
 
@@ -205,7 +204,7 @@ class TestLockDetection:
 
     def test_detect_lock_creation(self, tmp_path: Path) -> None:
         """Test detection of lock creation."""
-        test_code = '''
+        test_code = """
 import threading
 
 class ThreadSafe:
@@ -213,7 +212,7 @@ class ThreadSafe:
         self._lock = threading.Lock()
         self._rlock = threading.RLock()
         self._semaphore = threading.Semaphore(5)
-'''
+"""
         test_file = tmp_path / "locks.py"
         test_file.write_text(test_code)
 
@@ -227,7 +226,7 @@ class ThreadSafe:
 
     def test_with_lock_context(self, tmp_path: Path) -> None:
         """Test detection of 'with lock:' usage."""
-        test_code = '''
+        test_code = """
 import threading
 
 class SafeCounter:
@@ -238,7 +237,7 @@ class SafeCounter:
     def increment(self):
         with self._lock:
             self._count += 1  # Protected
-'''
+"""
         test_file = tmp_path / "with_lock.py"
         test_file.write_text(test_code)
 
@@ -255,7 +254,7 @@ class TestHeuristics:
 
     def test_thread_local_storage(self, tmp_path: Path) -> None:
         """Test that thread-local storage is recognized as safe."""
-        test_code = '''
+        test_code = """
 import threading
 
 _local = threading.local()
@@ -264,7 +263,7 @@ def get_connection():
     if not hasattr(_local, 'conn'):
         _local.conn = create_connection()
     return _local.conn
-'''
+"""
         test_file = tmp_path / "local.py"
         test_file.write_text(test_code)
 
@@ -277,7 +276,7 @@ def get_connection():
 
     def test_queue_types_safe(self, tmp_path: Path) -> None:
         """Test that queue types are recognized as thread-safe."""
-        test_code = '''
+        test_code = """
 from queue import Queue
 
 class TaskManager:
@@ -288,7 +287,7 @@ class TaskManager:
 
     def get_task(self):
         return self._tasks.get()  # Thread-safe
-'''
+"""
         test_file = tmp_path / "queue.py"
         test_file.write_text(test_code)
 
@@ -301,13 +300,13 @@ class TaskManager:
 
     def test_constants_ignored(self, tmp_path: Path) -> None:
         """Test that constants (uppercase) are not flagged."""
-        test_code = '''
+        test_code = """
 MAX_CONNECTIONS = 100
 API_TIMEOUT = 30.0
 
 def get_max():
     return MAX_CONNECTIONS
-'''
+"""
         test_file = tmp_path / "constants.py"
         test_file.write_text(test_code)
 
@@ -323,13 +322,13 @@ class TestReporting:
 
     def test_generate_report(self, tmp_path: Path) -> None:
         """Test report generation."""
-        test_code = '''
+        test_code = """
 class BadCache:
     _data = {}
 
     def set(self, key, value):
         self._data[key] = value
-'''
+"""
         test_file = tmp_path / "report.py"
         test_file.write_text(test_code)
 
@@ -344,7 +343,7 @@ class BadCache:
 
     def test_statistics(self, tmp_path: Path) -> None:
         """Test statistics generation."""
-        test_code = '''
+        test_code = """
 class Stats:
     _counter = 0
     _cache = {}
@@ -354,7 +353,7 @@ class Stats:
 
     def cache_set(self, key, value):
         self._cache[key] = value
-'''
+"""
         test_file = tmp_path / "stats.py"
         test_file.write_text(test_code)
 
@@ -374,7 +373,7 @@ class TestComplexScenarios:
 
     def test_singleton_pattern(self, tmp_path: Path) -> None:
         """Test detection in singleton pattern."""
-        test_code = '''
+        test_code = """
 class Database:
     _instance = None
 
@@ -383,7 +382,7 @@ class Database:
         if cls._instance is None:
             cls._instance = Database()
         return cls._instance
-'''
+"""
         test_file = tmp_path / "singleton.py"
         test_file.write_text(test_code)
 
@@ -396,7 +395,7 @@ class Database:
 
     def test_hal_factory_pattern(self, tmp_path: Path) -> None:
         """Test detection of HALFactory-like race conditions."""
-        test_code = '''
+        test_code = """
 class HALFactory:
     _instances = {}
 
@@ -410,7 +409,7 @@ class HALFactory:
     def _create_hal(cls, hal_type):
         # Create HAL instance
         pass
-'''
+"""
         test_file = tmp_path / "hal.py"
         test_file.write_text(test_code)
 
@@ -426,22 +425,26 @@ class HALFactory:
     def test_multiple_files(self, tmp_path: Path) -> None:
         """Test analysis across multiple files."""
         file1 = tmp_path / "module1.py"
-        file1.write_text('''
+        file1.write_text(
+            """
 class Cache1:
     _data = {}
 
     def set(self, k, v):
         self._data[k] = v
-''')
+"""
+        )
 
         file2 = tmp_path / "module2.py"
-        file2.write_text('''
+        file2.write_text(
+            """
 class Cache2:
     _data = []
 
     def append(self, item):
         self._data.append(item)
-''')
+"""
+        )
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=[])
         races = detector.analyze()
@@ -459,13 +462,15 @@ class TestExclusions:
     def test_exclude_test_files(self, tmp_path: Path) -> None:
         """Test that test files can be excluded."""
         test_file = tmp_path / "example.py"
-        test_file.write_text('''
+        test_file.write_text(
+            """
 class TestCache:
     _data = {}
 
     def test_set(self):
         self._data['key'] = 'value'
-''')
+"""
+        )
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=["test_"])
         races = detector.analyze()
@@ -480,20 +485,24 @@ class TestCache:
         venv_dir.mkdir(parents=True)
 
         venv_file = venv_dir / "module.py"
-        venv_file.write_text('''
+        venv_file.write_text(
+            """
 _data = {}
 
 def unsafe():
     _data['key'] = 'value'
-''')
+"""
+        )
 
         main_file = tmp_path / "main.py"
-        main_file.write_text('''
+        main_file.write_text(
+            """
 _cache = {}
 
 def process():
     _cache['key'] = 'value'
-''')
+"""
+        )
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=[])
         detector.analyze()
@@ -508,7 +517,7 @@ class TestSeverityCalculation:
 
     def test_critical_multiple_writes(self, tmp_path: Path) -> None:
         """Test that multiple unprotected writes are critical."""
-        test_code = '''
+        test_code = """
 class MultiWrite:
     _value = 0
 
@@ -520,7 +529,7 @@ class MultiWrite:
 
     def reset(self):
         self._value = 0
-'''
+"""
         test_file = tmp_path / "multiwrite.py"
         test_file.write_text(test_code)
 
@@ -532,13 +541,13 @@ class MultiWrite:
 
     def test_high_single_write(self, tmp_path: Path) -> None:
         """Test that single unprotected write is high severity."""
-        test_code = '''
+        test_code = """
 class SingleWrite:
     _data = []
 
     def append(self, item):
         self._data.append(item)
-'''
+"""
         test_file = tmp_path / "single.py"
         test_file.write_text(test_code)
 

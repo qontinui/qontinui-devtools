@@ -100,7 +100,9 @@ class ComplexityAnalyzer:
             Dictionary with metrics and issues
         """
         if self.verbose:
-            self.console.print(f"\n[bold]Analyzing TypeScript/JavaScript complexity:[/bold] {self.root_path}")
+            self.console.print(
+                f"\n[bold]Analyzing TypeScript/JavaScript complexity:[/bold] {self.root_path}"
+            )
 
         # Find all files
         self.files = find_ts_js_files(self.root_path)
@@ -125,7 +127,7 @@ class ComplexityAnalyzer:
         self.metrics["total_functions"] = function_count
 
         if self.verbose:
-            self.console.print(f"\n[green]Analysis complete[/green]")
+            self.console.print("\n[green]Analysis complete[/green]")
             self.console.print(f"Found {len(self.issues)} complexity issues")
 
         return {
@@ -196,7 +198,7 @@ class ComplexityAnalyzer:
                 )
 
             # Calculate cyclomatic complexity
-            func_content = "\n".join(content.split("\n")[func_start - 1:func_end])
+            func_content = "\n".join(content.split("\n")[func_start - 1 : func_end])
             complexity = self._calculate_complexity(func_content)
             total_complexity += complexity
 
@@ -238,8 +240,8 @@ class ComplexityAnalyzer:
 
             # Match function declarations
             func_match = re.search(
-                r'(?:export\s+)?(?:async\s+)?(?:function|const|let|var)\s+(\w+)\s*[=:]?\s*(?:async\s*)?\(',
-                line
+                r"(?:export\s+)?(?:async\s+)?(?:function|const|let|var)\s+(\w+)\s*[=:]?\s*(?:async\s*)?\(",
+                line,
             )
 
             if func_match:
@@ -289,15 +291,15 @@ class ComplexityAnalyzer:
 
         # Count decision points
         decision_keywords = [
-            r'\bif\b',
-            r'\belse\s+if\b',
-            r'\bwhile\b',
-            r'\bfor\b',
-            r'\bcase\b',
-            r'\bcatch\b',
-            r'\b\?\b',  # Ternary operator
-            r'\&\&',  # Logical AND
-            r'\|\|',  # Logical OR
+            r"\bif\b",
+            r"\belse\s+if\b",
+            r"\bwhile\b",
+            r"\bfor\b",
+            r"\bcase\b",
+            r"\bcatch\b",
+            r"\b\?\b",  # Ternary operator
+            r"\&\&",  # Logical AND
+            r"\|\|",  # Logical OR
         ]
 
         for keyword in decision_keywords:
@@ -313,7 +315,7 @@ class ComplexityAnalyzer:
             content: File content
         """
         # Find React components
-        component_pattern = r'(?:export\s+)?(?:default\s+)?(?:function|const)\s+(\w+)\s*[=:]?\s*(?:\([^)]*\))?\s*(?::\s*\w+)?\s*(?:=>)?\s*\{'
+        component_pattern = r"(?:export\s+)?(?:default\s+)?(?:function|const)\s+(\w+)\s*[=:]?\s*(?:\([^)]*\))?\s*(?::\s*\w+)?\s*(?:=>)?\s*\{"
 
         for match in re.finditer(component_pattern, content):
             component_name = match.group(1)
@@ -325,7 +327,7 @@ class ComplexityAnalyzer:
                 lines_before = content[:start_pos].count("\n")
 
                 # Look for return statement with JSX
-                return_match = re.search(r'return\s*\(', content[start_pos:])
+                return_match = re.search(r"return\s*\(", content[start_pos:])
                 if return_match:
                     # Count JSX lines (very rough estimate)
                     jsx_content = content[start_pos:]
@@ -357,7 +359,7 @@ class ComplexityAnalyzer:
         self.console.print("\n[bold]Code Complexity Report[/bold]\n")
 
         # Summary
-        self.console.print(f"[bold cyan]Metrics:[/bold cyan]")
+        self.console.print("[bold cyan]Metrics:[/bold cyan]")
         self.console.print(f"  Total files: {metrics['total_files']}")
         self.console.print(f"  Total lines: {metrics['total_lines']}")
         self.console.print(f"  Total functions: {metrics['total_functions']}")
@@ -365,7 +367,9 @@ class ComplexityAnalyzer:
 
         # Issues
         if issues:
-            self.console.print(f"\n[bold yellow]Found {len(issues)} complexity issues[/bold yellow]\n")
+            self.console.print(
+                f"\n[bold yellow]Found {len(issues)} complexity issues[/bold yellow]\n"
+            )
 
             # Group by type
             by_type: dict[str, list[ComplexityIssue]] = {}
@@ -398,7 +402,11 @@ class ComplexityAnalyzer:
             )
 
             for issue in sorted_issues[:20]:
-                rel_path = issue.file_path.relative_to(self.root_path) if issue.file_path.is_relative_to(self.root_path) else issue.file_path
+                rel_path = (
+                    issue.file_path.relative_to(self.root_path)
+                    if issue.file_path.is_relative_to(self.root_path)
+                    else issue.file_path
+                )
                 table.add_row(
                     issue.type,
                     issue.name,
@@ -464,7 +472,11 @@ class ComplexityAnalyzer:
             )
 
             for issue in sorted_issues[:20]:
-                rel_path = issue.file_path.relative_to(self.root_path) if issue.file_path.is_relative_to(self.root_path) else issue.file_path
+                rel_path = (
+                    issue.file_path.relative_to(self.root_path)
+                    if issue.file_path.is_relative_to(self.root_path)
+                    else issue.file_path
+                )
                 lines.append(
                     f"  {rel_path}:{issue.line_number} - {issue.type} '{issue.name}' "
                     f"(metric={issue.metric}, threshold={issue.threshold})"

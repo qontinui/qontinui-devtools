@@ -38,7 +38,7 @@ class MockPlatformSpecific(IPlatformSpecific):
         screen_resolution: tuple[int, int] = (1920, 1080),
         dpi_scaling: float = 1.0,
         dark_mode: bool = False,
-        latency: float = 0.0
+        latency: float = 0.0,
     ) -> None:
         """Initialize mock platform-specific implementation.
 
@@ -345,7 +345,7 @@ class MockPlatformSpecific(IPlatformSpecific):
         height: int = 600,
         class_name: str | None = None,
         process_id: int | None = None,
-        is_visible: bool = True
+        is_visible: bool = True,
     ) -> Window:
         """Add a mock window.
 
@@ -373,7 +373,7 @@ class MockPlatformSpecific(IPlatformSpecific):
             height=height,
             is_visible=is_visible,
             is_minimized=False,
-            is_maximized=False
+            is_maximized=False,
         )
         self.windows.append(window)
         self._ui_elements[window.handle] = []
@@ -408,7 +408,7 @@ class MockPlatformSpecific(IPlatformSpecific):
         width: int = 100,
         height: int = 30,
         is_enabled: bool = True,
-        is_visible: bool = True
+        is_visible: bool = True,
     ) -> UIElement:
         """Add a UI element to a window.
 
@@ -439,7 +439,7 @@ class MockPlatformSpecific(IPlatformSpecific):
             height=height,
             is_enabled=is_enabled,
             is_visible=is_visible,
-            is_focused=False
+            is_focused=False,
         )
 
         if window.handle not in self._ui_elements:

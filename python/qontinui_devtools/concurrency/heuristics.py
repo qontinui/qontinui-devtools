@@ -1,7 +1,5 @@
 """Heuristic analysis to reduce false positives in race condition detection."""
 
-import re
-from typing import Any
 
 from .ast_analyzer import AnalysisContext, LockInfo, StateAccess
 
@@ -44,9 +42,18 @@ def is_likely_thread_safe(
 def _is_immutable_type(type_annotation: str) -> bool:
     """Check if type is immutable."""
     immutable_types = {
-        "int", "float", "str", "bool", "bytes",
-        "tuple", "frozenset", "NoneType", "type",
-        "complex", "range", "slice",
+        "int",
+        "float",
+        "str",
+        "bool",
+        "bytes",
+        "tuple",
+        "frozenset",
+        "NoneType",
+        "type",
+        "complex",
+        "range",
+        "slice",
     }
     return type_annotation in immutable_types
 
@@ -91,8 +98,13 @@ def _has_associated_lock(state_name: str, context: AnalysisContext) -> bool:
 def _is_queue_type(type_annotation: str) -> bool:
     """Check if type is a thread-safe queue."""
     queue_types = {
-        "Queue", "LifoQueue", "PriorityQueue", "SimpleQueue",
-        "queue.Queue", "queue.LifoQueue", "queue.PriorityQueue",
+        "Queue",
+        "LifoQueue",
+        "PriorityQueue",
+        "SimpleQueue",
+        "queue.Queue",
+        "queue.LifoQueue",
+        "queue.PriorityQueue",
     }
     return type_annotation in queue_types
 
@@ -100,8 +112,13 @@ def _is_queue_type(type_annotation: str) -> bool:
 def _is_atomic_type(type_annotation: str) -> bool:
     """Check if type provides atomic operations."""
     atomic_types = {
-        "Value", "Array", "RawValue", "RawArray",  # multiprocessing
-        "Atomic", "AtomicInt", "AtomicLong",  # If using atomic libraries
+        "Value",
+        "Array",
+        "RawValue",
+        "RawArray",  # multiprocessing
+        "Atomic",
+        "AtomicInt",
+        "AtomicLong",  # If using atomic libraries
     }
     return type_annotation in atomic_types
 
@@ -292,9 +309,7 @@ def suggest_fix(
             "or consider using a concurrent data structure."
         )
     elif state_type == "list":
-        suggestions.append(
-            "Alternative: Use queue.Queue for thread-safe list operations."
-        )
+        suggestions.append("Alternative: Use queue.Queue for thread-safe list operations.")
 
     # Check for double-checked locking
     if is_double_checked_locking(accesses):
@@ -335,9 +350,7 @@ def get_false_positive_indicators(
 
     # Check if state is only accessed in __init__
     init_only = all(
-        "init" in context.current_function.lower()
-        if context.current_function
-        else False
+        "init" in context.current_function.lower() if context.current_function else False
         for _ in [1]  # Simplified check
     )
     if init_only:
@@ -349,16 +362,14 @@ def get_false_positive_indicators(
 def _looks_single_threaded(context: AnalysisContext) -> bool:
     """Check if code appears to be single-threaded."""
     # If no Thread creation or threading imports found
-    has_threading = any(
-        "threading" in str(state) for state in context.shared_states
-    )
-    has_thread_class = any(
-        "Thread" in str(state) for state in context.shared_states
-    )
+    has_threading = any("threading" in str(state) for state in context.shared_states)
+    has_thread_class = any("Thread" in str(state) for state in context.shared_states)
     return not (has_threading or has_thread_class or context.locks)
 
 
-def prioritize_issues(races: list[tuple[str, str, list[StateAccess]]]) -> list[tuple[str, str, list[StateAccess]]]:
+def prioritize_issues(
+    races: list[tuple[str, str, list[StateAccess]]]
+) -> list[tuple[str, str, list[StateAccess]]]:
     """
     Prioritize race conditions by severity and likelihood.
 

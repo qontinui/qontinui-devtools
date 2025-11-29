@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class StateAccess:
     """Record of accessing shared state."""
+
     name: str
     access_type: str  # "read", "write", "read_write"
     line_number: int
@@ -20,6 +21,7 @@ class StateAccess:
 @dataclass
 class LockInfo:
     """Information about a lock."""
+
     name: str
     type: str  # "Lock", "RLock", "Semaphore", etc.
     line_number: int
@@ -29,6 +31,7 @@ class LockInfo:
 @dataclass
 class AnalysisContext:
     """Context for analyzing a file."""
+
     file_path: str
     shared_states: list[dict[str, Any]] = field(default_factory=list)
     state_accesses: list[StateAccess] = field(default_factory=list)
@@ -64,29 +67,33 @@ class SharedStateVisitor(ast.NodeVisitor):
                         # Even if initial value is immutable, the variable can be reassigned
                         if not target.id.isupper() or "_" not in target.id:
                             type_info = self._infer_type(item.value)
-                            self.context.shared_states.append({
-                                "name": target.id,
-                                "type": "class_variable",
-                                "class_name": node.name,
-                                "line_number": item.lineno,
-                                "col_offset": item.col_offset,
-                                "inferred_type": type_info,
-                                "value_ast": item.value,
-                            })
+                            self.context.shared_states.append(
+                                {
+                                    "name": target.id,
+                                    "type": "class_variable",
+                                    "class_name": node.name,
+                                    "line_number": item.lineno,
+                                    "col_offset": item.col_offset,
+                                    "inferred_type": type_info,
+                                    "value_ast": item.value,
+                                }
+                            )
             elif isinstance(item, ast.AnnAssign):
                 if isinstance(item.target, ast.Name):
                     # Track annotated class variables
                     if not item.target.id.isupper() or "_" not in item.target.id:
                         type_info = self._get_annotation_type(item.annotation)
-                        self.context.shared_states.append({
-                            "name": item.target.id,
-                            "type": "class_variable",
-                            "class_name": node.name,
-                            "line_number": item.lineno,
-                            "col_offset": item.col_offset,
-                            "inferred_type": type_info,
-                            "value_ast": item.value if item.value else None,
-                        })
+                        self.context.shared_states.append(
+                            {
+                                "name": item.target.id,
+                                "type": "class_variable",
+                                "class_name": node.name,
+                                "line_number": item.lineno,
+                                "col_offset": item.col_offset,
+                                "inferred_type": type_info,
+                                "value_ast": item.value if item.value else None,
+                            }
+                        )
 
         self.generic_visit(node)
         self._class_stack.pop()
@@ -115,16 +122,20 @@ class SharedStateVisitor(ast.NodeVisitor):
             for target in node.targets:
                 if isinstance(target, ast.Name):
                     # Track module globals except constants and private names
-                    if not target.id.startswith("__") and not (target.id.isupper() and "_" in target.id):
+                    if not target.id.startswith("__") and not (
+                        target.id.isupper() and "_" in target.id
+                    ):
                         type_info = self._infer_type(node.value)
-                        self.context.shared_states.append({
-                            "name": target.id,
-                            "type": "module_global",
-                            "line_number": node.lineno,
-                            "col_offset": node.col_offset,
-                            "inferred_type": type_info,
-                            "value_ast": node.value,
-                        })
+                        self.context.shared_states.append(
+                            {
+                                "name": target.id,
+                                "type": "module_global",
+                                "line_number": node.lineno,
+                                "col_offset": node.col_offset,
+                                "inferred_type": type_info,
+                                "value_ast": node.value,
+                            }
+                        )
 
         # Track writes to potentially shared state
         if self._function_stack:
@@ -177,14 +188,16 @@ class SharedStateVisitor(ast.NodeVisitor):
         """Record an access to potentially shared state."""
         name = self._extract_name(node)
         if name and not name.startswith("__"):
-            self.context.state_accesses.append(StateAccess(
-                name=name,
-                access_type=access_type,
-                line_number=line,
-                col_offset=col,
-                in_lock_context=self.context.in_lock_context,
-                lock_name=self.context.current_lock,
-            ))
+            self.context.state_accesses.append(
+                StateAccess(
+                    name=name,
+                    access_type=access_type,
+                    line_number=line,
+                    col_offset=col,
+                    in_lock_context=self.context.in_lock_context,
+                    lock_name=self.context.current_lock,
+                )
+            )
 
     def _extract_name(self, node: ast.AST) -> str | None:
         """Extract variable name from AST node."""
@@ -236,8 +249,16 @@ class SharedStateVisitor(ast.NodeVisitor):
     def _is_mutable_type(self, type_info: str) -> bool:
         """Check if type is mutable."""
         mutable_types = {
-            "dict", "list", "set", "deque", "defaultdict", "OrderedDict",
-            "Counter", "bytearray", "array", "unknown"
+            "dict",
+            "list",
+            "set",
+            "deque",
+            "defaultdict",
+            "OrderedDict",
+            "Counter",
+            "bytearray",
+            "array",
+            "unknown",
         }
         return type_info in mutable_types
 
@@ -265,19 +286,23 @@ class LockUsageVisitor(ast.NodeVisitor):
                 for target in node.targets:
                     if isinstance(target, ast.Name):
                         scope = "class" if self._class_stack else "module"
-                        self.context.locks.append(LockInfo(
-                            name=target.id,
-                            type=lock_type,
-                            line_number=node.lineno,
-                            scope=scope,
-                        ))
+                        self.context.locks.append(
+                            LockInfo(
+                                name=target.id,
+                                type=lock_type,
+                                line_number=node.lineno,
+                                scope=scope,
+                            )
+                        )
                     elif isinstance(target, ast.Attribute):
-                        self.context.locks.append(LockInfo(
-                            name=target.attr,
-                            type=lock_type,
-                            line_number=node.lineno,
-                            scope="instance",
-                        ))
+                        self.context.locks.append(
+                            LockInfo(
+                                name=target.attr,
+                                type=lock_type,
+                                line_number=node.lineno,
+                                scope="instance",
+                            )
+                        )
 
         self.generic_visit(node)
 
@@ -315,20 +340,27 @@ class LockUsageVisitor(ast.NodeVisitor):
         lock_type = self._get_lock_type(node)
         if lock_type:
             # Anonymous lock creation
-            self.context.locks.append(LockInfo(
-                name="_anonymous",
-                type=lock_type,
-                line_number=node.lineno,
-                scope="local",
-            ))
+            self.context.locks.append(
+                LockInfo(
+                    name="_anonymous",
+                    type=lock_type,
+                    line_number=node.lineno,
+                    scope="local",
+                )
+            )
 
         self.generic_visit(node)
 
     def _get_lock_type(self, node: ast.Call) -> str | None:
         """Determine if a call creates a lock."""
         lock_types = {
-            "Lock", "RLock", "Semaphore", "BoundedSemaphore",
-            "Condition", "Event", "Barrier"
+            "Lock",
+            "RLock",
+            "Semaphore",
+            "BoundedSemaphore",
+            "Condition",
+            "Event",
+            "Barrier",
         }
 
         if isinstance(node.func, ast.Name):
@@ -394,18 +426,18 @@ def analyze_file(file_path: str | Path) -> AnalysisContext:
     file_path = Path(file_path)
 
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             source = f.read()
 
         tree = ast.parse(source, filename=str(file_path))
         visitor = CombinedVisitor(str(file_path))
         return visitor.analyze(tree)
 
-    except SyntaxError as e:
+    except SyntaxError:
         # Return empty context for files with syntax errors
         context = AnalysisContext(file_path=str(file_path))
         return context
-    except Exception as e:
+    except Exception:
         # Log error and return empty context
         context = AnalysisContext(file_path=str(file_path))
         return context

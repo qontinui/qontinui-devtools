@@ -5,12 +5,10 @@ This module provides utilities to generate visual representations of import
 graphs using Graphviz, with support for highlighting circular dependencies.
 """
 
-import os
-from typing import Optional, Literal
 from pathlib import Path
+from typing import Literal, Optional
 
 from .import_tracer import ImportGraph
-
 
 LayoutType = Literal["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
 
@@ -53,8 +51,7 @@ def visualize_import_graph(
         import graphviz
     except ImportError as e:
         raise ImportError(
-            "graphviz package is required for visualization. "
-            "Install with: pip install graphviz"
+            "graphviz package is required for visualization. " "Install with: pip install graphviz"
         ) from e
 
     output_path_obj = Path(output_path)
@@ -98,27 +95,60 @@ def visualize_import_graph(
     if exclude_stdlib:
         # Common patterns for stdlib modules
         stdlib_patterns = {
-            "sys", "os", "re", "time", "json", "collections", "typing",
-            "dataclasses", "pathlib", "threading", "multiprocessing",
-            "unittest", "logging", "argparse", "subprocess", "shutil",
-            "tempfile", "io", "contextlib", "functools", "itertools",
-            "operator", "copy", "pickle", "urllib", "http", "email",
-            "html", "xml", "csv", "sqlite3", "hashlib", "hmac", "secrets",
-            "uuid", "datetime", "calendar", "abc", "enum", "traceback",
-            "warnings", "inspect", "importlib", "pkgutil", "ast",
+            "sys",
+            "os",
+            "re",
+            "time",
+            "json",
+            "collections",
+            "typing",
+            "dataclasses",
+            "pathlib",
+            "threading",
+            "multiprocessing",
+            "unittest",
+            "logging",
+            "argparse",
+            "subprocess",
+            "shutil",
+            "tempfile",
+            "io",
+            "contextlib",
+            "functools",
+            "itertools",
+            "operator",
+            "copy",
+            "pickle",
+            "urllib",
+            "http",
+            "email",
+            "html",
+            "xml",
+            "csv",
+            "sqlite3",
+            "hashlib",
+            "hmac",
+            "secrets",
+            "uuid",
+            "datetime",
+            "calendar",
+            "abc",
+            "enum",
+            "traceback",
+            "warnings",
+            "inspect",
+            "importlib",
+            "pkgutil",
+            "ast",
         }
         modules_to_include = {
-            m for m in modules_to_include
-            if not any(m.startswith(s) for s in stdlib_patterns)
+            m for m in modules_to_include if not any(m.startswith(s) for s in stdlib_patterns)
         }
 
     # Limit number of nodes if specified
     if max_nodes and len(modules_to_include) > max_nodes:
         # Keep most connected nodes
-        node_degrees = {
-            node: len(graph.get_dependencies(node))
-            for node in modules_to_include
-        }
+        node_degrees = {node: len(graph.get_dependencies(node)) for node in modules_to_include}
         sorted_nodes = sorted(node_degrees.items(), key=lambda x: x[1], reverse=True)
         modules_to_include = {node for node, _ in sorted_nodes[:max_nodes]}
 
@@ -377,15 +407,17 @@ def generate_html_report(
     # Generate circular dependencies section
     if circular_deps:
         circular_html = '<div class="circular-deps">\n'
-        circular_html += '<h2>⚠️ Circular Dependencies Detected</h2>\n'
+        circular_html += "<h2>⚠️ Circular Dependencies Detected</h2>\n"
         for i, cycle in enumerate(circular_deps, 1):
             cycle_str = " → ".join(cycle)
             circular_html += f'<div class="cycle">{i}. {cycle_str}</div>\n'
-        circular_html += '</div>\n'
+        circular_html += "</div>\n"
     else:
-        circular_html = '<div style="background-color: #e6ffe6; padding: 15px; border-radius: 5px;">\n'
+        circular_html = (
+            '<div style="background-color: #e6ffe6; padding: 15px; border-radius: 5px;">\n'
+        )
         circular_html += '<h2 style="color: #006600;">✓ No Circular Dependencies</h2>\n'
-        circular_html += '</div>\n'
+        circular_html += "</div>\n"
 
     # Fill in template
     html_content = html_template.format(

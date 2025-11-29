@@ -1,24 +1,23 @@
 """Tests for Single Responsibility Principle (SRP) Analyzer."""
 
-import pytest
 from pathlib import Path
 
+import pytest
 from qontinui_devtools.architecture import (
-    SRPAnalyzer,
-    SRPViolation,
     MethodCluster,
-)
-from qontinui_devtools.architecture.semantic_utils import (
-    tokenize_method_name,
-    extract_verb,
-    extract_keywords,
-    classify_method,
-    calculate_similarity_score,
+    SRPAnalyzer,
 )
 from qontinui_devtools.architecture.clustering import (
     cluster_methods_by_keywords,
     merge_similar_clusters,
     name_cluster,
+)
+from qontinui_devtools.architecture.semantic_utils import (
+    calculate_similarity_score,
+    classify_method,
+    extract_keywords,
+    extract_verb,
+    tokenize_method_name,
 )
 
 
@@ -335,9 +334,7 @@ class TestSRPAnalyzer:
 
     def test_analyze_with_timing(self, analyzer, fixtures_path):
         """Test analysis with timing measurement."""
-        violations, execution_time = analyzer.analyze_with_timing(
-            str(fixtures_path), min_methods=5
-        )
+        violations, execution_time = analyzer.analyze_with_timing(str(fixtures_path), min_methods=5)
 
         assert isinstance(violations, list)
         assert execution_time > 0
@@ -363,9 +360,7 @@ class TestIntegration:
         assert isinstance(report, str)
 
         # Check that multi-responsibility class is detected
-        user_manager_violations = [
-            v for v in violations if v.class_name == "UserManager"
-        ]
+        user_manager_violations = [v for v in violations if v.class_name == "UserManager"]
         assert len(user_manager_violations) > 0
 
         # Check violation has required fields
@@ -383,11 +378,18 @@ class TestIntegration:
         """Test quality of clustering for known method groups."""
         methods = [
             # Data access
-            "get_user", "fetch_data", "retrieve_record", "find_item",
+            "get_user",
+            "fetch_data",
+            "retrieve_record",
+            "find_item",
             # Validation
-            "validate_email", "check_password", "verify_input",
+            "validate_email",
+            "check_password",
+            "verify_input",
             # Business logic
-            "calculate_total", "process_order", "compute_score",
+            "calculate_total",
+            "process_order",
+            "compute_score",
         ]
 
         clusters = cluster_methods_by_keywords(methods, min_cluster_size=2)

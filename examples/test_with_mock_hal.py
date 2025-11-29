@@ -5,7 +5,6 @@ automation workflows without real hardware interaction.
 """
 
 from PIL import Image
-
 from qontinui_devtools.testing import MockHAL, MockHALBuilder
 
 
@@ -53,10 +52,7 @@ def example_pattern_matching() -> None:
 
     # Configure pattern matcher
     hal.pattern_matcher.configure_match(
-        "login_button",
-        success=True,
-        location=(500, 300),
-        confidence=0.98
+        "login_button", success=True, location=(500, 300), confidence=0.98
     )
 
     # Create test images
@@ -65,10 +61,7 @@ def example_pattern_matching() -> None:
 
     # Configure for specific image
     hal.pattern_matcher.configure_match_for_image(
-        button_template,
-        success=True,
-        location=(500, 300),
-        confidence=0.98
+        button_template, success=True, location=(500, 300), confidence=0.98
     )
 
     # Find pattern
@@ -117,10 +110,7 @@ def example_workflow_testing() -> None:
 
     # Configure HAL for test scenario
     hal.pattern_matcher.configure_match(
-        "default",
-        success=True,
-        location=(400, 300),
-        confidence=0.95
+        "default", success=True, location=(400, 300), confidence=0.95
     )
     hal.ocr_engine.default_text = "Submit"
 
@@ -143,7 +133,7 @@ def example_workflow_testing() -> None:
         hal.input_controller.key_press("enter")
 
     # Verify workflow execution
-    print(f"\nWorkflow Results:")
+    print("\nWorkflow Results:")
     print(f"  - Total operations: {hal.get_total_operations()}")
     print(f"  - Actions performed: {hal.input_controller.get_action_count()}")
     print(f"  - Screen captures: {hal.screen_capture.capture_count}")
@@ -155,12 +145,14 @@ def example_builder_pattern() -> None:
     print("\n=== Builder Pattern ===\n")
 
     # Build custom HAL configuration
-    hal = (MockHALBuilder()
-           .with_input_latency(0.001)
-           .with_pattern_success_rate(0.95)
-           .with_ocr_accuracy(0.98)
-           .with_ocr_default_text("Login Button")
-           .build())
+    hal = (
+        MockHALBuilder()
+        .with_input_latency(0.001)
+        .with_pattern_success_rate(0.95)
+        .with_ocr_accuracy(0.98)
+        .with_ocr_default_text("Login Button")
+        .build()
+    )
 
     print(f"Input latency: {hal.input_controller.latency}s")
     print(f"Pattern success rate: {hal.pattern_matcher.default_success_rate}")
@@ -222,16 +214,8 @@ def example_window_management() -> None:
     hal = MockHAL.create()
 
     # Add windows
-    window1 = hal.platform_specific.add_window(
-        "Browser",
-        x=100, y=100,
-        width=1200, height=800
-    )
-    window2 = hal.platform_specific.add_window(
-        "Editor",
-        x=200, y=200,
-        width=800, height=600
-    )
+    window1 = hal.platform_specific.add_window("Browser", x=100, y=100, width=1200, height=800)
+    window2 = hal.platform_specific.add_window("Editor", x=200, y=200, width=800, height=600)
 
     print(f"Created {len(hal.platform_specific.get_all_windows())} windows")
 
@@ -246,8 +230,10 @@ def example_window_management() -> None:
         element_type="button",
         name="submit",
         text="Submit",
-        x=50, y=50,
-        width=100, height=30
+        x=50,
+        y=50,
+        width=100,
+        height=30,
     )
 
     print(f"Added button: {button.text}")

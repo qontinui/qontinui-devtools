@@ -117,9 +117,7 @@ def main():
             print(f"   License: {dep.license} ({dep.license_category.value})")
 
         if dep.last_release_date:
-            age = (
-                Path(__file__).stat().st_mtime - dep.last_release_date.timestamp()
-            ) / 86400
+            age = (Path(__file__).stat().st_mtime - dep.last_release_date.timestamp()) / 86400
             print(f"   Last release: {int(age)} days ago")
 
     print("\n" + "=" * 70)

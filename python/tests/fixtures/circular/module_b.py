@@ -3,10 +3,9 @@
 This module imports module_c, completing the circular chain.
 """
 
-from typing import TYPE_CHECKING
 
 # This import continues the circular dependency chain
-from .module_c import FunctionC, ClassC
+from .module_c import ClassC, FunctionC
 
 
 class ClassB:

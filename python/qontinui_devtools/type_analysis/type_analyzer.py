@@ -7,16 +7,13 @@ identify missing type hints, and suggest improvements for type safety.
 import ast
 import subprocess
 import time
-from collections import defaultdict
 from pathlib import Path
-from typing import Any
 
 from .models import (
     AnyUsage,
     MypyError,
     TypeAnalysisReport,
     TypeCoverage,
-    TypeHintStatus,
     UntypedItem,
 )
 from .type_inference import TypeInferenceEngine
@@ -66,10 +63,7 @@ class TypeHintVisitor(ast.NodeVisitor):
         self._analyze_function(node)
         self.generic_visit(node)
 
-    def _analyze_function(
-        self,
-        node: ast.FunctionDef | ast.AsyncFunctionDef
-    ) -> None:
+    def _analyze_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> None:
         """Analyze a function for type hints.
 
         Args:
@@ -84,11 +78,11 @@ class TypeHintVisitor(ast.NodeVisitor):
         # Count parameters and check type hints
         args = node.args
         all_params = (
-            args.posonlyargs +
-            args.args +
-            args.kwonlyargs +
-            ([args.vararg] if args.vararg else []) +
-            ([args.kwarg] if args.kwarg else [])
+            args.posonlyargs
+            + args.args
+            + args.kwonlyargs
+            + ([args.vararg] if args.vararg else [])
+            + ([args.kwarg] if args.kwarg else [])
         )
 
         # Filter out 'self' and 'cls'
@@ -222,10 +216,7 @@ class TypeAnalyzer:
     """Analyzes type hint coverage in Python code."""
 
     def __init__(
-        self,
-        run_mypy: bool = True,
-        strict_mode: bool = False,
-        mypy_config: str | None = None
+        self, run_mypy: bool = True, strict_mode: bool = False, mypy_config: str | None = None
     ) -> None:
         """Initialize the type analyzer.
 
@@ -239,7 +230,9 @@ class TypeAnalyzer:
         self.mypy_config = mypy_config
         self.inference_engine = TypeInferenceEngine()
 
-    def analyze_file(self, file_path: str | Path) -> tuple[TypeCoverage, list[UntypedItem], list[AnyUsage]]:
+    def analyze_file(
+        self, file_path: str | Path
+    ) -> tuple[TypeCoverage, list[UntypedItem], list[AnyUsage]]:
         """Analyze a single Python file.
 
         Args:
@@ -258,7 +251,7 @@ class TypeAnalyzer:
 
         try:
             tree = ast.parse(source, filename=str(file_path))
-        except SyntaxError as e:
+        except SyntaxError:
             # Return empty results for files with syntax errors
             return (TypeCoverage(), [], [])
 
@@ -269,9 +262,7 @@ class TypeAnalyzer:
         return (visitor.get_coverage(), visitor.untyped_items, visitor.any_usages)
 
     def analyze_directory(
-        self,
-        directory: str | Path,
-        exclude_patterns: list[str] | None = None
+        self, directory: str | Path, exclude_patterns: list[str] | None = None
     ) -> TypeAnalysisReport:
         """Analyze all Python files in a directory.
 
@@ -441,7 +432,7 @@ class TypeAnalyzer:
                         # Extract error code
                         error_code = None
                         if "[" in message and "]" in message:
-                            error_code = message[message.rfind("[")+1:message.rfind("]")]
+                            error_code = message[message.rfind("[") + 1 : message.rfind("]")]
 
                         mypy_errors.append(
                             MypyError(
@@ -496,7 +487,9 @@ class TypeAnalyzer:
         lines.append(f"Return coverage: {cov.return_coverage:.1f}%")
         lines.append("")
         lines.append(f"Total functions: {cov.total_functions}")
-        lines.append(f"Fully typed: {cov.fully_typed_functions} ({cov.fully_typed_functions/cov.total_functions*100 if cov.total_functions > 0 else 0:.1f}%)")
+        lines.append(
+            f"Fully typed: {cov.fully_typed_functions} ({cov.fully_typed_functions/cov.total_functions*100 if cov.total_functions > 0 else 0:.1f}%)"
+        )
         lines.append(f"Partially typed: {cov.typed_functions - cov.fully_typed_functions}")
         lines.append(f"Untyped: {cov.total_functions - cov.typed_functions}")
         lines.append("")
@@ -517,7 +510,9 @@ class TypeAnalyzer:
                 lines.append(f"  Type: {item.item_type}")
                 lines.append(f"  Name: {item.get_full_name()}")
                 if item.suggested_type:
-                    lines.append(f"  Suggestion: {item.suggested_type} (confidence: {item.confidence:.2f})")
+                    lines.append(
+                        f"  Suggestion: {item.suggested_type} (confidence: {item.confidence:.2f})"
+                    )
                     if item.reason:
                         lines.append(f"  Reason: {item.reason}")
                 lines.append("")
@@ -538,8 +533,7 @@ class TypeAnalyzer:
             lines.append("MODULE COVERAGE")
             lines.append("-" * 80)
             sorted_modules = sorted(
-                report.module_coverage.items(),
-                key=lambda x: x[1].coverage_percentage
+                report.module_coverage.items(), key=lambda x: x[1].coverage_percentage
             )
             for module_name, module_cov in sorted_modules[:10]:
                 lines.append(f"{module_name}: {module_cov.coverage_percentage:.1f}%")

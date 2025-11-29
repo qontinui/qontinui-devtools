@@ -4,10 +4,9 @@ This module imports module_b, which imports module_c, which imports back to modu
 creating a circular dependency: a -> b -> c -> a
 """
 
-from typing import TYPE_CHECKING
 
 # This import creates a circular dependency
-from .module_b import FunctionB, ClassB
+from .module_b import ClassB, FunctionB
 
 
 class ClassA:

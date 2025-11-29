@@ -41,7 +41,8 @@ class UserManager:
     def validate_email(self, email):
         """Validate email format."""
         import re
-        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+
+        pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         return re.match(pattern, email) is not None
 
     def check_password_strength(self, password):
@@ -68,7 +69,7 @@ class UserManager:
 
     def process_registration(self, user_data):
         """Process user registration."""
-        if not self.validate_email(user_data['email']):
+        if not self.validate_email(user_data["email"]):
             raise ValueError("Invalid email")
         return self.save_to_database(user_data)
 

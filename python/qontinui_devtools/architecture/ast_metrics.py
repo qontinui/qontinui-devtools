@@ -1,7 +1,6 @@
 """AST-based metrics utilities for analyzing Python code structure."""
 
 import ast
-from typing import Any
 
 try:
     from radon.complexity import cc_visit
@@ -63,12 +62,10 @@ def count_methods(class_node: ast.ClassDef) -> dict[str, int]:
         if isinstance(node, ast.FunctionDef):
             # Check for decorators
             is_classmethod = any(
-                isinstance(d, ast.Name) and d.id == "classmethod"
-                for d in node.decorator_list
+                isinstance(d, ast.Name) and d.id == "classmethod" for d in node.decorator_list
             )
             is_staticmethod = any(
-                isinstance(d, ast.Name) and d.id == "staticmethod"
-                for d in node.decorator_list
+                isinstance(d, ast.Name) and d.id == "staticmethod" for d in node.decorator_list
             )
 
             if is_classmethod:
@@ -220,10 +217,7 @@ def extract_method_names(class_node: ast.ClassDef) -> list[str]:
     return method_names
 
 
-def find_shared_attributes(
-    method1: ast.FunctionDef,
-    method2: ast.FunctionDef
-) -> set[str]:
+def find_shared_attributes(method1: ast.FunctionDef, method2: ast.FunctionDef) -> set[str]:
     """Find attributes shared between two methods.
 
     Args:
@@ -233,6 +227,7 @@ def find_shared_attributes(
     Returns:
         Set of shared attribute names
     """
+
     def get_accessed_attributes(method: ast.FunctionDef) -> set[str]:
         """Get all self.attribute accesses in a method."""
         attributes = set()
@@ -288,7 +283,10 @@ def analyze_method_calls(class_node: ast.ClassDef) -> dict[str, set[str]]:
                 def visit_Call(self, call_node: ast.Call) -> None:
                     # Check for self.method() calls
                     if isinstance(call_node.func, ast.Attribute):
-                        if isinstance(call_node.func.value, ast.Name) and call_node.func.value.id == "self":
+                        if (
+                            isinstance(call_node.func.value, ast.Name)
+                            and call_node.func.value.id == "self"
+                        ):
                             called_methods.add(call_node.func.attr)
                     self.generic_visit(call_node)
 

@@ -5,13 +5,13 @@ This script shows how to use the documentation generator to create
 beautiful API documentation from Python source code.
 """
 
-from pathlib import Path
 import tempfile
+from pathlib import Path
 
 from qontinui_devtools.documentation import (
+    DocstringStyle,
     DocumentationGenerator,
     OutputFormat,
-    DocstringStyle,
 )
 
 

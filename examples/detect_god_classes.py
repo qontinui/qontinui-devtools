@@ -2,11 +2,10 @@
 
 from pathlib import Path
 
+from qontinui_devtools.architecture import GodClassDetector
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-
-from qontinui_devtools.architecture import GodClassDetector
 
 console = Console()
 
@@ -15,30 +14,34 @@ def main() -> None:
     """Analyze a codebase for god classes."""
     # Configure detector with custom thresholds
     detector = GodClassDetector(
-        min_lines=500,      # Flag classes with 500+ lines
-        min_methods=20,     # Flag classes with 20+ methods
-        max_lcom=0.8,       # Flag classes with LCOM > 0.8
-        verbose=True
+        min_lines=500,  # Flag classes with 500+ lines
+        min_methods=20,  # Flag classes with 20+ methods
+        max_lcom=0.8,  # Flag classes with LCOM > 0.8
+        verbose=True,
     )
 
     # Analyze directory (replace with your path)
     # Example: "../qontinui/src"
     target_path = input("Enter path to analyze: ")
 
-    console.print(Panel(
-        f"[cyan]Analyzing:[/cyan] {target_path}\n"
-        f"[cyan]Min Lines:[/cyan] {detector.min_lines}\n"
-        f"[cyan]Min Methods:[/cyan] {detector.min_methods}\n"
-        f"[cyan]Max LCOM:[/cyan] {detector.max_lcom}",
-        title="God Class Detection",
-        border_style="blue"
-    ))
+    console.print(
+        Panel(
+            f"[cyan]Analyzing:[/cyan] {target_path}\n"
+            f"[cyan]Min Lines:[/cyan] {detector.min_lines}\n"
+            f"[cyan]Min Methods:[/cyan] {detector.min_methods}\n"
+            f"[cyan]Max LCOM:[/cyan] {detector.max_lcom}",
+            title="God Class Detection",
+            border_style="blue",
+        )
+    )
 
     with console.status("[bold green]Scanning files..."):
         god_classes = detector.analyze_directory(target_path)
 
     if not god_classes:
-        console.print("\n[green]✅ No god classes detected! Your codebase is well-structured.[/green]")
+        console.print(
+            "\n[green]✅ No god classes detected! Your codebase is well-structured.[/green]"
+        )
         return
 
     console.print(f"\n[red]❌ Found {len(god_classes)} god classes:[/red]\n")
@@ -55,15 +58,11 @@ def main() -> None:
         severity_color = {
             "critical": "[red]CRITICAL[/red]",
             "high": "[yellow]HIGH[/yellow]",
-            "medium": "[blue]MEDIUM[/blue]"
+            "medium": "[blue]MEDIUM[/blue]",
         }[cls.severity]
 
         table.add_row(
-            cls.name,
-            str(cls.line_count),
-            str(cls.method_count),
-            f"{cls.lcom:.2f}",
-            severity_color
+            cls.name, str(cls.line_count), str(cls.method_count), f"{cls.lcom:.2f}", severity_color
         )
 
     console.print(table)

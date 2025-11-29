@@ -101,15 +101,17 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
                 # Side-effect import: import 'foo'
                 source_match = re.search(r'import\s+[\'"]([^\'"]+)[\'"]', line)
                 if source_match:
-                    imports.append(ImportStatement(
-                        source=source_match.group(1),
-                        names=[],
-                        default_import=None,
-                        namespace_import=None,
-                        is_type_only=is_type_only,
-                        line_number=line_num,
-                        raw_statement=line
-                    ))
+                    imports.append(
+                        ImportStatement(
+                            source=source_match.group(1),
+                            names=[],
+                            default_import=None,
+                            namespace_import=None,
+                            is_type_only=is_type_only,
+                            line_number=line_num,
+                            raw_statement=line,
+                        )
+                    )
                 continue
 
             source = source_match.group(1)
@@ -120,17 +122,17 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
             namespace_import = None
 
             # Check for namespace import: import * as foo
-            namespace_match = re.search(r'import\s+\*\s+as\s+(\w+)', line)
+            namespace_match = re.search(r"import\s+\*\s+as\s+(\w+)", line)
             if namespace_match:
                 namespace_import = namespace_match.group(1)
             else:
                 # Check for default import: import foo from
-                default_match = re.search(r'import\s+(\w+)\s+from', line)
+                default_match = re.search(r"import\s+(\w+)\s+from", line)
                 if default_match:
                     default_import = default_match.group(1)
 
                 # Check for named imports: import { foo, bar }
-                named_match = re.search(r'\{([^}]+)\}', line)
+                named_match = re.search(r"\{([^}]+)\}", line)
                 if named_match:
                     named_imports = named_match.group(1)
                     # Split by comma and clean up
@@ -141,15 +143,17 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
                             name = name.split(" as ")[1].strip()
                         names.append(name)
 
-            imports.append(ImportStatement(
-                source=source,
-                names=names,
-                default_import=default_import,
-                namespace_import=namespace_import,
-                is_type_only=is_type_only,
-                line_number=line_num,
-                raw_statement=line
-            ))
+            imports.append(
+                ImportStatement(
+                    source=source,
+                    names=names,
+                    default_import=default_import,
+                    namespace_import=namespace_import,
+                    is_type_only=is_type_only,
+                    line_number=line_num,
+                    raw_statement=line,
+                )
+            )
 
         # Handle CommonJS require
         elif "require(" in line:
@@ -158,18 +162,20 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
                 source = require_match.group(1)
 
                 # Try to extract the variable name
-                var_match = re.search(r'(?:const|let|var)\s+(\w+)\s*=', line)
+                var_match = re.search(r"(?:const|let|var)\s+(\w+)\s*=", line)
                 default_import = var_match.group(1) if var_match else None
 
-                imports.append(ImportStatement(
-                    source=source,
-                    names=[],
-                    default_import=default_import,
-                    namespace_import=None,
-                    is_type_only=False,
-                    line_number=line_num,
-                    raw_statement=line
-                ))
+                imports.append(
+                    ImportStatement(
+                        source=source,
+                        names=[],
+                        default_import=default_import,
+                        namespace_import=None,
+                        is_type_only=False,
+                        line_number=line_num,
+                        raw_statement=line,
+                    )
+                )
 
     return imports
 
@@ -206,77 +212,88 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
         # export default
         if "export default" in line:
             # Try to extract name
-            name_match = re.search(r'export\s+default\s+(?:function|class)?\s*(\w+)', line)
+            name_match = re.search(r"export\s+default\s+(?:function|class)?\s*(\w+)", line)
             name = name_match.group(1) if name_match else "default"
 
-            exports.append(ExportStatement(
-                name=name,
-                export_type="default",
-                line_number=line_num,
-                is_type_only=is_type_only
-            ))
+            exports.append(
+                ExportStatement(
+                    name=name,
+                    export_type="default",
+                    line_number=line_num,
+                    is_type_only=is_type_only,
+                )
+            )
 
         # export function/class/const/interface/type
-        elif re.search(r'export\s+(?:async\s+)?function\s+(\w+)', line):
-            match = re.search(r'export\s+(?:async\s+)?function\s+(\w+)', line)
-            exports.append(ExportStatement(
-                name=match.group(1),
-                export_type="function",
-                line_number=line_num,
-                is_type_only=is_type_only
-            ))
+        elif re.search(r"export\s+(?:async\s+)?function\s+(\w+)", line):
+            match = re.search(r"export\s+(?:async\s+)?function\s+(\w+)", line)
+            exports.append(
+                ExportStatement(
+                    name=match.group(1),
+                    export_type="function",
+                    line_number=line_num,
+                    is_type_only=is_type_only,
+                )
+            )
 
-        elif re.search(r'export\s+class\s+(\w+)', line):
-            match = re.search(r'export\s+class\s+(\w+)', line)
-            exports.append(ExportStatement(
-                name=match.group(1),
-                export_type="class",
-                line_number=line_num,
-                is_type_only=is_type_only
-            ))
+        elif re.search(r"export\s+class\s+(\w+)", line):
+            match = re.search(r"export\s+class\s+(\w+)", line)
+            exports.append(
+                ExportStatement(
+                    name=match.group(1),
+                    export_type="class",
+                    line_number=line_num,
+                    is_type_only=is_type_only,
+                )
+            )
 
-        elif re.search(r'export\s+(?:const|let|var)\s+(\w+)', line):
-            match = re.search(r'export\s+(?:const|let|var)\s+(\w+)', line)
-            exports.append(ExportStatement(
-                name=match.group(1),
-                export_type="const",
-                line_number=line_num,
-                is_type_only=is_type_only
-            ))
+        elif re.search(r"export\s+(?:const|let|var)\s+(\w+)", line):
+            match = re.search(r"export\s+(?:const|let|var)\s+(\w+)", line)
+            exports.append(
+                ExportStatement(
+                    name=match.group(1),
+                    export_type="const",
+                    line_number=line_num,
+                    is_type_only=is_type_only,
+                )
+            )
 
-        elif re.search(r'export\s+interface\s+(\w+)', line):
-            match = re.search(r'export\s+interface\s+(\w+)', line)
-            exports.append(ExportStatement(
-                name=match.group(1),
-                export_type="interface",
-                line_number=line_num,
-                is_type_only=True
-            ))
+        elif re.search(r"export\s+interface\s+(\w+)", line):
+            match = re.search(r"export\s+interface\s+(\w+)", line)
+            exports.append(
+                ExportStatement(
+                    name=match.group(1),
+                    export_type="interface",
+                    line_number=line_num,
+                    is_type_only=True,
+                )
+            )
 
-        elif re.search(r'export\s+type\s+(\w+)', line):
-            match = re.search(r'export\s+type\s+(\w+)', line)
-            exports.append(ExportStatement(
-                name=match.group(1),
-                export_type="type",
-                line_number=line_num,
-                is_type_only=True
-            ))
+        elif re.search(r"export\s+type\s+(\w+)", line):
+            match = re.search(r"export\s+type\s+(\w+)", line)
+            exports.append(
+                ExportStatement(
+                    name=match.group(1), export_type="type", line_number=line_num, is_type_only=True
+                )
+            )
 
         # export { foo, bar }
-        elif re.search(r'export\s+\{([^}]+)\}', line):
-            match = re.search(r'export\s+\{([^}]+)\}', line)
+        elif re.search(r"export\s+\{([^}]+)\}", line):
+            match = re.search(r"export\s+\{([^}]+)\}", line)
             names_str = match.group(1)
             for name in names_str.split(","):
                 name = name.strip()
                 # Handle 'as' aliases
                 if " as " in name:
                     name = name.split(" as ")[0].strip()
-                exports.append(ExportStatement(
-                    name=name,
-                    export_type="const",
-                    line_number=line_num,
-                    is_type_only=is_type_only
-                ))
+                exports.append(
+                    ExportStatement(
+                        name=name,
+                        export_type="const",
+                        line_number=line_num,
+                        is_type_only=is_type_only,
+                    )
+                )
 
     return exports
 
@@ -384,9 +401,4 @@ def count_lines_of_code(file_path: Path) -> dict[str, int]:
         else:
             code += 1
 
-    return {
-        "total": total,
-        "code": code,
-        "comment": comment,
-        "blank": blank
-    }
+    return {"total": total, "code": code, "comment": comment, "blank": blank}

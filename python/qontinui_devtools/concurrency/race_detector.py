@@ -11,7 +11,6 @@ from .heuristics import (
     is_check_then_act_pattern,
     is_double_checked_locking,
     is_likely_thread_safe,
-    prioritize_issues,
     suggest_fix,
 )
 
@@ -55,7 +54,13 @@ class RaceConditionDetector:
             exclude_patterns: Patterns to exclude (e.g., ["test_", "venv/"])
         """
         self.root_path = Path(root_path)
-        self.exclude_patterns = exclude_patterns or ["test_", "__pycache__", ".git", "venv", ".venv"]
+        self.exclude_patterns = exclude_patterns or [
+            "test_",
+            "__pycache__",
+            ".git",
+            "venv",
+            ".venv",
+        ]
         self.contexts: dict[str, AnalysisContext] = {}
         self.shared_states: list[SharedState] = []
         self.race_conditions: list[RaceCondition] = []
@@ -229,9 +234,7 @@ class RaceConditionDetector:
             )
 
             # Build access locations
-            access_locations = [
-                (state.file_path, a.line_number, a.access_type) for a in accesses
-            ]
+            access_locations = [(state.file_path, a.line_number, a.access_type) for a in accesses]
 
             race = RaceCondition(
                 shared_state=state,
@@ -303,9 +306,7 @@ class RaceConditionDetector:
 
         # Lock context
         if protected_accesses > 0:
-            parts.append(
-                f"Some accesses ({protected_accesses}) are protected but not all"
-            )
+            parts.append(f"Some accesses ({protected_accesses}) are protected but not all")
         elif context.locks:
             parts.append(f"Locks available but not used: {[l.name for l in context.locks]}")
         else:
@@ -385,13 +386,13 @@ class RaceConditionDetector:
                 f"   Location: {race.shared_state.file_path}:{race.shared_state.line_number}"
             )
             lines.append("")
-            lines.append(f"   Description:")
+            lines.append("   Description:")
             lines.append(f"     {race.description}")
             lines.append("")
 
             # Patterns
             if race.patterns_detected:
-                lines.append(f"   Patterns Detected:")
+                lines.append("   Patterns Detected:")
                 for pattern in race.patterns_detected:
                     lines.append(f"     - {pattern}")
                 lines.append("")
@@ -405,13 +406,13 @@ class RaceConditionDetector:
                 lines.append(f"   Access Locations: {len(race.access_locations)} total")
 
             lines.append("")
-            lines.append(f"   Suggestion:")
+            lines.append("   Suggestion:")
             lines.append(f"     {race.suggestion}")
 
             # False positive indicators
             if race.false_positive_indicators:
                 lines.append("")
-                lines.append(f"   Note: Possible false positive indicators:")
+                lines.append("   Note: Possible false positive indicators:")
                 for indicator in race.false_positive_indicators:
                     lines.append(f"     - {indicator}")
 

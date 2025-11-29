@@ -90,19 +90,19 @@ def analyze_directory(path: str, verbose: bool = True) -> None:
             print()
 
             # Description
-            print(f"   Description:")
+            print("   Description:")
             print(f"     {race.description}")
             print()
 
             # Patterns
             if race.patterns_detected:
-                print(f"   Patterns:")
+                print("   Patterns:")
                 for pattern in race.patterns_detected:
                     print(f"     - {pattern}")
                 print()
 
             # Suggestion
-            print(f"   Suggestion:")
+            print("   Suggestion:")
             # Wrap suggestion text
             suggestion_lines = race.suggestion.split(". ")
             for line in suggestion_lines:
@@ -112,7 +112,7 @@ def analyze_directory(path: str, verbose: bool = True) -> None:
 
             # Access locations (limited)
             if len(race.access_locations) <= 5:
-                print(f"   Access locations:")
+                print("   Access locations:")
                 for file_path, line_num, access_type in race.access_locations:
                     print(f"     - Line {line_num}: {access_type}")
             else:
@@ -144,7 +144,8 @@ def analyze_example_code() -> None:
         tmppath = Path(tmpdir)
 
         # Example 1: Unprotected class variable
-        (tmppath / "bad_cache.py").write_text('''
+        (tmppath / "bad_cache.py").write_text(
+            '''
 class Cache:
     """Cache with race condition."""
     _data = {}
@@ -157,10 +158,12 @@ class Cache:
 
     def clear(self):
         self._data.clear()
-''')
+'''
+        )
 
         # Example 2: Check-then-act pattern
-        (tmppath / "singleton.py").write_text('''
+        (tmppath / "singleton.py").write_text(
+            '''
 class Singleton:
     """Singleton with race condition."""
     _instance = None
@@ -170,10 +173,12 @@ class Singleton:
         if cls._instance is None:  # Check
             cls._instance = Singleton()  # Act - RACE CONDITION!
         return cls._instance
-''')
+'''
+        )
 
         # Example 3: Properly protected (should not flag)
-        (tmppath / "safe_cache.py").write_text('''
+        (tmppath / "safe_cache.py").write_text(
+            '''
 import threading
 
 class SafeCache:
@@ -189,7 +194,8 @@ class SafeCache:
     def get(self, key):
         with self._lock:
             return self._data.get(key)
-''')
+'''
+        )
 
         # Analyze
         analyze_directory(str(tmppath), verbose=True)

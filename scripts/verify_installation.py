@@ -7,7 +7,6 @@ Run this after installing the package to ensure everything is working.
 
 import sys
 from importlib import import_module
-from typing import List, Tuple
 
 
 def verify_installation() -> bool:
@@ -27,7 +26,7 @@ def verify_installation() -> bool:
         "qontinui_devtools.ci",
     ]
 
-    required_classes: List[Tuple[str, str]] = [
+    required_classes: list[tuple[str, str]] = [
         # Import Analysis
         ("qontinui_devtools", "ImportTracer"),
         ("qontinui_devtools", "CircularDependencyDetector"),
@@ -100,6 +99,7 @@ def verify_installation() -> bool:
     print("-" * 70)
     try:
         from qontinui_devtools.cli import main
+
         print("  \u2713 CLI entry point available")
     except ImportError as e:
         print(f"  \u2717 CLI: {e}")
@@ -111,6 +111,7 @@ def verify_installation() -> bool:
     print("-" * 70)
     try:
         from qontinui_devtools import __version__
+
         print(f"  \u2713 Version: {__version__}")
     except ImportError as e:
         print(f"  \u2717 Version: {e}")

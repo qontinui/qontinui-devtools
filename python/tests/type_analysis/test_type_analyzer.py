@@ -4,15 +4,10 @@ This module contains comprehensive tests for the type hint analysis tools.
 """
 
 import ast
-import tempfile
-from pathlib import Path
-
-import pytest
 
 from qontinui_devtools.type_analysis import (
-    AnyUsage,
-    TypeAnalyzer,
     TypeAnalysisReport,
+    TypeAnalyzer,
     TypeCoverage,
     TypeHintVisitor,
     TypeInferenceEngine,
@@ -213,9 +208,7 @@ def func(x):
         """Test expression type inference for comparison."""
         engine = TypeInferenceEngine()
         node = ast.Compare(
-            left=ast.Constant(value=1),
-            ops=[ast.Lt()],
-            comparators=[ast.Constant(value=2)]
+            left=ast.Constant(value=1), ops=[ast.Lt()], comparators=[ast.Constant(value=2)]
         )
         result = engine._infer_expr_type(node)
         assert result == "bool"
@@ -545,16 +538,20 @@ def broken(
         """Test analyzing a directory."""
         # Create multiple files
         file1 = tmp_path / "module1.py"
-        file1.write_text("""
+        file1.write_text(
+            """
 def typed_func(x: int) -> int:
     return x * 2
-""")
+"""
+        )
 
         file2 = tmp_path / "module2.py"
-        file2.write_text("""
+        file2.write_text(
+            """
 def untyped_func(x, y):
     return x + y
-""")
+"""
+        )
 
         analyzer = TypeAnalyzer(run_mypy=False)
         report = analyzer.analyze_directory(tmp_path)
@@ -653,10 +650,7 @@ class TestTypeAnalysisReport:
 
     def test_get_sorted_untyped_items_with_limit(self):
         """Test sorting with limit."""
-        items = [
-            UntypedItem("parameter", f"x{i}", "/test.py", i)
-            for i in range(100)
-        ]
+        items = [UntypedItem("parameter", f"x{i}", "/test.py", i) for i in range(100)]
 
         report = TypeAnalysisReport(
             overall_coverage=TypeCoverage(),
@@ -678,7 +672,8 @@ class TestIntegration:
 
         (package / "__init__.py").write_text("")
 
-        (package / "math_utils.py").write_text("""
+        (package / "math_utils.py").write_text(
+            """
 def add(x: int, y: int) -> int:
     '''Add two numbers.'''
     return x + y
@@ -686,9 +681,11 @@ def add(x: int, y: int) -> int:
 def multiply(x, y):
     '''Multiply two numbers (untyped).'''
     return x * y
-""")
+"""
+        )
 
-        (package / "string_utils.py").write_text("""
+        (package / "string_utils.py").write_text(
+            """
 def upper(s: str) -> str:
     '''Convert to uppercase.'''
     return s.upper()
@@ -696,7 +693,8 @@ def upper(s: str) -> str:
 def reverse(s):
     '''Reverse string (untyped).'''
     return s[::-1]
-""")
+"""
+        )
 
         # Run analysis
         analyzer = TypeAnalyzer(run_mypy=False)
@@ -785,7 +783,9 @@ def maybe_value(exists):
         return_items = [item for item in untyped_items if item.item_type == "return"]
 
         get_value_return = next((item for item in return_items if "get_value" in item.name), None)
-        maybe_value_return = next((item for item in return_items if "maybe_value" in item.name), None)
+        maybe_value_return = next(
+            (item for item in return_items if "maybe_value" in item.name), None
+        )
 
         # get_value should suggest union of int and str
         assert get_value_return

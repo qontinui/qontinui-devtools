@@ -4,14 +4,14 @@ HTML Report Generator for qontinui-devtools.
 Generates comprehensive, interactive HTML reports aggregating results from all analysis tools.
 """
 
+import html
+import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-import json
-import html
 
-from jinja2 import Environment, PackageLoader, select_autoescape, TemplateNotFound
+from jinja2 import Environment, PackageLoader, TemplateNotFound, select_autoescape
 
 
 @dataclass
@@ -203,9 +203,7 @@ class HTMLReportGenerator:
         if not self.report_data:
             raise ValueError("No report data set")
 
-        status_color, status_icon, status_message = (
-            self.report_data.get_overall_status()
-        )
+        status_color, status_icon, status_message = self.report_data.get_overall_status()
 
         return {
             "project_name": self.report_data.project_name,
@@ -260,7 +258,9 @@ class HTMLReportGenerator:
             {
                 "name": "Quality Score",
                 "value": f"{quality_score:.1f}/100",
-                "color": "green" if quality_score >= 80 else ("yellow" if quality_score >= 60 else "red"),
+                "color": (
+                    "green" if quality_score >= 80 else ("yellow" if quality_score >= 60 else "red")
+                ),
                 "description": "Overall code quality rating",
             }
         )
@@ -294,9 +294,7 @@ class HTMLReportGenerator:
         score -= min(error_count * 10, 50)
 
         # Deduct for warnings (2 points each, max -20)
-        warning_count = sum(
-            1 for s in self.report_data.sections if s.severity == "warning"
-        )
+        warning_count = sum(1 for s in self.report_data.sections if s.severity == "warning")
         score -= min(warning_count * 2, 20)
 
         # Deduct for specific issues

@@ -15,7 +15,7 @@ from typing import Any
 from rich.console import Console
 from rich.table import Table
 
-from .ts_utils import extract_exports, extract_imports, find_ts_js_files, resolve_import_path
+from .ts_utils import extract_exports, extract_imports, find_ts_js_files
 
 
 @dataclass
@@ -78,7 +78,9 @@ class DeadCodeDetector:
             List of DeadCode objects for unused code
         """
         if self.verbose:
-            self.console.print(f"\n[bold]Analyzing TypeScript/JavaScript project:[/bold] {self.root_path}")
+            self.console.print(
+                f"\n[bold]Analyzing TypeScript/JavaScript project:[/bold] {self.root_path}"
+            )
 
         # Step 1: Find all files
         self.files = find_ts_js_files(self.root_path)
@@ -96,7 +98,9 @@ class DeadCodeDetector:
         dead_code = self._identify_dead_code()
 
         if self.verbose:
-            self.console.print(f"\n[yellow]Found {len(dead_code)} potentially unused exports[/yellow]")
+            self.console.print(
+                f"\n[yellow]Found {len(dead_code)} potentially unused exports[/yellow]"
+            )
 
         return dead_code
 
@@ -147,7 +151,7 @@ class DeadCodeDetector:
             for export_name in self.usage.keys():
                 # Use regex to find usage of the name
                 # This is a simple heuristic - may have false positives
-                pattern = r'\b' + re.escape(export_name) + r'\b'
+                pattern = r"\b" + re.escape(export_name) + r"\b"
                 if re.search(pattern, content):
                     self.usage[export_name].add(file_path)
 
@@ -240,7 +244,9 @@ class DeadCodeDetector:
             self.console.print("\n[green]No dead code found![/green]")
             return
 
-        self.console.print(f"\n[bold yellow]Found {len(dead_code)} potentially unused exports:[/bold yellow]\n")
+        self.console.print(
+            f"\n[bold yellow]Found {len(dead_code)} potentially unused exports:[/bold yellow]\n"
+        )
 
         # Group by file
         by_file: dict[Path, list[DeadCode]] = {}
@@ -260,7 +266,11 @@ class DeadCodeDetector:
 
         for file_path in sorted(by_file.keys()):
             codes = by_file[file_path]
-            rel_path = file_path.relative_to(self.root_path) if file_path.is_relative_to(self.root_path) else file_path
+            rel_path = (
+                file_path.relative_to(self.root_path)
+                if file_path.is_relative_to(self.root_path)
+                else file_path
+            )
 
             for code in codes:
                 table.add_row(
@@ -315,7 +325,11 @@ class DeadCodeDetector:
 
         for file_path in sorted(by_file.keys()):
             codes = by_file[file_path]
-            rel_path = file_path.relative_to(self.root_path) if file_path.is_relative_to(self.root_path) else file_path
+            rel_path = (
+                file_path.relative_to(self.root_path)
+                if file_path.is_relative_to(self.root_path)
+                else file_path
+            )
 
             lines.append(f"\n{rel_path}:")
             lines.append("-" * 40)

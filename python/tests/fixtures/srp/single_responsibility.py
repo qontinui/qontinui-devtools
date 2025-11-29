@@ -80,13 +80,14 @@ class EmailValidator:
     def validate_format(self, email):
         """Validate email format with regex."""
         import re
-        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+
+        pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         return re.match(pattern, email) is not None
 
     def validate_domain(self, email):
         """Validate email domain exists."""
-        domain = email.split('@')[1] if '@' in email else None
-        return domain and '.' in domain
+        domain = email.split("@")[1] if "@" in email else None
+        return domain and "." in domain
 
     def validate_length(self, email):
         """Validate email length."""
@@ -98,8 +99,8 @@ class EmailValidator:
 
     def check_blacklist(self, email):
         """Check if email domain is blacklisted."""
-        blacklist = ['spam.com', 'temp.com']
-        domain = email.split('@')[1] if '@' in email else None
+        blacklist = ["spam.com", "temp.com"]
+        domain = email.split("@")[1] if "@" in email else None
         return domain not in blacklist
 
     def verify(self, email):
@@ -108,4 +109,4 @@ class EmailValidator:
 
     def verify_syntax(self, email):
         """Verify email syntax."""
-        return '@' in email and '.' in email
+        return "@" in email and "." in email

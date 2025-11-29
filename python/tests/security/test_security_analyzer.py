@@ -9,12 +9,9 @@ import tempfile
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.security import (
     SecurityAnalyzer,
-    SecurityReport,
     Severity,
-    Vulnerability,
     VulnerabilityType,
 )
 
@@ -33,6 +30,7 @@ def temp_dir():
 
 
 # SQL Injection Tests
+
 
 def test_sql_injection_string_concatenation(analyzer, temp_dir):
     """Test detection of SQL injection via string concatenation."""
@@ -143,6 +141,7 @@ def get_all_users():
 
 # Command Injection Tests
 
+
 def test_command_injection_os_system(analyzer, temp_dir):
     """Test detection of command injection via os.system."""
     code = """
@@ -239,6 +238,7 @@ def git_status():
 
 # Path Traversal Tests
 
+
 def test_path_traversal_open(analyzer, temp_dir):
     """Test detection of path traversal via open()."""
     code = """
@@ -292,6 +292,7 @@ def read_config():
 
 
 # Hardcoded Secrets Tests
+
 
 def test_hardcoded_password(analyzer, temp_dir):
     """Test detection of hardcoded passwords."""
@@ -377,6 +378,7 @@ api_key = os.getenv("API_KEY")
 
 
 # Insecure Deserialization Tests
+
 
 def test_insecure_deserialization_pickle(analyzer, temp_dir):
     """Test detection of insecure pickle.loads."""
@@ -483,6 +485,7 @@ def load_config(config_str):
 
 # Weak Cryptography Tests
 
+
 def test_weak_crypto_md5(analyzer, temp_dir):
     """Test detection of MD5 usage."""
     code = """
@@ -556,6 +559,7 @@ def hash_data(data):
 
 
 # SSRF Tests
+
 
 def test_ssrf_requests_get(analyzer, temp_dir):
     """Test detection of SSRF via requests.get with user input."""
@@ -633,6 +637,7 @@ def get_api_status():
 
 
 # XXE Tests
+
 
 def test_xxe_etree_parse(analyzer, temp_dir):
     """Test detection of XXE via xml.etree.ElementTree.parse."""
@@ -712,22 +717,29 @@ def parse_xml(xml_str):
 
 # Directory Analysis Tests
 
+
 def test_analyze_directory(analyzer, temp_dir):
     """Test analyzing an entire directory."""
     # Create multiple files with vulnerabilities
-    (temp_dir / "vuln1.py").write_text("""
+    (temp_dir / "vuln1.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
-""")
+"""
+    )
 
-    (temp_dir / "vuln2.py").write_text("""
+    (temp_dir / "vuln2.py").write_text(
+        """
 password = "SuperSecret123!"
-""")
+"""
+    )
 
-    (temp_dir / "safe.py").write_text("""
+    (temp_dir / "safe.py").write_text(
+        """
 def hello():
     print("Hello, world!")
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -742,10 +754,12 @@ def test_analyze_directory_recursive(analyzer, temp_dir):
     subdir.mkdir()
 
     (temp_dir / "file1.py").write_text("print('hello')")
-    (subdir / "file2.py").write_text("""
+    (subdir / "file2.py").write_text(
+        """
 import pickle
 pickle.loads(data)
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir), recursive=True)
 
@@ -759,10 +773,12 @@ def test_analyze_directory_non_recursive(analyzer, temp_dir):
     subdir.mkdir()
 
     (temp_dir / "file1.py").write_text("print('hello')")
-    (subdir / "file2.py").write_text("""
+    (subdir / "file2.py").write_text(
+        """
 import pickle
 pickle.loads(data)
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir), recursive=False)
 
@@ -771,13 +787,17 @@ pickle.loads(data)
 
 def test_exclude_patterns(temp_dir):
     """Test excluding files by pattern."""
-    (temp_dir / "test_file.py").write_text("""
+    (temp_dir / "test_file.py").write_text(
+        """
 password = "SuperSecret123!"
-""")
+"""
+    )
 
-    (temp_dir / "main.py").write_text("""
+    (temp_dir / "main.py").write_text(
+        """
 api_key = "sk_live_1234567890abcdefghij"
-""")
+"""
+    )
 
     analyzer = SecurityAnalyzer(exclude_patterns=["test_*.py"])
     report = analyzer.analyze_directory(str(temp_dir))
@@ -788,15 +808,18 @@ api_key = "sk_live_1234567890abcdefghij"
 
 # Report Tests
 
+
 def test_security_report_properties(analyzer, temp_dir):
     """Test SecurityReport properties and methods."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
 import hashlib
 hashlib.md5(data)
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -807,12 +830,14 @@ hashlib.md5(data)
 
 def test_security_report_get_by_severity(analyzer, temp_dir):
     """Test filtering vulnerabilities by severity."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
 import hashlib
 hashlib.md5(data)
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -825,11 +850,13 @@ hashlib.md5(data)
 
 def test_security_report_get_by_type(analyzer, temp_dir):
     """Test filtering vulnerabilities by type."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -842,25 +869,29 @@ password = "SuperSecret123!"
 
 def test_security_report_to_dict(analyzer, temp_dir):
     """Test converting report to dictionary."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 password = "SuperSecret123!"
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir))
     report_dict = report.to_dict()
 
     assert isinstance(report_dict, dict)
-    assert 'vulnerabilities' in report_dict
-    assert 'total_files_scanned' in report_dict
-    assert 'critical_count' in report_dict
-    assert isinstance(report_dict['vulnerabilities'], list)
+    assert "vulnerabilities" in report_dict
+    assert "total_files_scanned" in report_dict
+    assert "critical_count" in report_dict
+    assert isinstance(report_dict["vulnerabilities"], list)
 
 
 def test_vulnerability_to_dict(analyzer, temp_dir):
     """Test converting vulnerability to dictionary."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 password = "SuperSecret123!"
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0
@@ -868,11 +899,11 @@ password = "SuperSecret123!"
     vuln_dict = vulns[0].to_dict()
 
     assert isinstance(vuln_dict, dict)
-    assert 'type' in vuln_dict
-    assert 'severity' in vuln_dict
-    assert 'file_path' in vuln_dict
-    assert 'description' in vuln_dict
-    assert 'remediation' in vuln_dict
+    assert "type" in vuln_dict
+    assert "severity" in vuln_dict
+    assert "file_path" in vuln_dict
+    assert "description" in vuln_dict
+    assert "remediation" in vuln_dict
 
 
 def test_severity_comparison():
@@ -890,9 +921,11 @@ def test_severity_comparison():
 
 def test_vulnerability_str_representation(analyzer, temp_dir):
     """Test string representation of vulnerability."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 password = "SuperSecret123!"
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0
@@ -905,9 +938,11 @@ password = "SuperSecret123!"
 
 def test_report_str_representation(analyzer, temp_dir):
     """Test string representation of report."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 password = "SuperSecret123!"
-""")
+"""
+    )
 
     report = analyzer.analyze_directory(str(temp_dir))
     report_str = str(report)
@@ -919,6 +954,7 @@ password = "SuperSecret123!"
 
 # Edge Cases and Error Handling
 
+
 def test_analyze_nonexistent_file(analyzer):
     """Test analyzing a file that doesn't exist."""
     vulns = analyzer.analyze_file("/nonexistent/file.py")
@@ -927,11 +963,13 @@ def test_analyze_nonexistent_file(analyzer):
 
 def test_analyze_file_with_syntax_error(analyzer, temp_dir):
     """Test analyzing a file with syntax errors."""
-    (temp_dir / "syntax_error.py").write_text("""
+    (temp_dir / "syntax_error.py").write_text(
+        """
 def broken_function(
     # Missing closing parenthesis
     print("This won't parse")
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "syntax_error.py"))
     assert len(vulns) == 0  # Should handle gracefully
@@ -973,10 +1011,12 @@ def unsafe_function(user_input, data):
 
 def test_confidence_score(analyzer, temp_dir):
     """Test that vulnerabilities have confidence scores."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0
@@ -985,15 +1025,18 @@ os.system("ls " + user_input)
 
 # CWE and OWASP Mapping Tests
 
+
 def test_cwe_mapping(analyzer, temp_dir):
     """Test that all vulnerabilities have CWE IDs."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
 import pickle
 pickle.loads(data)
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
 
@@ -1003,11 +1046,13 @@ pickle.loads(data)
 
 def test_owasp_mapping(analyzer, temp_dir):
     """Test that all vulnerabilities have OWASP categories."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
 
@@ -1018,12 +1063,15 @@ password = "SuperSecret123!"
 
 # Remediation Tests
 
+
 def test_remediation_suggestions(analyzer, temp_dir):
     """Test that all vulnerabilities have remediation suggestions."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 os.system("ls " + user_input)
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
 
@@ -1034,12 +1082,14 @@ os.system("ls " + user_input)
 
 def test_code_snippet_extraction(analyzer, temp_dir):
     """Test that code snippets are properly extracted."""
-    (temp_dir / "vuln.py").write_text("""
+    (temp_dir / "vuln.py").write_text(
+        """
 import os
 
 def unsafe_function(user_input):
     os.system("ls " + user_input)
-""")
+"""
+    )
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0

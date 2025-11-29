@@ -4,15 +4,16 @@ This example demonstrates how to use the EventTracer to track events
 from frontend through Tauri, Python, ActionExecutor, and HAL layers.
 """
 
-import time
 import random
+import time
+
 from qontinui_devtools.runtime import (
     EventTracer,
+    analyze_latencies,
+    detect_anomalies,
     export_chrome_trace,
     export_timeline_html,
-    analyze_latencies,
     find_bottleneck,
-    detect_anomalies,
     generate_latency_report,
 )
 
@@ -23,51 +24,50 @@ def simulate_event_flow(tracer: EventTracer, event_id: str, event_type: str) -> 
     tracer.start_trace(event_id, event_type)
 
     # Frontend emits event
-    tracer.checkpoint(event_id, "frontend_emit", metadata={
-        "component": "Button",
-        "action": "click"
-    })
+    tracer.checkpoint(
+        event_id, "frontend_emit", metadata={"component": "Button", "action": "click"}
+    )
 
     # Small delay for IPC
     time.sleep(random.uniform(0.001, 0.003))
 
     # Tauri receives event
-    tracer.checkpoint(event_id, "tauri_receive", metadata={
-        "process": "main",
-        "thread": "ipc_handler"
-    })
+    tracer.checkpoint(
+        event_id, "tauri_receive", metadata={"process": "main", "thread": "ipc_handler"}
+    )
 
     # Small delay for Python bridge
     time.sleep(random.uniform(0.002, 0.005))
 
     # Python receives event
-    tracer.checkpoint(event_id, "python_receive", metadata={
-        "handler": "event_dispatcher"
-    })
+    tracer.checkpoint(event_id, "python_receive", metadata={"handler": "event_dispatcher"})
 
     # Processing delay
     time.sleep(random.uniform(0.005, 0.015))
 
     # ActionExecutor starts processing
-    tracer.checkpoint(event_id, "executor_start", metadata={
-        "action_type": event_type,
-        "queue_depth": random.randint(0, 5)
-    })
+    tracer.checkpoint(
+        event_id,
+        "executor_start",
+        metadata={"action_type": event_type, "queue_depth": random.randint(0, 5)},
+    )
 
     # HAL call delay (typically the slowest part)
     time.sleep(random.uniform(0.020, 0.100))
 
     # HAL operation
-    tracer.checkpoint(event_id, "hal_call", metadata={
-        "operation": "move_mouse" if event_type == "click" else "key_press",
-        "target": f"x={random.randint(0, 1920)}, y={random.randint(0, 1080)}"
-    })
+    tracer.checkpoint(
+        event_id,
+        "hal_call",
+        metadata={
+            "operation": "move_mouse" if event_type == "click" else "key_press",
+            "target": f"x={random.randint(0, 1920)}, y={random.randint(0, 1080)}",
+        },
+    )
 
     time.sleep(random.uniform(0.001, 0.005))
 
-    tracer.checkpoint(event_id, "hal_complete", metadata={
-        "status": "success"
-    })
+    tracer.checkpoint(event_id, "hal_complete", metadata={"status": "success"})
 
     # Executor completes
     time.sleep(random.uniform(0.002, 0.008))
@@ -144,11 +144,7 @@ def main():
     latencies = analyze_latencies(tracer.get_all_traces())
 
     # Sort by mean latency (descending)
-    sorted_stages = sorted(
-        latencies.items(),
-        key=lambda x: x[1]["mean"],
-        reverse=True
-    )
+    sorted_stages = sorted(latencies.items(), key=lambda x: x[1]["mean"], reverse=True)
 
     for stage, stats in sorted_stages:
         if "trace_start" in stage:
@@ -177,7 +173,7 @@ def main():
         stats = latencies[bottleneck]
         print(f"  This stage accounts for {stats['mean'] * 1000:.2f}ms on average")
         print(f"  P95: {stats['p95'] * 1000:.2f}ms")
-        print(f"  Recommendation: Optimize this stage to improve overall latency")
+        print("  Recommendation: Optimize this stage to improve overall latency")
     print()
 
     # Detect anomalies
@@ -220,7 +216,9 @@ def main():
         print(f"Found {len(lost)} lost events:")
         for trace in lost:
             print(f"  {trace.event_id} ({trace.event_type})")
-            print(f"    Last checkpoint: {trace.checkpoints[-1].name if trace.checkpoints else 'N/A'}")
+            print(
+                f"    Last checkpoint: {trace.checkpoints[-1].name if trace.checkpoints else 'N/A'}"
+            )
             print(f"    Age: {time.time() - trace.created_at:.2f}s")
     else:
         print("No lost events detected")
@@ -236,14 +234,14 @@ def main():
     chrome_trace_path = "event_timeline.json"
     export_chrome_trace(tracer.get_all_traces(), chrome_trace_path)
     print(f"✓ Chrome trace saved to: {chrome_trace_path}")
-    print(f"  Open in chrome://tracing or https://ui.perfetto.dev/")
+    print("  Open in chrome://tracing or https://ui.perfetto.dev/")
     print()
 
     # HTML timeline
     html_timeline_path = "event_timeline.html"
     export_timeline_html(tracer.get_all_traces(), html_timeline_path)
     print(f"✓ HTML timeline saved to: {html_timeline_path}")
-    print(f"  Open in your browser to view interactive timeline")
+    print("  Open in your browser to view interactive timeline")
     print()
 
     # Generate detailed report
@@ -257,7 +255,7 @@ def main():
 
     # Save report to file
     report_path = "latency_report.txt"
-    with open(report_path, 'w') as f:
+    with open(report_path, "w") as f:
         f.write(report)
     print()
     print(f"✓ Report saved to: {report_path}")

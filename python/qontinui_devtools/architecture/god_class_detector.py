@@ -4,10 +4,8 @@ import ast
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
 
 from .ast_metrics import (
-    analyze_method_calls,
     calculate_complexity,
     count_attributes,
     count_lines,
@@ -122,7 +120,7 @@ class GodClassDetector:
         god_classes = []
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 source = f.read()
 
             tree = ast.parse(source)
@@ -157,7 +155,7 @@ class GodClassDetector:
             ClassMetrics object
         """
         if source is None:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 source = f.read()
 
         # Basic metrics
@@ -213,10 +211,7 @@ class GodClassDetector:
         Returns:
             LCOM value (0-1)
         """
-        methods = [
-            n for n in node.body
-            if isinstance(n, ast.FunctionDef) and n.name != "__init__"
-        ]
+        methods = [n for n in node.body if isinstance(n, ast.FunctionDef) and n.name != "__init__"]
 
         if len(methods) < 2:
             return 0.0
@@ -315,7 +310,7 @@ class GodClassDetector:
 
         try:
             # Read the source file
-            with open(metrics.file_path, "r", encoding="utf-8") as f:
+            with open(metrics.file_path, encoding="utf-8") as f:
                 source = f.read()
 
             tree = ast.parse(source)
@@ -335,8 +330,21 @@ class GodClassDetector:
             patterns = {
                 "DataAccessor": ["get_", "set_", "fetch_", "retrieve_", "load_", "find_"],
                 "Validator": ["validate_", "check_", "verify_", "is_valid_", "ensure_"],
-                "PersistenceManager": ["save_", "store_", "persist_", "write_", "delete_", "update_"],
-                "BusinessLogicProcessor": ["calculate_", "compute_", "process_", "execute_", "perform_"],
+                "PersistenceManager": [
+                    "save_",
+                    "store_",
+                    "persist_",
+                    "write_",
+                    "delete_",
+                    "update_",
+                ],
+                "BusinessLogicProcessor": [
+                    "calculate_",
+                    "compute_",
+                    "process_",
+                    "execute_",
+                    "perform_",
+                ],
                 "Formatter": ["render_", "display_", "show_", "format_", "to_string", "to_dict"],
                 "EventHandler": ["on_", "handle_event_", "dispatch_", "trigger_"],
                 "Notifier": ["notify_", "alert_", "send_", "publish_"],
@@ -414,25 +422,29 @@ class GodClassDetector:
         ]
 
         for i, cls in enumerate(god_classes, 1):
-            report_lines.extend([
-                f"### {i}. {cls.name} [{cls.severity.upper()}]",
-                "",
-                f"**File**: `{cls.file_path}:{cls.line_start}`",
-                "",
-                "**Metrics**:",
-                f"- Lines of Code: {cls.line_count}",
-                f"- Method Count: {cls.method_count}",
-                f"- Attribute Count: {cls.attribute_count}",
-                f"- Cyclomatic Complexity: {cls.cyclomatic_complexity}",
-                f"- LCOM (Lack of Cohesion): {cls.lcom:.3f}",
-                "",
-            ])
+            report_lines.extend(
+                [
+                    f"### {i}. {cls.name} [{cls.severity.upper()}]",
+                    "",
+                    f"**File**: `{cls.file_path}:{cls.line_start}`",
+                    "",
+                    "**Metrics**:",
+                    f"- Lines of Code: {cls.line_count}",
+                    f"- Method Count: {cls.method_count}",
+                    f"- Attribute Count: {cls.attribute_count}",
+                    f"- Cyclomatic Complexity: {cls.cyclomatic_complexity}",
+                    f"- LCOM (Lack of Cohesion): {cls.lcom:.3f}",
+                    "",
+                ]
+            )
 
             if cls.responsibilities:
-                report_lines.extend([
-                    "**Detected Responsibilities**:",
-                    "",
-                ])
+                report_lines.extend(
+                    [
+                        "**Detected Responsibilities**:",
+                        "",
+                    ]
+                )
                 for resp in cls.responsibilities:
                     report_lines.append(f"- {resp}")
                 report_lines.append("")
@@ -440,40 +452,46 @@ class GodClassDetector:
             # Add extraction suggestions
             suggestions = self.suggest_extractions(cls)
             if suggestions:
-                report_lines.extend([
-                    "**Extraction Suggestions**:",
-                    "",
-                ])
-                for sug in suggestions[:5]:  # Top 5 suggestions
-                    report_lines.extend([
-                        f"- **{sug.new_class_name}**",
-                        f"  - Responsibility: {sug.responsibility}",
-                        f"  - Methods to Extract: {len(sug.methods_to_extract)}",
-                        f"  - Estimated Lines: {sug.estimated_lines}",
-                        f"  - Methods: `{', '.join(sug.methods_to_extract[:10])}`",
+                report_lines.extend(
+                    [
+                        "**Extraction Suggestions**:",
                         "",
-                    ])
+                    ]
+                )
+                for sug in suggestions[:5]:  # Top 5 suggestions
+                    report_lines.extend(
+                        [
+                            f"- **{sug.new_class_name}**",
+                            f"  - Responsibility: {sug.responsibility}",
+                            f"  - Methods to Extract: {len(sug.methods_to_extract)}",
+                            f"  - Estimated Lines: {sug.estimated_lines}",
+                            f"  - Methods: `{', '.join(sug.methods_to_extract[:10])}`",
+                            "",
+                        ]
+                    )
 
             report_lines.append("---")
             report_lines.append("")
 
         # Add recommendations
-        report_lines.extend([
-            "## Recommendations",
-            "",
-            "1. **Refactor Critical Classes First**: Focus on classes with 'critical' severity.",
-            "2. **Extract Responsibilities**: Use the extraction suggestions to create new, focused classes.",
-            "3. **Apply Single Responsibility Principle**: Each class should have one reason to change.",
-            "4. **Improve Cohesion**: Methods in a class should work together on related data.",
-            "5. **Use Composition**: Break large classes into smaller, composable components.",
-            "",
-            "## LCOM Interpretation",
-            "",
-            "- **0.0 - 0.3**: Good cohesion (methods work together)",
-            "- **0.3 - 0.6**: Moderate cohesion (some refactoring may help)",
-            "- **0.6 - 0.8**: Poor cohesion (strong candidate for refactoring)",
-            "- **0.8 - 1.0**: Very poor cohesion (urgent refactoring needed)",
-            "",
-        ])
+        report_lines.extend(
+            [
+                "## Recommendations",
+                "",
+                "1. **Refactor Critical Classes First**: Focus on classes with 'critical' severity.",
+                "2. **Extract Responsibilities**: Use the extraction suggestions to create new, focused classes.",
+                "3. **Apply Single Responsibility Principle**: Each class should have one reason to change.",
+                "4. **Improve Cohesion**: Methods in a class should work together on related data.",
+                "5. **Use Composition**: Break large classes into smaller, composable components.",
+                "",
+                "## LCOM Interpretation",
+                "",
+                "- **0.0 - 0.3**: Good cohesion (methods work together)",
+                "- **0.3 - 0.6**: Moderate cohesion (some refactoring may help)",
+                "- **0.6 - 0.8**: Poor cohesion (strong candidate for refactoring)",
+                "- **0.8 - 1.0**: Very poor cohesion (urgent refactoring needed)",
+                "",
+            ]
+        )
 
         return "\n".join(report_lines)

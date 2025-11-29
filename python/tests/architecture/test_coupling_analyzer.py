@@ -6,16 +6,13 @@ import tempfile
 from pathlib import Path
 
 import pytest
-
 from qontinui_devtools.architecture import (
     CouplingCohesionAnalyzer,
-    CouplingMetrics,
-    CohesionMetrics,
     DependencyGraphBuilder,
+    calculate_lcc,
     calculate_lcom,
     calculate_lcom4,
     calculate_tcc,
-    calculate_lcc,
     count_abstract_classes,
 )
 
@@ -232,9 +229,7 @@ class TestCouplingMetrics:
         analyzer = CouplingCohesionAnalyzer()
 
         # I = 0.5, A = 0.5 -> D = |0.5 + 0.5 - 1| = 0
-        distance = analyzer.calculate_distance_from_main(
-            instability=0.5, abstractness=0.5
-        )
+        distance = analyzer.calculate_distance_from_main(instability=0.5, abstractness=0.5)
         assert distance == 0.0
 
     def test_calculate_distance_from_main_zone_of_pain(self):
@@ -242,9 +237,7 @@ class TestCouplingMetrics:
         analyzer = CouplingCohesionAnalyzer()
 
         # I = 0.0, A = 0.0 -> D = |0 + 0 - 1| = 1
-        distance = analyzer.calculate_distance_from_main(
-            instability=0.0, abstractness=0.0
-        )
+        distance = analyzer.calculate_distance_from_main(instability=0.0, abstractness=0.0)
         assert distance == 1.0
 
     def test_calculate_distance_from_main_zone_of_uselessness(self):
@@ -252,9 +245,7 @@ class TestCouplingMetrics:
         analyzer = CouplingCohesionAnalyzer()
 
         # I = 1.0, A = 1.0 -> D = |1 + 1 - 1| = 1
-        distance = analyzer.calculate_distance_from_main(
-            instability=1.0, abstractness=1.0
-        )
+        distance = analyzer.calculate_distance_from_main(instability=1.0, abstractness=1.0)
         assert distance == 1.0
 
 
@@ -263,8 +254,9 @@ class TestAbstractnessCalculation:
 
     def test_count_abstract_classes_abc(self):
         """Test counting abstract classes using ABC."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write("""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+            f.write(
+                """
 from abc import ABC, abstractmethod
 
 class AbstractBase(ABC):
@@ -275,7 +267,8 @@ class AbstractBase(ABC):
 class ConcreteClass:
     def method(self):
         pass
-""")
+"""
+            )
             f.flush()
 
             try:
@@ -287,8 +280,9 @@ class ConcreteClass:
 
     def test_count_abstract_classes_decorator_only(self):
         """Test counting abstract classes using only decorator."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write("""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+            f.write(
+                """
 from abc import abstractmethod
 
 class SemiAbstract:
@@ -298,7 +292,8 @@ class SemiAbstract:
 
     def concrete_method(self):
         pass
-""")
+"""
+            )
             f.flush()
 
             try:
@@ -310,8 +305,9 @@ class SemiAbstract:
 
     def test_count_abstract_classes_no_abstract(self):
         """Test counting when there are no abstract classes."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write("""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+            f.write(
+                """
 class ConcreteA:
     def method(self):
         pass
@@ -319,7 +315,8 @@ class ConcreteA:
 class ConcreteB:
     def method(self):
         pass
-""")
+"""
+            )
             f.flush()
 
             try:
@@ -354,38 +351,38 @@ class TestDependencyGraphBuilder:
     def test_calculate_afferent_coupling(self):
         """Test afferent coupling calculation."""
         graph = {
-            '/a.py': {'/c.py'},
-            '/b.py': {'/c.py'},
-            '/c.py': set(),
+            "/a.py": {"/c.py"},
+            "/b.py": {"/c.py"},
+            "/c.py": set(),
         }
 
         builder = DependencyGraphBuilder()
 
         # c.py is depended on by a.py and b.py
-        ca = builder.calculate_afferent_coupling('/c.py', graph)
+        ca = builder.calculate_afferent_coupling("/c.py", graph)
         assert ca == 2
 
     def test_calculate_efferent_coupling(self):
         """Test efferent coupling calculation."""
         graph = {
-            '/a.py': {'/b.py', '/c.py', '/d.py'},
-            '/b.py': set(),
-            '/c.py': set(),
-            '/d.py': set(),
+            "/a.py": {"/b.py", "/c.py", "/d.py"},
+            "/b.py": set(),
+            "/c.py": set(),
+            "/d.py": set(),
         }
 
         builder = DependencyGraphBuilder()
 
         # a.py depends on 3 modules
-        ce = builder.calculate_efferent_coupling('/a.py', graph)
+        ce = builder.calculate_efferent_coupling("/a.py", graph)
         assert ce == 3
 
     def test_find_cycles(self):
         """Test cycle detection in dependency graph."""
         graph = {
-            '/a.py': {'/b.py'},
-            '/b.py': {'/c.py'},
-            '/c.py': {'/a.py'},  # Cycle!
+            "/a.py": {"/b.py"},
+            "/b.py": {"/c.py"},
+            "/c.py": {"/a.py"},  # Cycle!
         }
 
         builder = DependencyGraphBuilder()
@@ -396,9 +393,9 @@ class TestDependencyGraphBuilder:
         cycle_modules = set()
         for cycle in cycles:
             cycle_modules.update(cycle)
-        assert '/a.py' in cycle_modules
-        assert '/b.py' in cycle_modules
-        assert '/c.py' in cycle_modules
+        assert "/a.py" in cycle_modules
+        assert "/b.py" in cycle_modules
+        assert "/c.py" in cycle_modules
 
 
 class TestCouplingCohesionAnalyzer:
@@ -425,9 +422,7 @@ class TestCouplingCohesionAnalyzer:
         coupling, cohesion = analyzer.analyze_directory(str(low_cohesion_file))
 
         # Find the LowCohesionClass
-        low_cohesion_class = next(
-            (c for c in cohesion if c.name == "LowCohesionClass"), None
-        )
+        low_cohesion_class = next((c for c in cohesion if c.name == "LowCohesionClass"), None)
 
         assert low_cohesion_class is not None
         # Should have poor cohesion
@@ -444,9 +439,7 @@ class TestCouplingCohesionAnalyzer:
         coupling, cohesion = analyzer.analyze_directory(str(low_cohesion_file))
 
         # Find the HighCohesionClass
-        high_cohesion_class = next(
-            (c for c in cohesion if c.name == "HighCohesionClass"), None
-        )
+        high_cohesion_class = next((c for c in cohesion if c.name == "HighCohesionClass"), None)
 
         assert high_cohesion_class is not None
         # Should have good cohesion
@@ -510,9 +503,7 @@ class TestIntegration:
         assert len(coupling) >= 3
 
         # main.py should have efferent coupling > 0
-        main_module = next(
-            (c for c in coupling if "main.py" in c.file_path), None
-        )
+        main_module = next((c for c in coupling if "main.py" in c.file_path), None)
         if main_module:
             assert main_module.efferent_coupling >= 2
 
@@ -531,7 +522,5 @@ class TestIntegration:
         assert len(coupling) >= 1
 
         # The HighlyCoupledClass should be in cohesion results
-        highly_coupled = next(
-            (c for c in cohesion if c.name == "HighlyCoupledClass"), None
-        )
+        highly_coupled = next((c for c in cohesion if c.name == "HighlyCoupledClass"), None)
         assert highly_coupled is not None

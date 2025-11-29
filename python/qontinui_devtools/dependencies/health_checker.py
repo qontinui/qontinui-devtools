@@ -10,11 +10,9 @@ This module provides comprehensive dependency health checking including:
 - Circular dependency detection
 """
 
-import re
 import json
+import re
 import tomllib
-from collections import defaultdict
-from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -174,9 +172,7 @@ class DependencyHealthChecker:
 
         return report
 
-    def _parse_dependencies(
-        self, project_path: Path, include_dev: bool
-    ) -> dict[str, str]:
+    def _parse_dependencies(self, project_path: Path, include_dev: bool) -> dict[str, str]:
         """Parse dependencies from all available sources.
 
         Args:
@@ -214,9 +210,7 @@ class DependencyHealthChecker:
 
         return dependencies
 
-    def _parse_pyproject_toml(
-        self, file_path: Path, include_dev: bool
-    ) -> dict[str, str]:
+    def _parse_pyproject_toml(self, file_path: Path, include_dev: bool) -> dict[str, str]:
         """Parse dependencies from pyproject.toml.
 
         Args:
@@ -281,7 +275,7 @@ class DependencyHealthChecker:
         """
         dependencies: dict[str, str] = {}
 
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             for line in f:
                 line = line.strip()
 
@@ -299,9 +293,7 @@ class DependencyHealthChecker:
 
         return dependencies
 
-    def _parse_poetry_lock(
-        self, file_path: Path, include_dev: bool
-    ) -> dict[str, str]:
+    def _parse_poetry_lock(self, file_path: Path, include_dev: bool) -> dict[str, str]:
         """Parse dependencies from poetry.lock.
 
         Args:
@@ -342,13 +334,11 @@ class DependencyHealthChecker:
         """
         dependencies: dict[str, str] = {}
 
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             content = f.read()
 
         # Look for install_requires
-        install_requires_match = re.search(
-            r'install_requires\s*=\s*\[(.*?)\]', content, re.DOTALL
-        )
+        install_requires_match = re.search(r"install_requires\s*=\s*\[(.*?)\]", content, re.DOTALL)
 
         if install_requires_match:
             requires_str = install_requires_match.group(1)
@@ -371,10 +361,10 @@ class DependencyHealthChecker:
             Tuple of (name, version)
         """
         # Remove extras [extra1,extra2]
-        spec = re.sub(r'\[.*?\]', '', spec)
+        spec = re.sub(r"\[.*?\]", "", spec)
 
         # Match name and version
-        match = re.match(r'^([a-zA-Z0-9\-_\.]+)\s*([><=!~]+)?\s*(.*)$', spec.strip())
+        match = re.match(r"^([a-zA-Z0-9\-_\.]+)\s*([><=!~]+)?\s*(.*)$", spec.strip())
 
         if match:
             name = match.group(1)
@@ -382,7 +372,7 @@ class DependencyHealthChecker:
             version = match.group(3).strip() or "*"
 
             # Clean up version
-            version = version.strip('"\' ')
+            version = version.strip("\"' ")
 
             return name, version
 
@@ -399,7 +389,7 @@ class DependencyHealthChecker:
         """
         if isinstance(spec, str):
             # Remove operators
-            version = re.sub(r'^[><=!~^]+', '', spec).strip()
+            version = re.sub(r"^[><=!~^]+", "", spec).strip()
             return version or "*"
 
         if isinstance(spec, dict):
@@ -488,7 +478,7 @@ class DependencyHealthChecker:
             return None
 
         # Remove version operators
-        current_clean = re.sub(r'^[><=!~^]+', '', current).strip()
+        current_clean = re.sub(r"^[><=!~^]+", "", current).strip()
         latest_clean = latest.strip()
 
         # Parse semantic versions
@@ -522,7 +512,7 @@ class DependencyHealthChecker:
             Tuple of (major, minor, patch, prerelease) or None
         """
         # Match X.Y.Z or X.Y.Z-prerelease
-        match = re.match(r'^(\d+)\.(\d+)\.(\d+)(?:-(.+))?', version)
+        match = re.match(r"^(\d+)\.(\d+)\.(\d+)(?:-(.+))?", version)
 
         if match:
             major = int(match.group(1))
@@ -534,9 +524,7 @@ class DependencyHealthChecker:
 
         return None
 
-    def _check_vulnerabilities(
-        self, package_name: str, version: str
-    ) -> list[VulnerabilityInfo]:
+    def _check_vulnerabilities(self, package_name: str, version: str) -> list[VulnerabilityInfo]:
         """Check for security vulnerabilities.
 
         Args:
@@ -576,10 +564,10 @@ class DependencyHealthChecker:
             True if affected
         """
         # Simplified check - in production, use packaging library
-        version_clean = re.sub(r'^[><=!~^]+', '', version).strip()
+        version_clean = re.sub(r"^[><=!~^]+", "", version).strip()
 
         if "<" in affected_spec:
-            max_version = re.search(r'<([0-9.]+)', affected_spec)
+            max_version = re.search(r"<([0-9.]+)", affected_spec)
             if max_version:
                 return version_clean < max_version.group(1)
 
@@ -684,9 +672,7 @@ class DependencyHealthChecker:
 
         return cycles
 
-    def _check_license_conflicts(
-        self, dependencies: list[DependencyInfo]
-    ) -> list[LicenseConflict]:
+    def _check_license_conflicts(self, dependencies: list[DependencyInfo]) -> list[LicenseConflict]:
         """Check for license compatibility conflicts.
 
         Args:
@@ -699,21 +685,18 @@ class DependencyHealthChecker:
 
         # Check for GPL + proprietary/permissive conflicts
         copyleft_deps = [
-            dep
-            for dep in dependencies
-            if dep.license_category == LicenseCategory.COPYLEFT
+            dep for dep in dependencies if dep.license_category == LicenseCategory.COPYLEFT
         ]
         permissive_deps = [
-            dep
-            for dep in dependencies
-            if dep.license_category == LicenseCategory.PERMISSIVE
+            dep for dep in dependencies if dep.license_category == LicenseCategory.PERMISSIVE
         ]
 
         # GPL requires all linked code to be GPL
         for copyleft in copyleft_deps:
-            if "GPL" in (copyleft.license or "").upper() and not "LGPL" in (
-                copyleft.license or ""
-            ).upper():
+            if (
+                "GPL" in (copyleft.license or "").upper()
+                and "LGPL" not in (copyleft.license or "").upper()
+            ):
                 for permissive in permissive_deps:
                     conflicts.append(
                         LicenseConflict(
@@ -784,11 +767,7 @@ class DependencyHealthChecker:
             )
 
         # Outdated packages
-        major_updates = [
-            dep
-            for dep in dependencies
-            if dep.update_type == UpdateType.MAJOR
-        ]
+        major_updates = [dep for dep in dependencies if dep.update_type == UpdateType.MAJOR]
         if major_updates:
             recommendations.append(
                 f"Consider upgrading {len(major_updates)} package(s) with major updates available"
@@ -796,9 +775,7 @@ class DependencyHealthChecker:
 
         # Circular dependencies
         if circular_deps:
-            recommendations.append(
-                f"Resolve {len(circular_deps)} circular dependency chain(s)"
-            )
+            recommendations.append(f"Resolve {len(circular_deps)} circular dependency chain(s)")
 
         # License conflicts
         if license_conflicts:
@@ -822,9 +799,9 @@ class DependencyHealthChecker:
 
         if vuln_db_file.exists():
             try:
-                with open(vuln_db_file, "r") as f:
+                with open(vuln_db_file) as f:
                     return json.load(f)
-            except (json.JSONDecodeError, IOError):
+            except (OSError, json.JSONDecodeError):
                 pass
 
         # Return minimal example database

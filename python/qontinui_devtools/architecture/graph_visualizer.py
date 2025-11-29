@@ -2,9 +2,10 @@
 
 import ast
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any
+
 import networkx as nx
 
 
@@ -113,7 +114,7 @@ class DependencyGraphVisualizer:
                 continue
 
             try:
-                with open(file_path, "r", encoding="utf-8") as f:
+                with open(file_path, encoding="utf-8") as f:
                     tree = ast.parse(f.read(), filename=str(file_path))
 
                 imports = self._extract_imports(tree, path)
@@ -177,7 +178,7 @@ class DependencyGraphVisualizer:
                 continue
 
             try:
-                with open(file_path, "r", encoding="utf-8") as f:
+                with open(file_path, encoding="utf-8") as f:
                     tree = ast.parse(f.read(), filename=str(file_path))
 
                 classes = self._extract_classes(tree, module_name)
@@ -206,9 +207,7 @@ class DependencyGraphVisualizer:
                 base_id = f"{info['module']}.{base}"
                 if base_id in class_info:
                     edges.append(
-                        GraphEdge(
-                            source=class_id, target=base_id, edge_type="inherits", weight=1
-                        )
+                        GraphEdge(source=class_id, target=base_id, edge_type="inherits", weight=1)
                     )
 
         self._calculate_node_metrics(nodes, edges)
@@ -237,7 +236,7 @@ class DependencyGraphVisualizer:
                 continue
 
             try:
-                with open(file_path, "r", encoding="utf-8") as f:
+                with open(file_path, encoding="utf-8") as f:
                     tree = ast.parse(f.read(), filename=str(file_path))
 
                 functions = self._extract_functions(tree, module_name)
@@ -309,7 +308,9 @@ class DependencyGraphVisualizer:
                     for base in node.bases
                 ]
                 methods = sum(
-                    1 for item in node.body if isinstance(item, ast.FunctionDef | ast.AsyncFunctionDef)
+                    1
+                    for item in node.body
+                    if isinstance(item, ast.FunctionDef | ast.AsyncFunctionDef)
                 )
 
                 classes[class_id] = {
@@ -350,9 +351,7 @@ class DependencyGraphVisualizer:
 
         return functions
 
-    def _calculate_node_metrics(
-        self, nodes: list[GraphNode], edges: list[GraphEdge]
-    ) -> None:
+    def _calculate_node_metrics(self, nodes: list[GraphNode], edges: list[GraphEdge]) -> None:
         """Calculate metrics for nodes based on the graph structure."""
         # Build a networkx graph for analysis
         G = nx.DiGraph()
@@ -491,7 +490,7 @@ class DependencyGraphVisualizer:
         Returns:
             Dictionary mapping node IDs to (x, y) positions
         """
-        from .layouts import force_directed_layout, hierarchical_layout, circular_layout
+        from .layouts import circular_layout, force_directed_layout, hierarchical_layout
 
         if layout == "force":
             return force_directed_layout(nodes, edges)
@@ -502,9 +501,7 @@ class DependencyGraphVisualizer:
         else:
             raise ValueError(f"Unknown layout: {layout}")
 
-    def export_json(
-        self, nodes: list[GraphNode], edges: list[GraphEdge], output_path: str
-    ) -> None:
+    def export_json(self, nodes: list[GraphNode], edges: list[GraphEdge], output_path: str) -> None:
         """Export the graph to JSON format.
 
         Args:

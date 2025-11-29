@@ -5,33 +5,88 @@ and classifying methods into responsibility categories based on common patterns.
 """
 
 import re
-from typing import Set, List, Optional, Dict
-
+from typing import Optional
 
 # Common method prefixes mapped to responsibilities
-RESPONSIBILITY_PATTERNS: Dict[str, List[str]] = {
-    "Data Access": ["get", "set", "fetch", "retrieve", "find", "query", "search", "select", "lookup"],
+RESPONSIBILITY_PATTERNS: dict[str, list[str]] = {
+    "Data Access": [
+        "get",
+        "set",
+        "fetch",
+        "retrieve",
+        "find",
+        "query",
+        "search",
+        "select",
+        "lookup",
+    ],
     "Validation": ["validate", "check", "verify", "assert", "ensure", "confirm", "test"],
     "Business Logic": ["calculate", "compute", "process", "execute", "run", "perform", "apply"],
-    "Persistence": ["save", "load", "persist", "store", "restore", "read", "write", "update", "delete"],
+    "Persistence": [
+        "save",
+        "load",
+        "persist",
+        "store",
+        "restore",
+        "read",
+        "write",
+        "update",
+        "delete",
+    ],
     "Presentation": ["render", "display", "show", "format", "print", "draw", "paint"],
     "Event Handling": ["handle", "on", "trigger", "emit", "listen", "subscribe", "publish"],
-    "Lifecycle": ["init", "initialize", "setup", "start", "stop", "cleanup", "destroy", "dispose", "close"],
+    "Lifecycle": [
+        "init",
+        "initialize",
+        "setup",
+        "start",
+        "stop",
+        "cleanup",
+        "destroy",
+        "dispose",
+        "close",
+    ],
     "Factory": ["create", "build", "make", "construct", "new", "instantiate"],
     "Conversion": ["to", "from", "convert", "transform", "parse", "serialize", "deserialize"],
     "Comparison": ["compare", "equals", "matches", "is", "has"],
 }
 
 # Common stop words to ignore
-STOP_WORDS: Set[str] = {
-    "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
-    "of", "with", "by", "from", "as", "into", "like", "through", "after",
-    "over", "between", "out", "against", "during", "without", "before",
-    "under", "around", "among"
+STOP_WORDS: set[str] = {
+    "the",
+    "a",
+    "an",
+    "and",
+    "or",
+    "but",
+    "in",
+    "on",
+    "at",
+    "to",
+    "for",
+    "of",
+    "with",
+    "by",
+    "from",
+    "as",
+    "into",
+    "like",
+    "through",
+    "after",
+    "over",
+    "between",
+    "out",
+    "against",
+    "during",
+    "without",
+    "before",
+    "under",
+    "around",
+    "among",
 }
 
 
-def tokenize_method_name(name: str) -> List[str]:
+def tokenize_method_name(name: str) -> list[str]:
     """Split method name into tokens.
 
     Handles both snake_case and camelCase method names, splitting them
@@ -63,9 +118,9 @@ def tokenize_method_name(name: str) -> List[str]:
     else:
         # Handle camelCase: insert spaces before capital letters
         # Convert HTTPRequest -> HTTP Request
-        name = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', name)
+        name = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1 \2", name)
         # Convert camelCase -> camel Case
-        name = re.sub(r'([a-z\d])([A-Z])', r'\1 \2', name)
+        name = re.sub(r"([a-z\d])([A-Z])", r"\1 \2", name)
         tokens = name.split()
 
     # Lowercase and filter empty strings
@@ -74,7 +129,7 @@ def tokenize_method_name(name: str) -> List[str]:
     return tokens
 
 
-def extract_verb(tokens: List[str]) -> Optional[str]:
+def extract_verb(tokens: list[str]) -> Optional[str]:
     """Extract primary verb from tokens.
 
     Typically the first token is the verb (get, set, calculate, etc).
@@ -98,7 +153,7 @@ def extract_verb(tokens: List[str]) -> Optional[str]:
     return tokens[0]
 
 
-def extract_keywords(method_name: str) -> Set[str]:
+def extract_keywords(method_name: str) -> set[str]:
     """Extract keywords from method name.
 
     Tokenizes the method name and removes stop words to extract
@@ -211,7 +266,7 @@ def get_method_category(method_name: str) -> str:
     return classify_method(method_name)
 
 
-def calculate_cluster_similarity(methods1: List[str], methods2: List[str]) -> float:
+def calculate_cluster_similarity(methods1: list[str], methods2: list[str]) -> float:
     """Calculate similarity between two groups of methods.
 
     Compares the keywords used across two method groups to determine

@@ -76,9 +76,9 @@ def analyze_project(project_path: str) -> None:
     print(f"  Total dependencies: {stats['total_dependencies']}")
     print(f"  Circular dependencies: {stats['cycles_found']}")
 
-    if stats['severity_breakdown']:
+    if stats["severity_breakdown"]:
         print("\n  Severity Breakdown:")
-        for severity, count in stats['severity_breakdown'].items():
+        for severity, count in stats["severity_breakdown"].items():
             if count > 0:
                 print(f"    {severity.capitalize()}: {count}")
 

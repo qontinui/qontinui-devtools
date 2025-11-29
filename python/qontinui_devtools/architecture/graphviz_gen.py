@@ -1,7 +1,8 @@
 """Graphviz DOT format generator for dependency graphs."""
 
 from typing import Any
-from .graph_visualizer import GraphNode, GraphEdge
+
+from .graph_visualizer import GraphEdge, GraphNode
 
 
 def generate_dot(

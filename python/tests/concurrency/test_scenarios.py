@@ -1,6 +1,5 @@
 """Tests for pre-built race condition scenarios."""
 
-import pytest
 
 from qontinui_devtools.concurrency.scenarios import (
     run_all_scenarios,
@@ -119,9 +118,7 @@ def test_counter_with_custom_expected():
     expected = threads * iterations * 100
 
     result = test_counter_increment_safe(
-        threads=threads,
-        iterations=iterations,
-        expected_total=expected
+        threads=threads, iterations=iterations, expected_total=expected
     )
 
     assert result.total_iterations == threads * iterations

@@ -9,7 +9,6 @@ import time
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
-
 from qontinui.hal.interfaces import IScreenCapture
 from qontinui.hal.interfaces.screen_capture import Monitor
 
@@ -37,7 +36,7 @@ class MockScreenCapture(IScreenCapture):
         self,
         default_image: Image.Image | None = None,
         latency: float = 0.0,
-        monitors: list[Monitor] | None = None
+        monitors: list[Monitor] | None = None,
     ) -> None:
         """Initialize mock screen capture.
 
@@ -63,7 +62,7 @@ class MockScreenCapture(IScreenCapture):
                     height=1080,
                     scale=1.0,
                     is_primary=True,
-                    name="Primary Monitor"
+                    name="Primary Monitor",
                 )
             ]
         else:
@@ -272,7 +271,7 @@ class MockScreenCapture(IScreenCapture):
         width: int = 1920,
         height: int = 1080,
         background_color: str = "white",
-        add_markers: bool = True
+        add_markers: bool = True,
     ) -> Image.Image:
         """Create a simple test image.
 
@@ -294,7 +293,7 @@ class MockScreenCapture(IScreenCapture):
             try:
                 # Try to use a truetype font
                 font = ImageFont.truetype("arial.ttf", 36)
-            except (OSError, IOError):
+            except OSError:
                 # Fall back to default font
                 font = ImageFont.load_default()
 
@@ -305,10 +304,11 @@ class MockScreenCapture(IScreenCapture):
             marker_size = 50
             draw.rectangle([0, 0, marker_size, marker_size], fill="red")  # Top-left
             draw.rectangle([width - marker_size, 0, width, marker_size], fill="green")  # Top-right
-            draw.rectangle([0, height - marker_size, marker_size, height], fill="blue")  # Bottom-left
             draw.rectangle(
-                [width - marker_size, height - marker_size, width, height],
-                fill="yellow"
+                [0, height - marker_size, marker_size, height], fill="blue"
+            )  # Bottom-left
+            draw.rectangle(
+                [width - marker_size, height - marker_size, width, height], fill="yellow"
             )  # Bottom-right
 
             # Add center crosshair
@@ -317,12 +317,12 @@ class MockScreenCapture(IScreenCapture):
             draw.line(
                 [(center_x - crosshair_size, center_y), (center_x + crosshair_size, center_y)],
                 fill="black",
-                width=2
+                width=2,
             )
             draw.line(
                 [(center_x, center_y - crosshair_size), (center_x, center_y + crosshair_size)],
                 fill="black",
-                width=2
+                width=2,
             )
 
         return img
@@ -335,7 +335,7 @@ class MockScreenCapture(IScreenCapture):
         text_position: tuple[int, int] = (100, 100),
         text_size: int = 36,
         text_color: str = "black",
-        background_color: str = "white"
+        background_color: str = "white",
     ) -> Image.Image:
         """Create a test image with custom text.
 
@@ -356,7 +356,7 @@ class MockScreenCapture(IScreenCapture):
 
         try:
             font = ImageFont.truetype("arial.ttf", text_size)
-        except (OSError, IOError):
+        except OSError:
             font = ImageFont.load_default()
 
         draw.text(text_position, text, fill=text_color, font=font)
@@ -364,9 +364,7 @@ class MockScreenCapture(IScreenCapture):
 
     @staticmethod
     def create_test_pattern(
-        width: int = 800,
-        height: int = 600,
-        pattern_type: str = "checkerboard"
+        width: int = 800, height: int = 600, pattern_type: str = "checkerboard"
     ) -> Image.Image:
         """Create a test pattern image.
 

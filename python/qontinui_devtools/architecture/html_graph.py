@@ -1,8 +1,8 @@
 """Interactive HTML graph generator using D3.js."""
 
 import json
-from typing import Any
-from .graph_visualizer import GraphNode, GraphEdge
+
+from .graph_visualizer import GraphEdge, GraphNode
 
 
 def generate_html_graph(

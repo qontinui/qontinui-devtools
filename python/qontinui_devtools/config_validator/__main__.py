@@ -39,34 +39,31 @@ Examples:
 Exit codes:
   0    All config files are valid
   1    One or more config files have validation errors
-        """
+        """,
     )
 
     parser.add_argument(
         "config_files",
         nargs="+",
         metavar="CONFIG_FILE",
-        help="One or more JSON config files to validate"
+        help="One or more JSON config files to validate",
     )
 
     parser.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_true",
-        help="Show detailed error information including expected types and locations"
+        help="Show detailed error information including expected types and locations",
     )
 
     parser.add_argument(
         "--qontinui-path",
         type=Path,
         metavar="PATH",
-        help="Path to qontinui library (default: auto-detect)"
+        help="Path to qontinui library (default: auto-detect)",
     )
 
-    parser.add_argument(
-        "--json",
-        action="store_true",
-        help="Output results in JSON format"
-    )
+    parser.add_argument("--json", action="store_true", help="Output results in JSON format")
 
     args = parser.parse_args()
 
@@ -82,18 +79,20 @@ Exit codes:
 
             if args.json:
                 # Collect results for JSON output
-                results.append({
-                    "config_path": str(config_path),
-                    "is_valid": report.is_valid,
-                    "total_workflows": report.total_workflows,
-                    "valid_workflows": report.valid_workflows,
-                    "invalid_workflows": report.invalid_workflows,
-                    "total_inline_workflows": report.total_inline_workflows,
-                    "valid_inline_workflows": report.valid_inline_workflows,
-                    "invalid_inline_workflows": report.invalid_inline_workflows,
-                    "error_count": len(report.errors) + len(report.inline_workflow_errors),
-                    "warning_count": len(report.warnings),
-                })
+                results.append(
+                    {
+                        "config_path": str(config_path),
+                        "is_valid": report.is_valid,
+                        "total_workflows": report.total_workflows,
+                        "valid_workflows": report.valid_workflows,
+                        "invalid_workflows": report.invalid_workflows,
+                        "total_inline_workflows": report.total_inline_workflows,
+                        "valid_inline_workflows": report.valid_inline_workflows,
+                        "invalid_inline_workflows": report.invalid_inline_workflows,
+                        "error_count": len(report.errors) + len(report.inline_workflow_errors),
+                        "warning_count": len(report.warnings),
+                    }
+                )
             else:
                 # Print human-readable report
                 report.print_report(verbose=args.verbose)
@@ -103,24 +102,32 @@ Exit codes:
 
         except Exception as e:
             if args.json:
-                results.append({
-                    "config_path": str(config_path),
-                    "is_valid": False,
-                    "error": str(e),
-                })
+                results.append(
+                    {
+                        "config_path": str(config_path),
+                        "is_valid": False,
+                        "error": str(e),
+                    }
+                )
             else:
                 print(f"\n❌ Error validating {config_file}: {e}\n")
             all_valid = False
 
     if args.json:
         import json
-        print(json.dumps({
-            "all_valid": all_valid,
-            "total_files": len(args.config_files),
-            "valid_files": sum(1 for r in results if r.get("is_valid", False)),
-            "invalid_files": sum(1 for r in results if not r.get("is_valid", False)),
-            "results": results,
-        }, indent=2))
+
+        print(
+            json.dumps(
+                {
+                    "all_valid": all_valid,
+                    "total_files": len(args.config_files),
+                    "valid_files": sum(1 for r in results if r.get("is_valid", False)),
+                    "invalid_files": sum(1 for r in results if not r.get("is_valid", False)),
+                    "results": results,
+                },
+                indent=2,
+            )
+        )
 
     return 0 if all_valid else 1
 

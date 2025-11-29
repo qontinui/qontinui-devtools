@@ -11,10 +11,7 @@ if TYPE_CHECKING:
     from .event_tracer import EventTrace
 
 
-def export_chrome_trace(
-    traces: list["EventTrace"],
-    output_path: str
-) -> None:
+def export_chrome_trace(traces: list["EventTrace"], output_path: str) -> None:
     """Export traces to Chrome Trace Event Format.
 
     This format can be viewed in chrome://tracing or https://ui.perfetto.dev/
@@ -36,21 +33,23 @@ def export_chrome_trace(
 
     for trace in traces:
         # Add trace metadata as instant event
-        events.append({
-            "name": f"{trace.event_type}:{trace.event_id}",
-            "cat": "metadata",
-            "ph": "i",  # Instant event
-            "ts": int(trace.created_at * 1_000_000),
-            "pid": 0,
-            "tid": 0,
-            "s": "g",  # Global scope
-            "args": {
-                "event_id": trace.event_id,
-                "event_type": trace.event_type,
-                "completed": trace.completed,
-                "total_latency": trace.total_latency
+        events.append(
+            {
+                "name": f"{trace.event_type}:{trace.event_id}",
+                "cat": "metadata",
+                "ph": "i",  # Instant event
+                "ts": int(trace.created_at * 1_000_000),
+                "pid": 0,
+                "tid": 0,
+                "s": "g",  # Global scope
+                "args": {
+                    "event_id": trace.event_id,
+                    "event_type": trace.event_type,
+                    "completed": trace.completed,
+                    "total_latency": trace.total_latency,
+                },
             }
-        })
+        )
 
         # Add duration events for each stage
         for i, checkpoint in enumerate(trace.checkpoints):
@@ -58,48 +57,46 @@ def export_chrome_trace(
                 next_checkpoint = trace.checkpoints[i + 1]
 
                 # Duration event (Complete event type)
-                events.append({
-                    "name": checkpoint.name,
-                    "cat": trace.event_type,
-                    "ph": "X",  # Complete event
-                    "ts": int(checkpoint.timestamp * 1_000_000),  # microseconds
-                    "dur": int((next_checkpoint.timestamp - checkpoint.timestamp) * 1_000_000),
-                    "pid": 0,
-                    "tid": checkpoint.thread_id,
-                    "args": checkpoint.metadata
-                })
+                events.append(
+                    {
+                        "name": checkpoint.name,
+                        "cat": trace.event_type,
+                        "ph": "X",  # Complete event
+                        "ts": int(checkpoint.timestamp * 1_000_000),  # microseconds
+                        "dur": int((next_checkpoint.timestamp - checkpoint.timestamp) * 1_000_000),
+                        "pid": 0,
+                        "tid": checkpoint.thread_id,
+                        "args": checkpoint.metadata,
+                    }
+                )
 
             # Add instant event for checkpoint
-            events.append({
-                "name": f"checkpoint:{checkpoint.name}",
-                "cat": trace.event_type,
-                "ph": "i",  # Instant event
-                "ts": int(checkpoint.timestamp * 1_000_000),
-                "pid": 0,
-                "tid": checkpoint.thread_id,
-                "s": "t",  # Thread scope
-                "args": checkpoint.metadata
-            })
+            events.append(
+                {
+                    "name": f"checkpoint:{checkpoint.name}",
+                    "cat": trace.event_type,
+                    "ph": "i",  # Instant event
+                    "ts": int(checkpoint.timestamp * 1_000_000),
+                    "pid": 0,
+                    "tid": checkpoint.thread_id,
+                    "s": "t",  # Thread scope
+                    "args": checkpoint.metadata,
+                }
+            )
 
     # Write trace file
     trace_data = {
         "traceEvents": events,
         "displayTimeUnit": "ms",
         "systemTraceEvents": "SystemTraceData",
-        "otherData": {
-            "version": "qontinui-devtools-1.0",
-            "trace_count": len(traces)
-        }
+        "otherData": {"version": "qontinui-devtools-1.0", "trace_count": len(traces)},
     }
 
-    with open(output_path, 'w') as f:
+    with open(output_path, "w") as f:
         json.dump(trace_data, f, indent=2)
 
 
-def export_timeline_html(
-    traces: list["EventTrace"],
-    output_path: str
-) -> None:
+def export_timeline_html(traces: list["EventTrace"], output_path: str) -> None:
     """Export interactive HTML timeline visualization.
 
     Args:
@@ -404,28 +401,27 @@ def export_timeline_html(
     # Convert traces to JSON
     traces_data = []
     for trace in traces:
-        traces_data.append({
-            "event_id": trace.event_id,
-            "event_type": trace.event_type,
-            "created_at": trace.created_at,
-            "completed": trace.completed,
-            "total_latency": trace.total_latency,
-            "checkpoints": [
-                {
-                    "name": cp.name,
-                    "timestamp": cp.timestamp,
-                    "thread_id": cp.thread_id,
-                    "metadata": cp.metadata
-                }
-                for cp in trace.checkpoints
-            ]
-        })
+        traces_data.append(
+            {
+                "event_id": trace.event_id,
+                "event_type": trace.event_type,
+                "created_at": trace.created_at,
+                "completed": trace.completed,
+                "total_latency": trace.total_latency,
+                "checkpoints": [
+                    {
+                        "name": cp.name,
+                        "timestamp": cp.timestamp,
+                        "thread_id": cp.thread_id,
+                        "metadata": cp.metadata,
+                    }
+                    for cp in trace.checkpoints
+                ],
+            }
+        )
 
     # Replace placeholder with actual data
-    html_content = html_template.replace(
-        'TRACES_DATA',
-        json.dumps(traces_data)
-    )
+    html_content = html_template.replace("TRACES_DATA", json.dumps(traces_data))
 
-    with open(output_path, 'w') as f:
+    with open(output_path, "w") as f:
         f.write(html_content)

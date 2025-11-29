@@ -9,10 +9,4 @@ hardcoded secrets, insecure deserialization, weak cryptography, SSRF, and XXE.
 from .models import SecurityReport, Severity, Vulnerability, VulnerabilityType
 from .security_analyzer import SecurityAnalyzer
 
-__all__ = [
-    'SecurityAnalyzer',
-    'SecurityReport',
-    'Vulnerability',
-    'VulnerabilityType',
-    'Severity'
-]
+__all__ = ["SecurityAnalyzer", "SecurityReport", "Vulnerability", "VulnerabilityType", "Severity"]

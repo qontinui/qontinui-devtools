@@ -27,7 +27,7 @@ class LowCohesionClass:
     def method_e(self):
         """Uses only attr_e."""
         self.attr_e = 5
-        return self.attr_e ** 2
+        return self.attr_e**2
 
 
 class HighCohesionClass:

@@ -13,7 +13,6 @@ from .mock_pattern_matcher import MockPatternMatcher
 from .mock_platform_specific import MockPlatformSpecific
 from .mock_screen_capture import MockScreenCapture
 
-
 # Individual component fixtures
 
 
@@ -130,11 +129,7 @@ def test_image_with_text() -> Image.Image:
     Returns:
         PIL Image with test text
     """
-    return MockScreenCapture.create_test_image_with_text(
-        text="Test Button",
-        width=400,
-        height=300
-    )
+    return MockScreenCapture.create_test_image_with_text(text="Test Button", width=400, height=300)
 
 
 @pytest.fixture
@@ -154,11 +149,7 @@ def test_pattern() -> Image.Image:
     Returns:
         PIL Image with checkerboard pattern
     """
-    return MockScreenCapture.create_test_pattern(
-        width=200,
-        height=200,
-        pattern_type="checkerboard"
-    )
+    return MockScreenCapture.create_test_pattern(width=200, height=200, pattern_type="checkerboard")
 
 
 # Configuration fixtures
@@ -192,10 +183,7 @@ def mock_hal_with_button(test_image_with_text: Image.Image) -> MockHAL:
     hal = MockHAL.create()
     hal.screen_capture.set_test_image(test_image_with_text)
     hal.pattern_matcher.configure_match(
-        "default",
-        success=True,
-        location=(150, 100),
-        confidence=0.95
+        "default", success=True, location=(150, 100), confidence=0.95
     )
     hal.ocr_engine.default_text = "Test Button"
     return hal
@@ -245,10 +233,7 @@ def mock_hal_with_latency(request: pytest.FixtureRequest) -> MockHAL:
     """
     latency = request.param
     return MockHAL.create(
-        input_latency=latency,
-        screen_latency=latency,
-        pattern_latency=latency,
-        ocr_latency=latency
+        input_latency=latency, screen_latency=latency, pattern_latency=latency, ocr_latency=latency
     )
 
 
@@ -263,10 +248,7 @@ def mock_hal_with_accuracy(request: pytest.FixtureRequest) -> MockHAL:
         MockHAL with specified accuracy
     """
     accuracy = request.param
-    return MockHAL.create(
-        pattern_success_rate=accuracy,
-        ocr_accuracy=accuracy
-    )
+    return MockHAL.create(pattern_success_rate=accuracy, ocr_accuracy=accuracy)
 
 
 # Context manager fixtures for temporary configuration
@@ -280,11 +262,7 @@ def mock_window(mock_platform_specific: MockPlatformSpecific):  # type: ignore
         Mock Window instance
     """
     window = mock_platform_specific.add_window(
-        title="Test Window",
-        x=100,
-        y=100,
-        width=800,
-        height=600
+        title="Test Window", x=100, y=100, width=800, height=600
     )
     yield window
     # Cleanup happens automatically when test ends
@@ -300,14 +278,7 @@ def pytest_configure(config: pytest.Config) -> None:
         config: Pytest configuration
     """
     config.addinivalue_line(
-        "markers",
-        "mock_hal: mark test as using mock HAL (deselect with '-m \"not mock_hal\"')"
+        "markers", "mock_hal: mark test as using mock HAL (deselect with '-m \"not mock_hal\"')"
     )
-    config.addinivalue_line(
-        "markers",
-        "slow_mock: mark test as using slow mock HAL with latencies"
-    )
-    config.addinivalue_line(
-        "markers",
-        "unreliable_mock: mark test as using unreliable mock HAL"
-    )
+    config.addinivalue_line("markers", "slow_mock: mark test as using slow mock HAL with latencies")
+    config.addinivalue_line("markers", "unreliable_mock: mark test as using unreliable mock HAL")

@@ -37,10 +37,7 @@ def main():
 
     # Run analysis
     print("Running analysis...")
-    violations, execution_time = analyzer.analyze_with_timing(
-        str(fixtures_path),
-        min_methods=5
-    )
+    violations, execution_time = analyzer.analyze_with_timing(str(fixtures_path), min_methods=5)
 
     print(f"\nAnalysis completed in {execution_time:.2f} seconds")
     print()
@@ -136,13 +133,22 @@ def demonstrate_clustering():
     # Example methods with multiple responsibilities
     methods = [
         # Data access
-        "get_user", "fetch_data", "retrieve_records", "find_items",
+        "get_user",
+        "fetch_data",
+        "retrieve_records",
+        "find_items",
         # Validation
-        "validate_email", "check_password", "verify_credentials",
+        "validate_email",
+        "check_password",
+        "verify_credentials",
         # Business logic
-        "calculate_total", "process_order", "compute_score",
+        "calculate_total",
+        "process_order",
+        "compute_score",
         # Persistence
-        "save_to_database", "load_from_cache", "persist_changes",
+        "save_to_database",
+        "load_from_cache",
+        "persist_changes",
     ]
 
     print("Methods to cluster:")

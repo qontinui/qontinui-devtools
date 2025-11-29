@@ -8,9 +8,9 @@ This package provides static analysis tools for TypeScript and JavaScript codeba
 """
 
 from .circular_detector import CircularDependencyDetector
+from .complexity_analyzer import ComplexityAnalyzer
 from .dead_code_detector import DeadCodeDetector
 from .type_coverage_analyzer import TypeCoverageAnalyzer
-from .complexity_analyzer import ComplexityAnalyzer
 
 __all__ = [
     "CircularDependencyDetector",

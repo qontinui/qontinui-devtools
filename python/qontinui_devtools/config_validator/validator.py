@@ -67,7 +67,9 @@ class ValidationReport:
 
         print(f"❌ FAILED - {self.invalid_workflows}/{self.total_workflows} workflows have errors")
         if self.total_inline_workflows > 0:
-            print(f"           {self.invalid_inline_workflows}/{self.total_inline_workflows} inline workflows have errors")
+            print(
+                f"           {self.invalid_inline_workflows}/{self.total_inline_workflows} inline workflows have errors"
+            )
         print()
 
         # Group errors by workflow
@@ -106,14 +108,14 @@ class ValidationReport:
             print("  Old format (from qontinui-web v1.x):")
             print('    "connections": {')
             print('      "action1": ["action2:false"]')
-            print('    }')
+            print("    }")
             print()
             print("  New format (qontinui library v2.0):")
             print('    "connections": {')
             print('      "action1": {')
             print('        "false": [[{"action": "action2", "type": "false", "index": 0}]]')
-            print('      }')
-            print('    }')
+            print("      }")
+            print("    }")
             print()
             print("  Solutions:")
             print("  1. Re-export config from updated qontinui-web (RECOMMENDED)")
@@ -204,8 +206,7 @@ class ConfigValidator:
                 return path
 
         raise FileNotFoundError(
-            "Could not find qontinui library. "
-            "Please specify qontinui_path parameter."
+            "Could not find qontinui library. " "Please specify qontinui_path parameter."
         )
 
     def _setup_imports(self) -> None:
@@ -221,9 +222,7 @@ class ConfigValidator:
             self.Workflow = Workflow
             self.ConfigParser = ConfigParser
         except ImportError as e:
-            raise ImportError(
-                f"Failed to import qontinui models from {self.qontinui_path}: {e}"
-            )
+            raise ImportError(f"Failed to import qontinui models from {self.qontinui_path}: {e}")
 
     def validate_file(self, config_path: str | Path) -> ValidationReport:
         """
@@ -255,7 +254,7 @@ class ConfigValidator:
 
         # Load JSON
         try:
-            with open(config_path, "r", encoding="utf-8") as f:
+            with open(config_path, encoding="utf-8") as f:
                 config_data = json.load(f)
         except json.JSONDecodeError as e:
             return ValidationReport(
@@ -314,17 +313,24 @@ class ConfigValidator:
             inline_wfs = transition.get("inlineWorkflows", [])
             for inline_wf in inline_wfs:
                 if isinstance(inline_wf, dict) and "actions" in inline_wf:
-                    inline_workflows.append((
-                        transition_id,  # parent ID (transition)
-                        f"Transition: {transition_id}",  # parent name
-                        transition_id,  # action ID (same as transition for transitions)
-                        inline_wf
-                    ))
+                    inline_workflows.append(
+                        (
+                            transition_id,  # parent ID (transition)
+                            f"Transition: {transition_id}",  # parent name
+                            transition_id,  # action ID (same as transition for transitions)
+                            inline_wf,
+                        )
+                    )
 
         inline_errors: list[ValidationError] = []
         inline_valid_count = 0
 
-        for parent_workflow_id, parent_workflow_name, action_id, inline_workflow in inline_workflows:
+        for (
+            parent_workflow_id,
+            parent_workflow_name,
+            action_id,
+            inline_workflow,
+        ) in inline_workflows:
             try:
                 # Attempt to parse inline workflow with Pydantic
                 validated = self.Workflow.model_validate(inline_workflow)
@@ -410,69 +416,78 @@ class ConfigValidator:
                 if "workflow" in config and isinstance(config["workflow"], dict):
                     # If workflow is a dict with workflow structure (not just a workflow_id reference)
                     if "actions" in config["workflow"]:
-                        inline_workflows.append((
-                            workflow_id,
-                            workflow_name,
-                            action_id,
-                            config["workflow"]
-                        ))
+                        inline_workflows.append(
+                            (workflow_id, workflow_name, action_id, config["workflow"])
+                        )
 
                 # Pattern 2: IF action with inline workflow in then/else branches
                 if action.get("type") == "IF":
                     if "thenWorkflow" in config and isinstance(config["thenWorkflow"], dict):
                         if "actions" in config["thenWorkflow"]:
-                            inline_workflows.append((
-                                workflow_id,
-                                workflow_name,
-                                f"{action_id}.then",
-                                config["thenWorkflow"]
-                            ))
+                            inline_workflows.append(
+                                (
+                                    workflow_id,
+                                    workflow_name,
+                                    f"{action_id}.then",
+                                    config["thenWorkflow"],
+                                )
+                            )
                     if "elseWorkflow" in config and isinstance(config["elseWorkflow"], dict):
                         if "actions" in config["elseWorkflow"]:
-                            inline_workflows.append((
-                                workflow_id,
-                                workflow_name,
-                                f"{action_id}.else",
-                                config["elseWorkflow"]
-                            ))
+                            inline_workflows.append(
+                                (
+                                    workflow_id,
+                                    workflow_name,
+                                    f"{action_id}.else",
+                                    config["elseWorkflow"],
+                                )
+                            )
 
                 # Pattern 3: LOOP action with inline workflow
                 if action.get("type") == "LOOP":
                     if "workflow" in config and isinstance(config["workflow"], dict):
                         if "actions" in config["workflow"]:
-                            inline_workflows.append((
-                                workflow_id,
-                                workflow_name,
-                                f"{action_id}.loop",
-                                config["workflow"]
-                            ))
+                            inline_workflows.append(
+                                (
+                                    workflow_id,
+                                    workflow_name,
+                                    f"{action_id}.loop",
+                                    config["workflow"],
+                                )
+                            )
 
                 # Pattern 4: TRY_CATCH action with inline workflows
                 if action.get("type") == "TRY_CATCH":
                     if "tryWorkflow" in config and isinstance(config["tryWorkflow"], dict):
                         if "actions" in config["tryWorkflow"]:
-                            inline_workflows.append((
-                                workflow_id,
-                                workflow_name,
-                                f"{action_id}.try",
-                                config["tryWorkflow"]
-                            ))
+                            inline_workflows.append(
+                                (
+                                    workflow_id,
+                                    workflow_name,
+                                    f"{action_id}.try",
+                                    config["tryWorkflow"],
+                                )
+                            )
                     if "catchWorkflow" in config and isinstance(config["catchWorkflow"], dict):
                         if "actions" in config["catchWorkflow"]:
-                            inline_workflows.append((
-                                workflow_id,
-                                workflow_name,
-                                f"{action_id}.catch",
-                                config["catchWorkflow"]
-                            ))
+                            inline_workflows.append(
+                                (
+                                    workflow_id,
+                                    workflow_name,
+                                    f"{action_id}.catch",
+                                    config["catchWorkflow"],
+                                )
+                            )
                     if "finallyWorkflow" in config and isinstance(config["finallyWorkflow"], dict):
                         if "actions" in config["finallyWorkflow"]:
-                            inline_workflows.append((
-                                workflow_id,
-                                workflow_name,
-                                f"{action_id}.finally",
-                                config["finallyWorkflow"]
-                            ))
+                            inline_workflows.append(
+                                (
+                                    workflow_id,
+                                    workflow_name,
+                                    f"{action_id}.finally",
+                                    config["finallyWorkflow"],
+                                )
+                            )
 
                 # Pattern 5: SWITCH action with inline workflows in cases
                 if action.get("type") == "SWITCH":
@@ -480,19 +495,23 @@ class ConfigValidator:
                     for idx, case in enumerate(cases):
                         if "workflow" in case and isinstance(case["workflow"], dict):
                             if "actions" in case["workflow"]:
-                                inline_workflows.append((
-                                    workflow_id,
-                                    workflow_name,
-                                    f"{action_id}.case[{idx}]",
-                                    case["workflow"]
-                                ))
+                                inline_workflows.append(
+                                    (
+                                        workflow_id,
+                                        workflow_name,
+                                        f"{action_id}.case[{idx}]",
+                                        case["workflow"],
+                                    )
+                                )
                     if "defaultWorkflow" in config and isinstance(config["defaultWorkflow"], dict):
                         if "actions" in config["defaultWorkflow"]:
-                            inline_workflows.append((
-                                workflow_id,
-                                workflow_name,
-                                f"{action_id}.default",
-                                config["defaultWorkflow"]
-                            ))
+                            inline_workflows.append(
+                                (
+                                    workflow_id,
+                                    workflow_name,
+                                    f"{action_id}.default",
+                                    config["defaultWorkflow"],
+                                )
+                            )
 
         return inline_workflows

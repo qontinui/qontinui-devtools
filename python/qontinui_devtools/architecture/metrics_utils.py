@@ -1,7 +1,6 @@
 """Metrics calculation utilities for coupling and cohesion analysis."""
 
 import ast
-from typing import Set, Dict, List, Tuple
 from collections import defaultdict
 
 
@@ -37,7 +36,7 @@ def calculate_lcom4(class_node: ast.ClassDef) -> float:
     method_calls = find_method_call_connections(class_node)
 
     # Build adjacency list for the graph
-    graph: Dict[str, Set[str]] = defaultdict(set)
+    graph: dict[str, set[str]] = defaultdict(set)
     method_names = [m.name for m in methods]
 
     # Add edges for shared attributes
@@ -62,7 +61,7 @@ def calculate_lcom4(class_node: ast.ClassDef) -> float:
                 graph[callee].add(caller)
 
     # Find connected components using DFS
-    visited: Set[str] = set()
+    visited: set[str] = set()
     components = 0
 
     def dfs(node: str) -> None:
@@ -155,7 +154,7 @@ def calculate_lcc(class_node: ast.ClassDef) -> float:
     method_attrs = find_method_attribute_connections(class_node)
 
     # Build adjacency list for direct connections
-    graph: Dict[str, Set[str]] = defaultdict(set)
+    graph: dict[str, set[str]] = defaultdict(set)
     method_names = [m.name for m in methods]
 
     for i, method1 in enumerate(method_names):
@@ -177,8 +176,8 @@ def calculate_lcc(class_node: ast.ClassDef) -> float:
         if start == end:
             return False
 
-        visited: Set[str] = {start}
-        queue: List[str] = [start]
+        visited: set[str] = {start}
+        queue: list[str] = [start]
 
         while queue:
             current = queue.pop(0)
@@ -213,7 +212,7 @@ def calculate_lcc(class_node: ast.ClassDef) -> float:
     return connected_pairs / total_pairs
 
 
-def find_method_attribute_connections(class_node: ast.ClassDef) -> Dict[str, Set[str]]:
+def find_method_attribute_connections(class_node: ast.ClassDef) -> dict[str, set[str]]:
     """Map each method to the attributes it accesses.
 
     This analyzes method bodies to find all self.attribute accesses.
@@ -224,7 +223,7 @@ def find_method_attribute_connections(class_node: ast.ClassDef) -> Dict[str, Set
     Returns:
         Dictionary mapping method names to sets of attribute names
     """
-    method_attrs: Dict[str, Set[str]] = {}
+    method_attrs: dict[str, set[str]] = {}
 
     for node in class_node.body:
         if not isinstance(node, ast.FunctionDef):
@@ -233,13 +232,13 @@ def find_method_attribute_connections(class_node: ast.ClassDef) -> Dict[str, Set
         # Skip __init__ and other special methods for LCOM calculation
         # (but include them for other metrics)
         method_name = node.name
-        attrs: Set[str] = set()
+        attrs: set[str] = set()
 
         # Walk the method body to find attribute accesses
         for child in ast.walk(node):
             # Look for self.attribute patterns
             if isinstance(child, ast.Attribute):
-                if isinstance(child.value, ast.Name) and child.value.id == 'self':
+                if isinstance(child.value, ast.Name) and child.value.id == "self":
                     attrs.add(child.attr)
 
         method_attrs[method_name] = attrs
@@ -247,7 +246,7 @@ def find_method_attribute_connections(class_node: ast.ClassDef) -> Dict[str, Set
     return method_attrs
 
 
-def find_method_call_connections(class_node: ast.ClassDef) -> Dict[str, Set[str]]:
+def find_method_call_connections(class_node: ast.ClassDef) -> dict[str, set[str]]:
     """Map each method to other methods it calls.
 
     This analyzes method bodies to find calls to other methods in the class.
@@ -258,21 +257,21 @@ def find_method_call_connections(class_node: ast.ClassDef) -> Dict[str, Set[str]
     Returns:
         Dictionary mapping method names to sets of called method names
     """
-    method_calls: Dict[str, Set[str]] = {}
+    method_calls: dict[str, set[str]] = {}
 
     for node in class_node.body:
         if not isinstance(node, ast.FunctionDef):
             continue
 
         method_name = node.name
-        calls: Set[str] = set()
+        calls: set[str] = set()
 
         # Walk the method body to find method calls
         for child in ast.walk(node):
             # Look for self.method() patterns
             if isinstance(child, ast.Call):
                 if isinstance(child.func, ast.Attribute):
-                    if isinstance(child.func.value, ast.Name) and child.func.value.id == 'self':
+                    if isinstance(child.func.value, ast.Name) and child.func.value.id == "self":
                         calls.add(child.func.attr)
 
         method_calls[method_name] = calls
@@ -332,7 +331,7 @@ def calculate_lcom(class_node: ast.ClassDef) -> float:
     return lcom / total_pairs
 
 
-def count_abstract_classes(module_path: str) -> Tuple[int, int]:
+def count_abstract_classes(module_path: str) -> tuple[int, int]:
     """Count abstract and total classes in a module.
 
     A class is considered abstract if:
@@ -346,7 +345,7 @@ def count_abstract_classes(module_path: str) -> Tuple[int, int]:
         Tuple of (abstract_count, total_count)
     """
     try:
-        with open(module_path, 'r', encoding='utf-8') as f:
+        with open(module_path, encoding="utf-8") as f:
             tree = ast.parse(f.read(), filename=module_path)
     except Exception:
         return (0, 0)
@@ -362,7 +361,7 @@ def count_abstract_classes(module_path: str) -> Tuple[int, int]:
             is_abstract = False
             for base in node.bases:
                 if isinstance(base, ast.Name):
-                    if base.id in ('ABC', 'ABCMeta'):
+                    if base.id in ("ABC", "ABCMeta"):
                         is_abstract = True
                         break
 
@@ -372,11 +371,11 @@ def count_abstract_classes(module_path: str) -> Tuple[int, int]:
                     if isinstance(item, ast.FunctionDef):
                         for decorator in item.decorator_list:
                             if isinstance(decorator, ast.Name):
-                                if decorator.id == 'abstractmethod':
+                                if decorator.id == "abstractmethod":
                                     is_abstract = True
                                     break
                             elif isinstance(decorator, ast.Attribute):
-                                if decorator.attr == 'abstractmethod':
+                                if decorator.attr == "abstractmethod":
                                     is_abstract = True
                                     break
                     if is_abstract:
@@ -388,7 +387,7 @@ def count_abstract_classes(module_path: str) -> Tuple[int, int]:
     return (abstract_count, total_count)
 
 
-def classify_score(value: float, thresholds: Dict[str, float], inverse: bool = False) -> str:
+def classify_score(value: float, thresholds: dict[str, float], inverse: bool = False) -> str:
     """Classify a metric value into a quality score.
 
     Args:
@@ -400,20 +399,20 @@ def classify_score(value: float, thresholds: Dict[str, float], inverse: bool = F
         Score category: 'excellent', 'good', 'fair', or 'poor'
     """
     if inverse:
-        if value <= thresholds['excellent']:
-            return 'excellent'
-        elif value <= thresholds['good']:
-            return 'good'
-        elif value <= thresholds['fair']:
-            return 'fair'
+        if value <= thresholds["excellent"]:
+            return "excellent"
+        elif value <= thresholds["good"]:
+            return "good"
+        elif value <= thresholds["fair"]:
+            return "fair"
         else:
-            return 'poor'
+            return "poor"
     else:
-        if value >= thresholds['excellent']:
-            return 'excellent'
-        elif value >= thresholds['good']:
-            return 'good'
-        elif value >= thresholds['fair']:
-            return 'fair'
+        if value >= thresholds["excellent"]:
+            return "excellent"
+        elif value >= thresholds["good"]:
+            return "good"
+        elif value >= thresholds["fair"]:
+            return "fair"
         else:
-            return 'poor'
+            return "poor"

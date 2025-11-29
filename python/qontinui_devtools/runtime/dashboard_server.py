@@ -69,9 +69,7 @@ class DashboardServer:
         self.app.router.add_get("/ws", self.websocket_handler)
         self.app.router.add_get("/", self.index_handler)
 
-    async def websocket_handler(
-        self, request: web.Request
-    ) -> web.WebSocketResponse:
+    async def websocket_handler(self, request: web.Request) -> web.WebSocketResponse:
         """Handle WebSocket connections for metrics streaming.
 
         Args:
@@ -105,9 +103,7 @@ class DashboardServer:
                     except json.JSONDecodeError:
                         logger.warning(f"Invalid JSON from client: {msg.data}")
                 elif msg.type == aiohttp.WSMsgType.ERROR:
-                    logger.error(
-                        f"WebSocket error: {ws.exception()}"
-                    )
+                    logger.error(f"WebSocket error: {ws.exception()}")
         except asyncio.CancelledError:
             logger.info("WebSocket handler cancelled")
         except Exception as e:
@@ -118,9 +114,7 @@ class DashboardServer:
 
         return ws
 
-    async def _handle_client_message(
-        self, ws: web.WebSocketResponse, data: dict[str, Any]
-    ) -> None:
+    async def _handle_client_message(self, ws: web.WebSocketResponse, data: dict[str, Any]) -> None:
         """Handle messages from clients.
 
         Args:

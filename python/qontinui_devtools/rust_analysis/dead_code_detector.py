@@ -14,7 +14,6 @@ definitions and usages across the codebase.
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 
 @dataclass
@@ -117,7 +116,7 @@ class DeadCodeDetector:
             file_path: Path to the Rust file
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 lines = f.readlines()
 
             for line_num, line in enumerate(lines, 1):
@@ -132,7 +131,9 @@ class DeadCodeDetector:
                 # fn foo(...) -> ...
                 # pub fn foo(...) -> ...
                 # async fn foo(...) -> ...
-                func_pattern = r"(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?(?:unsafe\s+)?fn\s+(\w+)\s*[<(]"
+                func_pattern = (
+                    r"(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?(?:unsafe\s+)?fn\s+(\w+)\s*[<(]"
+                )
                 func_match = re.search(func_pattern, line)
                 if func_match:
                     name = func_match.group(1)
@@ -149,9 +150,7 @@ class DeadCodeDetector:
                 struct_match = re.search(struct_pattern, line)
                 if struct_match:
                     name = struct_match.group(1)
-                    self._definitions["struct"].append(
-                        (name, line_num, str(file_path), visibility)
-                    )
+                    self._definitions["struct"].append((name, line_num, str(file_path), visibility))
 
                 # Match enum definitions
                 # enum Foo { ... }
@@ -169,9 +168,7 @@ class DeadCodeDetector:
                 trait_match = re.search(trait_pattern, line)
                 if trait_match:
                     name = trait_match.group(1)
-                    self._definitions["trait"].append(
-                        (name, line_num, str(file_path), visibility)
-                    )
+                    self._definitions["trait"].append((name, line_num, str(file_path), visibility))
 
                 # Match const definitions
                 # const FOO: ...
@@ -180,9 +177,7 @@ class DeadCodeDetector:
                 const_match = re.search(const_pattern, line)
                 if const_match:
                     name = const_match.group(1)
-                    self._definitions["const"].append(
-                        (name, line_num, str(file_path), visibility)
-                    )
+                    self._definitions["const"].append((name, line_num, str(file_path), visibility))
 
         except (UnicodeDecodeError, PermissionError):
             pass
@@ -199,7 +194,7 @@ class DeadCodeDetector:
             file_path: Path to the Rust file
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # Remove comments to avoid false positives
@@ -363,8 +358,7 @@ class DeadCodeDetector:
             for dc in items:
                 rel_path = Path(dc.file_path).relative_to(self.root_path)
                 lines.append(
-                    f"\n  {dc.name} ({dc.visibility})"
-                    f" - Confidence: {dc.confidence:.0%}"
+                    f"\n  {dc.name} ({dc.visibility})" f" - Confidence: {dc.confidence:.0%}"
                 )
                 lines.append(f"    {rel_path}:{dc.line_number}")
                 lines.append(f"    {dc.reason}")

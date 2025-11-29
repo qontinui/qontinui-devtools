@@ -1,11 +1,9 @@
 """Shared fixtures for integration tests."""
 
-import asyncio
-import tempfile
-import threading
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict, List
+from typing import Any
 
 import pytest
 
@@ -23,7 +21,8 @@ def sample_qontinui_action(temp_test_dir: Path) -> Path:
     This simulates a real qontinui action with HAL interactions.
     """
     action_file = temp_test_dir / "sample_action.py"
-    action_file.write_text("""
+    action_file.write_text(
+        """
 import time
 from typing import Optional
 
@@ -147,7 +146,8 @@ class ConcurrentAction:
             'iterations': iterations,
             'results': results
         }
-""")
+"""
+    )
     return action_file
 
 
@@ -162,7 +162,8 @@ def sample_qontinui_project(temp_test_dir: Path) -> Path:
 
     # Create main module
     main_file = project_dir / "main.py"
-    main_file.write_text("""
+    main_file.write_text(
+        """
 from actions import action_a, action_b
 from utils import helper
 
@@ -177,14 +178,16 @@ def main():
 
 if __name__ == '__main__':
     main()
-""")
+"""
+    )
 
     # Create actions module
     actions_dir = project_dir / "actions"
     actions_dir.mkdir()
     (actions_dir / "__init__.py").write_text("")
 
-    (actions_dir / "action_a.py").write_text("""
+    (actions_dir / "action_a.py").write_text(
+        """
 import time
 
 
@@ -192,9 +195,11 @@ def execute():
     '''Execute action A.'''
     time.sleep(0.01)
     return {'status': 'success', 'action': 'A'}
-""")
+"""
+    )
 
-    (actions_dir / "action_b.py").write_text("""
+    (actions_dir / "action_b.py").write_text(
+        """
 import time
 
 
@@ -202,69 +207,72 @@ def execute():
     '''Execute action B.'''
     time.sleep(0.02)
     return {'status': 'success', 'action': 'B'}
-""")
+"""
+    )
 
     # Create utils module
     utils_dir = project_dir / "utils"
     utils_dir.mkdir()
     (utils_dir / "__init__.py").write_text("")
 
-    (utils_dir / "helper.py").write_text("""
+    (utils_dir / "helper.py").write_text(
+        """
 def setup():
     '''Setup helper.'''
     print("Setup complete")
-""")
+"""
+    )
 
     return project_dir
 
 
 @pytest.fixture
-def profiler_config() -> Dict[str, Any]:
+def profiler_config() -> dict[str, Any]:
     """Default configuration for profiler."""
     return {
-        'enabled': True,
-        'sampling_interval': 0.001,
-        'include_stdlib': False,
-        'max_stack_depth': 10,
-        'output_format': 'json'
+        "enabled": True,
+        "sampling_interval": 0.001,
+        "include_stdlib": False,
+        "max_stack_depth": 10,
+        "output_format": "json",
     }
 
 
 @pytest.fixture
-def event_tracer_config() -> Dict[str, Any]:
+def event_tracer_config() -> dict[str, Any]:
     """Default configuration for event tracer."""
     return {
-        'enabled': True,
-        'trace_hal_calls': True,
-        'trace_actions': True,
-        'trace_state_changes': True,
-        'buffer_size': 1000,
-        'output_format': 'json'
+        "enabled": True,
+        "trace_hal_calls": True,
+        "trace_actions": True,
+        "trace_state_changes": True,
+        "buffer_size": 1000,
+        "output_format": "json",
     }
 
 
 @pytest.fixture
-def memory_profiler_config() -> Dict[str, Any]:
+def memory_profiler_config() -> dict[str, Any]:
     """Default configuration for memory profiler."""
     return {
-        'enabled': True,
-        'sampling_interval': 0.01,
-        'track_allocations': True,
-        'track_deallocations': True,
-        'threshold_mb': 100,
-        'output_format': 'json'
+        "enabled": True,
+        "sampling_interval": 0.01,
+        "track_allocations": True,
+        "track_deallocations": True,
+        "threshold_mb": 100,
+        "output_format": "json",
     }
 
 
 @pytest.fixture
-def dashboard_config() -> Dict[str, Any]:
+def dashboard_config() -> dict[str, Any]:
     """Default configuration for performance dashboard."""
     return {
-        'enabled': True,
-        'port': 8050,
-        'host': '127.0.0.1',
-        'update_interval': 0.1,
-        'retention_seconds': 60
+        "enabled": True,
+        "port": 8050,
+        "host": "127.0.0.1",
+        "update_interval": 0.1,
+        "retention_seconds": 60,
     }
 
 
@@ -312,28 +320,28 @@ def concurrent_action(sample_qontinui_action: Path):
 
 
 @pytest.fixture
-def performance_thresholds() -> Dict[str, float]:
+def performance_thresholds() -> dict[str, float]:
     """Performance thresholds for integration tests."""
     return {
-        'max_overhead_percent': 5.0,  # Maximum 5% overhead
-        'max_memory_mb': 100,  # Maximum 100MB memory usage
-        'max_startup_time_ms': 100,  # Maximum 100ms startup time
-        'max_event_latency_ms': 1,  # Maximum 1ms event latency
+        "max_overhead_percent": 5.0,  # Maximum 5% overhead
+        "max_memory_mb": 100,  # Maximum 100MB memory usage
+        "max_startup_time_ms": 100,  # Maximum 100ms startup time
+        "max_event_latency_ms": 1,  # Maximum 1ms event latency
     }
 
 
 @pytest.fixture
-def stress_test_config() -> Dict[str, int]:
+def stress_test_config() -> dict[str, int]:
     """Configuration for stress testing."""
     return {
-        'num_threads': 10,
-        'iterations_per_thread': 100,
-        'num_actions': 50,
-        'duration_seconds': 10
+        "num_threads": 10,
+        "iterations_per_thread": 100,
+        "num_actions": 50,
+        "duration_seconds": 10,
     }
 
 
-def measure_overhead(func: Callable, *args, **kwargs) -> Dict[str, float]:
+def measure_overhead(func: Callable, *args, **kwargs) -> dict[str, float]:
     """Measure execution overhead of a function.
 
     Returns:
@@ -349,9 +357,9 @@ def measure_overhead(func: Callable, *args, **kwargs) -> Dict[str, float]:
     baseline_avg = sum(baseline_times) / len(baseline_times)
 
     return {
-        'baseline_ms': baseline_avg * 1000,
-        'min_ms': min(baseline_times) * 1000,
-        'max_ms': max(baseline_times) * 1000,
+        "baseline_ms": baseline_avg * 1000,
+        "min_ms": min(baseline_times) * 1000,
+        "max_ms": max(baseline_times) * 1000,
     }
 
 

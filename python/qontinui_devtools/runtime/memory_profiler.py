@@ -9,11 +9,10 @@ This module provides tools for:
 """
 
 import gc
-import sys
 import time
+from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
-from collections import defaultdict
 
 try:
     import psutil
@@ -86,8 +85,7 @@ class MemoryProfiler:
         """
         if psutil is None:
             raise ImportError(
-                "psutil is required for memory profiling. "
-                "Install it with: pip install psutil"
+                "psutil is required for memory profiling. " "Install it with: pip install psutil"
             )
 
         self._snapshots: list[MemorySnapshot] = []
@@ -245,15 +243,10 @@ class MemoryProfiler:
 
         # Analyze each object type
         for obj_type in all_types:
-            samples = [
-                (s.timestamp, s.objects_by_type.get(obj_type, 0))
-                for s in self._snapshots
-            ]
+            samples = [(s.timestamp, s.objects_by_type.get(obj_type, 0)) for s in self._snapshots]
 
             # Check for steady growth
-            is_growing, growth_rate, confidence = self._analyze_growth(
-                samples, growth_threshold
-            )
+            is_growing, growth_rate, confidence = self._analyze_growth(samples, growth_threshold)
 
             if is_growing:
                 # Calculate metrics
@@ -263,9 +256,7 @@ class MemoryProfiler:
 
                 if count_increase >= min_increase:
                     # Estimate size increase (rough)
-                    size_increase_mb = self._estimate_size_increase(
-                        obj_type, count_increase
-                    )
+                    size_increase_mb = self._estimate_size_increase(obj_type, count_increase)
 
                     leak = MemoryLeak(
                         object_type=obj_type,
@@ -307,7 +298,7 @@ class MemoryProfiler:
         n = len(samples)
         sum_x = sum(times)
         sum_y = sum(counts)
-        sum_xy = sum(t * c for t, c in zip(times, counts))
+        sum_xy = sum(t * c for t, c in zip(times, counts, strict=False))
         sum_xx = sum(t * t for t in times)
 
         # Calculate slope (growth rate)
@@ -372,9 +363,7 @@ class MemoryProfiler:
 
         # Compare object counts
         type_diffs: dict[str, int] = {}
-        all_types = set(snapshot1.objects_by_type.keys()) | set(
-            snapshot2.objects_by_type.keys()
-        )
+        all_types = set(snapshot1.objects_by_type.keys()) | set(snapshot2.objects_by_type.keys())
 
         for obj_type in all_types:
             count1 = snapshot1.objects_by_type.get(obj_type, 0)
@@ -393,8 +382,7 @@ class MemoryProfiler:
             "total_objects_diff": sum(type_diffs.values()),
             "type_diffs": dict(sorted_diffs[:20]),  # Top 20
             "gc_collections_diff": [
-                snapshot2.gc_stats["collections"][i]
-                - snapshot1.gc_stats["collections"][i]
+                snapshot2.gc_stats["collections"][i] - snapshot1.gc_stats["collections"][i]
                 for i in range(3)
             ],
         }
@@ -428,9 +416,7 @@ class MemoryProfiler:
             f"Memory: {first.total_mb:.1f} MB → {last.total_mb:.1f} MB "
             f"({last.total_mb - first.total_mb:+.1f} MB)"
         )
-        lines.append(
-            f"Rate: {(last.total_mb - first.total_mb) / duration:.2f} MB/second"
-        )
+        lines.append(f"Rate: {(last.total_mb - first.total_mb) / duration:.2f} MB/second")
         lines.append("")
 
         # Detect leaks
@@ -459,9 +445,7 @@ class MemoryProfiler:
         # GC statistics
         lines.append("GARBAGE COLLECTION")
         lines.append("-" * 80)
-        lines.append(
-            f"Collections (gen0, gen1, gen2): {tuple(last.gc_stats['collections'])}"
-        )
+        lines.append(f"Collections (gen0, gen1, gen2): {tuple(last.gc_stats['collections'])}")
         lines.append(f"Total objects: {last.gc_stats['objects']:,}")
         lines.append(f"Garbage objects: {last.gc_stats['garbage']}")
         lines.append("")
