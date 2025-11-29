@@ -281,7 +281,7 @@ class TypeInferenceEngine:
         elif isinstance(expr, ast.BinOp):
             # Infer from binary operations
             if isinstance(
-                expr.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.Pow)
+                expr.op, ast.Add | ast.Sub | ast.Mult | ast.Div | ast.FloorDiv | ast.Mod | ast.Pow
             ):
                 left_type = self._infer_expr_type(expr.left)
                 right_type = self._infer_expr_type(expr.right)
@@ -444,7 +444,7 @@ class TypeInferenceEngine:
             elif isinstance(node, ast.Compare):
                 if isinstance(node.left, ast.Name) and node.left.id == param_name:
                     for op in node.ops:
-                        if isinstance(op, (ast.Is, ast.IsNot)):
+                        if isinstance(op, ast.Is | ast.IsNot):
                             # Parameter is compared with None, might be Optional
                             usages.append("optional")
 

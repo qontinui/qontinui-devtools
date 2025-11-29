@@ -475,7 +475,6 @@ def analyze(path: str, report: str | None, format: str, checks: tuple[str, ...])
     run_all = "all" in checks
     run_imports = run_all or "imports" in checks
     run_concurrency = run_all or "concurrency" in checks
-    run_complexity = run_all or "complexity" in checks
 
     results: dict[str, Any] = {}
 

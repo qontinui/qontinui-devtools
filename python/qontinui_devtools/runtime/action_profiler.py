@@ -180,9 +180,8 @@ class ActionProfiler:
         )
 
         # Stack sampling setup (if enabled)
-        sampling_active = False
         if self.enable_stack_sampling:
-            sampling_active = True
+            pass
             # Note: Actual stack sampling would require threading or signal-based approach
             # For now, we'll just mark it as available
             # A production implementation would use a background thread or py-spy
@@ -223,7 +222,6 @@ class ActionProfiler:
             # Store profile
             self._profiles.append(profile)
 
-            sampling_active = False
 
     def end_session(self) -> ProfilingSession:
         """End the current session and get results.

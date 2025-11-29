@@ -368,7 +368,7 @@ class TestLatencyAnalyzer:
         assert len(latencies) >= 2
 
         # Check statistics structure
-        for stage, stats in latencies.items():
+        for _stage, stats in latencies.items():
             assert "mean" in stats
             assert "p50" in stats
             assert "p95" in stats

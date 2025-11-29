@@ -18,7 +18,7 @@ def test_detect_race_in_dictionary():
     def worker():
         nonlocal race_detected
         try:
-            for i in range(100):
+            for _i in range(100):
                 key = "key"
                 if key not in shared:
                     shared[key] = 0
@@ -43,7 +43,7 @@ def test_thread_safe_code():
 
     def worker():
         with lock:
-            for i in range(100):
+            for _i in range(100):
                 if "key" not in shared:
                     shared["key"] = 0
                 shared["key"] += 1
@@ -184,7 +184,6 @@ def test_race_test_result_string():
 def test_counter_race_condition():
     """Test classic counter race condition."""
     counter = {"value": 0}
-    expected = 1000  # 10 threads * 10 iterations * 10
 
     def worker():
         for _ in range(10):
@@ -270,7 +269,7 @@ def test_race_tester_timeout():
 
     tester = RaceConditionTester(threads=5, iterations=10, timeout=0.5)
     start_time = time.time()
-    result = tester.test_function(slow_function)
+    tester.test_function(slow_function)
     elapsed = time.time() - start_time
 
     # Should timeout around 0.5s, not wait for all 50 iterations

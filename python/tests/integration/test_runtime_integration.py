@@ -304,7 +304,7 @@ class TestProfilerEventTracerIntegration:
 
         # Verify data from all threads
         profile_data = profiler.get_profile_data()
-        events = tracer.get_events()
+        tracer.get_events()
 
         assert profile_data["total_calls"] >= 5  # At least one per thread
         assert len(tracer.get_events("thread_start")) == 5
@@ -365,7 +365,7 @@ class TestMemoryProfilerIntegration:
         def allocate_memory():
             return memory_intensive_action.execute(size_mb=10)
 
-        result = allocate_memory()
+        allocate_memory()
 
         mem_profiler.stop()
         profiler.stop()
@@ -457,7 +457,7 @@ class TestDashboardIntegration:
                 tracer.trace_event("action_end", {})
                 return result
 
-            result = execute_monitored()
+            execute_monitored()
 
             # Update dashboard with all metrics
             dashboard.update_metrics(

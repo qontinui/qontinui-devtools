@@ -13,7 +13,6 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 from rich.console import Console
 from rich.panel import Panel
@@ -47,7 +46,7 @@ class IDField:
     file_path: Path
     line_number: int
     context: str  # Surrounding code context
-    struct_or_interface: Optional[str] = None  # Parent struct/interface name
+    struct_or_interface: str | None = None  # Parent struct/interface name
 
 
 @dataclass
@@ -470,7 +469,7 @@ class IDTypeChecker:
             fields_by_name[normalized].append(f)
 
         # Check for type mismatches
-        for name, fields in fields_by_name.items():
+        for _name, fields in fields_by_name.items():
             if len(fields) < 2:
                 continue
 

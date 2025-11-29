@@ -255,7 +255,7 @@ class TestConcurrentToolAccess:
         mem_profiler.stop()
 
         # Verify snapshots
-        memory_data = mem_profiler.get_memory_usage()
+        mem_profiler.get_memory_usage()
         # Should have start + thread snapshots + stop
         min_snapshots = 1 + (num_threads * snapshots_per_thread) + 1
         assert len(mem_profiler.snapshots) >= min_snapshots
@@ -421,7 +421,7 @@ class TestConcurrentToolLifecycle:
 
         def cycle_tool(cycle_id: int):
             try:
-                for i in range(10):
+                for _i in range(10):
                     profiler = ActionProfiler(profiler_config)
                     profiler.start()
                     time.sleep(0.001)
@@ -486,7 +486,7 @@ class TestConcurrentDataCollection:
 
         # Verify data consistency
         profile_data = profiler.get_profile_data()
-        events = tracer.get_events()
+        tracer.get_events()
 
         # Should have profile data from all threads
         assert profile_data["total_calls"] == num_threads
@@ -747,7 +747,7 @@ class TestAsyncConcurrency:
                 return sample_action_instance._process_iteration(worker_id)
 
             results = []
-            for i in range(10):
+            for _i in range(10):
                 result = sync_work()
                 results.append(result)
                 await asyncio.sleep(0.01)
@@ -761,7 +761,7 @@ class TestAsyncConcurrency:
         # Run async workers
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        results = loop.run_until_complete(run_async_workers())
+        loop.run_until_complete(run_async_workers())
         loop.close()
 
         profiler.stop()

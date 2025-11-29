@@ -7,7 +7,6 @@ requiring Node.js or external dependencies.
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 
 @dataclass
@@ -16,8 +15,8 @@ class ImportStatement:
 
     source: str  # The module being imported from
     names: list[str]  # List of imported names
-    default_import: Optional[str]  # Default import name if present
-    namespace_import: Optional[str]  # Namespace import name (e.g., * as foo)
+    default_import: str | None  # Default import name if present
+    namespace_import: str | None  # Namespace import name (e.g., * as foo)
     is_type_only: bool  # True if this is a type-only import
     line_number: int
     raw_statement: str
@@ -298,7 +297,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
     return exports
 
 
-def resolve_import_path(import_source: str, from_file: Path, root_path: Path) -> Optional[Path]:
+def resolve_import_path(import_source: str, from_file: Path, root_path: Path) -> Path | None:
     """Resolve an import source to an actual file path.
 
     Args:

@@ -7,7 +7,6 @@ vulnerabilities, their severity levels, and comprehensive security reports.
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 
 class VulnerabilityType(Enum):
@@ -100,8 +99,8 @@ class Vulnerability:
     remediation: str
     cwe_id: str
     owasp_category: str
-    column_offset: Optional[int] = None
-    end_line_number: Optional[int] = None
+    column_offset: int | None = None
+    end_line_number: int | None = None
     confidence: float = 1.0
 
     def to_dict(self) -> dict:

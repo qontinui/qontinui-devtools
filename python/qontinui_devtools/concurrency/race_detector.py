@@ -400,7 +400,7 @@ class RaceConditionDetector:
             # Access locations
             if len(race.access_locations) <= 10:
                 lines.append(f"   Access Locations ({len(race.access_locations)}):")
-                for file_path, line_num, access_type in race.access_locations:
+                for _file_path, line_num, access_type in race.access_locations:
                     lines.append(f"     - Line {line_num}: {access_type}")
             else:
                 lines.append(f"   Access Locations: {len(race.access_locations)} total")

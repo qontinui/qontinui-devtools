@@ -442,7 +442,7 @@ class TestLayouts:
         positions = force_directed_layout(nodes, edges, width=1000, height=1000, iterations=50)
 
         assert len(positions) == 3
-        for node_id, (x, y) in positions.items():
+        for _node_id, (x, y) in positions.items():
             assert isinstance(x, float) or isinstance(x, int)
             assert isinstance(y, float) or isinstance(y, int)
             # Just check that positions are numbers (networkx may produce any values)

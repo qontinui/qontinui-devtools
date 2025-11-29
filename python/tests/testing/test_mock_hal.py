@@ -334,7 +334,7 @@ class TestMockPlatformSpecific:
     def test_add_and_get_window(self) -> None:
         """Test adding and retrieving windows."""
         platform = MockPlatformSpecific()
-        window = platform.add_window("Test Window", 100, 100, 800, 600)
+        platform.add_window("Test Window", 100, 100, 800, 600)
 
         all_windows = platform.get_all_windows()
 
@@ -382,7 +382,7 @@ class TestMockPlatformSpecific:
         """Test adding UI elements to window."""
         platform = MockPlatformSpecific()
         window = platform.add_window("Test", 0, 0, 800, 600)
-        element = platform.add_ui_element(
+        platform.add_ui_element(
             window, element_type="button", name="submit_btn", text="Submit"
         )
 

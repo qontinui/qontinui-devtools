@@ -12,7 +12,7 @@ import time
 import traceback
 from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -28,7 +28,7 @@ class ImportEvent:
     """
 
     module_name: str
-    importer: Optional[str]
+    importer: str | None
     timestamp: float
     thread_id: int
     stack_trace: list[str] = field(default_factory=list)
@@ -165,7 +165,7 @@ class ImportHook:
         """
         self.tracer = tracer
 
-    def find_module(self, fullname: str, path: Optional[list[str]] = None) -> None:
+    def find_module(self, fullname: str, path: list[str] | None = None) -> None:
         """Called for every import attempt.
 
         Args:
@@ -212,7 +212,7 @@ class ImportHook:
         # Return None so other import hooks/finders handle the actual import
         return None
 
-    def find_spec(self, fullname: str, path: Optional[list[str]] = None, target=None):
+    def find_spec(self, fullname: str, path: list[str] | None = None, target=None):
         """Modern import hook interface (Python 3.4+).
 
         Args:
@@ -247,8 +247,8 @@ class ImportTracer:
         self._events: list[ImportEvent] = []
         self._graph = ImportGraph()
         self._lock = threading.Lock()
-        self._hook: Optional[ImportHook] = None
-        self._start_time: Optional[float] = None
+        self._hook: ImportHook | None = None
+        self._start_time: float | None = None
         self._installed = False
 
     def __enter__(self) -> "ImportTracer":

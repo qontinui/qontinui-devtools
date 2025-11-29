@@ -333,7 +333,7 @@ class BadCache:
         test_file.write_text(test_code)
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=[])
-        races = detector.analyze()
+        detector.analyze()
 
         report = detector.generate_report()
 
@@ -473,7 +473,7 @@ class TestCache:
         )
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=["test_"])
-        races = detector.analyze()
+        detector.analyze()
 
         # Should not analyze excluded files
         stats = detector.get_statistics()

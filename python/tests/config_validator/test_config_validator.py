@@ -165,7 +165,7 @@ def mock_validator():
     """Create a mock validator that doesn't require qontinui library."""
     with (
         patch.object(ConfigValidator, "_find_qontinui_path") as mock_find,
-        patch.object(ConfigValidator, "_setup_imports") as mock_setup,
+        patch.object(ConfigValidator, "_setup_imports"),
     ):
 
         mock_find.return_value = Path("/mock/qontinui/path")
@@ -242,7 +242,7 @@ class TestConfigValidatorInitialization:
             with patch.object(ConfigValidator, "_find_qontinui_path", return_value=test_path):
                 # Mock the actual imports to avoid ImportError
                 with patch("builtins.__import__"):
-                    validator = ConfigValidator()
+                    ConfigValidator()
 
                     # Should have added test_path to sys.path
                     assert str(test_path) in sys.path

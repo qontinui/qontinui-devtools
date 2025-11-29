@@ -223,7 +223,7 @@ def find_cycles_containing(obj: Any) -> list[list[Any]]:
             referents = gc.get_referents(current)
             for referent in referents:
                 # Skip frames and common containers
-                if isinstance(referent, (type(sys._getframe()), type, type(gc))):
+                if isinstance(referent, type(sys._getframe()) | type | type(gc)):
                     continue
                 _dfs(referent)
         except Exception:
@@ -261,7 +261,7 @@ def get_object_size_deep(obj: Any, seen: set[int] | None = None) -> int:
         size += sum(
             get_object_size_deep(k, seen) + get_object_size_deep(v, seen) for k, v in obj.items()
         )
-    elif isinstance(obj, (list, tuple, set, frozenset)):
+    elif isinstance(obj, list | tuple | set | frozenset):
         size += sum(get_object_size_deep(item, seen) for item in obj)
     elif hasattr(obj, "__dict__"):
         size += get_object_size_deep(obj.__dict__, seen)

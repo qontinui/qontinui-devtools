@@ -9,7 +9,6 @@ import ast
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 from .clustering import MethodCluster, cluster_methods_by_keywords
 
@@ -140,7 +139,7 @@ class SRPAnalyzer:
         class_node: ast.ClassDef,
         file_path: str,
         min_methods: int = 5,
-    ) -> Optional[SRPViolation]:
+    ) -> SRPViolation | None:
         """Analyze a class for SRP violations.
 
         Args:

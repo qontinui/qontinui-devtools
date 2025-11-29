@@ -93,7 +93,6 @@ def count_attributes(class_node: ast.ClassDef) -> int:
     Returns:
         Number of instance attributes
     """
-    attribute_count = 0
 
     # Find __init__ method
     init_method = None
@@ -162,7 +161,6 @@ def _estimate_complexity(node: ast.AST) -> int:
     Returns:
         Estimated complexity score
     """
-    complexity = 1  # Base complexity
 
     class ComplexityVisitor(ast.NodeVisitor):
         def __init__(self) -> None:

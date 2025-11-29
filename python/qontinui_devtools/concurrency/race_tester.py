@@ -217,7 +217,7 @@ class RaceConditionTester:
                 failure_details.append("Test timeout exceeded")
 
         end_time = time.time()
-        total_time = end_time - start_time
+        end_time - start_time
 
         # Calculate timing variance
         timing_variance = 0.0

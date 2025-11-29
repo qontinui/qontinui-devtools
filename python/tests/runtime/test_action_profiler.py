@@ -172,7 +172,6 @@ class TestActionProfiler:
 
         with profiler.profile_action("click", "btn_test") as profile:
             # Allocate some memory
-            data = [0] * 100000  # ~800KB
             time.sleep(0.01)
 
         # Memory tracking should show some change
@@ -210,7 +209,7 @@ class TestActionProfiler:
         profiler.start_session()
 
         with pytest.raises(ValueError):
-            with profiler.profile_action("click", "btn_test") as profile:
+            with profiler.profile_action("click", "btn_test"):
                 raise ValueError("Test error")
 
         # Profile should still be recorded
@@ -311,7 +310,7 @@ class TestActionProfiler:
 
         with profiler.profile_action("compute", "test") as profile:
             # Do some CPU work
-            result = sum(i**2 for i in range(100000))
+            sum(i**2 for i in range(100000))
 
         # CPU time should be measured
         assert profile.cpu_time > 0
@@ -340,7 +339,7 @@ class TestActionProfiler:
         profiler.start_session()
 
         with profiler.profile_action("click", "test") as profile:
-            data = [0] * 100000
+            pass
 
         assert profile.memory_before == 0
         assert profile.memory_after == 0
