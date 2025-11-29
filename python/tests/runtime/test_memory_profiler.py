@@ -168,7 +168,7 @@ class TestMemoryProfiler:
 
         # Create intentional leak
         leaky_list = []
-        for i in range(5):
+        for _i in range(5):
             # Take snapshot
             profiler.take_snapshot()
 

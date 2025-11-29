@@ -339,7 +339,7 @@ class TestImportTracer(unittest.TestCase):
 
         # Should have tracked imports from multiple threads
         events = tracer.get_events()
-        thread_ids = {e.thread_id for e in events}
+        {e.thread_id for e in events}
 
         # We expect at least the main thread
         self.assertGreater(len(events), 0)
@@ -385,7 +385,7 @@ class TestIntegration(unittest.TestCase):
                 pass
 
         # Step 2: Analyze
-        cycles = tracer.find_circular_dependencies()
+        tracer.find_circular_dependencies()
         events = tracer.get_events()
         graph = tracer.get_graph()
 

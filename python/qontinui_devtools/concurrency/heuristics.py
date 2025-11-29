@@ -232,7 +232,7 @@ def analyze_lock_granularity(accesses: list[StateAccess]) -> str:
         return "appropriate"
 
     protected = sum(1 for a in accesses if a.in_lock_context)
-    unprotected = len(accesses) - protected
+    len(accesses) - protected
 
     # If nothing is protected, granularity doesn't matter
     if protected == 0:

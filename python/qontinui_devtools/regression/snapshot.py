@@ -159,7 +159,7 @@ class APISnapshot:
             # Extract methods
             methods = []
             for item in node.body:
-                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if isinstance(item, ast.FunctionDef | ast.AsyncFunctionDef):
                     method_sig = self._extract_function_signature(item, module_path)
                     if method_sig:
                         methods.append(method_sig)

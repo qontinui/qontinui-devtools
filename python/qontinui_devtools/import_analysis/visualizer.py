@@ -6,7 +6,7 @@ graphs using Graphviz, with support for highlighting circular dependencies.
 """
 
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 from .import_tracer import ImportGraph
 
@@ -18,8 +18,8 @@ def visualize_import_graph(
     output_path: str,
     highlight_cycles: bool = True,
     layout: LayoutType = "dot",
-    title: Optional[str] = None,
-    max_nodes: Optional[int] = None,
+    title: str | None = None,
+    max_nodes: int | None = None,
     exclude_stdlib: bool = True,
 ) -> None:
     """Generate a visual representation of an import graph.

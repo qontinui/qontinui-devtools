@@ -256,7 +256,7 @@ class DependencyHealthChecker:
 
             # Optional dependencies
             if include_dev and "optional-dependencies" in project:
-                for group, deps in project["optional-dependencies"].items():
+                for _group, deps in project["optional-dependencies"].items():
                     for spec in deps:
                         name, version = self._parse_requirement_spec(spec)
                         dependencies[name] = version
@@ -368,7 +368,7 @@ class DependencyHealthChecker:
 
         if match:
             name = match.group(1)
-            operator = match.group(2) or ""
+            match.group(2) or ""
             version = match.group(3).strip() or "*"
 
             # Clean up version

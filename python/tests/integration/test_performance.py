@@ -751,7 +751,7 @@ class TestOverallPerformanceMetrics:
         def execute_monitored():
             tracer.trace_event("execute", {})
             start = time.perf_counter()
-            result = sample_action_instance.execute(iterations=10)
+            sample_action_instance.execute(iterations=10)
             elapsed = time.perf_counter() - start
             return elapsed
 

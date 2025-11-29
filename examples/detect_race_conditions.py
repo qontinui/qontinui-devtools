@@ -113,11 +113,11 @@ def analyze_directory(path: str, verbose: bool = True) -> None:
             # Access locations (limited)
             if len(race.access_locations) <= 5:
                 print("   Access locations:")
-                for file_path, line_num, access_type in race.access_locations:
+                for _file_path, line_num, access_type in race.access_locations:
                     print(f"     - Line {line_num}: {access_type}")
             else:
                 print(f"   Access locations: {len(race.access_locations)} (showing first 5)")
-                for file_path, line_num, access_type in race.access_locations[:5]:
+                for _file_path, line_num, access_type in race.access_locations[:5]:
                     print(f"     - Line {line_num}: {access_type}")
 
             print()

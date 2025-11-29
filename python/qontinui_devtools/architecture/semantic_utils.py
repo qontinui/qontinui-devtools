@@ -5,7 +5,6 @@ and classifying methods into responsibility categories based on common patterns.
 """
 
 import re
-from typing import Optional
 
 # Common method prefixes mapped to responsibilities
 RESPONSIBILITY_PATTERNS: dict[str, list[str]] = {
@@ -129,7 +128,7 @@ def tokenize_method_name(name: str) -> list[str]:
     return tokens
 
 
-def extract_verb(tokens: list[str]) -> Optional[str]:
+def extract_verb(tokens: list[str]) -> str | None:
     """Extract primary verb from tokens.
 
     Typically the first token is the verb (get, set, calculate, etc).

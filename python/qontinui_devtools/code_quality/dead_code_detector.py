@@ -129,7 +129,7 @@ class UsageCollector(ast.NodeVisitor):
 
     def visit_Name(self, node: ast.Name) -> None:
         """Visit name reference."""
-        if isinstance(node.ctx, (ast.Load, ast.Del)):
+        if isinstance(node.ctx, ast.Load | ast.Del):
             self.used_names.add(node.id)
         self.generic_visit(node)
 

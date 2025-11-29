@@ -72,8 +72,8 @@ def plot_memory_timeline(
         xy=(times[max_idx], memory_mb[max_idx]),
         xytext=(10, 10),
         textcoords="offset points",
-        bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
-        arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
+        bbox={"boxstyle": "round,pad=0.5", "fc": "yellow", "alpha": 0.7},
+        arrowprops={"arrowstyle": "->", "connectionstyle": "arc3,rad=0"},
     )
 
     plt.tight_layout()
@@ -133,7 +133,7 @@ def plot_object_growth(
             f"Growth: {growth:+d} objects\nRate: {rate:.1f} obj/s",
             transform=ax.transAxes,
             verticalalignment="top",
-            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
+            bbox={"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5},
         )
 
     plt.tight_layout()
@@ -194,7 +194,7 @@ def plot_top_objects(
     ax.grid(True, axis="x", alpha=0.3)
 
     # Add count labels
-    for i, (obj_type, count) in enumerate(sorted_objects):
+    for i, (_obj_type, count) in enumerate(sorted_objects):
         ax.text(count, i, f" {count:,}", va="center", fontsize=9)
 
     plt.tight_layout()
@@ -375,7 +375,7 @@ def plot_comparison(
         summary,
         transform=ax2.transAxes,
         verticalalignment="top",
-        bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
+        bbox={"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5},
         fontsize=10,
     )
 

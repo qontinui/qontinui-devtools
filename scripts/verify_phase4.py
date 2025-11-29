@@ -91,7 +91,7 @@ def verify_imports() -> tuple[bool, list[str]]:
     for module, class_name in classes:
         try:
             mod = __import__(module, fromlist=[class_name])
-            cls = getattr(mod, class_name)
+            getattr(mod, class_name)
             print_success(f"Imported {module}.{class_name}")
             success_count += 1
         except (ImportError, AttributeError) as e:

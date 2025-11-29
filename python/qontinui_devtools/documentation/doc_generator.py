@@ -120,7 +120,7 @@ class DocstringParser:
         description_lines = []
         in_description = True
 
-        for i, line in enumerate(lines[1:], 1):
+        for _i, line in enumerate(lines[1:], 1):
             stripped = line.strip()
 
             # Check for section headers
@@ -760,14 +760,14 @@ class ASTDocExtractor(ast.NodeVisitor):
 
         try:
             return ast.unparse(annotation)
-        except:
+        except Exception:
             return str(annotation)
 
     def _get_default_value(self, node: ast.expr) -> str:
         """Get default value as string."""
         try:
             return ast.unparse(node)
-        except:
+        except Exception:
             return str(node)
 
     def _get_decorator_name(self, node: ast.expr) -> str:
@@ -1118,7 +1118,7 @@ class DocumentationGenerator:
         # Modules
         if tree.modules:
             html.append("<h2>Modules</h2>")
-            for qualified_name, module in sorted(tree.modules.items()):
+            for _qualified_name, module in sorted(tree.modules.items()):
                 html.append('<div class="item">')
                 html.append(f"<h3>{module.name}</h3>")
                 if module.summary:
@@ -1128,7 +1128,7 @@ class DocumentationGenerator:
         # Classes
         if tree.classes:
             html.append("<h2>Classes</h2>")
-            for qualified_name, cls in sorted(tree.classes.items()):
+            for _qualified_name, cls in sorted(tree.classes.items()):
                 html.append('<div class="item">')
                 html.append(f"<h3>{cls.name}</h3>")
                 if cls.summary:

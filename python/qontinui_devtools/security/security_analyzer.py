@@ -10,7 +10,6 @@ import ast
 import re
 import time
 from pathlib import Path
-from typing import Optional
 
 from .models import SecurityReport, Severity, Vulnerability, VulnerabilityType
 
@@ -131,7 +130,7 @@ class SecurityAnalyzer:
         "lxml.etree.XMLParser",
     }
 
-    def __init__(self, exclude_patterns: Optional[list[str]] = None):
+    def __init__(self, exclude_patterns: list[str] | None = None):
         """
         Initialize the security analyzer.
 
@@ -600,7 +599,7 @@ class SecurityAnalyzer:
         if isinstance(node, ast.JoinedStr):
             # f-string
             return True
-        elif isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Mod)):
+        elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add | ast.Mod):
             # String concatenation or % formatting
             # Check if either side involves a name (variable)
             if self._contains_name(node.left) or self._contains_name(node.right):
@@ -624,7 +623,7 @@ class SecurityAnalyzer:
 
     def _contains_dynamic_elements(self, node: ast.AST) -> bool:
         """Check if a list or other container has dynamic elements."""
-        if isinstance(node, (ast.List, ast.Tuple)):
+        if isinstance(node, ast.List | ast.Tuple):
             return any(self._is_dynamic_string(elem) for elem in node.elts)
         return False
 

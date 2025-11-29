@@ -139,7 +139,7 @@ def main():
     print(f"Snapshot 1: {snapshot1.total_mb:.1f} MB")
 
     # Allocate memory
-    data = [{"key": f"value{i}" * 10} for i in range(5000)]
+    [{"key": f"value{i}" * 10} for i in range(5000)]
     time.sleep(0.5)
 
     snapshot2 = profiler.take_snapshot()
@@ -170,8 +170,8 @@ def main():
     profiler.start()
 
     # Simulate various allocations
-    lists = [[i] * 100 for i in range(5000)]
-    dicts = [{f"key{i}": i} for i in range(3000)]
+    [[i] * 100 for i in range(5000)]
+    [{f"key{i}": i} for i in range(3000)]
 
     snapshot = profiler.take_snapshot()
     patterns = detect_common_leak_patterns(snapshot.objects_by_type)

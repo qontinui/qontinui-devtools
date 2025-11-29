@@ -477,7 +477,7 @@ class TestDashboardIntegration:
                 collector.record_action(f"action_{i}", 0.01, success=True)
 
         def record_events():
-            for i in range(50):
+            for _i in range(50):
                 collector.record_event(0.01, success=True)
 
         # Run concurrently

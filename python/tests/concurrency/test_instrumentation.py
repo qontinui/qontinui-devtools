@@ -171,9 +171,9 @@ def test_tracker_default_timestamp():
     tracker = SharedStateTracker()
     obj_id = 123
 
-    before = time.time()
+    time.time()
     tracker.record_read(obj_id)
-    after = time.time()
+    time.time()
 
     # Can't directly check timestamp, but verify it was recorded
     stats = tracker.get_stats()
@@ -305,7 +305,7 @@ def test_concurrent_tracking():
     obj_id = id(shared_dict)
 
     def worker(thread_id: int):
-        for i in range(100):
+        for _i in range(100):
             tracker.record_read(obj_id, thread_id=thread_id)
             shared_dict["value"] += 1
             tracker.record_write(obj_id, thread_id=thread_id)

@@ -81,8 +81,6 @@ class TestFindReferenceChains:
     def test_nested_reference_chain(self):
         """Test finding nested reference chains."""
         inner = {"inner": "data"}
-        middle = {"middle": inner}
-        outer = {"outer": middle}
 
         chains = find_reference_chains(inner, max_depth=5)
 

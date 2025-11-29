@@ -263,7 +263,7 @@ class MockPatternMatcher(IPatternMatcher):
         features = []
         width, height = image.size
 
-        for i in range(num_features):
+        for _i in range(num_features):
             features.append(
                 Feature(
                     x=random.uniform(0, width),

@@ -279,7 +279,7 @@ class ConfigValidator:
 
             try:
                 # Attempt to parse workflow with Pydantic
-                validated = self.Workflow.model_validate(workflow)
+                self.Workflow.model_validate(workflow)
                 valid_count += 1
             except PydanticValidationError as e:
                 # Parse Pydantic errors
@@ -333,7 +333,7 @@ class ConfigValidator:
         ) in inline_workflows:
             try:
                 # Attempt to parse inline workflow with Pydantic
-                validated = self.Workflow.model_validate(inline_workflow)
+                self.Workflow.model_validate(inline_workflow)
                 inline_valid_count += 1
             except PydanticValidationError as e:
                 # Parse Pydantic errors for inline workflow
