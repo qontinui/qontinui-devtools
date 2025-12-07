@@ -382,9 +382,7 @@ class TestMockPlatformSpecific:
         """Test adding UI elements to window."""
         platform = MockPlatformSpecific()
         window = platform.add_window("Test", 0, 0, 800, 600)
-        platform.add_ui_element(
-            window, element_type="button", name="submit_btn", text="Submit"
-        )
+        platform.add_ui_element(window, element_type="button", name="submit_btn", text="Submit")
 
         elements = platform.get_ui_elements(window)
 

@@ -3,7 +3,6 @@
 This module imports back to module_a, closing the circular dependency loop.
 """
 
-
 # This import closes the circular dependency loop
 from .module_a import ClassA, function_a
 

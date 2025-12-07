@@ -23,7 +23,6 @@ except ImportError:
     MATPLOTLIB_AVAILABLE = False
 
 
-
 def plot_memory_timeline(
     snapshots: list[Any],  # list[MemorySnapshot]
     output_path: str,

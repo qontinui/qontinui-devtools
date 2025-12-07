@@ -3,7 +3,6 @@
 This module imports module_c, completing the circular chain.
 """
 
-
 # This import continues the circular dependency chain
 from .module_c import ClassC, FunctionC
 

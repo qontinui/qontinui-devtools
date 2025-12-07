@@ -1,6 +1,5 @@
 """Heuristic analysis to reduce false positives in race condition detection."""
 
-
 from .ast_analyzer import AnalysisContext, LockInfo, StateAccess
 
 

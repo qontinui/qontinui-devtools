@@ -4,7 +4,6 @@ This module imports module_b, which imports module_c, which imports back to modu
 creating a circular dependency: a -> b -> c -> a
 """
 
-
 # This import creates a circular dependency
 from .module_b import ClassB, FunctionB
 

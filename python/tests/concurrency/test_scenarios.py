@@ -1,6 +1,5 @@
 """Tests for pre-built race condition scenarios."""
 
-
 from qontinui_devtools.concurrency.scenarios import (
     run_all_scenarios,
     test_check_then_act,

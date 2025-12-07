@@ -222,7 +222,6 @@ class ActionProfiler:
             # Store profile
             self._profiles.append(profile)
 
-
     def end_session(self) -> ProfilingSession:
         """End the current session and get results.
 
