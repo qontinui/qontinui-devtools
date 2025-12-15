@@ -22,10 +22,10 @@ __version__ = "1.1.0"
 # Phase 1: Critical Tools
 # Phase 2: Architecture Analysis
 from .architecture import (
-    CouplingCohesionAnalyzer,
-    DependencyGraphVisualizer,
-    GodClassDetector,
-    SRPAnalyzer,
+                           CouplingCohesionAnalyzer,
+                           DependencyGraphVisualizer,
+                           GodClassDetector,
+                           SRPAnalyzer,
 )
 
 # Code Quality
@@ -40,13 +40,7 @@ from .regression import RegressionDetector
 from .reporting import HTMLReportGenerator, ReportAggregator
 
 # Phase 3: Runtime Monitoring
-from .runtime import (
-    ActionProfiler,
-    DashboardServer,
-    EventTracer,
-    MemoryProfiler,
-    MetricsCollector,
-)
+from .runtime import ActionProfiler, DashboardServer, EventTracer, MemoryProfiler, MetricsCollector
 
 # Phase 4: Advanced Analysis
 from .security import SecurityAnalyzer

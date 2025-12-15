@@ -8,11 +8,7 @@ beautiful API documentation from Python source code.
 import tempfile
 from pathlib import Path
 
-from qontinui_devtools.documentation import (
-    DocstringStyle,
-    DocumentationGenerator,
-    OutputFormat,
-)
+from qontinui_devtools.documentation import DocstringStyle, DocumentationGenerator, OutputFormat
 
 
 def create_sample_code(path: Path) -> None:

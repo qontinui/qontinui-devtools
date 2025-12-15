@@ -9,13 +9,7 @@ import subprocess
 import time
 from pathlib import Path
 
-from .models import (
-    AnyUsage,
-    MypyError,
-    TypeAnalysisReport,
-    TypeCoverage,
-    UntypedItem,
-)
+from .models import AnyUsage, MypyError, TypeAnalysisReport, TypeCoverage, UntypedItem
 from .type_inference import TypeInferenceEngine
 
 

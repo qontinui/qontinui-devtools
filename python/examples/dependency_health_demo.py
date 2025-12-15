@@ -9,11 +9,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import Mock
 
-from qontinui_devtools.dependencies import (
-    DependencyHealthChecker,
-    HealthStatus,
-    UpdateType,
-)
+from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus, UpdateType
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
 
 

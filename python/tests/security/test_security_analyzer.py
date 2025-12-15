@@ -9,11 +9,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.security import (
-    SecurityAnalyzer,
-    Severity,
-    VulnerabilityType,
-)
+from qontinui_devtools.security import SecurityAnalyzer, Severity, VulnerabilityType
 
 
 @pytest.fixture

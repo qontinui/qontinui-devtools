@@ -3,10 +3,7 @@
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.architecture import (
-    MethodCluster,
-    SRPAnalyzer,
-)
+from qontinui_devtools.architecture import MethodCluster, SRPAnalyzer
 from qontinui_devtools.architecture.clustering import (
     cluster_methods_by_keywords,
     merge_similar_clusters,

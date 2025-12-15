@@ -25,11 +25,7 @@ fixtures_dir = test_dir / "fixtures"
 if str(fixtures_dir) not in sys.path:
     sys.path.insert(0, str(fixtures_dir))
 
-from qontinui_devtools.import_analysis import (
-    ImportEvent,
-    ImportGraph,
-    ImportTracer,
-)
+from qontinui_devtools.import_analysis import ImportEvent, ImportGraph, ImportTracer
 
 
 class TestImportEvent(unittest.TestCase):

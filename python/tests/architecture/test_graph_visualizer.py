@@ -5,11 +5,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.architecture import (
-    DependencyGraphVisualizer,
-    GraphEdge,
-    GraphNode,
-)
+from qontinui_devtools.architecture import DependencyGraphVisualizer, GraphEdge, GraphNode
 
 
 @pytest.fixture

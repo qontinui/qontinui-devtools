@@ -15,7 +15,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 
 
-
 def main():
     print("\n" + "=" * 80)
     print("DEMONSTRATING: How ImportTracer catches the pynput_controller issue")

@@ -4,12 +4,7 @@ This module provides analyzers that work across multiple programming languages
 to detect type mismatches, naming inconsistencies, and other cross-language issues.
 """
 
-from .id_type_checker import (
-    IDField,
-    IDTypeChecker,
-    IDTypeIssue,
-    IssueSeverity,
-)
+from .id_type_checker import IDField, IDTypeChecker, IDTypeIssue, IssueSeverity
 
 __all__ = [
     "IDTypeChecker",
