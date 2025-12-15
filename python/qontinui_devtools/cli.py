@@ -427,126 +427,6 @@ def stress_test(path: str, duration: int, workers: int) -> None:
     console.print("[yellow]This feature is coming soon![/yellow]")
 
 
-@main.command("analyze")
-@click.argument("path", type=click.Path(exists=True))
-@click.option("--report", type=click.Path(), help="Generate HTML report")
-@click.option(
-    "--format",
-    type=click.Choice(["text", "json", "html"], case_sensitive=False),
-    default="text",
-    help="Output format",
-)
-@click.option(
-    "--checks",
-    multiple=True,
-    type=click.Choice(["imports", "concurrency", "complexity", "all"]),
-    default=["all"],
-    help="Checks to run",
-)
-def analyze(path: str, report: str | None, format: str, checks: tuple[str, ...]) -> None:
-    """Run comprehensive analysis on codebase.
-
-    Performs multiple static analysis checks including import analysis,
-    concurrency checks, and code complexity metrics.
-
-    Examples:
-
-        # Full analysis
-        qontinui-devtools analyze ./src
-
-        # Generate HTML report
-        qontinui-devtools analyze ./src --report report.html --format html
-
-        # Run specific checks
-        qontinui-devtools analyze ./src --checks imports --checks concurrency
-    """
-    console.print(
-        Panel(
-            f"[bold cyan]Path:[/bold cyan] {path}\n"
-            f"[bold cyan]Checks:[/bold cyan] {', '.join(checks)}\n"
-            f"[bold cyan]Format:[/bold cyan] {format}",
-            title="Comprehensive Analysis",
-            border_style="cyan",
-        )
-    )
-    console.print()
-
-    # Determine which checks to run
-    run_all = "all" in checks
-    run_imports = run_all or "imports" in checks
-    run_concurrency = run_all or "concurrency" in checks
-
-    results: dict[str, Any] = {}
-
-    # Import analysis
-    if run_imports:
-        try:
-            from .import_analysis import CircularDependencyDetector
-
-            with console.status("[bold green]Analyzing imports..."):
-                import_detector = CircularDependencyDetector(path, verbose=False)
-                import_cycles = import_detector.analyze()
-
-            results["imports"] = {
-                "cycles": len(import_cycles),
-                "status": "FAIL" if import_cycles else "PASS",
-            }
-        except Exception as e:
-            console.print(f"[yellow]Warning: Import analysis failed:[/yellow] {e}")
-            results["imports"] = {"status": "ERROR", "error": str(e)}
-
-    # Concurrency analysis
-    if run_concurrency:
-        try:
-            from .concurrency import RaceConditionDetector
-
-            with console.status("[bold green]Analyzing concurrency..."):
-                race_detector = RaceConditionDetector(path)
-                races = race_detector.analyze()
-
-            results["concurrency"] = {"races": len(races), "status": "FAIL" if races else "PASS"}
-        except Exception as e:
-            console.print(f"[yellow]Warning: Concurrency analysis failed:[/yellow] {e}")
-            results["concurrency"] = {"status": "ERROR", "error": str(e)}
-
-    # Display summary
-    table = Table(title="Analysis Summary", show_header=True, header_style="bold magenta")
-    table.add_column("Check", style="cyan", width=20)
-    table.add_column("Status", style="bold", width=10)
-    table.add_column("Issues", justify="right", width=10)
-    table.add_column("Details", width=40)
-
-    if "imports" in results:
-        status = results["imports"]["status"]
-        status_color = (
-            "[green]✓" if status == "PASS" else "[red]✗" if status == "FAIL" else "[yellow]⚠"
-        )
-        issues = results["imports"].get("cycles", "N/A")
-        details = f"Found {issues} circular dependencies" if status == "FAIL" else "No issues"
-        table.add_row("Circular Dependencies", f"{status_color} {status}", str(issues), details)
-
-    if "concurrency" in results:
-        status = results["concurrency"]["status"]
-        status_color = (
-            "[green]✓" if status == "PASS" else "[red]✗" if status == "FAIL" else "[yellow]⚠"
-        )
-        issues = results["concurrency"].get("races", "N/A")
-        details = f"Found {issues} potential races" if status == "FAIL" else "No issues"
-        table.add_row("Race Conditions", f"{status_color} {status}", str(issues), details)
-
-    console.print(table)
-    console.print()
-
-    # Generate report if requested
-    if report:
-        console.print(f"[blue]📄 Generating report:[/blue] {report}")
-        try:
-            generate_report(results, report, format)
-            console.print("[green]✅ Report saved successfully[/green]")
-        except Exception as e:
-            console.print(f"[red]Failed to generate report:[/red] {e}")
-
-
 @main.group()
 def profile() -> None:
     """Performance profiling commands.
@@ -2324,8 +2204,251 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
                 indent=2,
             )
     elif format == "html":
-        # TODO: Implement HTML report generation
-        console.print("[yellow]HTML format not yet implemented[/yellow]")
+        html_content = """<!DOCTYPE html>
+<html>
+<head>
+    <title>Circular Dependency Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .cycle {
+            background-color: white;
+            border-left: 4px solid #e74c3c;
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+        .cycle.critical {
+            border-left-color: #c0392b;
+            background-color: #fff5f5;
+        }
+        .cycle.warning {
+            border-left-color: #f39c12;
+            background-color: #fffaf0;
+        }
+        .cycle.info {
+            border-left-color: #3498db;
+            background-color: #f0f8ff;
+        }
+        .cycle-path {
+            font-family: 'Courier New', monospace;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .cycle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .cycle-number {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+        .severity-badge {
+            padding: 5px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .severity-critical { background-color: #c0392b; color: white; }
+        .severity-warning { background-color: #f39c12; color: white; }
+        .severity-info { background-color: #3498db; color: white; }
+        .suggestion {
+            background-color: #e8f8f5;
+            border-left: 3px solid: #1abc9c;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        .suggestion-header {
+            font-weight: bold;
+            color: #16a085;
+            margin-bottom: 10px;
+        }
+        .code-example {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .affected-files {
+            margin: 10px 0;
+        }
+        .affected-files li {
+            margin: 5px 0;
+            color: #7f8c8d;
+        }
+        .stats {
+            background-color: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .import-chain {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .import-chain-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+        .import-item {
+            margin: 5px 0;
+            padding: 8px;
+            background-color: white;
+            border-left: 2px solid #95a5a6;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 Circular Dependency Report</h1>
+"""
+
+        # Add statistics if available
+        if detector:
+            stats = detector.get_statistics()
+            html_content += f"""
+    <div class="stats">
+        <h2>Summary Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">{len(data)}</div>
+                <div class="stat-label">Total Cycles</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{stats.get('total_files_analyzed', 0)}</div>
+                <div class="stat-label">Files Analyzed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{stats.get('total_imports', 0)}</div>
+                <div class="stat-label">Total Imports</div>
+            </div>
+        </div>
+    </div>
+"""
+
+        # Add each cycle
+        for i, cycle in enumerate(data, 1):
+            severity_class = cycle.severity.lower() if hasattr(cycle, 'severity') else 'info'
+            severity_display = cycle.severity.upper() if hasattr(cycle, 'severity') else 'INFO'
+
+            html_content += f"""
+    <div class="cycle {severity_class}">
+        <div class="cycle-header">
+            <span class="cycle-number">Cycle #{i}</span>
+            <span class="severity-badge severity-{severity_class}">{severity_display}</span>
+        </div>
+        <div class="cycle-path">
+            {' → '.join(cycle.cycle)}
+        </div>
+"""
+
+            # Add import chain if available
+            if hasattr(cycle, 'import_chain') and cycle.import_chain:
+                html_content += """
+        <div class="import-chain">
+            <div class="import-chain-header">Import Chain:</div>
+"""
+                for imp in cycle.import_chain:
+                    html_content += f"""
+            <div class="import-item">
+                <strong>{imp.module}</strong><br>
+                File: {imp.file_path}:{imp.line_number}<br>
+                Statement: {str(imp)}
+            </div>
+"""
+                html_content += """
+        </div>
+"""
+
+            # Add suggestion
+            if hasattr(cycle, 'suggestion'):
+                suggestion = cycle.suggestion
+                html_content += f"""
+        <div class="suggestion">
+            <div class="suggestion-header">💡 Suggested Fix ({suggestion.fix_type})</div>
+            <p>{suggestion.description}</p>
+"""
+
+                if suggestion.code_example:
+                    html_content += f"""
+            <div class="code-example">{suggestion.code_example}</div>
+"""
+
+                if suggestion.affected_files:
+                    html_content += """
+            <div class="affected-files">
+                <strong>Affected Files:</strong>
+                <ul>
+"""
+                    for file in suggestion.affected_files:
+                        html_content += f"                    <li>{file}</li>\n"
+                    html_content += """
+                </ul>
+            </div>
+"""
+
+                html_content += """
+        </div>
+"""
+
+            html_content += """
+    </div>
+"""
+
+        html_content += """
+</body>
+</html>
+"""
+
+        with open(output, "w") as f:
+            f.write(html_content)
     else:
         with open(output, "w") as f:
             for i, cycle in enumerate(data, 1):
@@ -2585,9 +2708,9 @@ def start_dashboard(host: str, port: int, interval: float) -> None:
         sys.exit(1)
 
     # Check for aiohttp
-    try:
-        import aiohttp
-    except ImportError:
+    import importlib.util
+
+    if importlib.util.find_spec("aiohttp") is None:
         console.print("[red]Error: aiohttp is required for the dashboard[/red]")
         console.print("[yellow]Install it with: pip install aiohttp[/yellow]")
         sys.exit(1)
