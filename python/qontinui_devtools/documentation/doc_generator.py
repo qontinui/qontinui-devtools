@@ -966,7 +966,7 @@ class DocumentationGenerator:
             # Load template
             try:
                 template = env.get_template("api_reference.html.jinja2")
-            except:
+            except Exception:
                 # Use basic template if file doesn't exist
                 template = env.from_string(self._get_basic_html_template())
 

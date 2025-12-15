@@ -4,19 +4,15 @@ This module provides static analysis of Rust mod and use statements to detect
 circular dependencies without requiring rustc or cargo.
 """
 
+import importlib.util
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-try:
-    import networkx as nx
-
-    HAS_NETWORKX = True
-except ImportError:
-    HAS_NETWORKX = False
-
 from rich.console import Console
+
+HAS_NETWORKX = importlib.util.find_spec("networkx") is not None
 
 
 @dataclass

@@ -222,7 +222,7 @@ class ConfigValidator:
             self.Workflow = Workflow
             self.ConfigParser = ConfigParser
         except ImportError as e:
-            raise ImportError(f"Failed to import qontinui models from {self.qontinui_path}: {e}")
+            raise ImportError(f"Failed to import qontinui models from {self.qontinui_path}: {e}") from e
 
     def validate_file(self, config_path: str | Path) -> ValidationReport:
         """

@@ -273,22 +273,26 @@ def analyze_method_calls(class_node: ast.ClassDef) -> dict[str, set[str]]:
     """
     call_graph: dict[str, set[str]] = {}
 
+    def _create_visitor(methods_set: set[str]) -> ast.NodeVisitor:
+        """Create a visitor that captures method calls into the given set."""
+
+        class MethodCallVisitor(ast.NodeVisitor):
+            def visit_Call(self, call_node: ast.Call) -> None:
+                # Check for self.method() calls
+                if isinstance(call_node.func, ast.Attribute):
+                    if (
+                        isinstance(call_node.func.value, ast.Name)
+                        and call_node.func.value.id == "self"
+                    ):
+                        methods_set.add(call_node.func.attr)
+                self.generic_visit(call_node)
+
+        return MethodCallVisitor()
+
     for node in class_node.body:
         if isinstance(node, ast.FunctionDef):
             called_methods = set()
-
-            class MethodCallVisitor(ast.NodeVisitor):
-                def visit_Call(self, call_node: ast.Call) -> None:
-                    # Check for self.method() calls
-                    if isinstance(call_node.func, ast.Attribute):
-                        if (
-                            isinstance(call_node.func.value, ast.Name)
-                            and call_node.func.value.id == "self"
-                        ):
-                            called_methods.add(call_node.func.attr)
-                    self.generic_visit(call_node)
-
-            visitor = MethodCallVisitor()
+            visitor = _create_visitor(called_methods)
             visitor.visit(node)
             call_graph[node.name] = called_methods
 

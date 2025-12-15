@@ -474,7 +474,7 @@ class TestPerformance:
 
         # Measure without tracing
         start = time.time()
-        for i in range(1000):
+        for _i in range(1000):
             pass  # Do nothing
         baseline = time.time() - start
 

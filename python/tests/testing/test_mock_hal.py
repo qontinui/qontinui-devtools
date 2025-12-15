@@ -12,6 +12,7 @@ from qontinui_devtools.testing import (
     MockPlatformSpecific,
     MockScreenCapture,
 )
+from qontinui_devtools.testing.mock_input_controller import InputControlError
 
 
 class TestMockInputController:
@@ -100,7 +101,7 @@ class TestMockInputController:
         """Test simulated failures."""
         controller = MockInputController(failure_rate=1.0, simulate_errors=True)  # Always fail
 
-        with pytest.raises(Exception):  # InputControlError
+        with pytest.raises(InputControlError):
             controller.type_text("test")
 
     def test_reset_clears_actions(self) -> None:

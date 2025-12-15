@@ -586,17 +586,17 @@ class TestAllToolsConcurrently:
             for i in range(10):
 
                 @profiler.profile
-                def execute_iteration():
-                    tracer.trace_event("iteration_start", {"iteration": i})
+                def execute_iteration(iteration_num: int = i):
+                    tracer.trace_event("iteration_start", {"iteration": iteration_num})
 
                     result = sample_action_instance.execute(iterations=3)
 
-                    tracer.trace_event("iteration_end", {"iteration": i, "result": result})
+                    tracer.trace_event("iteration_end", {"iteration": iteration_num, "result": result})
 
                     # Update dashboard
                     dashboard.update_metrics(
                         {
-                            "iteration": i,
+                            "iteration": iteration_num,
                             "profiler": profiler.get_profile_data(),
                             "events_count": len(tracer.get_events()),
                             "memory": mem_profiler.get_memory_usage(),

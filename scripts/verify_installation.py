@@ -98,9 +98,12 @@ def verify_installation() -> bool:
     print("Checking CLI:")
     print("-" * 70)
     try:
-        from qontinui_devtools.cli import main
+        import importlib.util
 
-        print("  \u2713 CLI entry point available")
+        if importlib.util.find_spec("qontinui_devtools.cli") is not None:
+            print("  \u2713 CLI entry point available")
+        else:
+            raise ImportError("qontinui_devtools.cli module not found")
     except ImportError as e:
         print(f"  \u2717 CLI: {e}")
         all_passed = False

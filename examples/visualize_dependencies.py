@@ -85,7 +85,10 @@ def main():
     print("\n6. Attempting static visualization (requires graphviz)...")
     print("-" * 80)
     try:
-        import graphviz
+        import importlib.util
+
+        if importlib.util.find_spec("graphviz") is None:
+            raise ImportError("graphviz not available")
 
         output_png = Path(__file__).parent / "qontinui_devtools_modules.png"
         visualizer.visualize(

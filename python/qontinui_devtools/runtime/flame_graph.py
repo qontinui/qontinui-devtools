@@ -186,7 +186,7 @@ def samples_to_svg(
     for level_idx, level in enumerate(levels):
         y = svg_height - 100 - (level_idx * frame_height)
 
-        for frame_name, x, frame_width, stack in level:
+        for frame_name, x, frame_width, _stack in level:
             if frame_width < 1:  # Skip very narrow frames
                 continue
 

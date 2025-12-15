@@ -14,9 +14,7 @@ try:
     import matplotlib
 
     matplotlib.use("Agg")  # Non-interactive backend
-    import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
-    from matplotlib.figure import Figure
 
     MATPLOTLIB_AVAILABLE = True
 except ImportError:

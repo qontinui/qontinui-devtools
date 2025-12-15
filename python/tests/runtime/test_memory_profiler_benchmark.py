@@ -26,9 +26,9 @@ def test_snapshot_overhead(benchmark):
 
 def test_snapshot_with_tracemalloc_overhead(benchmark):
     """Benchmark snapshot creation with tracemalloc."""
-    try:
-        import tracemalloc
-    except ImportError:
+    import importlib.util
+
+    if importlib.util.find_spec("tracemalloc") is None:
         pytest.skip("tracemalloc not available")
 
     profiler = MemoryProfiler(enable_tracemalloc=True)

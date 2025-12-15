@@ -308,7 +308,7 @@ class RaceConditionDetector:
         if protected_accesses > 0:
             parts.append(f"Some accesses ({protected_accesses}) are protected but not all")
         elif context.locks:
-            parts.append(f"Locks available but not used: {[l.name for l in context.locks]}")
+            parts.append(f"Locks available but not used: {[lock.name for lock in context.locks]}")
         else:
             parts.append("No locking mechanism found")
 

@@ -431,11 +431,11 @@ class DependencyGraphVisualizer:
         """Generate a static visualization using graphviz."""
         try:
             import graphviz
-        except ImportError:
+        except ImportError as e:
             raise ImportError(
                 "graphviz is required for static visualizations. "
                 "Install it with: pip install graphviz"
-            )
+            ) from e
 
         from .graphviz_gen import generate_dot
 

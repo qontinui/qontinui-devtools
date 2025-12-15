@@ -356,12 +356,9 @@ class TestMemoryProfiler:
 
     def test_profiler_with_tracemalloc(self):
         """Test profiler with tracemalloc enabled."""
-        try:
-            import tracemalloc
+        import importlib.util
 
-            tracemalloc_available = True
-        except ImportError:
-            tracemalloc_available = False
+        tracemalloc_available = importlib.util.find_spec("tracemalloc") is not None
 
         if not tracemalloc_available:
             pytest.skip("tracemalloc not available")
@@ -478,7 +475,7 @@ class TestMemoryProfilerIntegration:
 
         # Should not detect significant leaks with stable memory
         # (or very few with low confidence)
-        major_leaks = [l for l in leaks if l.confidence > 0.8]
+        major_leaks = [leak for leak in leaks if leak.confidence > 0.8]
         assert len(major_leaks) == 0
 
         # Clean up
