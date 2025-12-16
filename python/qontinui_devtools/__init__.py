@@ -22,10 +22,10 @@ __version__ = "1.1.0"
 # Phase 1: Critical Tools
 # Phase 2: Architecture Analysis
 from .architecture import (
-                           CouplingCohesionAnalyzer,
-                           DependencyGraphVisualizer,
-                           GodClassDetector,
-                           SRPAnalyzer,
+    CouplingCohesionAnalyzer,
+    DependencyGraphVisualizer,
+    GodClassDetector,
+    SRPAnalyzer,
 )
 
 # Code Quality

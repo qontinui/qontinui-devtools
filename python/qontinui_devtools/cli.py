@@ -2375,8 +2375,8 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
 
         # Add each cycle
         for i, cycle in enumerate(data, 1):
-            severity_class = cycle.severity.lower() if hasattr(cycle, 'severity') else 'info'
-            severity_display = cycle.severity.upper() if hasattr(cycle, 'severity') else 'INFO'
+            severity_class = cycle.severity.lower() if hasattr(cycle, "severity") else "info"
+            severity_display = cycle.severity.upper() if hasattr(cycle, "severity") else "INFO"
 
             html_content += f"""
     <div class="cycle {severity_class}">
@@ -2390,7 +2390,7 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
 """
 
             # Add import chain if available
-            if hasattr(cycle, 'import_chain') and cycle.import_chain:
+            if hasattr(cycle, "import_chain") and cycle.import_chain:
                 html_content += """
         <div class="import-chain">
             <div class="import-chain-header">Import Chain:</div>
@@ -2408,7 +2408,7 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
 """
 
             # Add suggestion
-            if hasattr(cycle, 'suggestion'):
+            if hasattr(cycle, "suggestion"):
                 suggestion = cycle.suggestion
                 html_content += f"""
         <div class="suggestion">
