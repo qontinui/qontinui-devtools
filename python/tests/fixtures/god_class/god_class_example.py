@@ -15,8 +15,8 @@ class HugeClass:
         self.logger = None
         self.config: dict[Any, Any] = {}
         self.state = "initial"
-        self.errors=[],
-        self.warnings=[],
+        self.errors: list[Any] = []
+        self.warnings: list[Any] = []
         self.user_session = None
         self.api_client = None
         self.formatter = None

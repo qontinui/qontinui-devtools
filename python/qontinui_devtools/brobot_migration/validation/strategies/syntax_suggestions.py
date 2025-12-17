@@ -1,10 +1,7 @@
-"""
-from typing import Any
-
-Syntax fix suggestion strategies for Java to Python migration.
-"""
+"""Syntax fix suggestion strategies for Java to Python migration."""
 
 import re
+from typing import Any
 from pathlib import Path
 
 from ...core.models import TestFile

@@ -125,7 +125,7 @@ class TestProfilerPerformance:
 
     def test_profiler_overhead(
         self, sample_action_instance, profiler_config, performance_thresholds
-    ):
+    ) -> None:
         """Test that profiler overhead is below threshold."""
         # Baseline: measure without profiler
         baseline_times: list[Any] = []
@@ -206,7 +206,7 @@ class TestProfilerPerformance:
 
     def test_profiler_memory_usage(
         self, sample_action_instance, profiler_config, performance_thresholds
-    ):
+    ) -> None:
         """Test profiler memory usage."""
         import sys
 
@@ -250,7 +250,7 @@ class TestEventTracerPerformance:
 
     def test_event_tracer_overhead(
         self, sample_action_instance, event_tracer_config, performance_thresholds
-    ):
+    ) -> None:
         """Test that event tracer overhead is below threshold."""
         iterations = 100
 
@@ -386,7 +386,7 @@ class TestMemoryProfilerPerformance:
 
     def test_memory_profiler_overhead(
         self, memory_intensive_action, memory_profiler_config, performance_thresholds
-    ):
+    ) -> None:
         """Test memory profiler overhead."""
         # Baseline
         start = time.perf_counter()
@@ -460,7 +460,7 @@ class TestStressTests:
 
     def test_profiler_stress_many_calls(
         self, sample_action_instance, profiler_config, stress_test_config
-    ):
+    ) -> None:
         """Stress test profiler with many function calls."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
@@ -525,7 +525,7 @@ class TestStressTests:
         event_tracer_config,
         memory_profiler_config,
         stress_test_config,
-    ):
+    ) -> None:
         """Stress test all tools running concurrently."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -585,7 +585,7 @@ class TestStressTests:
 
     def test_long_running_monitoring(
         self, sample_action_instance, profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test tools can handle long-running monitoring sessions."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -726,7 +726,7 @@ class TestOverallPerformanceMetrics:
         event_tracer_config,
         memory_profiler_config,
         performance_thresholds,
-    ):
+    ) -> None:
         """Test that combined overhead of all tools meets threshold."""
         # Baseline
         baseline_times: list[Any] = []

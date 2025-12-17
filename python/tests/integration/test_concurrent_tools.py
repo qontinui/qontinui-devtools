@@ -301,7 +301,7 @@ class TestConcurrentToolLifecycle:
 
     def test_concurrent_tool_initialization(
         self, profiler_config, event_tracer_config, memory_profiler_config, dashboard_config
-    ):
+    ) -> None:
         """Test initializing all tools concurrently."""
         tools: dict[Any, Any] = {}
         errors=[],
@@ -361,7 +361,7 @@ class TestConcurrentToolLifecycle:
 
     def test_concurrent_tool_shutdown(
         self, profiler_config, event_tracer_config, memory_profiler_config
-    ):
+    ) -> None:
         """Test shutting down all tools concurrently."""
         # Initialize tools
         profiler = ActionProfiler(profiler_config)
@@ -451,7 +451,7 @@ class TestConcurrentDataCollection:
 
     def test_concurrent_profiling_and_tracing(
         self, sample_action_instance, profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test profiling and tracing during concurrent execution."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -508,7 +508,7 @@ class TestConcurrentDataCollection:
         event_tracer_config,
         memory_profiler_config,
         dashboard_config,
-    ):
+    ) -> None:
         """Test dashboard receiving data from multiple concurrent sources."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -669,7 +669,7 @@ class TestRaceConditions:
         event_tracer_config,
         memory_profiler_config,
         dashboard_config,
-    ):
+    ) -> None:
         """Test that no deadlocks occur with all tools running."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)

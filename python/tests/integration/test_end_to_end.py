@@ -220,7 +220,7 @@ class TestFullMonitoringWorkflow:
         profiler_config,
         event_tracer_config,
         memory_profiler_config,
-    ):
+    ) -> None:
         """Test full workflow: analyze + profile + generate report."""
         # Step 1: Initialize monitoring tools
         profiler = ActionProfiler(profiler_config)
@@ -283,7 +283,7 @@ class TestFullMonitoringWorkflow:
 
     def test_incremental_monitoring_workflow(
         self, sample_action_instance, temp_test_dir, profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test workflow with incremental monitoring and checkpoints."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -355,7 +355,7 @@ class TestFullMonitoringWorkflow:
         profiler_config,
         event_tracer_config,
         memory_profiler_config,
-    ):
+    ) -> None:
         """Test monitoring workflow with multiple different actions."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -549,7 +549,7 @@ class TestReportGeneration:
         profiler_config,
         event_tracer_config,
         memory_profiler_config,
-    ):
+    ) -> None:
         """Test JSON report generation with all monitoring data."""
         # Collect data
         profiler = ActionProfiler(profiler_config)
@@ -608,7 +608,7 @@ class TestReportGeneration:
         profiler_config,
         event_tracer_config,
         memory_profiler_config,
-    ):
+    ) -> None:
         """Test HTML report generation with all monitoring data."""
         # Collect data
         profiler = ActionProfiler(profiler_config)
@@ -676,7 +676,7 @@ class TestReportGeneration:
 
     def test_report_with_large_dataset(
         self, sample_action_instance, temp_test_dir, profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test report generation with large amounts of data."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)

@@ -187,7 +187,7 @@ class TestProfilerEventTracerIntegration:
 
     def test_profiler_and_tracer_together(
         self, sample_action_instance, profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test that profiler and tracer can run simultaneously."""
         # Initialize tools
         profiler = ActionProfiler(profiler_config)
@@ -229,7 +229,7 @@ class TestProfilerEventTracerIntegration:
 
     def test_profiler_captures_tracer_overhead(
         self, profiler_config, event_tracer_config, sample_action_instance
-    ):
+    ) -> None:
         """Test that profiler can measure tracer overhead."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -270,7 +270,7 @@ class TestProfilerEventTracerIntegration:
 
     def test_concurrent_profiling_and_tracing(
         self, concurrent_action, profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test profiler and tracer with concurrent execution."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -312,7 +312,7 @@ class TestProfilerEventTracerIntegration:
 
     def test_event_tracer_during_profiled_error(
         self, sample_action_instance, profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test that tracer captures events when profiled function errors."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -353,7 +353,7 @@ class TestMemoryProfilerIntegration:
 
     def test_memory_profiler_with_action_profiler(
         self, memory_intensive_action, profiler_config, memory_profiler_config
-    ):
+    ) -> None:
         """Test memory profiler alongside action profiler."""
         profiler = ActionProfiler(profiler_config)
         mem_profiler = MemoryProfiler(memory_profiler_config)
@@ -380,7 +380,7 @@ class TestMemoryProfilerIntegration:
 
     def test_memory_profiler_with_event_tracer(
         self, memory_intensive_action, memory_profiler_config, event_tracer_config
-    ):
+    ) -> None:
         """Test memory profiler with event tracer."""
         mem_profiler = MemoryProfiler(memory_profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -435,7 +435,7 @@ class TestDashboardIntegration:
         event_tracer_config,
         memory_profiler_config,
         dashboard_config,
-    ):
+    ) -> None:
         """Test dashboard integration with all monitoring tools."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -484,7 +484,7 @@ class TestDashboardIntegration:
 
     def test_dashboard_live_updates(
         self, sample_action_instance, profiler_config, dashboard_config
-    ):
+    ) -> None:
         """Test that dashboard receives live updates during execution."""
         profiler = ActionProfiler(profiler_config)
         dashboard = PerformanceDashboard(dashboard_config)
@@ -518,7 +518,7 @@ class TestDashboardIntegration:
 
     def test_dashboard_concurrent_updates(
         self, concurrent_action, profiler_config, dashboard_config
-    ):
+    ) -> None:
         """Test dashboard with concurrent metric updates."""
         profiler = ActionProfiler(profiler_config)
         dashboard = PerformanceDashboard(dashboard_config)
@@ -565,7 +565,7 @@ class TestAllToolsConcurrently:
         event_tracer_config,
         memory_profiler_config,
         dashboard_config,
-    ):
+    ) -> None:
         """Test that all tools can run together without interference."""
         # Initialize all tools
         profiler = ActionProfiler(profiler_config)
@@ -637,7 +637,7 @@ class TestAllToolsConcurrently:
 
     def test_all_tools_with_async_execution(
         self, sample_action_instance, profiler_config, event_tracer_config, memory_profiler_config
-    ):
+    ) -> None:
         """Test all tools with async action execution."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -681,7 +681,7 @@ class TestAllToolsConcurrently:
 
     def test_all_tools_error_handling(
         self, sample_action_instance, profiler_config, event_tracer_config, memory_profiler_config
-    ):
+    ) -> None:
         """Test that all tools handle errors gracefully."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -721,7 +721,7 @@ class TestAllToolsConcurrently:
         profiler_config,
         event_tracer_config,
         memory_profiler_config,
-    ):
+    ) -> None:
         """Test that all tools can export their data."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)

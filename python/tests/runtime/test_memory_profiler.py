@@ -165,7 +165,7 @@ class TestMemoryProfiler:
         profiler.start()
 
         # Create intentional leak
-        leaky_list=[],
+        leaky_list: list[dict[str, str]] = []
         for _i in range(5):
             # Take snapshot
             profiler.take_snapshot()
@@ -395,7 +395,7 @@ class TestMemoryProfilerIntegration:
         assert baseline is not None
 
         # Simulate work with memory allocation
-        cache=[],
+        cache: list[dict[str, Any]] = []
         for iteration in range(5):
             # Take snapshot
             snapshot = profiler.take_snapshot()
@@ -432,8 +432,8 @@ class TestMemoryProfilerIntegration:
         profiler.start()
 
         # Create growing cache
-        cache=[],
-        snapshots=[],
+        cache: list[str] = []
+        snapshots: list[Any] = []
 
         for i in range(10):
             snapshot = profiler.take_snapshot()

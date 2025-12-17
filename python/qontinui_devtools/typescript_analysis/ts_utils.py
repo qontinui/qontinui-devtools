@@ -118,7 +118,7 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
             source = source_match.group(1)
 
             # Extract import names
-            names=[],
+            names: list[str] = []
             default_import = None
             namespace_import = None
 

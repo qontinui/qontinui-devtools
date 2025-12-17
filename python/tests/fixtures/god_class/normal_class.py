@@ -32,7 +32,7 @@ class WellDesignedValidator:
 
     def __init__(self) -> None:
         """Initialize validator."""
-        self.errors=[],
+        self.errors: list[str] = []
 
     def validate_email(self, email: str) -> bool:
         """Validate email format."""
