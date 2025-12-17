@@ -153,6 +153,10 @@ class TestClass:
         method2 = class_node.body[2]
         method3 = class_node.body[3]
 
+        assert isinstance(method1, ast.FunctionDef)
+        assert isinstance(method2, ast.FunctionDef)
+        assert isinstance(method3, ast.FunctionDef)
+
         # method1 and method2 share self.x
         shared_1_2 = find_shared_attributes(method1, method2)
         assert "x" in shared_1_2

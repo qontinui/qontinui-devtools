@@ -275,8 +275,9 @@ class TestFixSuggester:
         # Check that suggestions include code examples
         for cycle in cycles:
             if cycle.suggestion.fix_type == "type_checking":
-                assert "TYPE_CHECKING" in cycle.suggestion.code_example or ""
-                assert "from typing import TYPE_CHECKING" in cycle.suggestion.code_example or ""
+                code_example = cycle.suggestion.code_example or ""
+                assert "TYPE_CHECKING" in code_example
+                assert "from typing import TYPE_CHECKING" in code_example
 
     def test_lazy_import_suggestion(self) -> None:
         """Test that lazy import suggestions include proper examples."""

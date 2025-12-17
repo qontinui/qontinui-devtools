@@ -1,6 +1,9 @@
 """Tests for pre-built race condition scenarios."""
 
+from collections.abc import Callable
+
 from qontinui_devtools.concurrency.scenarios import (
+    RaceTestResult,
     run_all_scenarios,
     test_check_then_act,
     test_check_then_act_safe,
@@ -126,7 +129,7 @@ def test_counter_with_custom_expected() -> None:
 
 def test_scenarios_complete_successfully() -> None:
     """Test that all safe scenarios complete without failures."""
-    safe_scenarios = [
+    safe_scenarios: list[Callable[..., RaceTestResult]] = [
         test_check_then_act_safe,
         test_counter_increment_safe,
         test_lazy_initialization_safe,

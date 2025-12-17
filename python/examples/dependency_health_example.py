@@ -60,12 +60,18 @@ def main() -> None:
                 UpdateType.MINOR: "🟡",
                 UpdateType.PATCH: "🟢",
             }
-            emoji = update_emoji.get(dep.update_type, "⚪")
+            emoji = update_emoji.get(dep.update_type, "⚪") if dep.update_type else "⚪"
 
-            print(
-                f"{emoji} {dep.name}: {dep.current_version} → {dep.latest_version} "
-                f"({dep.update_type.value} update, risk: {dep.update_type.risk_level})"
-            )
+            if dep.update_type:
+                print(
+                    f"{emoji} {dep.name}: {dep.current_version} → {dep.latest_version} "
+                    f"({dep.update_type.value} update, risk: {dep.update_type.risk_level})"
+                )
+            else:
+                print(
+                    f"{emoji} {dep.name}: {dep.current_version} → {dep.latest_version} "
+                    "(unknown update type)"
+                )
 
     # Display circular dependencies
     if report.circular_dependencies:

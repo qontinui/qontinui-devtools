@@ -334,11 +334,17 @@ def main() -> None:
             report.get_outdated_dependencies(),
             key=lambda d: d.health_score,
         ):
-            emoji = update_emoji.get(dep.update_type, "⚪")
-            print(
-                f"{emoji} {dep.name:20} {dep.current_version:12} → {dep.latest_version:12} "
-                f"({dep.update_type.value:8} update, risk: {dep.update_type.risk_level})"
-            )
+            emoji = update_emoji.get(dep.update_type, "⚪") if dep.update_type else "⚪"
+            if dep.update_type:
+                print(
+                    f"{emoji} {dep.name:20} {dep.current_version:12} → {dep.latest_version:12} "
+                    f"({dep.update_type.value:8} update, risk: {dep.update_type.risk_level})"
+                )
+            else:
+                print(
+                    f"{emoji} {dep.name:20} {dep.current_version:12} → {dep.latest_version:12} "
+                    "(unknown update type)"
+                )
         print()
 
     # Display recommendations

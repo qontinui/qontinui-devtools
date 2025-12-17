@@ -43,6 +43,7 @@ class LowCohesion:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         lcom = calculate_lcom(class_node)
 
@@ -70,6 +71,7 @@ class HighCohesion:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         lcom = calculate_lcom(class_node)
 
@@ -91,6 +93,7 @@ class PerfectCohesion:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         lcom4 = calculate_lcom4(class_node)
 
@@ -112,6 +115,7 @@ class Disconnected:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         lcom4 = calculate_lcom4(class_node)
 
@@ -134,6 +138,7 @@ class TightlyCoupled:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         tcc = calculate_tcc(class_node)
 
@@ -152,6 +157,7 @@ class NoConnections:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         tcc = calculate_tcc(class_node)
 
@@ -174,6 +180,7 @@ class IndirectConnections:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         lcc = calculate_lcc(class_node)
 
@@ -189,6 +196,7 @@ class SingleMethod:
 """
         tree = ast.parse(code)
         class_node = tree.body[0]
+        assert isinstance(class_node, ast.ClassDef)
 
         # All metrics should return ideal values for single method
         assert calculate_lcom(class_node) == 0.0

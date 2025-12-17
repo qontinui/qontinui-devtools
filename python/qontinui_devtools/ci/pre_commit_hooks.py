@@ -87,7 +87,7 @@ def check_circular_imports(filenames: Sequence[str]) -> None:
 
     # Try to import and run the circular dependency detector
     try:
-        from qontinui_devtools.import_analysis.circular_deps import CircularDependencyDetector
+        from qontinui_devtools.import_analysis import CircularDependencyDetector
 
         detector = CircularDependencyDetector(str(git_root))
         cycles = detector.analyze()

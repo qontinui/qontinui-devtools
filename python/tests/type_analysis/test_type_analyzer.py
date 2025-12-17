@@ -129,6 +129,7 @@ def func() -> None:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
+        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred == "None"
         assert confidence == 0.9
@@ -143,6 +144,7 @@ def func() -> None:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
+        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred == "None"
         assert confidence == 0.9
@@ -156,6 +158,7 @@ def func() -> Any:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
+        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred == "int"
         assert confidence == 0.7
@@ -171,9 +174,10 @@ def func(x) -> Any:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
+        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
         inferred, confidence, reason = engine.infer_return_type(func_node)
-        assert "int" in inferred and "str" in inferred
-        assert "|" in inferred
+        assert inferred is not None and "int" in inferred and "str" in inferred
+        assert inferred is not None and "|" in inferred
 
     def test_infer_return_type_with_none(self) -> None:
         """Test inference when function returns value or None."""
@@ -186,10 +190,11 @@ def func(x) -> Any:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
+        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
         inferred, confidence, reason = engine.infer_return_type(func_node)
-        assert "int" in inferred
-        assert "None" in inferred
-        assert "|" in inferred
+        assert inferred is not None and "int" in inferred
+        assert inferred is not None and "None" in inferred
+        assert inferred is not None and "|" in inferred
 
     def test_infer_expr_type_list(self) -> None:
         """Test expression type inference for list."""
@@ -790,10 +795,10 @@ def maybe_value(exists) -> Any:
 
         # get_value should suggest union of int and str
         assert get_value_return
-        assert "|" in get_value_return.suggested_type
-        assert "int" in get_value_return.suggested_type
-        assert "str" in get_value_return.suggested_type
+        assert get_value_return.suggested_type is not None and "|" in get_value_return.suggested_type
+        assert get_value_return.suggested_type is not None and "int" in get_value_return.suggested_type
+        assert get_value_return.suggested_type is not None and "str" in get_value_return.suggested_type
 
         # maybe_value should suggest list with None
         assert maybe_value_return
-        assert "None" in maybe_value_return.suggested_type
+        assert maybe_value_return.suggested_type is not None and "None" in maybe_value_return.suggested_type

@@ -229,7 +229,7 @@ class TestDashboardServer(AioHTTPTestCase):
     async def get_application(self):  # type: ignore[no-untyped-def]
         """Create application for testing."""
         self.collector = MetricsCollector(sample_interval=0.1)
-        self.server = DashboardServer(host="localhost", port=8765, metrics_collector=self.collector)
+        self.server = DashboardServer(host="localhost", port=8765, metrics_collector=self.collector)  # type: ignore[assignment]
         return self.server.app
 
     @unittest_run_loop

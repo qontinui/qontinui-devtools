@@ -97,6 +97,8 @@ ignore = [
 
 [tool.mypy]
 python_version = "3.12"
+mypy_path = "python"
+files = ["python/qontinui_devtools", "python/tests", "python/examples"]
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -118,6 +120,9 @@ module = [
     "matplotlib.*",
     "networkx.*",
     "aiohttp.*",
+    "yaml.*",
+    "requests.*",
+    "reportlab.*",
 ]
 ignore_missing_imports = true
 
