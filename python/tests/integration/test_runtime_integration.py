@@ -9,6 +9,7 @@ This module tests the integration between:
 All tests verify that tools work correctly together and don't interfere
 with each other's operation.
 """
+# mypy: disable-error-code="call-arg,index,attr-defined"
 
 import asyncio
 import json
@@ -22,13 +23,13 @@ import pytest
 # These imports will be available once Phase 3 tools are implemented
 # For now, we'll use mock implementations to define the API
 try:
-    from qontinui_devtools.runtime.dashboard import PerformanceDashboard
+    from qontinui_devtools.runtime.dashboard import PerformanceDashboard  # type: ignore[import-not-found]
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler
+    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-not-found]
 except ImportError:
     # Mock implementations for testing the API
-    class ActionProfiler:
+    class ActionProfiler:  # type: ignore[no-redef]
         """Mock Action Profiler for testing."""
 
         def __init__(self, config: dict[str, Any] | None = None) -> None:
@@ -72,7 +73,7 @@ except ImportError:
             with open(output_path, "w") as f:
                 json.dump(data, f, indent=2)
 
-    class EventTracer:
+    class EventTracer:  # type: ignore[no-redef]
         """Mock Event Tracer for testing."""
 
         def __init__(self, config: dict[str, Any] | None = None) -> None:
@@ -100,7 +101,7 @@ except ImportError:
                     }
                 )
 
-        def get_events(self, event_type: str = None) -> list[dict[str, Any]]:
+        def get_events(self, event_type: str | None = None) -> list[dict[str, Any]]:
             """Get traced events."""
             if event_type:
                 return [e for e in self.events if e["type"] == event_type]
@@ -111,7 +112,7 @@ except ImportError:
             with open(output_path, "w") as f:
                 json.dump(self.events, f, indent=2)
 
-    class MemoryProfiler:
+    class MemoryProfiler:  # type: ignore[no-redef]
         """Mock Memory Profiler for testing."""
 
         def __init__(self, config: dict[str, Any] | None = None) -> None:
@@ -156,7 +157,7 @@ except ImportError:
             with open(output_path, "w") as f:
                 json.dump(self.snapshots, f, indent=2)
 
-    class PerformanceDashboard:
+    class PerformanceDashboard:  # type: ignore[no-redef]
         """Mock Performance Dashboard for testing."""
 
         def __init__(self, config: dict[str, Any] | None = None) -> None:

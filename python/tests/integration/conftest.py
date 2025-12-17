@@ -284,6 +284,8 @@ def sample_action_instance(sample_qontinui_action: Path) -> Any:
     import sys
 
     spec = importlib.util.spec_from_file_location("sample_action", sample_qontinui_action)
+    if spec is None or spec.loader is None:
+        raise ImportError("Failed to load sample_action module")
     module = importlib.util.module_from_spec(spec)
     sys.modules["sample_action"] = module
     spec.loader.exec_module(module)
@@ -298,6 +300,8 @@ def memory_intensive_action(sample_qontinui_action: Path) -> Any:
     import sys
 
     spec = importlib.util.spec_from_file_location("sample_action", sample_qontinui_action)
+    if spec is None or spec.loader is None:
+        raise ImportError("Failed to load sample_action module")
     module = importlib.util.module_from_spec(spec)
     sys.modules["sample_action_mem"] = module
     spec.loader.exec_module(module)
@@ -312,6 +316,8 @@ def concurrent_action(sample_qontinui_action: Path) -> Any:
     import sys
 
     spec = importlib.util.spec_from_file_location("sample_action", sample_qontinui_action)
+    if spec is None or spec.loader is None:
+        raise ImportError("Failed to load sample_action module")
     module = importlib.util.module_from_spec(spec)
     sys.modules["sample_action_concurrent"] = module
     spec.loader.exec_module(module)

@@ -1,11 +1,9 @@
 """
-from typing import Any, Any
-
-from typing import Any
-
 Unit tests for SpringTestAdapter.
 """
 
+from pathlib import Path
+from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
@@ -14,7 +12,6 @@ from qontinui.test_migration.translation.spring_test_adapter import (
     DependencyContainer,
     SpringTestAdapter,
 )
-from typing import Any
 
 
 class TestSpringTestAdapter:
@@ -26,7 +23,7 @@ class TestSpringTestAdapter:
 
         # Create a sample test file with Spring annotations
         self.test_file = TestFile(
-            path="test_example.py",
+            path=Path("test_example.py"),
             test_type=TestType.INTEGRATION,
             class_name="ExampleTest",
             package="com.example.test",
@@ -43,7 +40,7 @@ class TestSpringTestAdapter:
     def test_handle_spring_boot_test_annotation(self) -> None:
         """Test handling of @SpringBootTest annotation."""
         annotation = "@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)"
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -62,7 +59,7 @@ class TestSpringTestAdapter:
     def test_handle_mock_bean_annotation(self) -> None:
         """Test handling of @MockBean annotation."""
         annotation = "@MockBean(UserService.class)"
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -80,7 +77,7 @@ class TestSpringTestAdapter:
     def test_handle_autowired_annotation(self) -> None:
         """Test handling of @Autowired annotation."""
         annotation = "@Autowired"
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -97,7 +94,7 @@ class TestSpringTestAdapter:
     def test_handle_value_injection_annotation(self) -> None:
         """Test handling of @Value annotation."""
         annotation = '@Value("${app.test.property}")'
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -115,7 +112,7 @@ class TestSpringTestAdapter:
     def test_handle_test_property_source_annotation(self) -> None:
         """Test handling of @TestPropertySource annotation."""
         annotation = '@TestPropertySource(properties = {"test.prop1=value1", "test.prop2=value2"})'
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -134,7 +131,7 @@ class TestSpringTestAdapter:
     def test_handle_active_profiles_annotation(self) -> None:
         """Test handling of @ActiveProfiles annotation."""
         annotation = '@ActiveProfiles("test")'
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -152,7 +149,7 @@ class TestSpringTestAdapter:
     def test_handle_transactional_annotation(self) -> None:
         """Test handling of @Transactional annotation."""
         annotation = "@Transactional"
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -171,7 +168,7 @@ class TestSpringTestAdapter:
     def test_handle_dirties_context_annotation(self) -> None:
         """Test handling of @DirtiesContext annotation."""
         annotation = "@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)"
-        config = {
+        config: dict[str, Any] = {
             "imports": set(),
             "class_decorators": [],
             "setup_code": [],
@@ -254,7 +251,7 @@ class TestSpringTestAdapter:
         """Test the main handle_spring_annotations method."""
         # Create a test file with various Spring annotations
         test_file = TestFile(
-            path="integration_test.py",
+            path=Path("integration_test.py"),
             test_type=TestType.INTEGRATION,
             class_name="IntegrationTest",
             package="com.example.integration",

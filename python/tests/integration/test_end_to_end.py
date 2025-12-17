@@ -6,6 +6,7 @@ This module tests complete workflows from start to finish:
 - Full monitoring lifecycle
 - Report generation with all data
 """
+# mypy: disable-error-code="call-arg,index,attr-defined"
 
 import json
 import sys
@@ -17,14 +18,14 @@ import pytest
 
 # Mock implementations for CLI testing
 try:
-    from qontinui_devtools.runtime.dashboard import PerformanceDashboard
+    from qontinui_devtools.runtime.dashboard import PerformanceDashboard  # type: ignore[import-not-found]
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler
-    from qontinui_devtools.runtime.report_generator import RuntimeReportGenerator
+    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-not-found]
+    from qontinui_devtools.runtime.report_generator import RuntimeReportGenerator  # type: ignore[import-not-found]
 except ImportError:
     # Mock implementations
-    class ActionProfiler:
+    class ActionProfiler:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
@@ -59,7 +60,7 @@ except ImportError:
             with open(output_path, "w") as f:
                 json.dump(self.get_profile_data(), f, indent=2)
 
-    class EventTracer:
+    class EventTracer:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
@@ -84,7 +85,7 @@ except ImportError:
             with open(output_path, "w") as f:
                 json.dump(self.events, f, indent=2)
 
-    class MemoryProfiler:
+    class MemoryProfiler:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
@@ -119,7 +120,7 @@ except ImportError:
             with open(output_path, "w") as f:
                 json.dump(self.snapshots, f, indent=2)
 
-    class PerformanceDashboard:
+    class PerformanceDashboard:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
@@ -137,7 +138,7 @@ except ImportError:
         def get_metrics(self) -> Any:
             return self.metrics
 
-    class RuntimeReportGenerator:
+    class RuntimeReportGenerator:  # type: ignore[no-redef]
         """Mock Runtime Report Generator."""
 
         def __init__(self) -> None:
@@ -224,7 +225,7 @@ class TestFullMonitoringWorkflow:
         # Step 3: Execute project code
         sys.path.insert(0, str(sample_qontinui_project))
         try:
-            import main
+            import main  # type: ignore[import-not-found]
 
             @profiler.profile
             def execute_main() -> Any:

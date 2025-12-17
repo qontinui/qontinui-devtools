@@ -1,6 +1,7 @@
 """Tests for leak detector utilities."""
 
 import gc
+from typing import Any
 
 import pytest
 from qontinui_devtools.runtime import (
@@ -212,8 +213,8 @@ class TestFindCyclesContaining:
     def test_simple_cycle(self) -> None:
         """Test detecting simple reference cycle."""
         # Create a cycle
-        obj1 = {"name": "obj1"}
-        obj2 = {"name": "obj2", "ref": obj1}
+        obj1: dict[str, Any] = {"name": "obj1"}
+        obj2: dict[str, Any] = {"name": "obj2", "ref": obj1}
         obj1["ref"] = obj2
 
         cycles = find_cycles_containing(obj1)
@@ -277,7 +278,7 @@ class TestGetObjectSizeDeep:
 
     def test_circular_reference_size(self) -> None:
         """Test size calculation with circular reference."""
-        obj = {"name": "obj"}
+        obj: dict[str, Any] = {"name": "obj"}
         obj["self"] = obj
 
         # Should handle circular reference without infinite loop

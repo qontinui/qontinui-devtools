@@ -111,7 +111,7 @@ class TestBehaviorComparator:
         assert result is True
 
     @patch("subprocess.run")
-    def test_execute_python_test_success(self, mock_run) -> None:
+    def test_execute_python_test_success(self, mock_run: Any) -> None:
         """Test successful Python test execution."""
         # Mock successful subprocess execution
         mock_result = Mock()
@@ -129,7 +129,7 @@ class TestBehaviorComparator:
         assert "PASSED" in result.output
 
     @patch("subprocess.run")
-    def test_execute_python_test_failure(self, mock_run) -> None:
+    def test_execute_python_test_failure(self, mock_run: Any) -> None:
         """Test failed Python test execution."""
         # Mock failed subprocess execution
         mock_result = Mock()
@@ -146,7 +146,7 @@ class TestBehaviorComparator:
         assert result.stack_trace == "AssertionError: Test failed"
 
     @patch("subprocess.run")
-    def test_execute_python_test_timeout(self, mock_run) -> None:
+    def test_execute_python_test_timeout(self, mock_run: Any) -> None:
         """Test Python test execution timeout."""
         # Mock timeout exception
         import subprocess
@@ -157,7 +157,7 @@ class TestBehaviorComparator:
         result = self.comparator._execute_python_test(test_path)
 
         assert result.passed is False
-        assert "timed out" in result.error_message
+        assert result.error_message is not None and "timed out" in result.error_message
         assert result.execution_time == self.comparator.isolation_config.timeout_seconds
 
     def test_execute_java_test_mock(self) -> None:
@@ -329,7 +329,7 @@ class TestBehaviorComparator:
             assert result.confidence == 0.3  # Multiple differences
             assert any("status differs" in diff.lower() for diff in result.differences)
 
-    def test_isolate_and_compare_component(self) -> Any:
+    def test_isolate_and_compare_component(self) -> None:
         """Test component-level isolation and comparison."""
         java_component = "public static int add(int a, int b) { return a + b; }"
         python_component = "def add(a, b): return a + b"
@@ -364,7 +364,7 @@ class TestBehaviorComparator:
             assert result.comparison_details["total_tests"] == 3
             assert result.comparison_details["matching_tests"] == 3
 
-    def test_isolate_and_compare_component_with_mismatch(self) -> Any:
+    def test_isolate_and_compare_component_with_mismatch(self) -> None:
         """Test component-level comparison with output mismatch."""
         java_component = "public static int multiply(int a, int b) { return a * b; }"
         python_component = "def multiply(a, b): return a + b"  # Wrong implementation

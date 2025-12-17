@@ -1,9 +1,5 @@
 """Comprehensive tests for dependency health checker.
 
-from typing import Any, Any
-
-from typing import Any
-
 This module tests all aspects of the dependency health checker including:
 - Parsing various dependency file formats
 - Version comparison and update detection
@@ -32,7 +28,7 @@ from qontinui_devtools.dependencies import (
     VulnerabilityInfo,
 )
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
-from typing import Any
+from typing import Any, Generator
 
 
 class TestPyPIClient:
@@ -402,7 +398,7 @@ class TestDependencyHealthChecker:
         )
 
     @pytest.fixture
-    def temp_project(self) -> None:
+    def temp_project(self) -> Generator[Path, None, None]:
         """Create temporary project directory."""
         with tempfile.TemporaryDirectory() as tmpdir:
             yield Path(tmpdir)

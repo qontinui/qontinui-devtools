@@ -192,6 +192,7 @@ public class UserServiceTest {
             test_file_path.write_text(test_content)
 
             test_file = self.scanner._create_test_file(test_file_path)
+            assert test_file is not None
             test_type = self.scanner.classify_test_type(test_file)
 
             assert test_type == TestType.UNIT
@@ -219,6 +220,7 @@ public class UserServiceIntegrationTest {
             test_file_path.write_text(test_content)
 
             test_file = self.scanner._create_test_file(test_file_path)
+            assert test_file is not None
             test_type = self.scanner.classify_test_type(test_file)
 
             assert test_type == TestType.INTEGRATION
@@ -246,6 +248,7 @@ public class UserControllerTest {
             test_file_path.write_text(test_content)
 
             test_file = self.scanner._create_test_file(test_file_path)
+            assert test_file is not None
             test_type = self.scanner.classify_test_type(test_file)
 
             assert test_type == TestType.INTEGRATION
@@ -275,6 +278,7 @@ public class ExampleTest {
             test_file_path.write_text(test_content)
 
             test_file = self.scanner._create_test_file(test_file_path)
+            assert test_file is not None
             dependencies = self.scanner.extract_dependencies(test_file)
 
             # Check that dependencies were extracted

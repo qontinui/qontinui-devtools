@@ -226,10 +226,10 @@ class TestMetricsCollector:
 class TestDashboardServer(AioHTTPTestCase):
     """Test suite for DashboardServer using aiohttp test utilities."""
 
-    async def get_application(self):  # type: ignore
+    async def get_application(self):  # type: ignore[no-untyped-def]
         """Create application for testing."""
         self.collector = MetricsCollector(sample_interval=0.1)
-        self.server = DashboardServer(host="localhost", port=8765, metrics_collector=self.collector)
+        self.server = DashboardServer(host="localhost", port=8765, metrics_collector=self.collector)  # type: ignore[assignment]
         return self.server.app
 
     @unittest_run_loop
@@ -324,21 +324,21 @@ class TestDashboardServer(AioHTTPTestCase):
     @unittest_run_loop
     async def test_client_tracking(self) -> None:
         """Test that server tracks connected clients."""
-        initial_count = len(self.server.clients)
+        initial_count = len(self.server.clients)  # type: ignore[attr-defined]
 
         # Connect client
         ws = await self.client.ws_connect("/ws")
         await ws.receive()  # Wait for initial metrics
 
         # Should have one more client
-        assert len(self.server.clients) == initial_count + 1
+        assert len(self.server.clients) == initial_count + 1  # type: ignore[attr-defined]
 
         # Disconnect
         await ws.close()
         await asyncio.sleep(0.1)  # Give time for cleanup
 
         # Should be back to initial count
-        assert len(self.server.clients) == initial_count
+        assert len(self.server.clients) == initial_count  # type: ignore[attr-defined]
 
     @unittest_run_loop
     async def test_metrics_with_data(self) -> None:

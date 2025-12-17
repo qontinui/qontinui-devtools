@@ -146,7 +146,7 @@ class DocstringParser:
 
                 in_description = False
                 current_section = stripped[:-1]
-                current_content = []
+                current_content: list[Any] = []
             elif current_section:
                 current_content.append(line)
             elif in_description and stripped:
@@ -330,7 +330,7 @@ class DocstringParser:
 
                 in_description = False
                 current_section = line.strip()
-                current_content = []
+                current_content: list[Any] = []
                 i += 2  # Skip header and dashes
                 continue
             elif current_section:
@@ -408,10 +408,9 @@ class DocstringParser:
                 }
             elif current_param and relative_indent > 0:
                 # Description continuation
-                desc = current_param["description"] or ""
-                if desc:
-                    desc += " "
-                current_param["description"] = desc + stripped
+                if current_param["description"]:
+                    current_param["description"] += " "
+                current_param["description"] += stripped
 
         if current_param:
             parameters.append(current_param)
@@ -996,7 +995,7 @@ class DocumentationGenerator:
 
     def _write_json(self, tree: DocumentationTree, output_path: Path) -> None:
         """Write JSON documentation."""
-        data: dict[str, Any] = {
+        data = {
             "package_name": tree.package_name,
             "version": tree.version,
             "modules": {},

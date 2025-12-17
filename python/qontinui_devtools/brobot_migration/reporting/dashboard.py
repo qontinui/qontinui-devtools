@@ -274,7 +274,7 @@ class MigrationReportingDashboard:
     def _save_yaml_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save YAML report."""
         try:
-            import yaml
+            import yaml  # type: ignore[import-untyped]
 
             with open(output_file, "w") as f:
                 yaml.dump(report_data, f, default_flow_style=False)
@@ -289,9 +289,9 @@ class MigrationReportingDashboard:
     def _save_pdf_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save PDF report."""
         try:
-            from reportlab.lib.pagesizes import letter
-            from reportlab.lib.styles import getSampleStyleSheet
-            from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
+            from reportlab.lib.pagesizes import letter  # type: ignore[import-untyped]
+            from reportlab.lib.styles import getSampleStyleSheet  # type: ignore[import-untyped]
+            from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer  # type: ignore[import-untyped]
 
             doc = SimpleDocTemplate(str(output_file), pagesize=letter)
             styles = getSampleStyleSheet()

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import click
 
-from ...json_executor import JSONRunner
+from ...json_executor import JSONRunner  # type: ignore[import-not-found]
 from ..exit_codes import ExitCode
 from ..result_streamer import ResultStreamer
 from ..utils import configure_logging, print_error, print_success, print_warning
@@ -239,14 +239,15 @@ def _select_workflow(runner: JSONRunner, workflow_name: str | None) -> str | Non
 
     # If no workflow specified, use the first one
     if not workflow_name:
-        workflow_id = workflows[0].id
+        workflow_id: str = workflows[0].id
         click.echo(f"No workflow specified, using first workflow: {workflows[0].name}")
         return workflow_id
 
     # Search by ID or name
     for wf in workflows:
         if wf.id == workflow_name or wf.name == workflow_name:
-            return wf.id
+            wf_id: str = wf.id
+            return wf_id
 
     # Not found
     print_error(f"Workflow not found: {workflow_name}")
@@ -270,8 +271,9 @@ def _run_with_timeout(runner: JSONRunner, workflow_id: str, monitor: int, timeou
         True if successful, False otherwise
     """
     import threading
+    from typing import Any
 
-    result = {"success": False, "error": None}
+    result: dict[str, Any] = {"success": False, "error": None}
 
     def run_workflow() -> None:
         try:

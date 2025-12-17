@@ -128,7 +128,7 @@ def samples_to_svg(
     for _, stack in stack_samples:
         # Build cumulative stacks (root to leaf)
         for i in range(1, len(stack) + 1):
-            stack_tuple = tuple(stack[:i])
+            stack_tuple: tuple[str, ...] = tuple(stack[:i])
             stack_counts[stack_tuple] += 1
 
     if not stack_counts:
@@ -143,19 +143,19 @@ def samples_to_svg(
 
     # Sort stacks by depth
     stacks_by_depth: dict[int, list[tuple[tuple[str, ...], int]]] = defaultdict(list)
-    for stack, count in stack_counts.items():
-        stacks_by_depth[len(stack)].append((stack, count))
+    for stack_key, count in stack_counts.items():
+        stacks_by_depth[len(stack_key)].append((stack_key, count))
 
     # Build levels bottom-up
     for depth in sorted(stacks_by_depth.keys()):
         level: list[tuple[str, float, float, tuple[str, ...]]] = []
         x_offset = 0.0
 
-        for stack, count in sorted(stacks_by_depth[depth], key=lambda x: x[0]):
+        for stack_tuple, count in sorted(stacks_by_depth[depth], key=lambda x: x[0]):
             frame_width = (count / total_samples) * width
-            frame_name = stack[-1]  # Last frame in stack
+            frame_name = stack_tuple[-1]  # Last frame in stack
 
-            level.append((frame_name, x_offset, frame_width, stack))
+            level.append((frame_name, x_offset, frame_width, stack_tuple))
             x_offset += frame_width
 
         levels.append(level)

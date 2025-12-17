@@ -109,10 +109,17 @@ class DependencyHealthChecker:
         # Analyze each dependency
         analyzed_deps: list[DependencyInfo] = []
         for dep_name, dep_version in dependencies.items():
+            # Skip internal tracking keys
+            if dep_name.startswith("_dev_"):
+                continue
+            # Ensure version is a string (should always be, but satisfy mypy)
+            if not isinstance(dep_version, str):
+                continue
+            is_dev_dep = bool(dependencies.get(f"_dev_{dep_name}", False))
             info = self._analyze_dependency(
                 dep_name,
                 dep_version,
-                is_dev=dependencies.get(f"_dev_{dep_name}", False),
+                is_dev=is_dev_dep,
             )
             analyzed_deps.append(info)
 
@@ -172,7 +179,7 @@ class DependencyHealthChecker:
 
         return report
 
-    def _parse_dependencies(self, project_path: Path, include_dev: bool) -> dict[str, str]:
+    def _parse_dependencies(self, project_path: Path, include_dev: bool) -> dict[str, str | bool]:
         """Parse dependencies from all available sources.
 
         Args:
@@ -180,9 +187,9 @@ class DependencyHealthChecker:
             include_dev: Include dev dependencies
 
         Returns:
-            Dictionary mapping package names to versions
+            Dictionary mapping package names to versions (and _dev_<name> keys to bool)
         """
-        dependencies: dict[str, str] = {}
+        dependencies: dict[str, str | bool] = {}
 
         # Try pyproject.toml
         pyproject_file = project_path / "pyproject.toml"
@@ -193,8 +200,8 @@ class DependencyHealthChecker:
         # Try requirements.txt
         requirements_file = project_path / "requirements.txt"
         if requirements_file.exists():
-            deps = self._parse_requirements_txt(requirements_file)
-            dependencies.update(deps)
+            deps_req = self._parse_requirements_txt(requirements_file)
+            dependencies.update(deps_req)
 
         # Try poetry.lock
         poetry_lock = project_path / "poetry.lock"
@@ -205,12 +212,12 @@ class DependencyHealthChecker:
         # Try setup.py (basic parsing)
         setup_py = project_path / "setup.py"
         if setup_py.exists():
-            deps = self._parse_setup_py(setup_py)
-            dependencies.update(deps)
+            deps_setup = self._parse_setup_py(setup_py)
+            dependencies.update(deps_setup)
 
         return dependencies
 
-    def _parse_pyproject_toml(self, file_path: Path, include_dev: bool) -> dict[str, str]:
+    def _parse_pyproject_toml(self, file_path: Path, include_dev: bool) -> dict[str, str | bool]:
         """Parse dependencies from pyproject.toml.
 
         Args:
@@ -218,9 +225,9 @@ class DependencyHealthChecker:
             include_dev: Include dev dependencies
 
         Returns:
-            Dictionary of dependencies
+            Dictionary of dependencies (with _dev_<name> keys as bool)
         """
-        dependencies: dict[str, str] = {}
+        dependencies: dict[str, str | bool] = {}
 
         with open(file_path, "rb") as f:
             data = tomllib.load(f)
@@ -293,7 +300,7 @@ class DependencyHealthChecker:
 
         return dependencies
 
-    def _parse_poetry_lock(self, file_path: Path, include_dev: bool) -> dict[str, str]:
+    def _parse_poetry_lock(self, file_path: Path, include_dev: bool) -> dict[str, str | bool]:
         """Parse dependencies from poetry.lock.
 
         Args:
@@ -301,9 +308,9 @@ class DependencyHealthChecker:
             include_dev: Include dev dependencies
 
         Returns:
-            Dictionary of dependencies
+            Dictionary of dependencies (with _dev_<name> keys as bool)
         """
-        dependencies: dict[str, str] = {}
+        dependencies: dict[str, str | bool] = {}
 
         with open(file_path, "rb") as f:
             data = tomllib.load(f)
@@ -800,7 +807,8 @@ class DependencyHealthChecker:
         if vuln_db_file.exists():
             try:
                 with open(vuln_db_file) as f:
-                    return json.load(f)
+                    data: dict[str, list[dict[str, Any]]] = json.load(f)
+                    return data
             except (OSError, json.JSONDecodeError):
                 pass
 

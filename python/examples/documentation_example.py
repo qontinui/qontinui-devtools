@@ -176,11 +176,11 @@ def main() -> None:
 
     # Create temporary directory for sample code
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
+        tmpdir_path = Path(tmpdir)
 
         # Create sample code
         print("Creating sample code...")
-        sample_file = tmpdir / "sample_library.py"
+        sample_file = tmpdir_path / "sample_library.py"
         create_sample_code(sample_file)
         print(f"Created: {sample_file}")
         print()
@@ -234,7 +234,7 @@ def main() -> None:
 
         # Generate HTML documentation
         print("Generating HTML documentation...")
-        html_output = tmpdir / "docs_html"
+        html_output = tmpdir_path / "docs_html"
         generator.write_docs(tree, html_output, OutputFormat.HTML)
         print(f"HTML documentation written to: {html_output}")
         print(f"  - index.html: {(html_output / 'index.html').stat().st_size} bytes")
@@ -242,7 +242,7 @@ def main() -> None:
 
         # Generate Markdown documentation
         print("Generating Markdown documentation...")
-        md_output = tmpdir / "docs_md"
+        md_output = tmpdir_path / "docs_md"
         generator.write_docs(tree, md_output, OutputFormat.MARKDOWN)
         print(f"Markdown documentation written to: {md_output}")
         for md_file in md_output.glob("*.md"):
@@ -251,7 +251,7 @@ def main() -> None:
 
         # Generate JSON documentation
         print("Generating JSON documentation...")
-        json_output = tmpdir / "docs_json"
+        json_output = tmpdir_path / "docs_json"
         generator.write_docs(tree, json_output, OutputFormat.JSON)
         print(f"JSON documentation written to: {json_output}")
         json_file = json_output / "documentation.json"

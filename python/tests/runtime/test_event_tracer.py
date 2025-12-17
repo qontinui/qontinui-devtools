@@ -163,6 +163,7 @@ class TestEventTracer:
         tracer.checkpoint("evt_001", "tauri_receive")
 
         trace = tracer.get_trace("evt_001")
+        assert trace is not None
         assert len(trace.checkpoints) >= 2  # May include trace_start
 
         # Find our checkpoints
@@ -239,6 +240,7 @@ class TestEventTracer:
         # Check all completed
         for i in range(10):
             trace = tracer.get_trace(f"evt_{i}")
+            assert trace is not None
             assert trace.completed
 
     def test_max_traces_eviction(self) -> None:

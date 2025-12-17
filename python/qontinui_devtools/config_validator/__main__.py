@@ -92,7 +92,7 @@ Exit codes:
                         "total_inline_workflows": report.total_inline_workflows,
                         "valid_inline_workflows": report.valid_inline_workflows,
                         "invalid_inline_workflows": report.invalid_inline_workflows,
-                        "error_count": len(report.errors) + len(report.inline_workflow_errors),
+                        "error_count": len(report.errors) + len(report.inline_workflow_errors or []),
                         "warning_count": len(report.warnings),
                     }
                 )

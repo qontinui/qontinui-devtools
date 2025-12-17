@@ -45,12 +45,12 @@ class ValidationReport:
     total_inline_workflows: int = 0
     valid_inline_workflows: int = 0
     invalid_inline_workflows: int = 0
-    inline_workflow_errors: list[ValidationError] = None
+    inline_workflow_errors: list[ValidationError] | None = None
 
     def __post_init__(self) -> None:
         """Initialize inline workflow errors list if None."""
         if self.inline_workflow_errors is None:
-            self.inline_workflow_errors=[]
+            self.inline_workflow_errors = []
 
     def print_report(self, verbose: bool = False) -> None:
         """Print formatted validation report."""
@@ -292,6 +292,7 @@ class ConfigValidator:
                     # Get current value at error location
                     current_value = self._get_nested_value(workflow, error["loc"])
 
+                    expected = error.get("expected", "unknown")
                     errors.append(
                         ValidationError(
                             workflow_id=workflow_id,
@@ -300,7 +301,7 @@ class ConfigValidator:
                             error_type=error["type"],
                             message=error["msg"],
                             current_value=current_value,
-                            expected_type=error.get("expected", "unknown"),
+                            expected_type=str(expected) if expected is not None else "unknown",
                             location=field_location,
                         )
                     )
@@ -346,6 +347,7 @@ class ConfigValidator:
                     # Get current value at error location
                     current_value = self._get_nested_value(inline_workflow, error["loc"])
 
+                    expected = error.get("expected", "unknown")
                     inline_errors.append(
                         ValidationError(
                             workflow_id=parent_workflow_id,
@@ -354,7 +356,7 @@ class ConfigValidator:
                             error_type=error["type"],
                             message=error["msg"],
                             current_value=current_value,
-                            expected_type=error.get("expected", "unknown"),
+                            expected_type=str(expected) if expected is not None else "unknown",
                             location=field_location,
                             is_inline=True,
                             parent_action_id=action_id,
@@ -380,7 +382,7 @@ class ConfigValidator:
 
     def _get_nested_value(self, data: dict[str, Any], location: tuple[Any, ...]) -> Any:
         """Get value at nested location in dict."""
-        current = data
+        current: Any = data
         for key in location:
             if isinstance(current, dict):
                 current = current.get(key, None)

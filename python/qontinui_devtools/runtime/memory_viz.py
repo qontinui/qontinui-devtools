@@ -180,7 +180,8 @@ def plot_top_objects(
 
     # Horizontal bar chart
     y_pos = range(len(types))
-    colors = plt.cm.viridis([(i / len(types)) for i in range(len(types))])
+    cmap = plt.get_cmap('viridis')
+    colors = cmap([(i / len(types)) for i in range(len(types))])
 
     ax.barh(y_pos, counts, color=colors)
     ax.set_yticks(y_pos)
@@ -401,9 +402,10 @@ def generate_html_report(
 
     # Create plot directory
     if plot_dir is None:
-        plot_dir = Path(output_path).parent / "memory_plots"
+        plot_path = Path(output_path).parent / "memory_plots"
+    else:
+        plot_path = Path(plot_dir)
 
-    plot_path = Path(plot_dir)
     plot_path.mkdir(exist_ok=True)
 
     # Generate plots

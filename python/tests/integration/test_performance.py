@@ -7,6 +7,7 @@ This module includes:
 - Memory leak detection
 - Long-running monitoring tests
 """
+# mypy: disable-error-code="call-arg,index,attr-defined"
 
 from typing import Any
 import gc
@@ -17,13 +18,13 @@ import pytest
 
 # Mock implementations
 try:
-    from qontinui_devtools.runtime.dashboard import PerformanceDashboard
+    from qontinui_devtools.runtime.dashboard import PerformanceDashboard  # type: ignore[import-not-found]
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler
+    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-not-found]
 except ImportError:
 
-    class ActionProfiler:
+    class ActionProfiler:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
@@ -52,7 +53,7 @@ except ImportError:
                 "total_time": sum(p["duration"] for p in self.profiles),
             }
 
-    class EventTracer:
+    class EventTracer:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
@@ -71,7 +72,7 @@ except ImportError:
         def get_events(self) -> Any:
             return self.events
 
-    class MemoryProfiler:
+    class MemoryProfiler:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
@@ -102,7 +103,7 @@ except ImportError:
             peak = max(s["memory_mb"] for s in self.snapshots)
             return {"current_mb": current, "peak_mb": peak}
 
-    class PerformanceDashboard:
+    class PerformanceDashboard:  # type: ignore[no-redef]
         def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False

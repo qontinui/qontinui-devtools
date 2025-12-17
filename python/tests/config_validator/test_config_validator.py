@@ -7,10 +7,11 @@ against Pydantic schemas, catching schema mismatches before execution.
 
 import json
 from pathlib import Path
-from typing import Any, Generator, Iterator
+from typing import Any, Iterator
 from unittest.mock import MagicMock, patch
 
 import pytest
+from pydantic_core import InitErrorDetails
 from qontinui_devtools.config_validator import ConfigValidator, ValidationError, ValidationReport
 
 
@@ -162,11 +163,12 @@ def multiple_workflows_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def mock_validator() -> None:
+def mock_validator() -> Iterator[ConfigValidator]:
     """Create a mock validator that doesn't require qontinui library."""
     with (
         patch.object(ConfigValidator, "_find_qontinui_path") as mock_find,
         patch.object(ConfigValidator, "_setup_imports"),
+        patch.object(ConfigValidator, "_find_inline_workflows", return_value=[]),
     ):
 
         mock_find.return_value = Path("/mock/qontinui/path")
@@ -176,9 +178,6 @@ def mock_validator() -> None:
         # Mock the Workflow class and its validation
         mock_workflow = MagicMock()
         validator.Workflow = mock_workflow
-
-        # Mock _find_inline_workflows to return empty list
-        validator._find_inline_workflows = MagicMock(return_value=[])
 
         yield validator
 
@@ -310,10 +309,9 @@ class TestValidateInvalidConfigs:
         from pydantic import ValidationError as PydanticValidationError
 
         # Mock validation error for connections field
-        error_dict = {
+        error_dict: InitErrorDetails = {
             "type": "dict_type",
             "loc": ("connections", "action1"),
-            "msg": "Input should be a valid dictionary",
             "input": ["action2:false"],
         }
 
@@ -335,10 +333,9 @@ class TestValidateInvalidConfigs:
         from pydantic import ValidationError as PydanticValidationError
 
         # Mock validation error for missing field
-        error_dict = {
+        error_dict: InitErrorDetails = {
             "type": "missing",
             "loc": ("actions", "action1", "type"),
-            "msg": "Field required",
             "input": {},
         }
 
@@ -366,10 +363,9 @@ class TestValidateInvalidConfigs:
             if call_count[0] == 1:
                 return MagicMock()  # Valid
             else:
-                error_dict = {
+                error_dict: InitErrorDetails = {
                     "type": "missing",
                     "loc": ("actions", "action2", "type"),
-                    "msg": "Field required",
                     "input": {},
                 }
                 raise PydanticValidationError.from_exception_data("ValidationError", [error_dict])
@@ -455,10 +451,9 @@ class TestValidationReportFormat:
         """Test that ValidationError has correct structure."""
         from pydantic import ValidationError as PydanticValidationError
 
-        error_dict = {
+        error_dict: InitErrorDetails = {
             "type": "dict_type",
             "loc": ("connections", "action1"),
-            "msg": "Invalid type",
             "input": ["wrong"],
         }
 
@@ -502,10 +497,9 @@ class TestValidationReportFormat:
         """Test print_report output for invalid config."""
         from pydantic import ValidationError as PydanticValidationError
 
-        error_dict = {
+        error_dict: InitErrorDetails = {
             "type": "dict_type",
             "loc": ("connections", "action1"),
-            "msg": "Invalid connections format",
             "input": ["wrong"],
         }
 
@@ -524,12 +518,10 @@ class TestValidationReportFormat:
         """Test print_report verbose output includes detailed info."""
         from pydantic import ValidationError as PydanticValidationError
 
-        error_dict = {
+        error_dict: InitErrorDetails = {
             "type": "dict_type",
             "loc": ("connections", "action1"),
-            "msg": "Invalid type",
             "input": ["wrong"],
-            "expected": "dict",
         }
 
         mock_validator.Workflow.model_validate.side_effect = (
@@ -625,7 +617,7 @@ class TestEdgeCases:
         with open(config_file, "w", encoding="utf-8") as f:
             json.dump(config, f)
 
-        error_dict = {"type": "missing", "loc": ("id",), "msg": "Field required", "input": {}}
+        error_dict: InitErrorDetails = {"type": "missing", "loc": ("id",), "input": {}}
 
         mock_validator.Workflow.model_validate.side_effect = (
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
@@ -695,10 +687,9 @@ class TestIntegrationWithFixtures:
         if not fixture_file.exists():
             pytest.skip("Fixture file not found")
 
-        error_dict = {
+        error_dict: InitErrorDetails = {
             "type": "dict_type",
             "loc": ("connections",),
-            "msg": "Invalid connections",
             "input": {},
         }
 
