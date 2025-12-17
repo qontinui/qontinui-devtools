@@ -51,7 +51,7 @@ class CoverageComparator:
 
         # Load mappings
         self.test_mappings.clear()
-        migration_history = []
+        migration_history: list[Any] = []
 
         for mapping_data in data.get("mappings", []):
             mapping = TestMapping(

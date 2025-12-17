@@ -119,7 +119,7 @@ class ActionProfiler:
 
         self._session_id = str(uuid.uuid4())
         self._session_start = time.perf_counter()
-        self._profiles = []
+        self._profiles: list[Any] = []
         return self._session_id
 
     @contextmanager
@@ -250,7 +250,7 @@ class ActionProfiler:
         # Reset state
         self._session_id = None
         self._session_start = None
-        self._profiles = []
+        self._profiles: list[Any] = []
 
         return session
 

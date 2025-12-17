@@ -1,4 +1,52 @@
 """
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 Comprehensive tests for the security analyzer.
 
 Tests cover all vulnerability types with both positive and negative cases,
@@ -13,13 +61,13 @@ from qontinui_devtools.security import SecurityAnalyzer, Severity, Vulnerability
 
 
 @pytest.fixture
-def analyzer():
+def analyzer() -> Any:
     """Create a security analyzer instance."""
     return SecurityAnalyzer()
 
 
 @pytest.fixture
-def temp_dir():
+def temp_dir() -> None:
     """Create a temporary directory for test files."""
     with tempfile.TemporaryDirectory() as tmpdir:
         yield Path(tmpdir)
@@ -28,12 +76,12 @@ def temp_dir():
 # SQL Injection Tests
 
 
-def test_sql_injection_string_concatenation(analyzer, temp_dir):
+def test_sql_injection_string_concatenation(analyzer, temp_dir) -> None:
     """Test detection of SQL injection via string concatenation."""
     code = """
 import sqlite3
 
-def get_user(user_id):
+def get_user(user_id) -> Any:
     conn = sqlite3.connect('db.sqlite')
     cursor = conn.cursor()
     query = "SELECT * FROM users WHERE id = " + user_id
@@ -53,12 +101,12 @@ def get_user(user_id):
     assert sql_vulns[0].cwe_id == "CWE-89"
 
 
-def test_sql_injection_fstring(analyzer, temp_dir):
+def test_sql_injection_fstring(analyzer, temp_dir) -> None:
     """Test detection of SQL injection via f-strings."""
     code = """
 import sqlite3
 
-def get_user(username):
+def get_user(username) -> Any:
     conn = sqlite3.connect('db.sqlite')
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM users WHERE name = '{username}'")
@@ -74,12 +122,12 @@ def get_user(username):
     assert sql_vulns[0].severity == Severity.CRITICAL
 
 
-def test_sql_injection_format(analyzer, temp_dir):
+def test_sql_injection_format(analyzer, temp_dir) -> None:
     """Test detection of SQL injection via .format()."""
     code = """
 import sqlite3
 
-def get_user(email):
+def get_user(email) -> Any:
     conn = sqlite3.connect('db.sqlite')
     cursor = conn.cursor()
     query = "SELECT * FROM users WHERE email = '{}'".format(email)
@@ -95,12 +143,12 @@ def get_user(email):
     assert len(sql_vulns) == 1
 
 
-def test_sql_safe_parameterized_query(analyzer, temp_dir):
+def test_sql_safe_parameterized_query(analyzer, temp_dir) -> None:
     """Test that safe parameterized queries are not flagged."""
     code = """
 import sqlite3
 
-def get_user(user_id):
+def get_user(user_id) -> Any:
     conn = sqlite3.connect('db.sqlite')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
@@ -115,12 +163,12 @@ def get_user(user_id):
     assert len(sql_vulns) == 0
 
 
-def test_sql_static_query(analyzer, temp_dir):
+def test_sql_static_query(analyzer, temp_dir) -> None:
     """Test that static SQL queries are not flagged."""
     code = """
 import sqlite3
 
-def get_all_users():
+def get_all_users() -> Any:
     conn = sqlite3.connect('db.sqlite')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users")
@@ -138,12 +186,12 @@ def get_all_users():
 # Command Injection Tests
 
 
-def test_command_injection_os_system(analyzer, temp_dir):
+def test_command_injection_os_system(analyzer, temp_dir) -> None:
     """Test detection of command injection via os.system."""
     code = """
 import os
 
-def backup_file(filename):
+def backup_file(filename) -> None:
     os.system("cp " + filename + " /backup/")
 """
     file_path = temp_dir / "cmd_os_system.py"
@@ -158,12 +206,12 @@ def backup_file(filename):
     assert cmd_vulns[0].cwe_id == "CWE-78"
 
 
-def test_command_injection_subprocess_shell_true(analyzer, temp_dir):
+def test_command_injection_subprocess_shell_true(analyzer, temp_dir) -> None:
     """Test detection of command injection with shell=True."""
     code = """
 import subprocess
 
-def ping_host(host):
+def ping_host(host) -> None:
     subprocess.run(f"ping -c 1 {host}", shell=True)
 """
     file_path = temp_dir / "cmd_shell_true.py"
@@ -177,12 +225,12 @@ def ping_host(host):
     assert "shell=True" in cmd_vulns[0].description
 
 
-def test_command_injection_subprocess_list_dynamic(analyzer, temp_dir):
+def test_command_injection_subprocess_list_dynamic(analyzer, temp_dir) -> None:
     """Test detection of command injection with dynamic list arguments."""
     code = """
 import subprocess
 
-def run_command(arg):
+def run_command(arg) -> None:
     subprocess.run(["ls", "-l", arg])
 """
     file_path = temp_dir / "cmd_list_dynamic.py"
@@ -198,12 +246,12 @@ def run_command(arg):
         assert cmd_vulns[0].severity == Severity.HIGH
 
 
-def test_command_safe_subprocess(analyzer, temp_dir):
+def test_command_safe_subprocess(analyzer, temp_dir) -> None:
     """Test that safe subprocess calls are not flagged."""
     code = """
 import subprocess
 
-def list_directory():
+def list_directory() -> None:
     subprocess.run(["ls", "-l", "/home"])
 """
     file_path = temp_dir / "cmd_safe.py"
@@ -215,12 +263,12 @@ def list_directory():
     assert len(cmd_vulns) == 0
 
 
-def test_command_subprocess_shell_false(analyzer, temp_dir):
+def test_command_subprocess_shell_false(analyzer, temp_dir) -> None:
     """Test that subprocess with shell=False and static args is safe."""
     code = """
 import subprocess
 
-def git_status():
+def git_status() -> None:
     subprocess.run(["git", "status"], shell=False)
 """
     file_path = temp_dir / "cmd_safe_shell_false.py"
@@ -235,10 +283,10 @@ def git_status():
 # Path Traversal Tests
 
 
-def test_path_traversal_open(analyzer, temp_dir):
+def test_path_traversal_open(analyzer, temp_dir) -> None:
     """Test detection of path traversal via open()."""
     code = """
-def read_file(filename):
+def read_file(filename) -> Any:
     with open("/data/" + filename, "r") as f:
         return f.read()
 """
@@ -254,12 +302,12 @@ def read_file(filename):
     assert path_vulns[0].cwe_id == "CWE-22"
 
 
-def test_path_traversal_os_remove(analyzer, temp_dir):
+def test_path_traversal_os_remove(analyzer, temp_dir) -> None:
     """Test detection of path traversal via os.remove()."""
     code = """
 import os
 
-def delete_file(filename):
+def delete_file(filename) -> None:
     os.remove(f"/tmp/{filename}")
 """
     file_path = temp_dir / "path_remove.py"
@@ -271,10 +319,10 @@ def delete_file(filename):
     assert len(path_vulns) == 1
 
 
-def test_path_safe_static(analyzer, temp_dir):
+def test_path_safe_static(analyzer, temp_dir) -> None:
     """Test that static paths are not flagged."""
     code = """
-def read_config():
+def read_config() -> Any:
     with open("/etc/config.ini", "r") as f:
         return f.read()
 """
@@ -290,7 +338,7 @@ def read_config():
 # Hardcoded Secrets Tests
 
 
-def test_hardcoded_password(analyzer, temp_dir):
+def test_hardcoded_password(analyzer, temp_dir) -> None:
     """Test detection of hardcoded passwords."""
     code = """
 DATABASE_CONFIG = {
@@ -311,7 +359,7 @@ DATABASE_CONFIG = {
     assert secret_vulns[0].cwe_id == "CWE-798"
 
 
-def test_hardcoded_api_key(analyzer, temp_dir):
+def test_hardcoded_api_key(analyzer, temp_dir) -> None:
     """Test detection of hardcoded API keys."""
     code = """
 API_KEY = "fake_test_key_not_real_1234567890abcdef"
@@ -326,7 +374,7 @@ API_KEY = "fake_test_key_not_real_1234567890abcdef"
     assert secret_vulns[0].severity == Severity.CRITICAL
 
 
-def test_hardcoded_aws_key(analyzer, temp_dir):
+def test_hardcoded_aws_key(analyzer, temp_dir) -> None:
     """Test detection of hardcoded AWS keys."""
     code = """
 AWS_ACCESS_KEY = "AKIAIOSFODNN7EXAMPLE"
@@ -340,7 +388,7 @@ AWS_ACCESS_KEY = "AKIAIOSFODNN7EXAMPLE"
     assert len(secret_vulns) == 1
 
 
-def test_hardcoded_secret_false_positive_example(analyzer, temp_dir):
+def test_hardcoded_secret_false_positive_example(analyzer, temp_dir) -> None:
     """Test that example/placeholder secrets are not flagged."""
     code = """
 # Example configuration - replace with your actual values
@@ -356,7 +404,7 @@ api_key = "example_api_key"
     assert len(secret_vulns) == 0
 
 
-def test_safe_env_variable_usage(analyzer, temp_dir):
+def test_safe_env_variable_usage(analyzer, temp_dir) -> None:
     """Test that environment variable usage is not flagged."""
     code = """
 import os
@@ -376,12 +424,12 @@ api_key = os.getenv("API_KEY")
 # Insecure Deserialization Tests
 
 
-def test_insecure_deserialization_pickle(analyzer, temp_dir):
+def test_insecure_deserialization_pickle(analyzer, temp_dir) -> None:
     """Test detection of insecure pickle.loads."""
     code = """
 import pickle
 
-def load_data(data):
+def load_data(data) -> Any:
     return pickle.loads(data)
 """
     file_path = temp_dir / "deser_pickle.py"
@@ -396,12 +444,12 @@ def load_data(data):
     assert deser_vulns[0].cwe_id == "CWE-502"
 
 
-def test_insecure_deserialization_yaml(analyzer, temp_dir):
+def test_insecure_deserialization_yaml(analyzer, temp_dir) -> None:
     """Test detection of insecure yaml.load."""
     code = """
 import yaml
 
-def load_config(config_str):
+def load_config(config_str) -> Any:
     return yaml.load(config_str)
 """
     file_path = temp_dir / "deser_yaml.py"
@@ -414,10 +462,10 @@ def load_config(config_str):
     assert "safe_load" in deser_vulns[0].remediation.lower()
 
 
-def test_insecure_deserialization_eval(analyzer, temp_dir):
+def test_insecure_deserialization_eval(analyzer, temp_dir) -> None:
     """Test detection of eval with user input."""
     code = """
-def calculate(expression):
+def calculate(expression) -> Any:
     return eval(expression)
 """
     file_path = temp_dir / "deser_eval.py"
@@ -430,10 +478,10 @@ def calculate(expression):
     assert "ast.literal_eval()" in deser_vulns[0].remediation
 
 
-def test_insecure_deserialization_exec(analyzer, temp_dir):
+def test_insecure_deserialization_exec(analyzer, temp_dir) -> None:
     """Test detection of exec with user input."""
     code = """
-def run_code(code_str):
+def run_code(code_str) -> None:
     exec(code_str)
 """
     file_path = temp_dir / "deser_exec.py"
@@ -445,12 +493,12 @@ def run_code(code_str):
     assert len(deser_vulns) == 1
 
 
-def test_safe_yaml_safeloader(analyzer, temp_dir):
+def test_safe_yaml_safeloader(analyzer, temp_dir) -> None:
     """Test that yaml.safe_load is not flagged."""
     code = """
 import yaml
 
-def load_config(config_str):
+def load_config(config_str) -> Any:
     return yaml.safe_load(config_str)
 """
     file_path = temp_dir / "deser_safe_yaml.py"
@@ -462,12 +510,12 @@ def load_config(config_str):
     assert len(deser_vulns) == 0
 
 
-def test_safe_yaml_explicit_safeloader(analyzer, temp_dir):
+def test_safe_yaml_explicit_safeloader(analyzer, temp_dir) -> None:
     """Test that yaml.load with SafeLoader is not flagged."""
     code = """
 import yaml
 
-def load_config(config_str):
+def load_config(config_str) -> Any:
     return yaml.load(config_str, Loader=yaml.SafeLoader)
 """
     file_path = temp_dir / "deser_safe_yaml2.py"
@@ -482,12 +530,12 @@ def load_config(config_str):
 # Weak Cryptography Tests
 
 
-def test_weak_crypto_md5(analyzer, temp_dir):
+def test_weak_crypto_md5(analyzer, temp_dir) -> None:
     """Test detection of MD5 usage."""
     code = """
 import hashlib
 
-def hash_password(password):
+def hash_password(password) -> Any:
     return hashlib.md5(password.encode()).hexdigest()
 """
     file_path = temp_dir / "crypto_md5.py"
@@ -502,12 +550,12 @@ def hash_password(password):
     assert crypto_vulns[0].cwe_id == "CWE-328"
 
 
-def test_weak_crypto_sha1(analyzer, temp_dir):
+def test_weak_crypto_sha1(analyzer, temp_dir) -> None:
     """Test detection of SHA1 usage."""
     code = """
 import hashlib
 
-def hash_data(data):
+def hash_data(data) -> Any:
     return hashlib.sha1(data.encode()).hexdigest()
 """
     file_path = temp_dir / "crypto_sha1.py"
@@ -519,7 +567,7 @@ def hash_data(data):
     assert len(crypto_vulns) == 1
 
 
-def test_weak_crypto_des_string(analyzer, temp_dir):
+def test_weak_crypto_des_string(analyzer, temp_dir) -> None:
     """Test detection of DES algorithm in strings."""
     code = """
 from Crypto.Cipher import DES
@@ -537,12 +585,12 @@ cipher = DES.new(key, DES.MODE_ECB)
         assert "AES" in crypto_vulns[0].remediation
 
 
-def test_safe_crypto_sha256(analyzer, temp_dir):
+def test_safe_crypto_sha256(analyzer, temp_dir) -> None:
     """Test that SHA-256 is not flagged."""
     code = """
 import hashlib
 
-def hash_data(data):
+def hash_data(data) -> Any:
     return hashlib.sha256(data.encode()).hexdigest()
 """
     file_path = temp_dir / "crypto_safe.py"
@@ -557,12 +605,12 @@ def hash_data(data):
 # SSRF Tests
 
 
-def test_ssrf_requests_get(analyzer, temp_dir):
+def test_ssrf_requests_get(analyzer, temp_dir) -> None:
     """Test detection of SSRF via requests.get with user input."""
     code = """
 import requests
 
-def fetch_url(url):
+def fetch_url(url) -> Any:
     response = requests.get(url)
     return response.text
 """
@@ -578,12 +626,12 @@ def fetch_url(url):
     assert ssrf_vulns[0].cwe_id == "CWE-918"
 
 
-def test_ssrf_urllib(analyzer, temp_dir):
+def test_ssrf_urllib(analyzer, temp_dir) -> None:
     """Test detection of SSRF via urllib."""
     code = """
 import urllib.request
 
-def fetch_data(url):
+def fetch_data(url) -> Any:
     response = urllib.request.urlopen(url)
     return response.read()
 """
@@ -596,12 +644,12 @@ def fetch_data(url):
     assert len(ssrf_vulns) == 1
 
 
-def test_ssrf_fstring_url(analyzer, temp_dir):
+def test_ssrf_fstring_url(analyzer, temp_dir) -> None:
     """Test detection of SSRF with f-string URL."""
     code = """
 import requests
 
-def get_user_profile(user_id):
+def get_user_profile(user_id) -> Any:
     url = f"https://api.example.com/users/{user_id}"
     return requests.get(url).json()
 """
@@ -614,12 +662,12 @@ def get_user_profile(user_id):
     assert len(ssrf_vulns) == 1
 
 
-def test_safe_ssrf_static_url(analyzer, temp_dir):
+def test_safe_ssrf_static_url(analyzer, temp_dir) -> None:
     """Test that static URLs are not flagged."""
     code = """
 import requests
 
-def get_api_status():
+def get_api_status() -> Any:
     response = requests.get("https://api.example.com/status")
     return response.json()
 """
@@ -635,12 +683,12 @@ def get_api_status():
 # XXE Tests
 
 
-def test_xxe_etree_parse(analyzer, temp_dir):
+def test_xxe_etree_parse(analyzer, temp_dir) -> None:
     """Test detection of XXE via xml.etree.ElementTree.parse."""
     code = """
 import xml.etree.ElementTree as ET
 
-def parse_xml(xml_file):
+def parse_xml(xml_file) -> Any:
     tree = ET.parse(xml_file)
     return tree.getroot()
 """
@@ -656,12 +704,12 @@ def parse_xml(xml_file):
     assert xxe_vulns[0].cwe_id == "CWE-611"
 
 
-def test_xxe_etree_fromstring(analyzer, temp_dir):
+def test_xxe_etree_fromstring(analyzer, temp_dir) -> None:
     """Test detection of XXE via xml.etree.ElementTree.fromstring."""
     code = """
 import xml.etree.ElementTree as ET
 
-def parse_xml_string(xml_str):
+def parse_xml_string(xml_str) -> Any:
     root = ET.fromstring(xml_str)
     return root
 """
@@ -674,12 +722,12 @@ def parse_xml_string(xml_str):
     assert len(xxe_vulns) == 1
 
 
-def test_xxe_lxml(analyzer, temp_dir):
+def test_xxe_lxml(analyzer, temp_dir) -> None:
     """Test detection of XXE via lxml."""
     code = """
 from lxml import etree
 
-def parse_xml(xml_str):
+def parse_xml(xml_str) -> Any:
     root = etree.fromstring(xml_str)
     return root
 """
@@ -692,12 +740,12 @@ def parse_xml(xml_str):
     assert len(xxe_vulns) == 1
 
 
-def test_safe_xxe_lxml_secure(analyzer, temp_dir):
+def test_safe_xxe_lxml_secure(analyzer, temp_dir) -> None:
     """Test that lxml with resolve_entities=False is not flagged."""
     code = """
 from lxml import etree
 
-def parse_xml(xml_str):
+def parse_xml(xml_str) -> Any:
     parser = etree.XMLParser(resolve_entities=False)
     root = etree.fromstring(xml_str, parser=parser)
     return root
@@ -714,7 +762,7 @@ def parse_xml(xml_str):
 # Directory Analysis Tests
 
 
-def test_analyze_directory(analyzer, temp_dir):
+def test_analyze_directory(analyzer, temp_dir) -> None:
     """Test analyzing an entire directory."""
     # Create multiple files with vulnerabilities
     (temp_dir / "vuln1.py").write_text(
@@ -732,7 +780,7 @@ password = "SuperSecret123!"
 
     (temp_dir / "safe.py").write_text(
         """
-def hello():
+def hello() -> None:
     print("Hello, world!")
 """
     )
@@ -744,7 +792,7 @@ def hello():
     assert report.critical_count >= 1
 
 
-def test_analyze_directory_recursive(analyzer, temp_dir):
+def test_analyze_directory_recursive(analyzer, temp_dir) -> None:
     """Test recursive directory analysis."""
     subdir = temp_dir / "subdir"
     subdir.mkdir()
@@ -763,7 +811,7 @@ pickle.loads(data)
     assert report.total_vulnerabilities >= 1
 
 
-def test_analyze_directory_non_recursive(analyzer, temp_dir):
+def test_analyze_directory_non_recursive(analyzer, temp_dir) -> None:
     """Test non-recursive directory analysis."""
     subdir = temp_dir / "subdir"
     subdir.mkdir()
@@ -781,7 +829,7 @@ pickle.loads(data)
     assert report.total_files_scanned == 1
 
 
-def test_exclude_patterns(temp_dir):
+def test_exclude_patterns(temp_dir) -> None:
     """Test excluding files by pattern."""
     (temp_dir / "test_file.py").write_text(
         """
@@ -805,7 +853,7 @@ api_key = "sk_live_1234567890abcdefghij"
 # Report Tests
 
 
-def test_security_report_properties(analyzer, temp_dir):
+def test_security_report_properties(analyzer, temp_dir) -> None:
     """Test SecurityReport properties and methods."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -824,7 +872,7 @@ hashlib.md5(data)
     assert isinstance(report.has_high, bool)
 
 
-def test_security_report_get_by_severity(analyzer, temp_dir):
+def test_security_report_get_by_severity(analyzer, temp_dir) -> None:
     """Test filtering vulnerabilities by severity."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -844,7 +892,7 @@ hashlib.md5(data)
     assert all(v.severity == Severity.MEDIUM for v in medium_vulns)
 
 
-def test_security_report_get_by_type(analyzer, temp_dir):
+def test_security_report_get_by_type(analyzer, temp_dir) -> None:
     """Test filtering vulnerabilities by type."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -863,7 +911,7 @@ password = "SuperSecret123!"
     assert all(v.type == VulnerabilityType.HARDCODED_SECRET for v in secret_vulns)
 
 
-def test_security_report_to_dict(analyzer, temp_dir):
+def test_security_report_to_dict(analyzer, temp_dir) -> None:
     """Test converting report to dictionary."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -881,7 +929,7 @@ password = "SuperSecret123!"
     assert isinstance(report_dict["vulnerabilities"], list)
 
 
-def test_vulnerability_to_dict(analyzer, temp_dir):
+def test_vulnerability_to_dict(analyzer, temp_dir) -> None:
     """Test converting vulnerability to dictionary."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -902,7 +950,7 @@ password = "SuperSecret123!"
     assert "remediation" in vuln_dict
 
 
-def test_severity_comparison():
+def test_severity_comparison() -> None:
     """Test severity level comparison."""
     assert Severity.CRITICAL < Severity.HIGH
     assert Severity.HIGH < Severity.MEDIUM
@@ -915,7 +963,7 @@ def test_severity_comparison():
     assert Severity.MEDIUM > Severity.HIGH
 
 
-def test_vulnerability_str_representation(analyzer, temp_dir):
+def test_vulnerability_str_representation(analyzer, temp_dir) -> None:
     """Test string representation of vulnerability."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -932,7 +980,7 @@ password = "SuperSecret123!"
     assert vulns[0].file_path in vuln_str
 
 
-def test_report_str_representation(analyzer, temp_dir):
+def test_report_str_representation(analyzer, temp_dir) -> None:
     """Test string representation of report."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -951,13 +999,13 @@ password = "SuperSecret123!"
 # Edge Cases and Error Handling
 
 
-def test_analyze_nonexistent_file(analyzer):
+def test_analyze_nonexistent_file(analyzer) -> None:
     """Test analyzing a file that doesn't exist."""
     vulns = analyzer.analyze_file("/nonexistent/file.py")
     assert len(vulns) == 0
 
 
-def test_analyze_file_with_syntax_error(analyzer, temp_dir):
+def test_analyze_file_with_syntax_error(analyzer, temp_dir) -> None:
     """Test analyzing a file with syntax errors."""
     (temp_dir / "syntax_error.py").write_text(
         """
@@ -971,7 +1019,7 @@ def broken_function(
     assert len(vulns) == 0  # Should handle gracefully
 
 
-def test_analyze_empty_file(analyzer, temp_dir):
+def test_analyze_empty_file(analyzer, temp_dir) -> None:
     """Test analyzing an empty file."""
     (temp_dir / "empty.py").write_text("")
 
@@ -979,7 +1027,7 @@ def test_analyze_empty_file(analyzer, temp_dir):
     assert len(vulns) == 0
 
 
-def test_analyze_file_with_multiple_vulnerabilities(analyzer, temp_dir):
+def test_analyze_file_with_multiple_vulnerabilities(analyzer, temp_dir) -> None:
     """Test file with multiple different vulnerabilities."""
     code = """
 import os
@@ -989,7 +1037,7 @@ import hashlib
 password = "SuperSecret123!"
 api_key = "sk_live_1234567890abcdefghij"
 
-def unsafe_function(user_input, data):
+def unsafe_function(user_input, data) -> None:
     os.system("ls " + user_input)
     pickle.loads(data)
     hashlib.md5(b"data")
@@ -1005,7 +1053,7 @@ def unsafe_function(user_input, data):
     assert len(vuln_types) >= 4
 
 
-def test_confidence_score(analyzer, temp_dir):
+def test_confidence_score(analyzer, temp_dir) -> None:
     """Test that vulnerabilities have confidence scores."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -1022,7 +1070,7 @@ os.system("ls " + user_input)
 # CWE and OWASP Mapping Tests
 
 
-def test_cwe_mapping(analyzer, temp_dir):
+def test_cwe_mapping(analyzer, temp_dir) -> None:
     """Test that all vulnerabilities have CWE IDs."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -1040,7 +1088,7 @@ pickle.loads(data)
         assert vuln.cwe_id.startswith("CWE-")
 
 
-def test_owasp_mapping(analyzer, temp_dir):
+def test_owasp_mapping(analyzer, temp_dir) -> None:
     """Test that all vulnerabilities have OWASP categories."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -1060,7 +1108,7 @@ password = "SuperSecret123!"
 # Remediation Tests
 
 
-def test_remediation_suggestions(analyzer, temp_dir):
+def test_remediation_suggestions(analyzer, temp_dir) -> None:
     """Test that all vulnerabilities have remediation suggestions."""
     (temp_dir / "vuln.py").write_text(
         """
@@ -1076,13 +1124,13 @@ os.system("ls " + user_input)
         assert isinstance(vuln.remediation, str)
 
 
-def test_code_snippet_extraction(analyzer, temp_dir):
+def test_code_snippet_extraction(analyzer, temp_dir) -> None:
     """Test that code snippets are properly extracted."""
     (temp_dir / "vuln.py").write_text(
         """
 import os
 
-def unsafe_function(user_input):
+def unsafe_function(user_input) -> None:
     os.system("ls " + user_input)
 """
     )

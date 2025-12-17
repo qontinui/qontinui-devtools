@@ -6,7 +6,7 @@ import sys
 import click
 
 
-def configure_logging(verbose: bool):
+def configure_logging(verbose: bool) -> None:
     """Configure logging based on verbosity level.
 
     Args:
@@ -20,7 +20,7 @@ def configure_logging(verbose: bool):
     )
 
 
-def print_success(message: str):
+def print_success(message: str) -> None:
     """Print a success message in green.
 
     Args:
@@ -29,7 +29,7 @@ def print_success(message: str):
     click.echo(click.style(message, fg="green", bold=True))
 
 
-def print_error(message: str):
+def print_error(message: str) -> None:
     """Print an error message in red.
 
     Args:
@@ -38,7 +38,7 @@ def print_error(message: str):
     click.echo(click.style(f"Error: {message}", fg="red", bold=True), err=True)
 
 
-def print_warning(message: str):
+def print_warning(message: str) -> None:
     """Print a warning message in yellow.
 
     Args:
@@ -47,7 +47,7 @@ def print_warning(message: str):
     click.echo(click.style(f"Warning: {message}", fg="yellow", bold=True))
 
 
-def print_info(message: str):
+def print_info(message: str) -> None:
     """Print an info message in blue.
 
     Args:

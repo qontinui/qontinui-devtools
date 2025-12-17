@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Quick fix for import issues in the test migration system.
 This script patches the import problems to make the full CLI work.
 """
@@ -9,7 +11,7 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 
-def fix_execution_init():
+def fix_execution_init() -> None:
     """Fix the execution/__init__.py to handle import errors gracefully."""
     init_file = Path(__file__).parent / "execution" / "__init__.py"
 
@@ -49,7 +51,7 @@ except ImportError:
     print(f"✅ Fixed {init_file}")
 
 
-def create_simple_cli():
+def create_simple_cli() -> Any:
     """Create a simplified CLI that works with existing components."""
     return '''"""
 Working CLI for test migration - simplified version that avoids import issues.
@@ -141,7 +143,7 @@ class WorkingTestMigrationCLI(StandaloneTestMigrationCLI):
 
     def _generate_python_template(self, test_file) -> str:
         """Generate a Python test template from Java test file."""
-        lines = []
+        lines: list[Any] = []
         lines.append('"""')
         lines.append(f'Migrated test from {test_file.path.name}')
         lines.append(f'Original package: {test_file.package}')
@@ -211,7 +213,7 @@ if __name__ == "__main__":
 '''
 
 
-def main():
+def main() -> None:
     """Main function to fix imports and create working CLI."""
     print("Fixing Test Migration Import Issues")
     print("=" * 40)

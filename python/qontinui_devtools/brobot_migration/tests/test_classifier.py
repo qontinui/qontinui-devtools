@@ -21,18 +21,18 @@ else:
 class TestTestClassifier:
     """Test cases for TestClassifier."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.classifier = TestClassifier()
 
-    def test_classifier_initialization(self):
+    def test_classifier_initialization(self) -> None:
         """Test classifier initializes with correct patterns."""
         assert "integration" in self.classifier.integration_indicators["path_indicators"]
         assert "@SpringBootTest" in self.classifier.integration_indicators["spring_annotations"]
         assert "BrobotMock" in self.classifier.mock_patterns["brobot_mocks"]
         assert "junit" in self.classifier.java_library_patterns
 
-    def test_categorize_unit_test_by_default(self):
+    def test_categorize_unit_test_by_default(self) -> None:
         """Test that tests are categorized as unit tests by default."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -66,7 +66,7 @@ public class UserServiceTest {
             result = self.classifier.categorize_test(test_file)
             assert result == TestType.UNIT
 
-    def test_categorize_integration_test_by_path(self):
+    def test_categorize_integration_test_by_path(self) -> None:
         """Test categorization of integration test by path indicators."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -98,7 +98,7 @@ public class UserServiceTest {
             result = self.classifier.categorize_test(test_file)
             assert result == TestType.INTEGRATION
 
-    def test_categorize_integration_test_by_class_name(self):
+    def test_categorize_integration_test_by_class_name(self) -> None:
         """Test categorization of integration test by class name indicators."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -128,7 +128,7 @@ public class UserServiceIntegrationTest {
             result = self.classifier.categorize_test(test_file)
             assert result == TestType.INTEGRATION
 
-    def test_categorize_integration_test_by_spring_import(self):
+    def test_categorize_integration_test_by_spring_import(self) -> None:
         """Test categorization of integration test by Spring imports."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -165,7 +165,7 @@ public class UserControllerTest {
             result = self.classifier.categorize_test(test_file)
             assert result == TestType.INTEGRATION
 
-    def test_categorize_integration_test_by_spring_annotation(self):
+    def test_categorize_integration_test_by_spring_annotation(self) -> None:
         """Test categorization of integration test by Spring annotations in content."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -196,7 +196,7 @@ public class UserControllerTest {
             result = self.classifier.categorize_test(test_file)
             assert result == TestType.INTEGRATION
 
-    def test_detect_brobot_mock_usage(self):
+    def test_detect_brobot_mock_usage(self) -> None:
         """Test detection of Brobot mock usage."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -240,7 +240,7 @@ public class GuiTest {
             assert "loginButton" in brobot_mock.gui_model.elements
             assert "click" in brobot_mock.gui_model.actions
 
-    def test_detect_spring_mock_usage(self):
+    def test_detect_spring_mock_usage(self) -> None:
         """Test detection of Spring mock usage."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -277,7 +277,7 @@ public class ServiceTest {
             assert len(spring_mocks) > 0
             assert spring_mocks[0].mock_class == "@MockBean"
 
-    def test_detect_mockito_mock_usage(self):
+    def test_detect_mockito_mock_usage(self) -> None:
         """Test detection of Mockito mock usage."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -314,7 +314,7 @@ public class ServiceTest {
             mockito_mocks = [m for m in mock_usages if m.mock_type == "mockito_mock"]
             assert len(mockito_mocks) > 0
 
-    def test_analyze_dependencies_testing_frameworks(self):
+    def test_analyze_dependencies_testing_frameworks(self) -> None:
         """Test analysis of testing framework dependencies."""
         junit_dependency = Dependency(java_import="org.junit.Test")
         testng_dependency = Dependency(java_import="org.testng.annotations.Test")
@@ -331,7 +331,7 @@ public class ServiceTest {
         assert "org.junit.Test" in analysis["testing_frameworks"]
         assert "org.testng.annotations.Test" in analysis["testing_frameworks"]
 
-    def test_analyze_dependencies_mocking_frameworks(self):
+    def test_analyze_dependencies_mocking_frameworks(self) -> None:
         """Test analysis of mocking framework dependencies."""
         mockito_dependency = Dependency(java_import="org.mockito.Mock")
         powermock_dependency = Dependency(java_import="org.powermock.api.mockito.PowerMockito")
@@ -348,7 +348,7 @@ public class ServiceTest {
         assert "org.mockito.Mock" in analysis["mocking_frameworks"]
         assert "org.powermock.api.mockito.PowerMockito" in analysis["mocking_frameworks"]
 
-    def test_analyze_dependencies_spring_testing(self):
+    def test_analyze_dependencies_spring_testing(self) -> None:
         """Test analysis of Spring testing dependencies."""
         spring_dependency = Dependency(
             java_import="org.springframework.boot.test.context.SpringBootTest"
@@ -365,7 +365,7 @@ public class ServiceTest {
 
         assert "org.springframework.boot.test.context.SpringBootTest" in analysis["spring_testing"]
 
-    def test_analyze_dependencies_custom_libraries(self):
+    def test_analyze_dependencies_custom_libraries(self) -> None:
         """Test analysis of custom library dependencies."""
         custom_dependency = Dependency(java_import="com.example.custom.CustomLibrary")
 
@@ -380,7 +380,7 @@ public class ServiceTest {
 
         assert "com.example.custom.CustomLibrary" in analysis["custom_libraries"]
 
-    def test_has_integration_path_indicators(self):
+    def test_has_integration_path_indicators(self) -> None:
         """Test detection of integration indicators in file path."""
         integration_path = Path("/project/src/test/integration/UserServiceTest.java")
         e2e_path = Path("/project/src/test/e2e/WorkflowTest.java")
@@ -402,7 +402,7 @@ public class ServiceTest {
         assert self.classifier._has_integration_path_indicators(e2e_file) is True
         assert self.classifier._has_integration_path_indicators(unit_file) is False
 
-    def test_has_integration_class_indicators(self):
+    def test_has_integration_class_indicators(self) -> None:
         """Test detection of integration indicators in class name."""
         integration_file = TestFile(
             path=Path("test.java"),
@@ -426,7 +426,7 @@ public class ServiceTest {
         assert self.classifier._has_integration_class_indicators(e2e_file) is True
         assert self.classifier._has_integration_class_indicators(unit_file) is False
 
-    def test_extract_gui_model_from_content(self):
+    def test_extract_gui_model_from_content(self) -> None:
         """Test extraction of GUI model from Brobot mock content."""
         content = """
         brobotMock.findElement("loginButton");
@@ -447,7 +447,7 @@ public class ServiceTest {
         assert "waitFor" in gui_model.actions
         assert "verify" in gui_model.actions
 
-    def test_determine_simulation_scope(self):
+    def test_determine_simulation_scope(self) -> None:
         """Test determination of mock simulation scope."""
         class_scope_content = """
         @BeforeClass

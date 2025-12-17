@@ -247,7 +247,7 @@ class TypeCoverageAnalyzer:
             percentage = 0.0
 
         # Group issues by type
-        issues_by_type = {}
+        issues_by_type: dict[Any, Any] = {}
         for issue in self.issues:
             if issue.type not in issues_by_type:
                 issues_by_type[issue.type] = []

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from typing import Any
+
 Test the complete migration system functionality.
 """
 
@@ -11,7 +13,7 @@ current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 
 
-def test_system_functionality():
+def test_system_functionality() -> Any:
     """Test the complete system functionality."""
 
     print("🧪 Testing Brobot Test Migration System")

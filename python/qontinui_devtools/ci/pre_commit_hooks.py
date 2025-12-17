@@ -1,5 +1,7 @@
 """Pre-commit hooks for qontinui-devtools.
 
+from typing import Any
+
 This module provides pre-commit hooks for local development to catch
 code quality issues before they are committed.
 """
@@ -147,7 +149,7 @@ def check_new_god_classes(filenames: Sequence[str], min_lines: int, min_methods:
 
         detector = GodClassDetector(min_lines=min_lines, min_methods=min_methods)
 
-        found_god_classes = []
+        found_god_classes: list[Any] = []
 
         for file in files_to_check:
             file_path = Path(file)
@@ -224,7 +226,7 @@ def check_race_conditions(filenames: Sequence[str], severity: str) -> None:
 
         detector = RaceConditionDetector()
 
-        found_issues = []
+        found_issues: list[Any] = []
 
         for file in files_to_check:
             file_path = Path(file)
@@ -296,7 +298,7 @@ def check_complexity(filenames: Sequence[str], max_complexity: int) -> None:
     try:
         import radon.complexity as radon_complexity
 
-        high_complexity_functions = []
+        high_complexity_functions: list[Any] = []
 
         for file in files_to_check:
             file_path = Path(file)

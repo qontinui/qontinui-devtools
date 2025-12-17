@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Comprehensive security analyzer for Python code.
 
 This module provides static analysis capabilities to detect common security
@@ -130,7 +132,7 @@ class SecurityAnalyzer:
         "lxml.etree.XMLParser",
     }
 
-    def __init__(self, exclude_patterns: list[str] | None = None):
+    def __init__(self, exclude_patterns: list[str] | None = None) -> None:
         """
         Initialize the security analyzer.
 
@@ -152,7 +154,7 @@ class SecurityAnalyzer:
         Returns:
             List of detected vulnerabilities
         """
-        self.vulnerabilities = []
+        self.vulnerabilities: list[Any] = []
         self.current_file = file_path
 
         try:

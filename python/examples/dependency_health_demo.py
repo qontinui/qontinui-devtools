@@ -1,5 +1,9 @@
 """Demonstration of the Dependency Health Checker with sample output.
 
+from typing import Any
+
+from typing import Any
+
 This script creates a sample project and demonstrates the dependency health checker
 with realistic output.
 """
@@ -13,7 +17,7 @@ from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
 
 
-def create_sample_project():
+def create_sample_project() -> None:
     """Create a sample project with various dependency scenarios."""
     tmpdir = tempfile.mkdtemp()
     project_path = Path(tmpdir)
@@ -48,7 +52,7 @@ dev = [
     return project_path
 
 
-def create_mock_pypi_client():
+def create_mock_pypi_client() -> Any:
     """Create a mock PyPI client with realistic package data."""
     mock_client = Mock(spec=PyPIClient)
 
@@ -243,7 +247,7 @@ def create_mock_pypi_client():
         ),
     }
 
-    def get_package_info(name):
+    def get_package_info(name) -> Any:
         return package_data.get(name)
 
     mock_client.get_package_info.side_effect = get_package_info
@@ -251,7 +255,7 @@ def create_mock_pypi_client():
     return mock_client
 
 
-def main():
+def main() -> None:
     """Run the demonstration."""
     print("=" * 80)
     print("DEPENDENCY HEALTH CHECKER DEMONSTRATION")

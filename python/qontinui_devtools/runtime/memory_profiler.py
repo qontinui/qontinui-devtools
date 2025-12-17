@@ -393,7 +393,7 @@ class MemoryProfiler:
         Returns:
             Multi-line report string
         """
-        lines = []
+        lines: list[Any] = []
         lines.append("=" * 80)
         lines.append("MEMORY PROFILING REPORT")
         lines.append("=" * 80)

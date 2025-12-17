@@ -3,7 +3,7 @@ Assertion converter for mapping JUnit assertions to pytest assertions.
 """
 
 import re
-from typing import cast
+from typing import cast, Any
 
 
 class AssertionConverter:
@@ -150,7 +150,7 @@ class AssertionConverter:
 
     def _split_parameters(self, params_str: str) -> list[str]:
         """Split parameter string handling nested structures."""
-        params = []
+        params: list[Any] = []
         current_param = ""
         paren_count = 0
         quote_char = None
@@ -545,7 +545,7 @@ class AssertionConverter:
         Returns:
             List of custom assertion method names
         """
-        custom_assertions = []
+        custom_assertions: list[Any] = []
 
         # Look for methods that start with 'assert' but aren't standard JUnit
         method_pattern = r"(?:private|protected|public)?\s*(?:static)?\s*void\s+(assert\w+)\s*\("

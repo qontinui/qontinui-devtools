@@ -26,7 +26,7 @@ from ..validation.result_validator import (
 class TestResultValidator:
     """Test suite for ResultValidator functionality."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.validator = ResultValidator()
 
@@ -65,7 +65,7 @@ class TestResultValidator:
             output="Test failed with exception",
         )
 
-    def test_compare_identical_outputs(self):
+    def test_compare_identical_outputs(self) -> None:
         """Test comparison of identical test outputs."""
         comparison = self.validator.compare_test_outputs(
             self.java_result_pass, self.python_result_pass, ComparisonType.OUTPUT
@@ -76,7 +76,7 @@ class TestResultValidator:
         assert len(comparison.differences) == 0
         assert comparison.performance_metrics is not None
 
-    def test_compare_different_outputs(self):
+    def test_compare_different_outputs(self) -> None:
         """Test comparison of different test outputs."""
         different_python_result = TestResult(
             test_name="testCalculation",
@@ -94,7 +94,7 @@ class TestResultValidator:
         assert comparison.similarity_score < 1.0
         assert len(comparison.differences) > 0
 
-    def test_behavioral_equivalence_same_status(self):
+    def test_behavioral_equivalence_same_status(self) -> None:
         """Test behavioral equivalence for tests with same pass/fail status."""
         comparison = self.validator.compare_test_outputs(
             self.java_result_pass, self.python_result_pass, ComparisonType.BEHAVIOR
@@ -103,7 +103,7 @@ class TestResultValidator:
         assert comparison.validation_result == ValidationResult.EQUIVALENT
         assert comparison.test_name == "testCalculation"
 
-    def test_behavioral_equivalence_different_status(self):
+    def test_behavioral_equivalence_different_status(self) -> None:
         """Test behavioral equivalence for tests with different pass/fail status."""
         comparison = self.validator.compare_test_outputs(
             self.java_result_pass, self.python_result_fail, ComparisonType.BEHAVIOR
@@ -112,7 +112,7 @@ class TestResultValidator:
         assert comparison.validation_result == ValidationResult.DIFFERENT
         assert "Test status differs" in comparison.differences[0]
 
-    def test_exception_comparison(self):
+    def test_exception_comparison(self) -> None:
         """Test comparison of exception messages."""
         comparison = self.validator.compare_test_outputs(
             self.java_result_fail, self.python_result_fail, ComparisonType.EXCEPTION
@@ -123,7 +123,7 @@ class TestResultValidator:
         assert comparison.comparison_type == ComparisonType.EXCEPTION
         assert comparison.similarity_score > 0.0
 
-    def test_performance_comparison(self):
+    def test_performance_comparison(self) -> None:
         """Test performance metrics calculation."""
         comparison = self.validator.compare_test_outputs(
             self.java_result_pass, self.python_result_pass, ComparisonType.PERFORMANCE
@@ -137,7 +137,7 @@ class TestResultValidator:
         assert metrics.time_ratio == 1.6
         assert metrics.performance_delta_percent == 60.0
 
-    def test_verify_behavioral_equivalence_suite(self):
+    def test_verify_behavioral_equivalence_suite(self) -> None:
         """Test behavioral equivalence verification for test suites."""
         java_results = TestResults(
             total_tests=2,
@@ -169,7 +169,7 @@ class TestResultValidator:
         assert calc_comparison.validation_result == ValidationResult.EQUIVALENT
         assert div_comparison.comparison_type == ComparisonType.BEHAVIOR
 
-    def test_collect_performance_metrics(self):
+    def test_collect_performance_metrics(self) -> None:
         """Test performance metrics collection for test suites."""
         java_results = TestResults(
             total_tests=1,
@@ -197,7 +197,7 @@ class TestResultValidator:
         assert calc_metrics.python_execution_time == 0.08
         assert calc_metrics.performance_delta_percent == 60.0
 
-    def test_missing_tests_in_suites(self):
+    def test_missing_tests_in_suites(self) -> None:
         """Test handling of tests that exist in only one suite."""
         java_only_result = TestResult(
             test_name="testJavaOnly",
@@ -246,7 +246,7 @@ class TestResultValidator:
         assert python_only_comp.validation_result == ValidationResult.DIFFERENT
         assert "exists only in Python suite" in python_only_comp.differences[0]
 
-    def test_custom_equivalence_config(self):
+    def test_custom_equivalence_config(self) -> None:
         """Test custom behavioral equivalence configuration."""
         config = BehavioralEquivalenceConfig(
             ignore_whitespace=True, ignore_case=True, tolerance_threshold=0.8
@@ -277,7 +277,7 @@ class TestResultValidator:
         # Should be equivalent due to ignore_case and ignore_whitespace
         assert comparison.validation_result == ValidationResult.EQUIVALENT
 
-    def test_validation_history_tracking(self):
+    def test_validation_history_tracking(self) -> None:
         """Test that validation history is properly tracked."""
         # Perform several comparisons
         self.validator.compare_test_outputs(
@@ -295,7 +295,7 @@ class TestResultValidator:
         assert summary["different"] >= 0
         assert "average_similarity_score" in summary
 
-    def test_error_handling_in_comparison(self):
+    def test_error_handling_in_comparison(self) -> None:
         """Test error handling during comparison."""
         # Create a mock that raises an exception
         invalid_result = Mock()
@@ -309,7 +309,7 @@ class TestResultValidator:
         assert comparison.validation_result == ValidationResult.ERROR
         assert comparison.error_details is not None
 
-    def test_export_validation_results(self):
+    def test_export_validation_results(self) -> None:
         """Test exporting validation results to JSON."""
         # Perform some comparisons
         self.validator.compare_test_outputs(
@@ -333,7 +333,7 @@ class TestResultValidator:
             assert comparison_data["test_name"] == "testCalculation"
             assert "performance_metrics" in comparison_data
 
-    def test_similarity_score_calculation(self):
+    def test_similarity_score_calculation(self) -> None:
         """Test similarity score calculation accuracy."""
         # Test identical strings
         score = self.validator._calculate_similarity_score("hello", "hello")
@@ -354,7 +354,7 @@ class TestResultValidator:
         score = self.validator._calculate_similarity_score("hello", "")
         assert score == 0.0
 
-    def test_output_normalization(self):
+    def test_output_normalization(self) -> None:
         """Test output normalization functionality."""
         config = BehavioralEquivalenceConfig(ignore_whitespace=True, ignore_case=True)
         validator = ResultValidator(config)
@@ -369,7 +369,7 @@ class TestResultValidator:
         normalized = validator._normalize_output("HELLO World")
         assert normalized == "hello world"
 
-    def test_error_message_normalization(self):
+    def test_error_message_normalization(self) -> None:
         """Test error message normalization for comparison."""
         # Test path removal
         error_with_path = "Error at C:\\path\\to\\file.java:123: Division by zero"
@@ -387,7 +387,7 @@ class TestResultValidator:
 class TestPerformanceMetrics:
     """Test suite for PerformanceMetrics functionality."""
 
-    def test_performance_delta_calculation(self):
+    def test_performance_delta_calculation(self) -> None:
         """Test performance delta percentage calculation."""
         metrics = PerformanceMetrics(
             java_execution_time=1.0,
@@ -398,7 +398,7 @@ class TestPerformanceMetrics:
 
         assert metrics.performance_delta_percent == 50.0
 
-    def test_performance_delta_zero_java_time(self):
+    def test_performance_delta_zero_java_time(self) -> None:
         """Test performance delta when Java time is zero."""
         metrics = PerformanceMetrics(
             java_execution_time=0.0,
@@ -409,7 +409,7 @@ class TestPerformanceMetrics:
 
         assert metrics.performance_delta_percent == 0.0
 
-    def test_performance_improvement(self):
+    def test_performance_improvement(self) -> None:
         """Test performance delta for improved Python performance."""
         metrics = PerformanceMetrics(
             java_execution_time=2.0,
@@ -424,7 +424,7 @@ class TestPerformanceMetrics:
 class TestValidationComparison:
     """Test suite for ValidationComparison functionality."""
 
-    def test_is_equivalent_property(self):
+    def test_is_equivalent_property(self) -> None:
         """Test the is_equivalent property."""
         comparison = ValidationComparison(
             test_name="test",

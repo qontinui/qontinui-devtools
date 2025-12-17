@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Coverage analysis module.
 
 Performs issue detection, generates recommendations, and creates
@@ -72,7 +74,7 @@ class CoverageAnalyzer:
         Returns:
             List of recommendation strings
         """
-        recommendations = []
+        recommendations: list[Any] = []
         progress = self.stats.calculate_progress()
         issues = self.identify_issues()
 

@@ -1,4 +1,8 @@
 """
+from typing import Any
+
+from typing import Any
+
 Test the standalone CLI functionality.
 """
 
@@ -10,7 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 
-def create_sample_brobot_tests(test_dir: Path):
+def create_sample_brobot_tests(test_dir: Path) -> None:
     """Create sample Brobot-style test files for testing."""
 
     # Simple unit test
@@ -114,7 +118,7 @@ public class BrobotGuiTest {
     )
 
 
-def test_cli_discovery():
+def test_cli_discovery() -> Any:
     """Test the CLI discovery functionality."""
     print("Testing CLI Discovery Functionality")
     print("=" * 40)
@@ -167,7 +171,7 @@ def test_cli_discovery():
         return False
 
 
-def main():
+def main() -> Any:
     """Run CLI tests."""
     success = test_cli_discovery()
 

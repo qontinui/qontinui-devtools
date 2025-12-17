@@ -10,7 +10,7 @@ from .health_checker import DependencyHealthChecker
 from .models import UpdateType
 
 
-def main():
+def main() -> None:
     """Run dependency health checker CLI."""
     parser = argparse.ArgumentParser(
         description="Check dependency health for Python projects",

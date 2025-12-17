@@ -20,7 +20,7 @@ from qontinui.test_migration.core.models import (
 class TestDependency:
     """Tests for the Dependency model."""
 
-    def test_dependency_creation(self):
+    def test_dependency_creation(self) -> None:
         """Test creating a basic dependency."""
         dep = Dependency(
             java_import="org.junit.jupiter.api.Test",
@@ -33,7 +33,7 @@ class TestDependency:
         assert dep.requires_adaptation is True
         assert dep.adapter_function is None
 
-    def test_dependency_with_adapter(self):
+    def test_dependency_with_adapter(self) -> None:
         """Test creating a dependency with adapter function."""
         dep = Dependency(
             java_import="org.junit.jupiter.api.Assertions.assertEquals",
@@ -48,7 +48,7 @@ class TestDependency:
 class TestGuiModel:
     """Tests for the GuiModel model."""
 
-    def test_gui_model_creation(self):
+    def test_gui_model_creation(self) -> None:
         """Test creating a GUI model."""
         model = GuiModel(
             model_name="TestWindow",
@@ -62,7 +62,7 @@ class TestGuiModel:
         assert "click" in model.actions
         assert model.state_properties["visible"] is True
 
-    def test_gui_model_defaults(self):
+    def test_gui_model_defaults(self) -> None:
         """Test GUI model with default values."""
         model = GuiModel(model_name="EmptyWindow")
 
@@ -75,7 +75,7 @@ class TestGuiModel:
 class TestMockUsage:
     """Tests for the MockUsage model."""
 
-    def test_mock_usage_creation(self):
+    def test_mock_usage_creation(self) -> None:
         """Test creating mock usage."""
         gui_model = GuiModel(model_name="TestWindow")
         mock_usage = MockUsage(
@@ -95,7 +95,7 @@ class TestMockUsage:
 class TestTestMethod:
     """Tests for the TestMethod model."""
 
-    def test_test_method_creation(self):
+    def test_test_method_creation(self) -> None:
         """Test creating a test method."""
         method = TestMethod(
             name="testExample",
@@ -111,7 +111,7 @@ class TestTestMethod:
         assert method.body == 'assertEquals("expected", result);'
         assert 'assertEquals("expected", result)' in method.assertions
 
-    def test_test_method_defaults(self):
+    def test_test_method_defaults(self) -> None:
         """Test test method with default values."""
         method = TestMethod(name="testBasic")
 
@@ -126,7 +126,7 @@ class TestTestMethod:
 class TestTestFile:
     """Tests for the TestFile model."""
 
-    def test_test_file_creation(self):
+    def test_test_file_creation(self) -> None:
         """Test creating a test file."""
         test_file = TestFile(
             path=Path("SampleTest.java"),
@@ -149,7 +149,7 @@ class TestTestFile:
 class TestMigrationConfig:
     """Tests for the MigrationConfig model."""
 
-    def test_migration_config_creation(self):
+    def test_migration_config_creation(self) -> None:
         """Test creating migration configuration."""
         config = MigrationConfig(
             source_directories=[Path("java/tests")],
@@ -166,7 +166,7 @@ class TestMigrationConfig:
         assert config.parallel_execution is True
         assert config.comparison_mode == "behavioral"
 
-    def test_migration_config_defaults(self):
+    def test_migration_config_defaults(self) -> None:
         """Test migration configuration with defaults."""
         config = MigrationConfig(source_directories=[Path("src")], target_directory=Path("tests"))
 
@@ -177,13 +177,13 @@ class TestMigrationConfig:
 class TestEnums:
     """Tests for enum types."""
 
-    def test_test_type_enum(self):
+    def test_test_type_enum(self) -> None:
         """Test TestType enum values."""
         assert TestType.UNIT.value == "unit"
         assert TestType.INTEGRATION.value == "integration"
         assert TestType.UNKNOWN.value == "unknown"
 
-    def test_failure_type_enum(self):
+    def test_failure_type_enum(self) -> None:
         """Test FailureType enum values."""
         assert FailureType.SYNTAX_ERROR.value == "syntax_error"
         assert FailureType.ASSERTION_ERROR.value == "assertion_error"
@@ -191,7 +191,7 @@ class TestEnums:
         assert FailureType.MOCK_ERROR.value == "mock_error"
         assert FailureType.RUNTIME_ERROR.value == "runtime_error"
 
-    def test_suspected_cause_enum(self):
+    def test_suspected_cause_enum(self) -> None:
         """Test SuspectedCause enum values."""
         assert SuspectedCause.MIGRATION_ISSUE.value == "migration_issue"
         assert SuspectedCause.CODE_ISSUE.value == "code_issue"

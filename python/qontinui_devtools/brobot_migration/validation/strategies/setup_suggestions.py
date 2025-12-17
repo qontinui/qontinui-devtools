@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Setup and annotation fix suggestion strategies for JUnit to pytest migration.
 """
 
@@ -37,7 +39,7 @@ class SetupSuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for JUnit annotation errors."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         # Find JUnit annotations in the error
         annotation_matches = re.findall(r"@\w+", error_message + stack_trace)

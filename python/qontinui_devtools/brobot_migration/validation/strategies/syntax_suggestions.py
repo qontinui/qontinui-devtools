@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Syntax fix suggestion strategies for Java to Python migration.
 """
 
@@ -20,7 +22,7 @@ class SyntaxSuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for Java syntax errors in Python code."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         # Check for common Java syntax patterns
         if "{" in stack_trace or "}" in stack_trace:
@@ -59,7 +61,7 @@ class SyntaxSuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for Python indentation errors."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         suggestions.append(
             FixSuggestion(

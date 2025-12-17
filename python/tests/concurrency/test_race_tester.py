@@ -1,5 +1,9 @@
 """Tests for race condition tester."""
 
+from typing import Any
+
+from typing import Any
+
 import threading
 import time
 
@@ -124,7 +128,7 @@ def test_stress_test_scenarios() -> None:
     call_counts = {"scenario1": 0, "scenario2": 0}
     lock = threading.Lock()
 
-    def target(scenario_name: str):
+    def target(scenario_name: str) -> None:
         with lock:
             call_counts[scenario_name] += 1
 
@@ -233,12 +237,12 @@ def test_check_then_act_race() -> None:
     assert result.total_iterations == 100
 
 
-def test_lazy_initialization_race() -> None:
+def test_lazy_initialization_race() -> Any:
     """Test lazy initialization race condition."""
     instance: dict[str, str] | None = None
     creation_count = {"value": 0}
 
-    def get_instance() -> None:
+    def get_instance() -> Any:
         nonlocal instance
         if instance is None:
             creation_count["value"] += 1
@@ -275,10 +279,10 @@ def test_race_tester_timeout() -> None:
 
 def test_function_with_arguments() -> None:
     """Test race tester with function arguments."""
-    results = []
+    results: list[Any] = []
     lock = threading.Lock()
 
-    def function_with_args(x: int, y: int, multiplier: int = 1):
+    def function_with_args(x: int, y: int, multiplier: int = 1) -> None:
         with lock:
             results.append((x + y) * multiplier)
 

@@ -1,6 +1,8 @@
 """Utility functions."""
 
 
-def utility_function() -> None:
+from typing import Any
+
+def utility_function() -> Any:
     """A utility function."""
     return 42

@@ -24,11 +24,11 @@ from qontinui.test_migration.validation.fix_suggestion_engine import (  # type: 
 class TestFixSuggestionEngine:
     """Test cases for FixSuggestionEngine."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.engine = FixSuggestionEngine()
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test that engine initializes with proper patterns and mappings."""
         assert len(self.engine._migration_patterns) > 0
         assert len(self.engine._java_to_python_mappings) > 0
@@ -40,7 +40,7 @@ class TestFixSuggestionEngine:
         assert "assertEquals" in self.engine._assertion_mappings
         assert "@Test" in self.engine._annotation_mappings
 
-    def test_suggest_fixes_brobot_import_error(self):
+    def test_suggest_fixes_brobot_import_error(self) -> None:
         """Test fix suggestions for Brobot import errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -66,7 +66,7 @@ class TestFixSuggestionEngine:
         assert "qontinui" in brobot_fix.suggested_code.lower()
         assert brobot_fix.confidence > 0.8
 
-    def test_suggest_fixes_java_import_error(self):
+    def test_suggest_fixes_java_import_error(self) -> None:
         """Test fix suggestions for Java import errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -91,7 +91,7 @@ class TestFixSuggestionEngine:
         assert "java.util" in java_fix.original_code
         assert java_fix.confidence > 0.7
 
-    def test_suggest_fixes_junit_annotation_error(self):
+    def test_suggest_fixes_junit_annotation_error(self) -> None:
         """Test fix suggestions for JUnit annotation errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -117,7 +117,7 @@ class TestFixSuggestionEngine:
         assert "def test_" in test_fix.suggested_code
         assert test_fix.confidence > 0.8
 
-    def test_suggest_fixes_junit_assertion_error(self):
+    def test_suggest_fixes_junit_assertion_error(self) -> None:
         """Test fix suggestions for JUnit assertion errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -143,7 +143,7 @@ class TestFixSuggestionEngine:
         assert "assert" in assertion_fix.suggested_code
         assert assertion_fix.confidence > 0.7
 
-    def test_suggest_fixes_spring_annotation_error(self):
+    def test_suggest_fixes_spring_annotation_error(self) -> None:
         """Test fix suggestions for Spring Boot annotation errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -168,7 +168,7 @@ class TestFixSuggestionEngine:
         assert "@SpringBootTest" in spring_fix.original_code
         assert "pytest.fixture" in spring_fix.suggested_code
 
-    def test_suggest_fixes_mockito_error(self):
+    def test_suggest_fixes_mockito_error(self) -> None:
         """Test fix suggestions for Mockito errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -193,7 +193,7 @@ class TestFixSuggestionEngine:
         assert "mockito" in mockito_fix.original_code.lower()
         assert "unittest.mock" in mockito_fix.suggested_code
 
-    def test_suggest_fixes_java_syntax_error(self):
+    def test_suggest_fixes_java_syntax_error(self) -> None:
         """Test fix suggestions for Java syntax errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -218,7 +218,7 @@ class TestFixSuggestionEngine:
         assert "{" in syntax_fix.original_code or ";" in syntax_fix.original_code
         assert syntax_fix.confidence > 0.8
 
-    def test_suggest_fixes_indentation_error(self):
+    def test_suggest_fixes_indentation_error(self) -> None:
         """Test fix suggestions for indentation errors."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -243,14 +243,14 @@ class TestFixSuggestionEngine:
         assert "indentation" in indent_fix.description.lower()
         assert indent_fix.confidence > 0.7
 
-    def test_apply_simple_fixes_with_temp_file(self):
+    def test_apply_simple_fixes_with_temp_file(self) -> None:
         """Test applying simple fixes to a temporary file."""
         # Create a temporary Python file with issues
         python_content = """
 import org.junit.Test
 
 @Test
-def testMethod():
+def testMethod() -> None:
     assertEquals(expected, actual)
 """
 
@@ -287,7 +287,7 @@ def testMethod():
         finally:
             python_path.unlink()
 
-    def test_apply_simple_fixes_nonexistent_file(self):
+    def test_apply_simple_fixes_nonexistent_file(self) -> None:
         """Test applying fixes to a nonexistent file."""
         nonexistent_path = Path("nonexistent_file.py")
         suggestions = [
@@ -306,7 +306,7 @@ def testMethod():
         # Should return empty list for nonexistent file
         assert len(applied_fixes) == 0
 
-    def test_recognize_common_patterns(self):
+    def test_recognize_common_patterns(self) -> None:
         """Test recognition of common migration patterns."""
         # Test Brobot import pattern
         brobot_patterns = self.engine.recognize_common_patterns(
@@ -335,7 +335,7 @@ def testMethod():
         )
         assert "junit_assertion_error" in assertion_patterns
 
-    def test_migration_issue_pattern_dataclass(self):
+    def test_migration_issue_pattern_dataclass(self) -> None:
         """Test the MigrationIssuePattern dataclass."""
         pattern = MigrationIssuePattern(
             pattern_name="test_pattern",
@@ -353,7 +353,7 @@ def testMethod():
         assert pattern.confidence_threshold == 0.8
         assert pattern.description == "Test pattern description"
 
-    def test_fix_suggestion_dataclass(self):
+    def test_fix_suggestion_dataclass(self) -> None:
         """Test the FixSuggestion dataclass."""
         suggestion = FixSuggestion(
             fix_type=FixType.IMPORT_FIX,
@@ -381,7 +381,7 @@ def testMethod():
         assert "prerequisite1" in suggestion.prerequisites
         assert "step1" in suggestion.validation_steps
 
-    def test_map_brobot_to_qontinui(self):
+    def test_map_brobot_to_qontinui(self) -> None:
         """Test Brobot to Qontinui mapping."""
         # Test known mappings
         assert "qontinui.actions.Action" in self.engine._map_brobot_to_qontinui(
@@ -397,7 +397,7 @@ def testMethod():
         assert "qontinui" in unknown_mapping
         assert "unknown" in unknown_mapping.lower()
 
-    def test_can_apply_fix_safely(self):
+    def test_can_apply_fix_safely(self) -> None:
         """Test safe fix application checking."""
         content = "import org.junit.Test\n@Test\ndef testMethod():\n    assertEquals(a, b)"
 
@@ -445,7 +445,7 @@ def testMethod():
         )
         assert not self.engine._can_apply_fix_safely(missing_code_fix, content)
 
-    def test_apply_fix_to_content_import_fix(self):
+    def test_apply_fix_to_content_import_fix(self) -> None:
         """Test applying import fixes to content."""
         content = "from org.junit import Test\ndef test_method():\n    pass"
 
@@ -462,7 +462,7 @@ def testMethod():
         assert "import pytest" in result
         assert "org.junit" not in result
 
-    def test_apply_fix_to_content_assertion_fix(self):
+    def test_apply_fix_to_content_assertion_fix(self) -> None:
         """Test applying assertion fixes to content."""
         content = "def test_method():\n    assertEquals(expected, actual)"
 
@@ -479,7 +479,7 @@ def testMethod():
         result = self.engine._apply_fix_to_content(fix, content)
         assert "assert actual == expected" in result or "assertEquals" not in result
 
-    def test_apply_fix_to_content_syntax_fix(self):
+    def test_apply_fix_to_content_syntax_fix(self) -> None:
         """Test applying syntax fixes to content."""
         content = "if (condition) {\n    statement;\n}"
 
@@ -498,7 +498,7 @@ def testMethod():
         assert "}" not in result
         assert ":" in result
 
-    def test_suggest_fixes_with_test_file_context(self):
+    def test_suggest_fixes_with_test_file_context(self) -> None:
         """Test fix suggestions with Java test file context."""
         test_file = TestFile(
             path=Path("TestClass.java"),
@@ -530,7 +530,7 @@ def testMethod():
         # Should provide context-aware suggestions
         assert any("brobot" in s.description.lower() for s in suggestions)
 
-    def test_suggest_fixes_sorting(self):
+    def test_suggest_fixes_sorting(self) -> None:
         """Test that fix suggestions are sorted by confidence and complexity."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -550,7 +550,7 @@ def testMethod():
             for i in range(len(suggestions) - 1):
                 assert suggestions[i].confidence >= suggestions[i + 1].confidence
 
-    def test_empty_error_handling(self):
+    def test_empty_error_handling(self) -> None:
         """Test handling of empty error messages and stack traces."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -569,7 +569,7 @@ def testMethod():
         assert isinstance(suggestions, list)
         # May be empty or contain general suggestions
 
-    def test_case_insensitive_pattern_matching(self):
+    def test_case_insensitive_pattern_matching(self) -> None:
         """Test that pattern matching is case insensitive."""
         patterns = self.engine.recognize_common_patterns(
             "MODULENOTFOUNDERROR: No module named 'BROBOT'",
@@ -579,7 +579,7 @@ def testMethod():
         # Should still match despite different case
         assert "brobot_import_error" in patterns
 
-    def test_multiple_pattern_matches(self):
+    def test_multiple_pattern_matches(self) -> None:
         """Test behavior when multiple patterns match the same error."""
         failure_analysis = FailureAnalysis(
             is_migration_issue=True,
@@ -601,7 +601,7 @@ def testMethod():
         fix_types = {s.fix_type for s in suggestions}
         assert len(fix_types) > 1  # Multiple types of fixes
 
-    def test_fix_type_enum(self):
+    def test_fix_type_enum(self) -> None:
         """Test the FixType enum."""
         assert FixType.IMPORT_FIX.value == "import_fix"
         assert FixType.ANNOTATION_FIX.value == "annotation_fix"
@@ -611,7 +611,7 @@ def testMethod():
         assert FixType.MOCK_FIX.value == "mock_fix"
         assert FixType.SETUP_FIX.value == "setup_fix"
 
-    def test_fix_complexity_enum(self):
+    def test_fix_complexity_enum(self) -> None:
         """Test the FixComplexity enum."""
         assert FixComplexity.SIMPLE.value == "simple"
         assert FixComplexity.MODERATE.value == "moderate"

@@ -11,7 +11,7 @@ from typing import Any
 from qontinui_devtools.concurrency import RaceConditionTester, concurrent_test, stress_test
 
 
-def example_1_basic_usage():
+def example_1_basic_usage() -> None:
     """Example 1: Basic usage of RaceConditionTester."""
     print("=" * 80)
     print("Example 1: Basic Usage")
@@ -23,7 +23,7 @@ def example_1_basic_usage():
     # Test a simple function
     shared_dict: dict[str, int] = {}
 
-    def test_function():
+    def test_function() -> None:
         """Function to test - has a race condition."""
         key = "counter"
         if key not in shared_dict:
@@ -54,7 +54,7 @@ def example_1_basic_usage():
         print("  WARNING: Counter mismatch indicates lost updates!")
 
 
-def example_2_decorator_usage():
+def example_2_decorator_usage() -> None:
     """Example 2: Using the @concurrent_test decorator."""
     print("\n" + "=" * 80)
     print("Example 2: Decorator Usage")
@@ -64,7 +64,7 @@ def example_2_decorator_usage():
     lock = threading.Lock()
 
     @concurrent_test(threads=20, iterations=50)
-    def test_with_lock():
+    def test_with_lock() -> None:
         """Thread-safe function using lock."""
         with lock:
             call_count["value"] += 1
@@ -84,7 +84,7 @@ def example_2_decorator_usage():
         print("\n  SUCCESS: Thread-safe code passed!")
 
 
-def example_3_stress_test():
+def example_3_stress_test() -> None:
     """Example 3: Heavy stress testing."""
     print("\n" + "=" * 80)
     print("Example 3: Stress Test")
@@ -94,7 +94,7 @@ def example_3_stress_test():
     lock = threading.Lock()
 
     @stress_test(threads=50, iterations=1000)
-    def test_cache_operations():
+    def test_cache_operations() -> None:
         """Test cache with high concurrency."""
         key = f"key_{threading.get_ident()}"
 
@@ -126,7 +126,7 @@ def example_3_stress_test():
         print(f"    Max: {result.max_execution_time*1000:.2f}ms")
 
 
-def example_4_compare_safe_vs_unsafe():
+def example_4_compare_safe_vs_unsafe() -> None:
     """Example 4: Compare safe vs unsafe implementations."""
     print("\n" + "=" * 80)
     print("Example 4: Safe vs Unsafe Comparison")
@@ -135,7 +135,7 @@ def example_4_compare_safe_vs_unsafe():
     # Unsafe version
     counter_unsafe = {"value": 0}
 
-    def unsafe_increment():
+    def unsafe_increment() -> None:
         """Unsafe counter increment."""
         for _ in range(100):
             counter_unsafe["value"] += 1
@@ -144,7 +144,7 @@ def example_4_compare_safe_vs_unsafe():
     counter_safe = {"value": 0}
     lock = threading.Lock()
 
-    def safe_increment():
+    def safe_increment() -> None:
         """Safe counter increment with lock."""
         for _ in range(100):
             with lock:
@@ -179,7 +179,7 @@ def example_4_compare_safe_vs_unsafe():
     print(f"  Lost updates: {10 * 10 * 100 - counter_safe['value']}")
 
 
-def example_5_multiple_scenarios():
+def example_5_multiple_scenarios() -> None:
     """Example 5: Testing multiple scenarios."""
     print("\n" + "=" * 80)
     print("Example 5: Multiple Scenarios")
@@ -188,7 +188,7 @@ def example_5_multiple_scenarios():
     results_dict: dict[str, int] = {}
     lock = threading.Lock()
 
-    def target_function(scenario: str, count: int):
+    def target_function(scenario: str, count: int) -> None:
         """Target function for scenarios."""
         with lock:
             if scenario not in results_dict:
@@ -216,7 +216,7 @@ def example_5_multiple_scenarios():
         print(f"    {key}: {value}")
 
 
-def example_6_with_exceptions():
+def example_6_with_exceptions() -> None:
     """Example 6: Testing code that raises exceptions."""
     print("\n" + "=" * 80)
     print("Example 6: Exception Handling")
@@ -224,7 +224,7 @@ def example_6_with_exceptions():
 
     shared_list: list[int] = []
 
-    def buggy_function():
+    def buggy_function() -> None:
         """Function with a bug that sometimes raises."""
         # Intentional race condition
         index = len(shared_list)
@@ -254,7 +254,7 @@ def example_6_with_exceptions():
             print(f"    - {detail}")
 
 
-def main():
+def main() -> None:
     """Run all examples."""
     print("\n")
     print("╔" + "═" * 78 + "╗")

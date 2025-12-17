@@ -92,7 +92,7 @@ class PythonTestGenerator(TestTranslator):
         Returns:
             Complete Python test file content as a string
         """
-        lines = []
+        lines: list[Any] = []
 
         # Add file header comment
         lines.append('"""')
@@ -163,7 +163,7 @@ class PythonTestGenerator(TestTranslator):
 
     def _generate_imports(self, test_file: TestFile) -> list[str]:
         """Generate Python import statements based on test dependencies."""
-        imports = []
+        imports: list[Any] = []
         imported_modules = set()
 
         # Always include pytest
@@ -201,7 +201,7 @@ class PythonTestGenerator(TestTranslator):
 
     def _generate_qontinui_imports(self, test_file: TestFile) -> list[str]:
         """Generate Qontinui-specific imports based on test content."""
-        imports = []
+        imports: list[Any] = []
 
         # Basic Qontinui imports for all tests
         imports.append("from qontinui.core import QontinuiCore")
@@ -219,7 +219,7 @@ class PythonTestGenerator(TestTranslator):
 
     def _generate_test_class(self, test_file: TestFile) -> list[str]:
         """Generate the Python test class structure."""
-        lines = []
+        lines: list[Any] = []
 
         # Class definition
         class_name = self._convert_class_name(test_file.class_name)
@@ -251,7 +251,7 @@ class PythonTestGenerator(TestTranslator):
 
     def _generate_test_method(self, test_method: TestMethod) -> list[str]:
         """Generate a single test method."""
-        lines = []
+        lines: list[Any] = []
 
         # Method signature
         method_name = self._convert_method_name(test_method.name)
@@ -278,7 +278,7 @@ class PythonTestGenerator(TestTranslator):
 
     def _generate_setup_method(self, setup_method: TestMethod) -> list[str]:
         """Generate setup method with appropriate pytest fixture."""
-        lines = []
+        lines: list[Any] = []
 
         # Determine fixture type
         fixture_name = self.pytest_fixtures.get(setup_method.name, "setup_method")
@@ -305,7 +305,7 @@ class PythonTestGenerator(TestTranslator):
 
     def _generate_mock_setup(self, mock_usages: list[Any]) -> list[str]:
         """Generate mock setup code for test methods."""
-        lines = []
+        lines: list[Any] = []
 
         for mock_usage in mock_usages:
             if mock_usage.mock_type == "brobot_mock":
@@ -338,7 +338,7 @@ class PythonTestGenerator(TestTranslator):
     def _convert_method_body(self, java_body: str) -> list[str]:
         """Convert Java method body to Python."""
         lines = java_body.split("\n")
-        python_lines = []
+        python_lines: list[Any] = []
 
         for line in lines:
             # Basic conversions
@@ -409,7 +409,7 @@ class PythonTestGenerator(TestTranslator):
         Returns:
             List of validation errors (empty if valid)
         """
-        errors = []
+        errors=[],
 
         # Check for basic Python syntax issues
         try:

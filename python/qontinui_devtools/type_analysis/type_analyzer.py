@@ -278,7 +278,7 @@ class TypeAnalyzer:
 
         # Apply exclusions
         if exclude_patterns:
-            filtered_files = []
+            filtered_files: list[Any] = []
             for file in python_files:
                 should_exclude = False
                 for pattern in exclude_patterns:
@@ -456,7 +456,7 @@ class TypeAnalyzer:
         Returns:
             Formatted text report
         """
-        lines = []
+        lines: list[Any] = []
 
         # Header
         lines.append("=" * 80)

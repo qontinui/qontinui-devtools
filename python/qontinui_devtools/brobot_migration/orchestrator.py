@@ -291,7 +291,7 @@ class TestMigrationOrchestrator(MigrationOrchestrator):
 
     def _migrate_tests(self, test_files: list[TestFile], target_path: Path) -> list[dict[str, Any]]:
         """Migrate test files to Python equivalents."""
-        migration_results = []
+        migration_results: list[Any] = []
 
         # Ensure target directory exists
         target_path.mkdir(parents=True, exist_ok=True)
@@ -392,7 +392,7 @@ class TestMigrationOrchestrator(MigrationOrchestrator):
             self.logger.error(f"Analysis and reporting failed: {str(e)}")
             return execution_results
 
-    def _analyze_failures(self, execution_results: TestResults):
+    def _analyze_failures(self, execution_results: TestResults) -> None:
         """Analyze test failures to categorize and suggest fixes."""
         for result in execution_results.individual_results:
             if not result.passed and result.error_message:
@@ -472,7 +472,7 @@ class TestMigrationOrchestrator(MigrationOrchestrator):
             failed_tests=0,
             skipped_tests=0,
             execution_time=0.0,
-            individual_results=[],
+            individual_results=[]
         )
 
     def _create_error_results(self, error_message: str) -> TestResults:

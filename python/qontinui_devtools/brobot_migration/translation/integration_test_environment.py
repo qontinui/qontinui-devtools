@@ -168,7 +168,7 @@ class IntegrationTestEnvironment:
         """
         self._database_config = database_config
 
-        setup_code = []
+        setup_code: list[Any] = []
 
         if database_config.database_type == "in_memory":
             setup_code.extend(self._setup_in_memory_database(database_config))
@@ -191,7 +191,7 @@ class IntegrationTestEnvironment:
         Returns:
             List of Python code lines for service mocking setup
         """
-        setup_code = []
+        setup_code: list[Any] = []
 
         # Add imports for external service mocking
         setup_code.extend(
@@ -308,7 +308,7 @@ class IntegrationTestEnvironment:
         self, test_file: TestFile
     ) -> list[ComponentConfiguration]:
         """Extract component configurations from test file."""
-        components = []
+        components: list[Any] = []
 
         # Extract from mock usage
         for mock_usage in test_file.mock_usage:
@@ -343,7 +343,7 @@ class IntegrationTestEnvironment:
 
     def _generate_component_fixture(self, component: ComponentConfiguration) -> list[str]:
         """Generate pytest fixture for a component."""
-        fixture_code = []
+        fixture_code: list[Any] = []
 
         if component.mock_type == "mock":
             fixture_code.extend(
@@ -535,7 +535,7 @@ class IntegrationTestGenerator:
         Returns:
             Complete Python integration test file content
         """
-        lines = []
+        lines: list[Any] = []
 
         # Add file header
         lines.extend(['"""', f"Integration tests migrated from {test_file.path}", '"""', ""])

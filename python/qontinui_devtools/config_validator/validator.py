@@ -47,10 +47,10 @@ class ValidationReport:
     invalid_inline_workflows: int = 0
     inline_workflow_errors: list[ValidationError] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize inline workflow errors list if None."""
         if self.inline_workflow_errors is None:
-            self.inline_workflow_errors = []
+            self.inline_workflow_errors=[]
 
     def print_report(self, verbose: bool = False) -> None:
         """Print formatted validation report."""
@@ -182,7 +182,7 @@ class ConfigValidator:
         ...     sys.exit(1)
     """
 
-    def __init__(self, qontinui_path: Path | None = None):
+    def __init__(self, qontinui_path: Path | None = None) -> None:
         """
         Initialize validator.
 
@@ -399,7 +399,7 @@ class ConfigValidator:
         Returns:
             List of (parent_workflow_id, parent_workflow_name, action_id, inline_workflow_dict)
         """
-        inline_workflows = []
+        inline_workflows: list[Any] = []
 
         for workflow in workflows:
             workflow_id = workflow.get("id", "unknown")

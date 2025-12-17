@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Confidence scoring logic for fix suggestions.
 """
 
@@ -107,7 +109,7 @@ class SuggestionScorer:
         Returns:
             List of recognized pattern names
         """
-        recognized_patterns = []
+        recognized_patterns: list[Any] = []
 
         combined_text = f"{error_message}\n{stack_trace}".lower()
 

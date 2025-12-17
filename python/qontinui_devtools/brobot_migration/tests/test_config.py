@@ -13,7 +13,7 @@ from qontinui.test_migration.core.models import MigrationConfig
 class TestTestMigrationConfig:
     """Tests for the TestMigrationConfig class."""
 
-    def test_create_default_config(self):
+    def test_create_default_config(self) -> None:
         """Test creating default configuration."""
         source_dirs = [Path("java/tests")]
         target_dir = Path("python/tests")
@@ -39,7 +39,7 @@ class TestTestMigrationConfig:
             "QONTINUI_TARGET_DIR": "python/migrated_tests",
         },
     )
-    def test_from_environment(self):
+    def test_from_environment(self) -> None:
         """Test creating configuration from environment variables."""
         config = TestMigrationConfig.from_environment()
 
@@ -49,14 +49,14 @@ class TestTestMigrationConfig:
         assert config.target_directory == Path("python/migrated_tests")
 
     @patch.dict(os.environ, {}, clear=True)
-    def test_from_environment_defaults(self):
+    def test_from_environment_defaults(self) -> None:
         """Test creating configuration from environment with defaults."""
         config = TestMigrationConfig.from_environment()
 
         assert config.source_directories == []
         assert config.target_directory == Path("tests/migrated")
 
-    def test_get_dependency_mapping(self):
+    def test_get_dependency_mapping(self) -> None:
         """Test getting dependency mappings."""
         mappings = TestMigrationConfig.get_dependency_mapping()
 
@@ -71,7 +71,7 @@ class TestTestMigrationConfig:
         new_mappings = TestMigrationConfig.get_dependency_mapping()
         assert len(new_mappings) == original_size
 
-    def test_get_brobot_mock_mappings(self):
+    def test_get_brobot_mock_mappings(self) -> None:
         """Test getting Brobot mock mappings."""
         mappings = TestMigrationConfig.get_brobot_mock_mappings()
 
@@ -86,7 +86,7 @@ class TestTestMigrationConfig:
             "qontinui.core.settings" in mappings["io.github.jspinak.brobot.actions.BrobotSettings"]
         )
 
-    def test_get_pytest_markers(self):
+    def test_get_pytest_markers(self) -> None:
         """Test getting pytest markers."""
         markers = TestMigrationConfig.get_pytest_markers()
 
@@ -100,7 +100,7 @@ class TestTestMigrationConfig:
         assert markers["unit"] == "pytest.mark.unit"
         assert markers["integration"] == "pytest.mark.integration"
 
-    def test_default_patterns(self):
+    def test_default_patterns(self) -> None:
         """Test default patterns are correctly defined."""
         assert "*Test.java" in TestMigrationConfig.DEFAULT_JAVA_TEST_PATTERNS
         assert "*Tests.java" in TestMigrationConfig.DEFAULT_JAVA_TEST_PATTERNS

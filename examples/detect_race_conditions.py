@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 """
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 Example script demonstrating the Race Condition Detector.
 
 This script shows how to use the RaceConditionDetector to analyze Python code
@@ -148,15 +154,15 @@ def analyze_example_code() -> None:
             '''
 class Cache:
     """Cache with race condition."""
-    _data = {}
+    _data: dict[Any, Any] = {}
 
-    def get(self, key):
+    def get(self, key) -> Any:
         return self._data.get(key)
 
-    def set(self, key, value):
+    def set(self, key, value) -> None:
         self._data[key] = value  # RACE CONDITION!
 
-    def clear(self):
+    def clear(self) -> None:
         self._data.clear()
 '''
         )
@@ -169,7 +175,7 @@ class Singleton:
     _instance = None
 
     @classmethod
-    def get_instance(cls):
+    def get_instance(cls) -> Any:
         if cls._instance is None:  # Check
             cls._instance = Singleton()  # Act - RACE CONDITION!
         return cls._instance
@@ -183,15 +189,15 @@ import threading
 
 class SafeCache:
     """Cache with proper locking."""
-    def __init__(self):
-        self._data = {}
+    def __init__(self) -> None:
+        self._data: dict[Any, Any] = {}
         self._lock = threading.Lock()
 
-    def set(self, key, value):
+    def set(self, key, value) -> None:
         with self._lock:
             self._data[key] = value  # Properly protected
 
-    def get(self, key):
+    def get(self, key) -> Any:
         with self._lock:
             return self._data.get(key)
 '''

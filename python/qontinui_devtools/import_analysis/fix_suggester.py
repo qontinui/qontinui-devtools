@@ -44,7 +44,7 @@ def analyze_cycle(cycle: list[str], import_map: dict[str, list[ImportStatement]]
             fix_type="restructure",
             description="Unable to analyze cycle imports. Consider restructuring the modules.",
             code_example=None,
-            affected_files=[],
+            affected_files=[]
         )
 
     # Analyze the usage patterns of the imports
@@ -141,7 +141,7 @@ def _suggest_type_checking_fix(imports: list[ImportStatement]) -> FixSuggestion:
     if example_import and example_import.is_from_import:
         names = ", ".join(example_import.imported_names)
         code_example = f"""# Move import inside TYPE_CHECKING block:
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from {example_import.module} import {names}
@@ -195,7 +195,7 @@ def _suggest_lazy_import_fix(imports: list[ImportStatement]) -> FixSuggestion:
 # Remove this from top of file:
 # from {example_import.module} import {names}
 
-def my_function():
+def my_function() -> None:
     # Import only when function is called:
     from {example_import.module} import {names}
     # ... use imported items ...
@@ -208,7 +208,7 @@ def my_function():
 # Remove this from top of file:
 # import {example_import.module}
 
-def my_function():
+def my_function() -> None:
     # Import only when function is called:
     import {example_import.module}
     # ... use the module ...
@@ -217,7 +217,7 @@ def my_function():
 """
     else:
         code_example = """# Move import to function level:
-def my_function():
+def my_function() -> None:
     from module_a import something
     # Use 'something' here
 """

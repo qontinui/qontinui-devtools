@@ -1,5 +1,7 @@
 """Dead code detector for Rust codebases.
 
+from typing import Any
+
 This module provides functionality to detect unused code including:
 - Unused functions
 - Unused structs
@@ -74,7 +76,7 @@ class DeadCodeDetector:
 
     def _find_rust_files(self) -> list[Path]:
         """Find all Rust files in the project."""
-        rust_files = []
+        rust_files: list[Any] = []
         for path in self.root_path.rglob("*.rs"):
             # Skip common directories
             parts = path.parts

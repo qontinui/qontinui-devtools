@@ -124,7 +124,7 @@ class TestTypeInferenceEngine:
         """Test inference when function has no return statements."""
         engine = TypeInferenceEngine()
         code = """
-def func():
+def func() -> None:
     x = 1
     """
         tree = ast.parse(code)
@@ -138,7 +138,7 @@ def func():
         """Test inference when function returns None."""
         engine = TypeInferenceEngine()
         code = """
-def func():
+def func() -> None:
     return None
     """
         tree = ast.parse(code)
@@ -151,7 +151,7 @@ def func():
         """Test inference when function returns a constant."""
         engine = TypeInferenceEngine()
         code = """
-def func():
+def func() -> Any:
     return 42
     """
         tree = ast.parse(code)
@@ -164,7 +164,7 @@ def func():
         """Test inference when function returns multiple types."""
         engine = TypeInferenceEngine()
         code = """
-def func(x):
+def func(x) -> Any:
     if x:
         return 42
     return "hello"
@@ -179,7 +179,7 @@ def func(x):
         """Test inference when function returns value or None."""
         engine = TypeInferenceEngine()
         code = """
-def func(x):
+def func(x) -> Any:
     if x:
         return 42
     return None
@@ -338,7 +338,7 @@ def add(x: int, y: int) -> int:
     def test_visit_untyped_function(self) -> None:
         """Test visiting an untyped function."""
         code = """
-def add(x, y):
+def add(x, y) -> Any:
     return x + y
 """
         tree = ast.parse(code)
@@ -373,7 +373,7 @@ def add(x: int, y) -> int:
     def test_visit_function_with_defaults(self) -> None:
         """Test visiting function with default values."""
         code = """
-def greet(name: str, greeting="Hello"):
+def greet(name: str, greeting="Hello") -> Any:
     return f"{greeting}, {name}"
 """
         tree = ast.parse(code)
@@ -421,10 +421,10 @@ async def fetch(url: str) -> str:
         """Test that special methods are skipped."""
         code = """
 class MyClass:
-    def __init__(self, x):
+    def __init__(self, x) -> None:
         self.x = x
 
-    def __str__(self):
+    def __str__(self) -> Any:
         return str(self.x)
 """
         tree = ast.parse(code)
@@ -504,10 +504,10 @@ def greet(name: str) -> str:
     def test_analyze_file_untyped(self, tmp_path: Path) -> None:
         """Test analyzing an untyped file."""
         code = """
-def add(x, y):
+def add(x, y) -> Any:
     return x + y
 
-def greet(name):
+def greet(name) -> Any:
     return f"Hello, {name}"
 """
         file_path = tmp_path / "test.py"
@@ -549,7 +549,7 @@ def typed_func(x: int) -> int:
         file2 = tmp_path / "module2.py"
         file2.write_text(
             """
-def untyped_func(x, y):
+def untyped_func(x, y) -> Any:
     return x + y
 """
         )
@@ -679,7 +679,7 @@ def add(x: int, y: int) -> int:
     '''Add two numbers.'''
     return x + y
 
-def multiply(x, y):
+def multiply(x, y) -> Any:
     '''Multiply two numbers (untyped).'''
     return x * y
 """
@@ -691,7 +691,7 @@ def upper(s: str) -> str:
     '''Convert to uppercase.'''
     return s.upper()
 
-def reverse(s):
+def reverse(s) -> Any:
     '''Reverse string (untyped).'''
     return s[::-1]
 """
@@ -719,7 +719,7 @@ def reverse(s):
     def test_inference_suggestions(self, tmp_path: Path) -> None:
         """Test that inference provides useful suggestions."""
         code = """
-def process(count=10, name="default", items=[], enabled=True):
+def process(count=10, name="default", items=[], enabled=True) -> Any:
     return count + len(items)
 """
         file_path = tmp_path / "test.py"
@@ -763,13 +763,13 @@ def convert(items: list[Any]) -> dict[str, Any]:
     def test_complex_return_inference(self, tmp_path: Path) -> None:
         """Test inference for complex return types."""
         code = """
-def get_value(use_int):
+def get_value(use_int) -> Any:
     if use_int:
         return 42
     else:
         return "hello"
 
-def maybe_value(exists):
+def maybe_value(exists) -> Any:
     if exists:
         return [1, 2, 3]
     return None

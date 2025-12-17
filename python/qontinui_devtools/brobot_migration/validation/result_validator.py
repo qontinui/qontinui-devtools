@@ -143,7 +143,7 @@ class ResultValidator:
                 )
             else:
                 result = "inconclusive"
-                differences = []
+                differences: list[Any] = []
                 similarity = 0.0
 
             # Create comparison object
@@ -209,7 +209,7 @@ class ResultValidator:
         Returns:
             List of ValidationComparison objects for each test pair
         """
-        comparisons = []
+        comparisons: list[Any] = []
 
         # Create mapping of test names to results
         java_map = {result.test_name: result for result in java_results.individual_results}
@@ -265,7 +265,7 @@ class ResultValidator:
         Returns:
             Dictionary mapping test names to performance metrics
         """
-        metrics = {}
+        metrics: dict[Any, Any] = {}
 
         # Create mapping of test names to results
         java_map = {result.test_name: result for result in java_results.individual_results}

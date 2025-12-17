@@ -221,7 +221,7 @@ class HTMLReportGenerator:
 
     def _prepare_key_metrics(self) -> list[dict[str, Any]]:
         """Prepare key metrics for summary cards."""
-        metrics = []
+        metrics: list[Any] = []
 
         data = self.report_data
         if not data:
@@ -583,7 +583,7 @@ class HTMLReportGenerator:
 
     def _generate_chart_scripts(self, context: dict[str, Any]) -> str:
         """Generate Chart.js initialization scripts."""
-        scripts = []
+        scripts: list[Any] = []
 
         # Issue distribution chart
         sections = context["sections"]

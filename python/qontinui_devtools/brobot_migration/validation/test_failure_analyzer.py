@@ -344,7 +344,7 @@ class TestFailureAnalyzer(FailureAnalyzer):
         diagnostic_info: dict[str, Any],
     ) -> list[str]:
         """Generate specific fix suggestions based on the analysis."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         if is_migration_issue:
             suggestions.extend(self._get_migration_fix_suggestions(failure, diagnostic_info))
@@ -362,7 +362,7 @@ class TestFailureAnalyzer(FailureAnalyzer):
         self, failure: TestFailure, diagnostic_info: dict[str, Any]
     ) -> list[str]:
         """Get fix suggestions for migration-related issues."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         error_text = f"{failure.error_message}\n{failure.stack_trace}"
 
@@ -397,7 +397,7 @@ class TestFailureAnalyzer(FailureAnalyzer):
         self, failure: TestFailure, diagnostic_info: dict[str, Any]
     ) -> list[str]:
         """Get fix suggestions for code-related issues."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         error_text = f"{failure.error_message}\n{failure.stack_trace}"
 

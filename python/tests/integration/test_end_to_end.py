@@ -28,7 +28,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.profiles = []
+            self.profiles: list[Any] = []
 
         def start(self) -> None:
             self.is_running = True
@@ -48,14 +48,14 @@ except ImportError:
 
             return wrapper
 
-        def get_profile_data(self) -> None:
+        def get_profile_data(self) -> Any:
             return {
                 "profiles": self.profiles,
                 "total_calls": len(self.profiles),
                 "total_time": sum(p["duration"] for p in self.profiles),
             }
 
-        def export(self, output_path, format="json"):
+        def export(self, output_path, format="json") -> None:
             with open(output_path, "w") as f:
                 json.dump(self.get_profile_data(), f, indent=2)
 
@@ -63,7 +63,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.events = []
+            self.events: list[Any] = []
 
         def start(self) -> None:
             self.is_running = True
@@ -75,12 +75,12 @@ except ImportError:
             if self.is_running:
                 self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
 
-        def get_events(self, event_type=None):
+        def get_events(self, event_type=None) -> Any:
             if event_type:
                 return [e for e in self.events if e["type"] == event_type]
             return self.events
 
-        def export(self, output_path, format="json"):
+        def export(self, output_path, format="json") -> None:
             with open(output_path, "w") as f:
                 json.dump(self.events, f, indent=2)
 
@@ -88,7 +88,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.snapshots = []
+            self.snapshots: list[Any] = []
 
         def start(self) -> None:
             self.is_running = True
@@ -108,14 +108,14 @@ except ImportError:
                 }
             )
 
-        def get_memory_usage(self) -> None:
+        def get_memory_usage(self) -> Any:
             if not self.snapshots:
                 return {"current_mb": 0, "peak_mb": 0}
             current = self.snapshots[-1]["memory_mb"]
             peak = max(s["memory_mb"] for s in self.snapshots)
             return {"current_mb": current, "peak_mb": peak}
 
-        def export(self, output_path, format="json"):
+        def export(self, output_path, format="json") -> None:
             with open(output_path, "w") as f:
                 json.dump(self.snapshots, f, indent=2)
 
@@ -123,7 +123,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.metrics = {}
+            self.metrics: dict[Any, Any] = {}
 
         def start(self) -> None:
             self.is_running = True
@@ -131,10 +131,10 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def update_metrics(self, metrics):
+        def update_metrics(self, metrics) -> None:
             self.metrics.update(metrics)
 
-        def get_metrics(self) -> None:
+        def get_metrics(self) -> Any:
             return self.metrics
 
     class RuntimeReportGenerator:
@@ -169,7 +169,7 @@ except ImportError:
             elif output_path.suffix == ".html":
                 self._generate_html_report(report, output_path)
 
-        def _generate_html_report(self, report: dict[str, Any], output_path: Path):
+        def _generate_html_report(self, report: dict[str, Any], output_path: Path) -> None:
             """Generate HTML report."""
             html_content = f"""
 <!DOCTYPE html>
@@ -240,7 +240,7 @@ class TestFullMonitoringWorkflow:
             import main
 
             @profiler.profile
-            def execute_main():
+            def execute_main() -> Any:
                 tracer.trace_event("main_start", {})
                 result = main.main()
                 tracer.trace_event("main_end", {"result": str(result)})
@@ -295,7 +295,7 @@ class TestFullMonitoringWorkflow:
 
         # Phase 1: Warm-up
         @profiler.profile
-        def warmup():
+        def warmup() -> Any:
             tracer.trace_event("phase", {"name": "warmup"})
             return sample_action_instance.execute(iterations=2)
 
@@ -308,7 +308,7 @@ class TestFullMonitoringWorkflow:
 
         # Phase 2: Main execution
         @profiler.profile
-        def main_execution():
+        def main_execution() -> Any:
             tracer.trace_event("phase", {"name": "main"})
             return sample_action_instance.execute(iterations=10)
 
@@ -321,7 +321,7 @@ class TestFullMonitoringWorkflow:
 
         # Phase 3: Cool-down
         @profiler.profile
-        def cooldown():
+        def cooldown() -> Any:
             tracer.trace_event("phase", {"name": "cooldown"})
             return sample_action_instance.execute(iterations=2)
 
@@ -367,7 +367,7 @@ class TestFullMonitoringWorkflow:
 
         # Action 1: Normal execution
         @profiler.profile
-        def action1():
+        def action1() -> Any:
             tracer.trace_event("action", {"name": "normal", "phase": "start"})
             result = sample_action_instance.execute(iterations=5)
             tracer.trace_event("action", {"name": "normal", "phase": "end"})
@@ -377,7 +377,7 @@ class TestFullMonitoringWorkflow:
 
         # Action 2: Memory intensive
         @profiler.profile
-        def action2():
+        def action2() -> Any:
             tracer.trace_event("action", {"name": "memory", "phase": "start"})
             result = memory_intensive_action.execute(size_mb=5)
             tracer.trace_event(
@@ -390,7 +390,7 @@ class TestFullMonitoringWorkflow:
 
         # Action 3: Concurrent
         @profiler.profile
-        def action3():
+        def action3() -> Any:
             tracer.trace_event("action", {"name": "concurrent", "phase": "start"})
             result = concurrent_action.execute_threaded(0, iterations=5)
             tracer.trace_event("action", {"name": "concurrent", "phase": "end"})
@@ -432,7 +432,7 @@ class TestFullMonitoringWorkflow:
 class TestCLIEndToEnd:
     """Test CLI commands end-to-end."""
 
-    def test_runtime_profile_command(self, sample_qontinui_project, temp_test_dir):
+    def test_runtime_profile_command(self, sample_qontinui_project, temp_test_dir) -> None:
         """Test 'qontinui-devtools runtime profile' CLI command."""
         # This test would run the actual CLI command
         # For now, we'll simulate it
@@ -454,7 +454,7 @@ class TestCLIEndToEnd:
             data = json.load(f)
         assert "total_calls" in data
 
-    def test_runtime_trace_command(self, sample_qontinui_project, temp_test_dir):
+    def test_runtime_trace_command(self, sample_qontinui_project, temp_test_dir) -> None:
         """Test 'qontinui-devtools runtime trace' CLI command."""
         output_file = temp_test_dir / "trace_output.json"
 
@@ -475,7 +475,7 @@ class TestCLIEndToEnd:
             events = json.load(f)
         assert len(events) > 0
 
-    def test_runtime_monitor_command(self, sample_qontinui_project, temp_test_dir):
+    def test_runtime_monitor_command(self, sample_qontinui_project, temp_test_dir) -> None:
         """Test 'qontinui-devtools runtime monitor' CLI command."""
         # This would start all monitoring tools
         profiler = ActionProfiler()
@@ -503,7 +503,7 @@ class TestCLIEndToEnd:
         assert (temp_test_dir / "events.json").exists()
         assert (temp_test_dir / "memory.json").exists()
 
-    def test_runtime_report_command(self, sample_qontinui_project, temp_test_dir):
+    def test_runtime_report_command(self, sample_qontinui_project, temp_test_dir) -> None:
         """Test 'qontinui-devtools runtime report' CLI command."""
         # Generate sample data
         profiler = ActionProfiler()
@@ -561,7 +561,7 @@ class TestReportGeneration:
         mem_profiler.start()
 
         @profiler.profile
-        def execute():
+        def execute() -> Any:
             tracer.trace_event("execution", {"type": "start"})
             result = sample_action_instance.execute(iterations=10)
             tracer.trace_event("execution", {"type": "end"})
@@ -620,7 +620,7 @@ class TestReportGeneration:
         mem_profiler.start()
 
         @profiler.profile
-        def execute():
+        def execute() -> Any:
             tracer.trace_event("test", {})
             return sample_action_instance.execute(iterations=5)
 
@@ -686,7 +686,7 @@ class TestReportGeneration:
 
         # Generate large dataset
         @profiler.profile
-        def execute_many():
+        def execute_many() -> None:
             for i in range(100):
                 tracer.trace_event("iteration", {"index": i})
                 sample_action_instance._process_iteration(i)

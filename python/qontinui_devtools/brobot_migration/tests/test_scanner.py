@@ -12,37 +12,37 @@ from ..discovery.scanner import BrobotTestScanner
 class TestBrobotTestScanner:
     """Test cases for BrobotTestScanner."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.scanner = BrobotTestScanner()
         self.temp_dir = None
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         """Clean up test fixtures."""
         if self.temp_dir:
             # Cleanup is handled by tempfile context manager
             pass
 
-    def test_scanner_initialization(self):
+    def test_scanner_initialization(self) -> None:
         """Test scanner initializes with correct default patterns."""
         assert self.scanner.java_test_patterns == ["*Test.java", "*Tests.java"]
         assert "**/target/**" in self.scanner.exclude_patterns
         assert "org.junit.Test" in self.scanner.junit_imports
 
-    def test_scan_nonexistent_directory(self):
+    def test_scan_nonexistent_directory(self) -> None:
         """Test scanning a non-existent directory returns empty list."""
         non_existent = Path("/non/existent/path")
         result = self.scanner.scan_directory(non_existent)
         assert result == []
 
-    def test_scan_empty_directory(self):
+    def test_scan_empty_directory(self) -> None:
         """Test scanning an empty directory returns empty list."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
             result = self.scanner.scan_directory(temp_path)
             assert result == []
 
-    def test_is_test_file_with_junit_import(self):
+    def test_is_test_file_with_junit_import(self) -> None:
         """Test identification of test file with JUnit import."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -65,7 +65,7 @@ public class ExampleTest {
 
             assert self.scanner._is_test_file(test_file) is True
 
-    def test_is_test_file_with_test_annotation(self):
+    def test_is_test_file_with_test_annotation(self) -> None:
         """Test identification of test file with @Test annotation."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -85,7 +85,7 @@ public class ExampleTest {
 
             assert self.scanner._is_test_file(test_file) is True
 
-    def test_is_test_file_with_test_method_pattern(self):
+    def test_is_test_file_with_test_method_pattern(self) -> None:
         """Test identification of test file with test method pattern."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -104,7 +104,7 @@ public class ExampleTest {
 
             assert self.scanner._is_test_file(test_file) is True
 
-    def test_is_not_test_file(self):
+    def test_is_not_test_file(self) -> None:
         """Test identification of non-test file."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -123,7 +123,7 @@ public class RegularClass {
 
             assert self.scanner._is_test_file(regular_file) is False
 
-    def test_extract_package(self):
+    def test_extract_package(self) -> None:
         """Test package extraction from Java file."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -146,7 +146,7 @@ public class ExampleTest {
             package = self.scanner._extract_package(test_file)
             assert package == "com.example.test"
 
-    def test_extract_package_no_package(self):
+    def test_extract_package_no_package(self) -> None:
         """Test package extraction when no package declaration exists."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -167,7 +167,7 @@ public class ExampleTest {
             package = self.scanner._extract_package(test_file)
             assert package == ""
 
-    def test_classify_unit_test(self):
+    def test_classify_unit_test(self) -> None:
         """Test classification of unit test."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -196,7 +196,7 @@ public class UserServiceTest {
 
             assert test_type == TestType.UNIT
 
-    def test_classify_integration_test_by_path(self):
+    def test_classify_integration_test_by_path(self) -> None:
         """Test classification of integration test by path."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -223,7 +223,7 @@ public class UserServiceIntegrationTest {
 
             assert test_type == TestType.INTEGRATION
 
-    def test_classify_integration_test_by_spring_annotation(self):
+    def test_classify_integration_test_by_spring_annotation(self) -> None:
         """Test classification of integration test by Spring Boot annotation."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -250,7 +250,7 @@ public class UserControllerTest {
 
             assert test_type == TestType.INTEGRATION
 
-    def test_extract_dependencies(self):
+    def test_extract_dependencies(self) -> None:
         """Test dependency extraction from test file."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -288,21 +288,21 @@ public class ExampleTest {
             assert "java.util.List" in import_names
             assert "com.example.service.UserService" in import_names
 
-    def test_map_to_python_equivalent(self):
+    def test_map_to_python_equivalent(self) -> None:
         """Test mapping of Java imports to Python equivalents."""
         assert self.scanner._map_to_python_equivalent("org.junit.Test") == "pytest"
         assert self.scanner._map_to_python_equivalent("org.mockito.Mock") == "unittest.mock.Mock"
         assert self.scanner._map_to_python_equivalent("java.util.List") == "typing.List"
         assert self.scanner._map_to_python_equivalent("unknown.import") == "unknown.import"
 
-    def test_requires_adaptation(self):
+    def test_requires_adaptation(self) -> None:
         """Test identification of imports requiring adaptation."""
         assert self.scanner._requires_adaptation("org.junit.Test") is True
         assert self.scanner._requires_adaptation("org.mockito.Mock") is True
         assert self.scanner._requires_adaptation("java.util.List") is False
         assert self.scanner._requires_adaptation("com.example.CustomClass") is False
 
-    def test_is_excluded(self):
+    def test_is_excluded(self) -> None:
         """Test exclusion pattern matching."""
         target_path = Path("/project/target/classes/Test.java")
         build_path = Path("/project/build/Test.java")
@@ -314,7 +314,7 @@ public class ExampleTest {
         assert self.scanner._is_excluded(git_path) is True
         assert self.scanner._is_excluded(regular_path) is False
 
-    def test_scan_directory_with_test_files(self):
+    def test_scan_directory_with_test_files(self) -> None:
         """Test scanning directory with actual test files."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -362,7 +362,7 @@ public class UserService {
             assert result[0].package == "com.example"
             assert result[0].test_type == TestType.UNIT
 
-    def test_create_test_file_success(self):
+    def test_create_test_file_success(self) -> None:
         """Test successful creation of TestFile object."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -390,7 +390,7 @@ public class ExampleTest {
             assert test_file.path == test_file_path
             assert len(test_file.dependencies) > 0
 
-    def test_create_test_file_with_invalid_file(self):
+    def test_create_test_file_with_invalid_file(self) -> None:
         """Test TestFile creation with invalid file."""
         non_existent = Path("/non/existent/file.java")
 

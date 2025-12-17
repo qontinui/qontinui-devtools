@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Test the minimal orchestrator functionality.
 """
 
@@ -10,7 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 
-def test_minimal_orchestrator():
+def test_minimal_orchestrator() -> None:
     """Test the minimal orchestrator."""
     try:
         from core.models import MigrationConfig
@@ -69,7 +71,7 @@ public class SampleTest {
             python_test = target_dir / "test_sample.py"
             python_test.write_text(
                 """
-def test_sample():
+def test_sample() -> None:
     assert 1 == 1
 """
             )
@@ -88,7 +90,7 @@ def test_sample():
         return False
 
 
-def main():
+def main() -> Any:
     """Run minimal orchestrator test."""
     print("Testing Minimal Migration Orchestrator")
     print("=" * 40)

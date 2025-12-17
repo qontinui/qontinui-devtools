@@ -1,5 +1,7 @@
 """Heuristic analysis to reduce false positives in race condition detection."""
 
+from typing import Any
+
 from .ast_analyzer import AnalysisContext, LockInfo, StateAccess
 
 
@@ -261,7 +263,7 @@ def suggest_fix(
     # Check for existing locks
     has_locks = len(context.locks) > 0
 
-    suggestions = []
+    suggestions: list[Any] = []
 
     # Critical issues need immediate fixes
     if severity == "critical":
@@ -330,7 +332,7 @@ def get_false_positive_indicators(
 
     Returns list of reasons why this might not be a real race condition.
     """
-    indicators = []
+    indicators: list[Any] = []
 
     # Check for single-threaded context clues
     if _looks_single_threaded(context):
@@ -374,7 +376,7 @@ def prioritize_issues(
 
     Returns sorted list with most important issues first.
     """
-    scored_races = []
+    scored_races: list[Any] = []
 
     for state_name, state_type, accesses in races:
         score = 0

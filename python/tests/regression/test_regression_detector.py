@@ -1,5 +1,7 @@
 """Comprehensive tests for regression detection functionality."""
 
+from typing import Any
+
 import json
 from pathlib import Path
 
@@ -312,7 +314,7 @@ def public_function(x: int, y: str) -> bool:
     '''Public function.'''
     return True
 
-def _private_function():
+def _private_function() -> None:
     pass
 
 class PublicClass:
@@ -421,10 +423,10 @@ class TestRegressionDetector:
         baseline_dir.mkdir()
         (baseline_dir / "test.py").write_text(
             """
-def function_to_remove():
+def function_to_remove() -> None:
     pass
 
-def function_to_keep():
+def function_to_keep() -> None:
     pass
 """
         )
@@ -434,7 +436,7 @@ def function_to_keep():
         current_dir.mkdir()
         (current_dir / "test.py").write_text(
             """
-def function_to_keep():
+def function_to_keep() -> None:
     pass
 """
         )
@@ -455,7 +457,7 @@ def function_to_keep():
         baseline_dir.mkdir()
         (baseline_dir / "test.py").write_text(
             """
-def test_func(x: int):
+def test_func(x: int) -> None:
     pass
 """
         )
@@ -465,7 +467,7 @@ def test_func(x: int):
         current_dir.mkdir()
         (current_dir / "test.py").write_text(
             """
-def test_func(x: int, y: str):
+def test_func(x: int, y: str) -> None:
     pass
 """
         )
@@ -515,7 +517,7 @@ def test_func() -> str:
         baseline_dir.mkdir()
         (baseline_dir / "test.py").write_text(
             """
-def test_func():
+def test_func() -> None:
     pass
 """
         )
@@ -681,7 +683,7 @@ async def test_func():
         baseline_dir.mkdir()
         (baseline_dir / "test.py").write_text(
             """
-def test_func(x: int):
+def test_func(x: int) -> None:
     pass
 """
         )
@@ -690,7 +692,7 @@ def test_func(x: int):
         current_dir.mkdir()
         (current_dir / "test.py").write_text(
             """
-def test_func(x: int, y: str = "default"):
+def test_func(x: int, y: str = "default") -> None:
     pass
 """
         )
@@ -711,7 +713,7 @@ def test_func(x: int, y: str = "default"):
         baseline_dir.mkdir()
         (baseline_dir / "test.py").write_text(
             """
-def test_func(x: int, y: str = "default"):
+def test_func(x: int, y: str = "default") -> None:
     '''Docstring.'''
     pass
 """
@@ -722,7 +724,7 @@ def test_func(x: int, y: str = "default"):
         current_dir.mkdir()
         (current_dir / "test.py").write_text(
             """
-def test_func(x: int, y: str = "default"):
+def test_func(x: int, y: str = "default") -> None:
     '''Updated docstring.'''
     pass
 """
@@ -768,7 +770,7 @@ class MyClass:
         baseline_dir.mkdir()
         (baseline_dir / "test.py").write_text(
             """
-def test_func(x: int, y: str):
+def test_func(x: int, y: str) -> None:
     pass
 """
         )
@@ -778,7 +780,7 @@ def test_func(x: int, y: str):
         current_dir.mkdir()
         (current_dir / "test.py").write_text(
             """
-def test_func(y: str, x: int):
+def test_func(y: str, x: int) -> None:
     pass
 """
         )
@@ -831,13 +833,13 @@ def test_func(y: str, x: int):
         baseline_dir.mkdir()
         (baseline_dir / "test.py").write_text(
             """
-def removed_func():
+def removed_func() -> None:
     pass
 
 def changed_func(x: int) -> str:
     return str(x)
 
-def kept_func():
+def kept_func() -> None:
     pass
 """
         )
@@ -849,10 +851,10 @@ def kept_func():
 def changed_func(x: int, y: int) -> int:
     return x + y
 
-def kept_func():
+def kept_func() -> None:
     pass
 
-def new_func():
+def new_func() -> None:
     pass
 """
         )

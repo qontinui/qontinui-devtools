@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Integration tests for BrobotMockAnalyzer and QontinuiMockGenerator working together.
 """
 
@@ -14,12 +16,12 @@ from qontinui.test_migration.mocks.qontinui_mock_generator import QontinuiMockGe
 class TestMockIntegration:
     """Integration tests for mock analysis and generation."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.analyzer = BrobotMockAnalyzer()
         self.generator = QontinuiMockGenerator()
 
-    def test_end_to_end_mock_migration(self):
+    def test_end_to_end_mock_migration(self) -> None:
         """Test complete mock migration from analysis to generation."""
         # Sample Java test content with Brobot mocks
         java_content = """
@@ -80,7 +82,7 @@ class TestMockIntegration:
                 assert len(mock_usages) > 0, "Should identify mock usages"
 
                 # Step 2: Generate equivalent Qontinui mocks
-                generated_mocks = []
+                generated_mocks=[]
                 for mock_usage in mock_usages:
                     qontinui_mock_code = self.generator.create_equivalent_mock(mock_usage)
                     generated_mocks.append(qontinui_mock_code)
@@ -96,7 +98,7 @@ class TestMockIntegration:
 
                 assert len(generated_mocks) > 0, "Should generate mock code"
 
-    def test_gui_model_extraction_and_simulation(self):
+    def test_gui_model_extraction_and_simulation(self) -> None:
         """Test GUI model extraction and state simulation generation."""
         # Create mock usage with GUI model
         java_content = """
@@ -143,7 +145,7 @@ class TestMockIntegration:
                         assert "click" in simulation_code
                         assert "type_text" in simulation_code or "type" in simulation_code
 
-    def test_mock_behavior_mapping(self):
+    def test_mock_behavior_mapping(self) -> None:
         """Test behavior mapping from Brobot to Qontinui patterns."""
         # Create mock usage with specific behavior patterns
         mock_usage_data = {
@@ -176,7 +178,7 @@ class TestMockIntegration:
         assert actions["type"] == "type_text"
         assert actions["hover"] == "hover"
 
-    def test_complex_integration_scenario(self):
+    def test_complex_integration_scenario(self) -> None:
         """Test complex integration scenario with multiple mock types."""
         complex_java_content = """
         @BrobotTest
@@ -248,7 +250,7 @@ class TestMockIntegration:
                 assert "add_mock" in integration_setup
                 assert "simulate_workflow" in integration_setup
 
-    def test_mock_complexity_analysis_and_generation(self):
+    def test_mock_complexity_analysis_and_generation(self) -> None:
         """Test mock complexity analysis affects generation strategy."""
         # Simple mock
         simple_mock_usage = {
@@ -296,7 +298,7 @@ class TestMockIntegration:
         assert "add_element" in complex_code
         assert "add_action" in complex_code
 
-    def test_dependency_mapping_integration(self):
+    def test_dependency_mapping_integration(self) -> None:
         """Test integration of dependency mapping between analyzer and generator."""
         # Get dependency mappings from analyzer
         analyzer_mappings = self.analyzer.get_mock_dependency_mapping()
@@ -318,7 +320,7 @@ class TestMockIntegration:
             # Generator should have mapping for it
             assert brobot_class in generator_mappings
 
-    def test_error_handling_integration(self):
+    def test_error_handling_integration(self) -> None:
         """Test error handling when analyzer and generator work together."""
         # Test with malformed mock usage
         malformed_mock = {
@@ -357,7 +359,7 @@ class TestMockIntegration:
         except Exception as e:
             pytest.fail(f"Should handle empty GUI models gracefully, but got: {e}")
 
-    def test_realistic_brobot_test_migration(self):
+    def test_realistic_brobot_test_migration(self) -> None:
         """Test migration of a realistic Brobot test case."""
         realistic_java_content = """
         @BrobotTest
@@ -414,7 +416,7 @@ class TestMockIntegration:
                 assert len(mock_usages) > 0
 
                 # Generate complete Qontinui test
-                qontinui_test_parts = []
+                qontinui_test_parts=[]
 
                 for mock_usage in mock_usages:
                     mock_code = self.generator.create_equivalent_mock(mock_usage)

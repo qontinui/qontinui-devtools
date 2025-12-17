@@ -51,7 +51,7 @@ class ImportGraph:
     relationships (A imports B means A -> B edge).
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize empty import graph."""
         self._graph: dict[str, set[str]] = defaultdict(set)
         self._lock = threading.Lock()
@@ -91,9 +91,9 @@ class ImportGraph:
         with self._lock:
             graph_copy = {k: v.copy() for k, v in self._graph.items()}
 
-        cycles = []
+        cycles: list[Any] = []
         visited = set()
-        rec_stack = []
+        rec_stack: list[Any] = []
 
         def dfs(node: str) -> None:
             """Depth-first search to detect cycles."""
@@ -130,7 +130,7 @@ class ImportGraph:
         """
         with self._lock:
             nodes = list(self._graph.keys())
-            edges = []
+            edges: list[Any] = []
             for source, targets in self._graph.items():
                 for target in targets:
                     edges.append({"source": source, "target": target})
@@ -157,7 +157,7 @@ class ImportHook:
     and record them for analysis.
     """
 
-    def __init__(self, tracer: "ImportTracer"):
+    def __init__(self, tracer: "ImportTracer") -> None:
         """Initialize the import hook.
 
         Args:
@@ -212,7 +212,7 @@ class ImportHook:
         # Return None so other import hooks/finders handle the actual import
         return None
 
-    def find_spec(self, fullname: str, path: list[str] | None = None, target=None):
+    def find_spec(self, fullname: str, path: list[str] | None = None, target=None) -> None:
         """Modern import hook interface (Python 3.4+).
 
         Args:
@@ -242,7 +242,7 @@ class ImportTracer:
         ...     print(f"Found {len(cycles)} circular dependencies!")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the import tracer."""
         self._events: list[ImportEvent] = []
         self._graph = ImportGraph()
@@ -322,7 +322,7 @@ class ImportTracer:
         Returns:
             Formatted string report
         """
-        lines = []
+        lines: list[Any] = []
         lines.append("=" * 80)
         lines.append("IMPORT TRACER REPORT")
         lines.append("=" * 80)

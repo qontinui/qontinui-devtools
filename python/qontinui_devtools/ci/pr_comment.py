@@ -65,7 +65,7 @@ def generate_circular_deps_section(
     Returns:
         List of markdown lines
     """
-    lines = []
+    lines: list[Any] = []
     cycles = data.get("cycles", [])
     count = len(cycles)
 
@@ -107,7 +107,7 @@ def generate_god_classes_section(
     Returns:
         List of markdown lines
     """
-    lines = []
+    lines: list[Any] = []
     god_classes = data.get("god_classes", [])
     count = len(god_classes)
 
@@ -151,7 +151,7 @@ def generate_race_conditions_section(
     Returns:
         List of markdown lines
     """
-    lines = []
+    lines: list[Any] = []
     races = data.get("races", [])
 
     critical = [r for r in races if r.get("severity") == "critical"]
@@ -208,7 +208,7 @@ def generate_coverage_section(
     Returns:
         List of markdown lines
     """
-    lines = []
+    lines: list[Any] = []
     coverage = data.get("totals", {}).get("percent_covered", 0.0)
 
     if coverage >= 80:
@@ -245,7 +245,7 @@ def generate_complexity_section(
     Returns:
         List of markdown lines
     """
-    lines = []
+    lines: list[Any] = []
     avg_complexity = data.get("average_complexity", 0)
 
     if avg_complexity <= 5:
@@ -338,7 +338,7 @@ def generate_pr_comment(
         ]
     )
 
-    recommendations = []
+    recommendations: list[Any] = []
 
     if circular_deps and len(circular_deps.get("cycles", [])) > 0:
         recommendations.append("- 🔄 **Refactor circular dependencies** to improve modularity")

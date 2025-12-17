@@ -1,30 +1,32 @@
 """Example god class with multiple responsibilities for testing."""
 
 
+from typing import Any, Callable
+
 class HugeClass:
     """Example god class with 50+ methods handling multiple responsibilities."""
 
     def __init__(self) -> None:
         """Initialize with many attributes."""
-        self.data = {}
-        self.cache = {}
+        self.data: dict[Any, Any] = {}
+        self.cache: dict[Any, Any] = {}
         self.validator = None
         self.db_connection = None
         self.logger = None
-        self.config = {}
+        self.config: dict[Any, Any] = {}
         self.state = "initial"
-        self.errors = []
-        self.warnings = []
+        self.errors=[],
+        self.warnings=[],
         self.user_session = None
         self.api_client = None
         self.formatter = None
 
     # Data access methods
-    def get_data(self, key: str) -> any:
+    def get_data(self, key: str) -> Any:
         """Get data by key."""
         return self.data.get(key)
 
-    def set_data(self, key: str, value: any) -> None:
+    def set_data(self, key: str, value: Any) -> None:
         """Set data by key."""
         self.data[key] = value
 
@@ -86,7 +88,7 @@ class HugeClass:
         """Process workflow steps."""
         pass
 
-    def execute_operation(self, operation: str) -> any:
+    def execute_operation(self, operation: str) -> Any:
         """Execute an operation."""
         pass
 
@@ -119,7 +121,7 @@ class HugeClass:
         """Delete from database."""
         pass
 
-    def store_cache(self, key: str, value: any) -> None:
+    def store_cache(self, key: str, value: Any) -> None:
         """Store in cache."""
         self.cache[key] = value
 
@@ -177,7 +179,7 @@ class HugeClass:
         """Dispatch event to handlers."""
         pass
 
-    def trigger_callback(self, callback: callable) -> None:
+    def trigger_callback(self, callback: Callable[[], None]) -> None:
         """Trigger callback function."""
         callback()
 
@@ -211,7 +213,7 @@ class HugeClass:
         """Log warning message."""
         pass
 
-    def debug_print(self, data: any) -> None:
+    def debug_print(self, data: Any) -> None:
         """Print debug information."""
         pass
 
@@ -250,7 +252,7 @@ class HugeClass:
         return data
 
     # Cache management methods
-    def cache_result(self, key: str, result: any) -> None:
+    def cache_result(self, key: str, result: Any) -> None:
         """Cache computation result."""
         self.cache[key] = result
 
@@ -263,6 +265,6 @@ class HugeClass:
         """Clear entire cache."""
         self.cache.clear()
 
-    def cached_get(self, key: str) -> any:
+    def cached_get(self, key: str) -> Any:
         """Get from cache."""
         return self.cache.get(key)

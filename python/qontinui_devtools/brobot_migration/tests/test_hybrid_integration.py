@@ -14,13 +14,13 @@ from qontinui.test_migration.execution.python_test_generator import PythonTestGe
 class TestHybridTranslationIntegration:
     """Integration tests for the complete hybrid translation system."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.hybrid_translator = HybridTestTranslator()
         self.llm_translator = LLMTestTranslator()
         self.utility_translator = PythonTestGenerator()
 
-    def test_simple_test_translation_end_to_end(self):
+    def test_simple_test_translation_end_to_end(self) -> None:
         """Test complete translation of a simple test file."""
         test_file = TestFile(
             path=Path("CalculatorTest.java"),
@@ -63,7 +63,7 @@ class TestHybridTranslationIntegration:
             except SyntaxError as e:
                 pytest.fail(f"Generated invalid Python syntax: {e}")
 
-    def test_complex_test_with_mocks_translation(self):
+    def test_complex_test_with_mocks_translation(self) -> None:
         """Test translation of a complex test with mocks."""
         mock_usage = MockUsage(mock_type="spring_mock", mock_class="UserRepository")
 
@@ -105,7 +105,7 @@ class TestHybridTranslationIntegration:
         except SyntaxError as e:
             pytest.fail(f"Generated invalid Python syntax: {e}")
 
-    def test_hybrid_translator_strategy_selection(self):
+    def test_hybrid_translator_strategy_selection(self) -> None:
         """Test that hybrid translator selects appropriate strategy."""
         # Simple test should use utility
         simple_test = TestFile(
@@ -123,7 +123,7 @@ class TestHybridTranslationIntegration:
         assert isinstance(result, str)
         assert len(result) > 0
 
-    def test_translation_validation(self):
+    def test_translation_validation(self) -> None:
         """Test that translation validation works correctly."""
         test_file = TestFile(
             path=Path("ValidationTest.java"),
@@ -142,7 +142,7 @@ class TestHybridTranslationIntegration:
         assert isinstance(errors, list)
         # Note: Some errors might be expected for minimal test cases
 
-    def test_method_level_translation(self):
+    def test_method_level_translation(self) -> None:
         """Test method-level translation functionality."""
         java_method = """
         @Test
@@ -165,7 +165,7 @@ class TestHybridTranslationIntegration:
         hybrid_result = self.hybrid_translator.translate_test_method(java_method)
         assert isinstance(hybrid_result, str)
 
-    def test_assertion_translation(self):
+    def test_assertion_translation(self) -> None:
         """Test assertion-level translation functionality."""
         java_assertions = [
             "assertEquals(expected, actual);",
@@ -188,7 +188,7 @@ class TestHybridTranslationIntegration:
             hybrid_result = self.hybrid_translator.translate_assertions(assertion)
             assert isinstance(hybrid_result, str)
 
-    def test_translation_statistics_tracking(self):
+    def test_translation_statistics_tracking(self) -> None:
         """Test that translation statistics are tracked correctly."""
         initial_stats = self.hybrid_translator.get_translation_stats()
         assert initial_stats["total_translations"] == 0
@@ -212,7 +212,7 @@ class TestHybridTranslationIntegration:
         assert "utility_success_rate" in final_stats
         assert "average_time" in final_stats
 
-    def test_configuration_and_thresholds(self):
+    def test_configuration_and_thresholds(self) -> None:
         """Test translator configuration and threshold adjustment."""
         # Test initial configuration
         assert self.hybrid_translator.utility_confidence_threshold == 0.8
@@ -229,7 +229,7 @@ class TestHybridTranslationIntegration:
         stats = self.hybrid_translator.get_translation_stats()
         assert stats["total_translations"] == 0
 
-    def test_error_handling_and_fallbacks(self):
+    def test_error_handling_and_fallbacks(self) -> None:
         """Test error handling and fallback mechanisms."""
         # Create a test file that might cause issues
         problematic_test = TestFile(
@@ -247,7 +247,7 @@ class TestHybridTranslationIntegration:
         except Exception as e:
             pytest.fail(f"Hybrid translator should handle errors gracefully: {e}")
 
-    def test_file_path_generation(self):
+    def test_file_path_generation(self) -> None:
         """Test Python file path generation."""
         test_file = TestFile(
             path=Path("com/example/service/UserServiceTest.java"),

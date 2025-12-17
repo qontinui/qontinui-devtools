@@ -99,7 +99,7 @@ class RaceConditionDetector:
 
     def find_shared_state(self) -> list[SharedState]:
         """Find all shared mutable state across analyzed files."""
-        shared_states = []
+        shared_states: list[Any] = []
 
         for file_path, context in self.contexts.items():
             for state_dict in context.shared_states:
@@ -133,7 +133,7 @@ class RaceConditionDetector:
         Returns:
             Dictionary mapping file paths to list of lock names.
         """
-        lock_usage = {}
+        lock_usage: dict[Any, Any] = {}
 
         for file_path, context in self.contexts.items():
             if context.locks:
@@ -171,7 +171,7 @@ class RaceConditionDetector:
 
     def _detect_race_conditions(self) -> list[RaceCondition]:
         """Detect race conditions from shared state and access patterns."""
-        race_conditions = []
+        race_conditions: list[Any] = []
 
         for state in self.shared_states:
             # Skip if already marked as protected
@@ -220,7 +220,7 @@ class RaceConditionDetector:
             )
 
             # Detect patterns
-            patterns = []
+            patterns: list[Any] = []
             if is_check_then_act_pattern(accesses):
                 patterns.append("check-then-act")
             if is_double_checked_locking(accesses):
@@ -254,7 +254,7 @@ class RaceConditionDetector:
         self, state: SharedState, context: AnalysisContext
     ) -> list[StateAccess]:
         """Get all accesses to a shared state."""
-        accesses = []
+        accesses: list[Any] = []
 
         # Simple name matching (could be improved with scope analysis)
         state_name = state.name.lstrip("_")
@@ -282,7 +282,7 @@ class RaceConditionDetector:
         )
         protected_accesses = sum(1 for a in accesses if a.in_lock_context)
 
-        parts = []
+        parts: list[Any] = []
 
         # State location
         if state.class_name:
@@ -319,7 +319,7 @@ class RaceConditionDetector:
         if self.root_path.is_file():
             return [self.root_path]
 
-        python_files = []
+        python_files: list[Any] = []
         for file_path in self.root_path.rglob("*.py"):
             # Check exclusion patterns
             if any(pattern in str(file_path) for pattern in self.exclude_patterns):
@@ -341,7 +341,7 @@ class RaceConditionDetector:
         if not self.race_conditions:
             return "No race conditions detected. Good job!"
 
-        lines = []
+        lines: list[Any] = []
         lines.append("=" * 80)
         lines.append("RACE CONDITION DETECTION REPORT")
         lines.append("=" * 80)

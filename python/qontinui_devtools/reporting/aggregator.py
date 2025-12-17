@@ -113,7 +113,7 @@ class ReportAggregator:
             from ..architecture import GodClassDetector
 
             detector = GodClassDetector()
-            god_classes = []
+            god_classes: list[Any] = []
 
             # Scan all Python files
             for py_file in self.project_path.rglob("*.py"):
@@ -133,7 +133,7 @@ class ReportAggregator:
             from ..architecture import SRPAnalyzer
 
             analyzer = SRPAnalyzer()
-            violations = []
+            violations: list[Any] = []
 
             # Scan all Python files
             for py_file in self.project_path.rglob("*.py"):
@@ -204,7 +204,7 @@ class ReportAggregator:
             from ..concurrency import RaceConditionDetector
 
             detector = RaceConditionDetector()
-            race_conditions = []
+            race_conditions: list[Any] = []
 
             # Scan all Python files
             for py_file in self.project_path.rglob("*.py"):
@@ -441,7 +441,7 @@ class ReportAggregator:
 
     def _create_recommendations_section(self) -> ReportSection:
         """Create recommendations section."""
-        recommendations = []
+        recommendations: list[Any] = []
 
         # Check circular dependencies
         circular_deps = self.results.get("imports", {}).get("circular_dependencies", 0)

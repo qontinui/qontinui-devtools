@@ -29,7 +29,7 @@ def concurrent_test(
 
     Example:
         @concurrent_test(threads=20, iterations=200)
-        def test_my_function():
+        def test_my_function() -> None:
             # Test code
             cache.get("key")
             cache.set("key", "value")
@@ -72,7 +72,7 @@ def stress_test(threads: int = 50, iterations: int = 1000, timeout: float = 60.0
 
     Example:
         @stress_test(threads=100, iterations=10000)
-        def test_high_load():
+        def test_high_load() -> Any:
             # Test code under heavy load
             pass
     """
@@ -97,7 +97,7 @@ def tracked_test(threads: int = 10, iterations: int = 100, timeout: float = 30.0
 
     Example:
         @tracked_test(threads=10, iterations=50)
-        def test_with_tracking():
+        def test_with_tracking() -> Any:
             # Test code with state tracking enabled
             pass
     """

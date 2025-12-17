@@ -27,7 +27,7 @@ from ..validation.coverage_tracker import (
 class TestCoverageTracker:
     """Test suite for CoverageTracker functionality."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.java_dir = Path("/test/java")
         self.python_dir = Path("/test/python")
@@ -48,7 +48,7 @@ class TestCoverageTracker:
             package="com.example.integration",
         )
 
-    def test_register_java_test(self):
+    def test_register_java_test(self) -> None:
         """Test registering Java test files for tracking."""
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
 
@@ -63,7 +63,7 @@ class TestCoverageTracker:
         assert mapping.migration_status == MigrationStatus.NOT_STARTED
         assert mapping.python_test_path is None
 
-    def test_register_python_test(self):
+    def test_register_python_test(self) -> None:
         """Test registering Python test files as migrated."""
         # First register the Java test
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -81,7 +81,7 @@ class TestCoverageTracker:
         assert mapping.migration_date is not None
         assert mapping in self.tracker.migration_history
 
-    def test_register_orphaned_python_test(self):
+    def test_register_orphaned_python_test(self) -> None:
         """Test registering Python test without existing Java mapping."""
         python_path = Path("/test/python/test_orphan.py")
         java_path = Path("/test/java/OrphanTest.java")
@@ -96,7 +96,7 @@ class TestCoverageTracker:
         assert mapping.java_class_name == "Unknown"
         assert mapping.test_type == TestType.UNKNOWN
 
-    def test_update_migration_status(self):
+    def test_update_migration_status(self) -> None:
         """Test updating migration status of tests."""
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
 
@@ -117,7 +117,7 @@ class TestCoverageTracker:
         assert mapping.migration_status == MigrationStatus.COMPLETED
         assert mapping.migration_date is not None
 
-    def test_add_method_mapping(self):
+    def test_add_method_mapping(self) -> None:
         """Test adding method-level mappings."""
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
 
@@ -135,7 +135,7 @@ class TestCoverageTracker:
         assert mapping.test_methods["testSubtraction"] == "test_subtraction"
         assert mapping.migration_success_rate == 1.0
 
-    def test_calculate_progress(self):
+    def test_calculate_progress(self) -> None:
         """Test migration progress calculation."""
         # Register multiple tests with different statuses
         tests = [
@@ -169,7 +169,7 @@ class TestCoverageTracker:
         assert progress.completion_percentage == (1 / 3) * 100
         assert progress.success_rate == (1 / 2) * 100  # 1 success out of 2 attempts
 
-    def test_calculate_coverage_metrics(self):
+    def test_calculate_coverage_metrics(self) -> None:
         """Test coverage metrics calculation."""
         # Register Java tests
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -193,7 +193,7 @@ class TestCoverageTracker:
         assert coverage.mapping_coverage == 50.0
         assert coverage.test_method_coverage == 100.0  # All methods mapped
 
-    def test_category_breakdown(self):
+    def test_category_breakdown(self) -> None:
         """Test category breakdown calculation."""
         # Register tests in different categories
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -205,7 +205,7 @@ class TestCoverageTracker:
         assert breakdown[TestCategory.INTEGRATION_SPRING] == 1
         assert breakdown[TestCategory.UNIT_WITH_MOCKS] == 0
 
-    def test_status_breakdown(self):
+    def test_status_breakdown(self) -> None:
         """Test status breakdown calculation."""
         # Register tests with different statuses
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -222,7 +222,7 @@ class TestCoverageTracker:
         assert breakdown[MigrationStatus.FAILED] == 1
         assert breakdown[MigrationStatus.NOT_STARTED] == 0
 
-    def test_recent_migrations(self):
+    def test_recent_migrations(self) -> None:
         """Test recent migrations tracking."""
         # Register and migrate a test
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -236,7 +236,7 @@ class TestCoverageTracker:
         assert recent[0].python_class_name == "TestCalculator"
         assert recent[0].migration_date is not None
 
-    def test_identify_issues(self):
+    def test_identify_issues(self) -> None:
         """Test issue identification."""
         # Create various issue scenarios
 
@@ -261,7 +261,7 @@ class TestCoverageTracker:
         assert issues["failed_migrations"] == 1
         assert issues["incomplete_method_mapping"] == 1
 
-    def test_generate_recommendations(self):
+    def test_generate_recommendations(self) -> None:
         """Test recommendation generation."""
         # Create scenario with low completion rate
         for i in range(10):
@@ -286,7 +286,7 @@ class TestCoverageTracker:
         assert len(recommendations) > 0
         assert any("simple unit tests" in rec for rec in recommendations)
 
-    def test_generate_migration_summary(self):
+    def test_generate_migration_summary(self) -> None:
         """Test comprehensive migration summary generation."""
         # Set up test scenario
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -305,7 +305,7 @@ class TestCoverageTracker:
         assert isinstance(summary.issues_summary, dict)
         assert isinstance(summary.recommendations, list)
 
-    def test_export_mapping_documentation(self):
+    def test_export_mapping_documentation(self) -> None:
         """Test exporting mapping documentation to JSON."""
         # Set up test data
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -331,7 +331,7 @@ class TestCoverageTracker:
             assert mapping_data["python_class_name"] == "TestCalculator"
             assert mapping_data["test_methods"]["testAdd"] == "test_add"
 
-    def test_export_progress_report(self):
+    def test_export_progress_report(self) -> None:
         """Test exporting progress report to JSON."""
         # Set up test data
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -360,7 +360,7 @@ class TestCoverageTracker:
             assert data["progress"]["migrated_tests"] == 1
             assert data["summary"]["completion_percentage"] == 100.0
 
-    def test_load_mapping_documentation(self):
+    def test_load_mapping_documentation(self) -> None:
         """Test loading mapping documentation from JSON."""
         # Create test data
         test_data = {
@@ -407,7 +407,7 @@ class TestCoverageTracker:
             assert "testAdd" in mapping.test_methods
             assert len(new_tracker.migration_history) == 1
 
-    def test_get_unmigrated_tests(self):
+    def test_get_unmigrated_tests(self) -> None:
         """Test getting list of unmigrated tests."""
         # Register tests with different statuses
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -422,7 +422,7 @@ class TestCoverageTracker:
         assert unmigrated[0].java_class_name == "IntegrationTest"
         assert unmigrated[0].migration_status == MigrationStatus.NOT_STARTED
 
-    def test_get_migration_statistics(self):
+    def test_get_migration_statistics(self) -> None:
         """Test getting detailed migration statistics."""
         # Set up test scenario
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
@@ -450,7 +450,7 @@ class TestCoverageTracker:
 class TestTestMapping:
     """Test suite for TestMapping functionality."""
 
-    def test_is_migrated_property(self):
+    def test_is_migrated_property(self) -> None:
         """Test the is_migrated property."""
         mapping = TestMapping(
             java_test_path=Path("/test/Test.java"),
@@ -467,7 +467,7 @@ class TestTestMapping:
         mapping.migration_status = MigrationStatus.FAILED
         assert mapping.is_migrated is False
 
-    def test_migration_success_rate(self):
+    def test_migration_success_rate(self) -> None:
         """Test migration success rate calculation."""
         mapping = TestMapping(
             java_test_path=Path("/test/Test.java"),
@@ -496,7 +496,7 @@ class TestTestMapping:
 class TestMigrationProgress:
     """Test suite for MigrationProgress functionality."""
 
-    def test_completion_percentage(self):
+    def test_completion_percentage(self) -> None:
         """Test completion percentage calculation."""
         progress = MigrationProgress(
             total_java_tests=10,
@@ -512,7 +512,7 @@ class TestMigrationProgress:
         progress.total_java_tests = 0
         assert progress.completion_percentage == 0.0
 
-    def test_success_rate(self):
+    def test_success_rate(self) -> None:
         """Test success rate calculation."""
         progress = MigrationProgress(
             total_java_tests=10,
@@ -534,7 +534,7 @@ class TestMigrationProgress:
 class TestCoverageMetrics:
     """Test suite for CoverageMetrics functionality."""
 
-    def test_mapping_coverage(self):
+    def test_mapping_coverage(self) -> None:
         """Test mapping coverage calculation."""
         metrics = CoverageMetrics(
             java_test_count=10,

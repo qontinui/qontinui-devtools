@@ -17,7 +17,7 @@ from qontinui.test_migration.translation.integration_test_environment import (
 class TestIntegrationTestEnvironment:
     """Test cases for IntegrationTestEnvironment."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.environment = IntegrationTestEnvironment()
 
@@ -42,7 +42,7 @@ class TestIntegrationTestEnvironment:
         )
         self.test_file.test_methods.append(self.test_method)
 
-    def test_configure_component_wiring(self):
+    def test_configure_component_wiring(self) -> None:
         """Test component wiring configuration."""
         wiring_config = self.environment.configure_component_wiring(self.test_file)
 
@@ -67,7 +67,7 @@ class TestIntegrationTestEnvironment:
         assert "@pytest.fixture(scope='class')" in fixtures_code
         assert "def integration_environment" in fixtures_code
 
-    def test_configure_database_environment_in_memory(self):
+    def test_configure_database_environment_in_memory(self) -> None:
         """Test in-memory database configuration."""
         db_config = DatabaseConfiguration(
             database_type="in_memory",
@@ -85,7 +85,7 @@ class TestIntegrationTestEnvironment:
         assert "schema_files" in setup_text
         assert "data_files" in setup_text
 
-    def test_configure_database_environment_testcontainer(self):
+    def test_configure_database_environment_testcontainer(self) -> None:
         """Test testcontainer database configuration."""
         db_config = DatabaseConfiguration(database_type="testcontainer")
 
@@ -97,7 +97,7 @@ class TestIntegrationTestEnvironment:
         assert "PostgresContainer" in setup_text
         assert "get_connection_url" in setup_text
 
-    def test_configure_database_environment_mock(self):
+    def test_configure_database_environment_mock(self) -> None:
         """Test mock database configuration."""
         db_config = DatabaseConfiguration(database_type="mock")
 
@@ -109,7 +109,7 @@ class TestIntegrationTestEnvironment:
         assert "def database_mock" in setup_text
         assert "Mock()" in setup_text
 
-    def test_configure_external_service_mocking_rest_api(self):
+    def test_configure_external_service_mocking_rest_api(self) -> None:
         """Test REST API service mocking configuration."""
         service_config = ExternalServiceConfiguration(
             service_name="user_api",
@@ -127,7 +127,7 @@ class TestIntegrationTestEnvironment:
         assert "requests_mock.Mocker()" in setup_text
         assert "m.get('http://api.example.com/users'" in setup_text
 
-    def test_configure_external_service_mocking_message_queue(self):
+    def test_configure_external_service_mocking_message_queue(self) -> None:
         """Test message queue service mocking configuration."""
         service_config = ExternalServiceConfiguration(
             service_name="notification_queue", service_type="message_queue"
@@ -140,7 +140,7 @@ class TestIntegrationTestEnvironment:
         assert "def notification_queue_mock" in setup_text
         assert "Mock()" in setup_text
 
-    def test_configure_external_service_mocking_file_system(self):
+    def test_configure_external_service_mocking_file_system(self) -> None:
         """Test file system service mocking configuration."""
         service_config = ExternalServiceConfiguration(
             service_name="file_storage", service_type="file_system"
@@ -153,7 +153,7 @@ class TestIntegrationTestEnvironment:
         assert "def file_storage_mock" in setup_text
         assert "patch('builtins.open')" in setup_text
 
-    def test_configure_external_service_mocking_cache(self):
+    def test_configure_external_service_mocking_cache(self) -> None:
         """Test cache service mocking configuration."""
         service_config = ExternalServiceConfiguration(
             service_name="redis_cache", service_type="cache"
@@ -167,7 +167,7 @@ class TestIntegrationTestEnvironment:
         assert "mock_cache.get.return_value = None" in setup_text
         assert "mock_cache.set.return_value = True" in setup_text
 
-    def test_create_multi_component_test_scenario(self):
+    def test_create_multi_component_test_scenario(self) -> None:
         """Test multi-component test scenario creation."""
         # Add multiple mock usages to make it a multi-component test
         self.test_file.mock_usage.append(
@@ -196,7 +196,7 @@ class TestIntegrationTestEnvironment:
         assert "def record_interaction" in helpers_text
         assert "def verify_interaction_sequence" in helpers_text
 
-    def test_extract_components_from_test_file(self):
+    def test_extract_components_from_test_file(self) -> None:
         """Test component extraction from test file."""
         components = self.environment._extract_components_from_test_file(self.test_file)
 
@@ -209,7 +209,7 @@ class TestIntegrationTestEnvironment:
         assert user_service_component is not None
         assert user_service_component.mock_type == "mock"
 
-    def test_generate_component_fixture_mock(self):
+    def test_generate_component_fixture_mock(self) -> None:
         """Test component fixture generation for mock components."""
         component = ComponentConfiguration(
             component_name="user_service",
@@ -225,7 +225,7 @@ class TestIntegrationTestEnvironment:
         assert "def user_service" in fixture_text
         assert "Mock(spec=UserService)" in fixture_text
 
-    def test_generate_component_fixture_real(self):
+    def test_generate_component_fixture_real(self) -> None:
         """Test component fixture generation for real components."""
         component = ComponentConfiguration(
             component_name="user_service",
@@ -245,7 +245,7 @@ class TestIntegrationTestEnvironment:
 class TestIntegrationTestGenerator:
     """Test cases for IntegrationTestGenerator."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.generator = IntegrationTestGenerator()
 
@@ -269,7 +269,7 @@ class TestIntegrationTestGenerator:
         )
         self.test_file.test_methods.append(self.test_method)
 
-    def test_generate_integration_test_file_basic(self):
+    def test_generate_integration_test_file_basic(self) -> None:
         """Test basic integration test file generation."""
         result = self.generator.generate_integration_test_file(self.test_file)
 
@@ -279,7 +279,7 @@ class TestIntegrationTestGenerator:
         assert "class ComponentRegistry:" in result
         assert "class IntegrationTest:" in result
 
-    def test_generate_integration_test_file_with_database(self):
+    def test_generate_integration_test_file_with_database(self) -> None:
         """Test integration test file generation with database configuration."""
         db_config = DatabaseConfiguration(database_type="in_memory", schema_files=["schema.sql"])
 
@@ -291,7 +291,7 @@ class TestIntegrationTestGenerator:
         assert "def database_connection" in result
         assert "sqlite3.connect(':memory:')" in result
 
-    def test_generate_integration_test_file_with_external_services(self):
+    def test_generate_integration_test_file_with_external_services(self) -> None:
         """Test integration test file generation with external services."""
         service_config = ExternalServiceConfiguration(
             service_name="user_api",
@@ -307,7 +307,7 @@ class TestIntegrationTestGenerator:
         assert "def user_api_mock" in result
         assert "requests_mock.Mocker()" in result
 
-    def test_generate_integration_test_file_complete(self):
+    def test_generate_integration_test_file_complete(self) -> None:
         """Test complete integration test file generation with all features."""
         db_config = DatabaseConfiguration(database_type="testcontainer")
 
@@ -335,7 +335,7 @@ class TestIntegrationTestGenerator:
 class TestComponentConfiguration:
     """Test cases for ComponentConfiguration."""
 
-    def test_component_configuration_creation(self):
+    def test_component_configuration_creation(self) -> None:
         """Test ComponentConfiguration creation."""
         config = ComponentConfiguration(
             component_name="user_service",
@@ -353,7 +353,7 @@ class TestComponentConfiguration:
 class TestDatabaseConfiguration:
     """Test cases for DatabaseConfiguration."""
 
-    def test_database_configuration_defaults(self):
+    def test_database_configuration_defaults(self) -> None:
         """Test DatabaseConfiguration with default values."""
         config = DatabaseConfiguration()
 
@@ -363,7 +363,7 @@ class TestDatabaseConfiguration:
         assert config.data_files == []
         assert config.cleanup_strategy == "rollback"
 
-    def test_database_configuration_custom(self):
+    def test_database_configuration_custom(self) -> None:
         """Test DatabaseConfiguration with custom values."""
         config = DatabaseConfiguration(
             database_type="testcontainer",
@@ -383,7 +383,7 @@ class TestDatabaseConfiguration:
 class TestExternalServiceConfiguration:
     """Test cases for ExternalServiceConfiguration."""
 
-    def test_external_service_configuration_creation(self):
+    def test_external_service_configuration_creation(self) -> None:
         """Test ExternalServiceConfiguration creation."""
         config = ExternalServiceConfiguration(
             service_name="user_api",

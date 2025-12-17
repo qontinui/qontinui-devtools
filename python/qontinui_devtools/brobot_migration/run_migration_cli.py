@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 
-def setup_python_path():
+def setup_python_path() -> None:
     """Set up Python path for proper module imports."""
     # Add the test_migration directory to Python path
     current_dir = Path(__file__).parent
@@ -18,7 +18,7 @@ def setup_python_path():
         sys.path.insert(0, str(current_dir))
 
 
-def main():
+def main() -> None:
     """Main entry point for the migration CLI."""
     setup_python_path()
 

@@ -1,5 +1,7 @@
 """Regression detection for identifying behavioral changes between code versions."""
 
+from typing import Any
+
 import json
 import logging
 import subprocess
@@ -345,7 +347,7 @@ class RegressionDetector:
         removed = old_params - new_params
         added = new_params - old_params
 
-        parts = []
+        parts: list[Any] = []
         if removed:
             parts.append(f"Removed parameters: {', '.join(removed)}")
         if added:

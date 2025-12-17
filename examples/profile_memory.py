@@ -1,5 +1,9 @@
 """Example: Memory profiling and leak detection.
 
+from typing import Any
+
+from typing import Any
+
 This example demonstrates how to use the MemoryProfiler to:
 - Track memory usage over time
 - Detect memory leaks
@@ -17,10 +21,10 @@ from qontinui_devtools.runtime import (
 )
 
 
-def simulate_memory_leak():
+def simulate_memory_leak() -> Any:
     """Simulate a memory leak for demonstration."""
     # This is an intentional leak for testing
-    cache = []
+    cache: list[Any] = []
     for i in range(10):
         # Leak some memory
         cache.extend([{"data": f"item_{i}_{j}" * 100} for j in range(500)])
@@ -28,7 +32,7 @@ def simulate_memory_leak():
     return cache
 
 
-def simulate_stable_usage():
+def simulate_stable_usage() -> Any:
     """Simulate stable memory usage."""
     # Allocate fixed amount
     data = [{"key": f"value{i}"} for i in range(1000)]
@@ -36,7 +40,7 @@ def simulate_stable_usage():
     return data
 
 
-def main():
+def main() -> None:
     """Run memory profiling examples."""
     print("=" * 80)
     print("Memory Profiling Example")
@@ -82,7 +86,7 @@ def main():
     print()
 
     # Simulate leak
-    leaky_cache = []
+    leaky_cache: list[Any] = []
     for iteration in range(10):
         snapshot = profiler.take_snapshot()
         mem_change = snapshot.total_mb - baseline.total_mb
@@ -216,7 +220,7 @@ def main():
         profiler.start()
 
         # Simulate some work
-        cache = []
+        cache: list[Any] = []
         for i in range(8):
             profiler.take_snapshot()
             cache.extend([{"iter": i, "data": "x" * 500} for _ in range(200)])

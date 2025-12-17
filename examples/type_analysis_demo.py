@@ -43,20 +43,20 @@ class Calculator:
     # Partially typed module
     (tmp_dir / "partially_typed.py").write_text(
         """
-def process_data(data, format="json"):
+def process_data(data, format="json") -> Any:
     '''Process data in various formats.'''
     if format == "json":
         return {"data": data}
     return str(data)
 
-def calculate(x: int, y):
+def calculate(x: int, y) -> Any:
     '''Calculate something.'''
     return x * y + 10
 
 class DataProcessor:
     '''Process data.'''
 
-    def __init__(self, config):
+    def __init__(self, config) -> None:
         self.config = config
 
     def process(self, items: list) -> dict:
@@ -68,11 +68,11 @@ class DataProcessor:
     # Untyped module
     (tmp_dir / "untyped.py").write_text(
         """
-def fetch_data(url, timeout=30):
+def fetch_data(url, timeout=30) -> Any:
     '''Fetch data from URL.'''
     return {"status": "ok", "data": []}
 
-def transform(data, mapper=None):
+def transform(data, mapper=None) -> Any:
     '''Transform data using mapper.'''
     if mapper:
         return [mapper(item) for item in data]
@@ -81,14 +81,14 @@ def transform(data, mapper=None):
 class Cache:
     '''Simple cache.'''
 
-    def __init__(self):
-        self.data = {}
+    def __init__(self) -> None:
+        self.data: dict[Any, Any] = {}
 
-    def get(self, key, default=None):
+    def get(self, key, default=None) -> Any:
         '''Get value from cache.'''
         return self.data.get(key, default)
 
-    def set(self, key, value):
+    def set(self, key, value) -> None:
         '''Set value in cache.'''
         self.data[key] = value
 """

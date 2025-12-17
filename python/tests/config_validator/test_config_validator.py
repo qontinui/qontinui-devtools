@@ -371,7 +371,7 @@ class TestValidateInvalidConfigs:
         # First workflow valid, second invalid
         call_count = [0]
 
-        def mock_validate(workflow):
+        def mock_validate(workflow) -> Any:
             call_count[0] += 1
             if call_count[0] == 1:
                 return MagicMock()  # Valid

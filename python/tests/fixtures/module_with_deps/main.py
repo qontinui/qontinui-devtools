@@ -1,5 +1,7 @@
 """Main module that imports others."""
 
+from typing import Any
+
 from .helper import HelperClass
 from .utils import utility_function
 
@@ -10,7 +12,7 @@ class MainClass:
     def __init__(self) -> None:
         self.helper = HelperClass()
 
-    def do_work(self) -> None:
+    def do_work(self) -> Any:
         """Perform work using utilities."""
         result = utility_function()
         self.helper.assist()

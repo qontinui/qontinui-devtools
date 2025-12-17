@@ -1,5 +1,13 @@
 """Tests for coupling and cohesion analyzer."""
 
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 import ast
 import os
 import tempfile
@@ -24,13 +32,13 @@ class TestCohesionMetrics:
         """Test LCOM calculation for low cohesion class."""
         code = """
 class LowCohesion:
-    def method_a(self):
+    def method_a(self) -> None:
         self.attr_a = 1
 
-    def method_b(self):
+    def method_b(self) -> None:
         self.attr_b = 2
 
-    def method_c(self):
+    def method_c(self) -> None:
         self.attr_c = 3
 """
         tree = ast.parse(code)
@@ -45,19 +53,19 @@ class LowCohesion:
         """Test LCOM calculation for high cohesion class."""
         code = """
 class HighCohesion:
-    def __init__(self):
-        self.data = []
+    def __init__(self) -> None:
+        self.data: list[Any] = []
         self.count = 0
 
-    def add(self, item):
+    def add(self, item) -> None:
         self.data.append(item)
         self.count += 1
 
-    def remove(self, item):
+    def remove(self, item) -> None:
         self.data.remove(item)
         self.count -= 1
 
-    def size(self):
+    def size(self) -> Any:
         return self.count
 """
         tree = ast.parse(code)
@@ -72,13 +80,13 @@ class HighCohesion:
         """Test LCOM4 for perfect cohesion (all methods connected)."""
         code = """
 class PerfectCohesion:
-    def method_a(self):
+    def method_a(self) -> None:
         self.shared = 1
 
-    def method_b(self):
+    def method_b(self) -> Any:
         return self.shared * 2
 
-    def method_c(self):
+    def method_c(self) -> None:
         self.shared += 3
 """
         tree = ast.parse(code)
@@ -93,13 +101,13 @@ class PerfectCohesion:
         """Test LCOM4 for completely disconnected methods."""
         code = """
 class Disconnected:
-    def method_a(self):
+    def method_a(self) -> None:
         self.attr_a = 1
 
-    def method_b(self):
+    def method_b(self) -> None:
         self.attr_b = 2
 
-    def method_c(self):
+    def method_c(self) -> None:
         self.attr_c = 3
 """
         tree = ast.parse(code)
@@ -114,14 +122,14 @@ class Disconnected:
         """Test TCC for perfect tight cohesion."""
         code = """
 class TightlyCoupled:
-    def method_a(self):
+    def method_a(self) -> None:
         self.x = 1
         self.y = 2
 
-    def method_b(self):
+    def method_b(self) -> Any:
         return self.x + self.y
 
-    def method_c(self):
+    def method_c(self) -> Any:
         return self.x * self.y
 """
         tree = ast.parse(code)
@@ -136,10 +144,10 @@ class TightlyCoupled:
         """Test TCC for no connections."""
         code = """
 class NoConnections:
-    def method_a(self):
+    def method_a(self) -> None:
         self.a = 1
 
-    def method_b(self):
+    def method_b(self) -> None:
         self.b = 2
 """
         tree = ast.parse(code)
@@ -154,14 +162,14 @@ class NoConnections:
         """Test LCC includes indirect connections."""
         code = """
 class IndirectConnections:
-    def method_a(self):
+    def method_a(self) -> None:
         self.x = 1
 
-    def method_b(self):
+    def method_b(self) -> None:
         self.x = 2
         self.y = 3
 
-    def method_c(self):
+    def method_c(self) -> None:
         self.y = 4
 """
         tree = ast.parse(code)
@@ -176,7 +184,7 @@ class IndirectConnections:
         """Test metrics for class with single method."""
         code = """
 class SingleMethod:
-    def method(self):
+    def method(self) -> None:
         self.x = 1
 """
         tree = ast.parse(code)
@@ -261,11 +269,11 @@ from abc import ABC, abstractmethod
 
 class AbstractBase(ABC):
     @abstractmethod
-    def abstract_method(self):
+    def abstract_method(self) -> None:
         pass
 
 class ConcreteClass:
-    def method(self):
+    def method(self) -> None:
         pass
 """
             )
@@ -287,10 +295,10 @@ from abc import abstractmethod
 
 class SemiAbstract:
     @abstractmethod
-    def abstract_method(self):
+    def abstract_method(self) -> None:
         pass
 
-    def concrete_method(self):
+    def concrete_method(self) -> None:
         pass
 """
             )
@@ -309,11 +317,11 @@ class SemiAbstract:
             f.write(
                 """
 class ConcreteA:
-    def method(self):
+    def method(self) -> None:
         pass
 
 class ConcreteB:
-    def method(self):
+    def method(self) -> None:
         pass
 """
             )

@@ -278,7 +278,7 @@ class PyPIClient:
                         pass
 
         # Extract dependencies from requires_dist
-        dependencies = []
+        dependencies=[],
         requires_dist = info_data.get("requires_dist") or []
         for req in requires_dist:
             if isinstance(req, str):
@@ -288,7 +288,7 @@ class PyPIClient:
                     dependencies.append(dep_name)
 
         # Extract maintainers
-        maintainers = []
+        maintainers: list[Any] = []
         if info_data.get("author"):
             maintainers.append(info_data["author"])
         if info_data.get("maintainer") and info_data["maintainer"] != info_data.get("author"):

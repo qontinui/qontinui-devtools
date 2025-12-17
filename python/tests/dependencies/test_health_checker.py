@@ -1,5 +1,9 @@
 """Comprehensive tests for dependency health checker.
 
+from typing import Any
+
+from typing import Any
+
 This module tests all aspects of the dependency health checker including:
 - Parsing various dependency file formats
 - Version comparison and update detection
@@ -382,13 +386,13 @@ class TestDependencyHealthChecker:
     """Test dependency health checker."""
 
     @pytest.fixture
-    def mock_pypi_client(self):
+    def mock_pypi_client(self) -> Any:
         """Create mock PyPI client."""
         client = Mock(spec=PyPIClient)
         return client
 
     @pytest.fixture
-    def checker(self, mock_pypi_client):
+    def checker(self, mock_pypi_client) -> Any:
         """Create checker with mock client."""
         return DependencyHealthChecker(
             pypi_client=mock_pypi_client,
@@ -397,7 +401,7 @@ class TestDependencyHealthChecker:
         )
 
     @pytest.fixture
-    def temp_project(self):
+    def temp_project(self) -> None:
         """Create temporary project directory."""
         with tempfile.TemporaryDirectory() as tmpdir:
             yield Path(tmpdir)
@@ -410,35 +414,35 @@ class TestDependencyHealthChecker:
         assert not checker.offline_mode
         assert checker.check_vulnerabilities
 
-    def test_parse_requirement_spec_simple(self, checker):
+    def test_parse_requirement_spec_simple(self, checker) -> None:
         """Test parsing simple requirement spec."""
         name, version = checker._parse_requirement_spec("requests==2.31.0")
 
         assert name == "requests"
         assert version == "2.31.0"
 
-    def test_parse_requirement_spec_operator(self, checker):
+    def test_parse_requirement_spec_operator(self, checker) -> None:
         """Test parsing requirement with operator."""
         name, version = checker._parse_requirement_spec("requests>=2.28.0")
 
         assert name == "requests"
         assert version == "2.28.0"
 
-    def test_parse_requirement_spec_extras(self, checker):
+    def test_parse_requirement_spec_extras(self, checker) -> None:
         """Test parsing requirement with extras."""
         name, version = checker._parse_requirement_spec("requests[security]>=2.28.0")
 
         assert name == "requests"
         assert version == "2.28.0"
 
-    def test_parse_requirement_spec_complex(self, checker):
+    def test_parse_requirement_spec_complex(self, checker) -> None:
         """Test parsing complex requirement."""
         name, version = checker._parse_requirement_spec("Django>=3.2,<4.0")
 
         assert name == "Django"
         assert "3.2" in version
 
-    def test_extract_version_string(self, checker):
+    def test_extract_version_string(self, checker) -> None:
         """Test extracting version from string."""
         version = checker._extract_version(">=2.28.0")
         assert version == "2.28.0"
@@ -449,12 +453,12 @@ class TestDependencyHealthChecker:
         version = checker._extract_version("*")
         assert version == "*"
 
-    def test_extract_version_dict(self, checker):
+    def test_extract_version_dict(self, checker) -> None:
         """Test extracting version from dict."""
         version = checker._extract_version({"version": "2.28.0"})
         assert version == "2.28.0"
 
-    def test_parse_requirements_txt(self, checker, temp_project):
+    def test_parse_requirements_txt(self, checker, temp_project) -> None:
         """Test parsing requirements.txt."""
         requirements_file = temp_project / "requirements.txt"
         requirements_file.write_text(
@@ -477,7 +481,7 @@ pytest>=7.0.0
         assert "django" in deps
         assert "pytest" in deps
 
-    def test_parse_pyproject_toml_poetry(self, checker, temp_project):
+    def test_parse_pyproject_toml_poetry(self, checker, temp_project) -> None:
         """Test parsing pyproject.toml with Poetry format."""
         pyproject_file = temp_project / "pyproject.toml"
         pyproject_file.write_text(
@@ -504,7 +508,7 @@ black = "^23.0.0"
         assert "pytest" in deps
         assert "_dev_pytest" in deps
 
-    def test_parse_pyproject_toml_pep621(self, checker, temp_project):
+    def test_parse_pyproject_toml_pep621(self, checker, temp_project) -> None:
         """Test parsing pyproject.toml with PEP 621 format."""
         pyproject_file = temp_project / "pyproject.toml"
         pyproject_file.write_text(
@@ -531,7 +535,7 @@ dev = [
         assert "pytest" in deps
         assert "_dev_pytest" in deps
 
-    def test_parse_poetry_lock(self, checker, temp_project):
+    def test_parse_poetry_lock(self, checker, temp_project) -> None:
         """Test parsing poetry.lock."""
         poetry_lock = temp_project / "poetry.lock"
         poetry_lock.write_text(
@@ -555,7 +559,7 @@ category = "dev"
         assert deps["pytest"] == "7.4.0"
         assert "_dev_pytest" in deps
 
-    def test_parse_setup_py(self, checker, temp_project):
+    def test_parse_setup_py(self, checker, temp_project) -> None:
         """Test parsing setup.py."""
         setup_py = temp_project / "setup.py"
         setup_py.write_text(
@@ -579,7 +583,7 @@ setup(
         assert "flask" in deps
         assert "django" in deps
 
-    def test_parse_semver_valid(self, checker):
+    def test_parse_semver_valid(self, checker) -> None:
         """Test parsing valid semantic versions."""
         version = checker._parse_semver("2.31.0")
         assert version == (2, 31, 0, "")
@@ -587,53 +591,53 @@ setup(
         version = checker._parse_semver("1.0.0-alpha.1")
         assert version == (1, 0, 0, "alpha.1")
 
-    def test_parse_semver_invalid(self, checker):
+    def test_parse_semver_invalid(self, checker) -> None:
         """Test parsing invalid versions."""
         version = checker._parse_semver("invalid")
         assert version is None
 
-    def test_compare_versions_major(self, checker):
+    def test_compare_versions_major(self, checker) -> None:
         """Test major version comparison."""
         update_type = checker._compare_versions("1.0.0", "2.0.0")
         assert update_type == UpdateType.MAJOR
 
-    def test_compare_versions_minor(self, checker):
+    def test_compare_versions_minor(self, checker) -> None:
         """Test minor version comparison."""
         update_type = checker._compare_versions("2.28.0", "2.31.0")
         assert update_type == UpdateType.MINOR
 
-    def test_compare_versions_patch(self, checker):
+    def test_compare_versions_patch(self, checker) -> None:
         """Test patch version comparison."""
         update_type = checker._compare_versions("2.31.0", "2.31.5")
         assert update_type == UpdateType.PATCH
 
-    def test_compare_versions_same(self, checker):
+    def test_compare_versions_same(self, checker) -> None:
         """Test comparing same versions."""
         update_type = checker._compare_versions("2.31.0", "2.31.0")
         assert update_type is None
 
-    def test_compare_versions_with_operators(self, checker):
+    def test_compare_versions_with_operators(self, checker) -> None:
         """Test comparing versions with operators."""
         update_type = checker._compare_versions(">=2.28.0", "2.31.0")
         assert update_type == UpdateType.MINOR
 
-    def test_categorize_license_permissive(self, checker):
+    def test_categorize_license_permissive(self, checker) -> None:
         """Test categorizing permissive licenses."""
         assert checker._categorize_license("MIT") == LicenseCategory.PERMISSIVE
         assert checker._categorize_license("BSD-3-Clause") == LicenseCategory.PERMISSIVE
         assert checker._categorize_license("Apache-2.0") == LicenseCategory.PERMISSIVE
 
-    def test_categorize_license_copyleft(self, checker):
+    def test_categorize_license_copyleft(self, checker) -> None:
         """Test categorizing copyleft licenses."""
         assert checker._categorize_license("GPL-3.0") == LicenseCategory.COPYLEFT
         assert checker._categorize_license("LGPL-2.1") == LicenseCategory.COPYLEFT
 
-    def test_categorize_license_unknown(self, checker):
+    def test_categorize_license_unknown(self, checker) -> None:
         """Test categorizing unknown licenses."""
         assert checker._categorize_license(None) == LicenseCategory.UNKNOWN
         assert checker._categorize_license("Custom License") == LicenseCategory.UNKNOWN
 
-    def test_determine_health_status_vulnerable(self, checker):
+    def test_determine_health_status_vulnerable(self, checker) -> None:
         """Test determining health status with vulnerabilities."""
         vulns = [
             VulnerabilityInfo(
@@ -647,22 +651,22 @@ setup(
         status = checker._determine_health_status("2.28.0", "2.31.0", vulns, None)
         assert status == HealthStatus.VULNERABLE
 
-    def test_determine_health_status_deprecated(self, checker):
+    def test_determine_health_status_deprecated(self, checker) -> None:
         """Test determining health status for deprecated package."""
         status = checker._determine_health_status("1.0.0", "1.0.0", [], "Use pytest instead")
         assert status == HealthStatus.DEPRECATED
 
-    def test_determine_health_status_outdated(self, checker):
+    def test_determine_health_status_outdated(self, checker) -> None:
         """Test determining health status for outdated package."""
         status = checker._determine_health_status("2.28.0", "2.31.0", [], None)
         assert status == HealthStatus.OUTDATED
 
-    def test_determine_health_status_healthy(self, checker):
+    def test_determine_health_status_healthy(self, checker) -> None:
         """Test determining health status for healthy package."""
         status = checker._determine_health_status("2.31.0", "2.31.0", [], None)
         assert status == HealthStatus.HEALTHY
 
-    def test_detect_circular_dependencies_simple(self, checker):
+    def test_detect_circular_dependencies_simple(self, checker) -> None:
         """Test detecting simple circular dependency."""
         deps = [
             DependencyInfo(
@@ -681,7 +685,7 @@ setup(
 
         assert len(circular) > 0
 
-    def test_detect_circular_dependencies_complex(self, checker):
+    def test_detect_circular_dependencies_complex(self, checker) -> None:
         """Test detecting complex circular dependency chain."""
         deps = [
             DependencyInfo(
@@ -705,7 +709,7 @@ setup(
 
         assert len(circular) > 0
 
-    def test_detect_circular_dependencies_none(self, checker):
+    def test_detect_circular_dependencies_none(self, checker) -> None:
         """Test detecting no circular dependencies."""
         deps = [
             DependencyInfo(
@@ -724,7 +728,7 @@ setup(
 
         assert len(circular) == 0
 
-    def test_check_license_conflicts(self, checker):
+    def test_check_license_conflicts(self, checker) -> None:
         """Test checking license conflicts."""
         deps = [
             DependencyInfo(
@@ -746,7 +750,7 @@ setup(
         assert len(conflicts) > 0
         assert any("GPL" in str(c) for c in conflicts)
 
-    def test_calculate_health_score_perfect(self, checker):
+    def test_calculate_health_score_perfect(self, checker) -> None:
         """Test calculating health score for perfect dependencies."""
         deps = [
             DependencyInfo(
@@ -761,7 +765,7 @@ setup(
         score = checker._calculate_health_score(deps)
         assert score == 100.0
 
-    def test_calculate_health_score_mixed(self, checker):
+    def test_calculate_health_score_mixed(self, checker) -> None:
         """Test calculating health score for mixed dependencies."""
         deps = [
             DependencyInfo(
@@ -782,7 +786,7 @@ setup(
         score = checker._calculate_health_score(deps)
         assert 80 < score < 100
 
-    def test_generate_recommendations_critical_vuln(self, checker):
+    def test_generate_recommendations_critical_vuln(self, checker) -> None:
         """Test recommendations for critical vulnerabilities."""
         deps = [
             DependencyInfo(
@@ -805,7 +809,7 @@ setup(
         assert any("URGENT" in rec for rec in recommendations)
         assert any("critical" in rec.lower() for rec in recommendations)
 
-    def test_generate_recommendations_deprecated(self, checker):
+    def test_generate_recommendations_deprecated(self, checker) -> None:
         """Test recommendations for deprecated packages."""
         deps = [
             DependencyInfo(
@@ -820,7 +824,7 @@ setup(
 
         assert any("deprecated" in rec.lower() for rec in recommendations)
 
-    def test_generate_recommendations_healthy(self, checker):
+    def test_generate_recommendations_healthy(self, checker) -> None:
         """Test recommendations for healthy dependencies."""
         deps = [
             DependencyInfo(
@@ -835,7 +839,7 @@ setup(
 
         assert any("healthy" in rec.lower() for rec in recommendations)
 
-    def test_check_health_integration(self, temp_project):
+    def test_check_health_integration(self, temp_project) -> None:
         """Test full health check integration."""
         # Create a test project with requirements
         requirements_file = temp_project / "requirements.txt"
@@ -869,12 +873,12 @@ setup(
         assert report.overall_health_score > 0
         assert len(report.recommendations) > 0
 
-    def test_check_health_nonexistent_project(self, checker):
+    def test_check_health_nonexistent_project(self, checker) -> None:
         """Test health check on nonexistent project."""
         with pytest.raises(FileNotFoundError):
             checker.check_health("/nonexistent/path")
 
-    def test_analyze_dependency_with_mock_data(self, checker):
+    def test_analyze_dependency_with_mock_data(self, checker) -> None:
         """Test analyzing dependency with mocked PyPI data."""
         mock_info = PackageInfo(
             name="requests",

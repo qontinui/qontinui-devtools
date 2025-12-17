@@ -1,4 +1,12 @@
 """
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 Simple test to verify core components work.
 """
 
@@ -10,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 
-def test_basic_orchestrator():
+def test_basic_orchestrator() -> Any:
     """Test basic orchestrator functionality without complex dependencies."""
     try:
         from core.models import MigrationConfig
@@ -43,7 +51,7 @@ def test_basic_orchestrator():
         return False
 
 
-def test_scanner():
+def test_scanner() -> Any:
     """Test the scanner component."""
     try:
         from discovery.scanner import BrobotTestScanner
@@ -64,7 +72,7 @@ def test_scanner():
         return False
 
 
-def test_pytest_runner():
+def test_pytest_runner() -> Any:
     """Test the pytest runner component."""
     try:
         from execution.pytest_runner import PytestRunner
@@ -83,14 +91,14 @@ def test_pytest_runner():
         return False
 
 
-def main():
+def main() -> Any:
     """Run basic component tests."""
     print("Testing Basic Migration Components")
     print("=" * 40)
 
     tests = [test_basic_orchestrator, test_scanner, test_pytest_runner]
 
-    results = []
+    results: list[Any] = []
     for test in tests:
         results.append(test())
         print()

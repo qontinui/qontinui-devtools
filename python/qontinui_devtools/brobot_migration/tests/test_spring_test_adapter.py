@@ -1,4 +1,8 @@
 """
+from typing import Any
+
+from typing import Any
+
 Unit tests for SpringTestAdapter.
 """
 
@@ -15,7 +19,7 @@ from qontinui.test_migration.translation.spring_test_adapter import (
 class TestSpringTestAdapter:
     """Test cases for SpringTestAdapter."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.adapter = SpringTestAdapter()
 
@@ -35,7 +39,7 @@ class TestSpringTestAdapter:
         )
         self.test_file.test_methods.append(self.test_method)
 
-    def test_handle_spring_boot_test_annotation(self):
+    def test_handle_spring_boot_test_annotation(self) -> None:
         """Test handling of @SpringBootTest annotation."""
         annotation = "@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)"
         config = {
@@ -54,7 +58,7 @@ class TestSpringTestAdapter:
         assert "from unittest.mock import Mock, patch" in config["imports"]
         assert any("SpringBootTest equivalent setup" in line for line in config["setup_code"])
 
-    def test_handle_mock_bean_annotation(self):
+    def test_handle_mock_bean_annotation(self) -> None:
         """Test handling of @MockBean annotation."""
         annotation = "@MockBean(UserService.class)"
         config = {
@@ -72,7 +76,7 @@ class TestSpringTestAdapter:
         assert "from unittest.mock import Mock, patch" in config["imports"]
         assert any("Mock bean" in line for line in config["setup_code"])
 
-    def test_handle_autowired_annotation(self):
+    def test_handle_autowired_annotation(self) -> None:
         """Test handling of @Autowired annotation."""
         annotation = "@Autowired"
         config = {
@@ -89,7 +93,7 @@ class TestSpringTestAdapter:
 
         assert "import pytest" in config["imports"]
 
-    def test_handle_value_injection_annotation(self):
+    def test_handle_value_injection_annotation(self) -> None:
         """Test handling of @Value annotation."""
         annotation = '@Value("${app.test.property}")'
         config = {
@@ -107,7 +111,7 @@ class TestSpringTestAdapter:
         assert "import os" in config["imports"]
         assert any("APP_TEST_PROPERTY" in line for line in config["environment_setup"])
 
-    def test_handle_test_property_source_annotation(self):
+    def test_handle_test_property_source_annotation(self) -> None:
         """Test handling of @TestPropertySource annotation."""
         annotation = '@TestPropertySource(properties = {"test.prop1=value1", "test.prop2=value2"})'
         config = {
@@ -126,7 +130,7 @@ class TestSpringTestAdapter:
         assert any("TEST_PROP1" in line for line in config["environment_setup"])
         assert any("TEST_PROP2" in line for line in config["environment_setup"])
 
-    def test_handle_active_profiles_annotation(self):
+    def test_handle_active_profiles_annotation(self) -> None:
         """Test handling of @ActiveProfiles annotation."""
         annotation = '@ActiveProfiles("test")'
         config = {
@@ -144,7 +148,7 @@ class TestSpringTestAdapter:
         assert "import os" in config["imports"]
         assert any("ACTIVE_PROFILES" in line for line in config["environment_setup"])
 
-    def test_handle_transactional_annotation(self):
+    def test_handle_transactional_annotation(self) -> None:
         """Test handling of @Transactional annotation."""
         annotation = "@Transactional"
         config = {
@@ -163,7 +167,7 @@ class TestSpringTestAdapter:
         assert "import pytest" in config["imports"]
         assert any("transaction_for_testTransactional" in line for line in config["fixtures"])
 
-    def test_handle_dirties_context_annotation(self):
+    def test_handle_dirties_context_annotation(self) -> None:
         """Test handling of @DirtiesContext annotation."""
         annotation = "@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)"
         config = {
@@ -181,7 +185,7 @@ class TestSpringTestAdapter:
         assert "import pytest" in config["imports"]
         assert any("reset_context_after_class" in line for line in config["fixtures"])
 
-    def test_extract_annotation_parameter(self):
+    def test_extract_annotation_parameter(self) -> None:
         """Test extraction of annotation parameters."""
         annotation = "@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = TestConfig.class)"
 
@@ -191,7 +195,7 @@ class TestSpringTestAdapter:
         assert web_env == "SpringBootTest.WebEnvironment.RANDOM_PORT"
         assert classes == "TestConfig.class"
 
-    def test_extract_property_name(self):
+    def test_extract_property_name(self) -> None:
         """Test extraction of property names from @Value expressions."""
         value_expression = "${app.test.property}"
 
@@ -199,7 +203,7 @@ class TestSpringTestAdapter:
 
         assert property_name == "app.test.property"
 
-    def test_convert_properties_to_env_vars(self):
+    def test_convert_properties_to_env_vars(self) -> None:
         """Test conversion of Spring properties to environment variables."""
         properties = '{"test.prop1=value1", "test.prop2=value2"}'
 
@@ -209,7 +213,7 @@ class TestSpringTestAdapter:
         assert "os.environ['TEST_PROP1'] = 'value1'" in env_vars
         assert "os.environ['TEST_PROP2'] = 'value2'" in env_vars
 
-    def test_create_application_context_setup(self):
+    def test_create_application_context_setup(self) -> None:
         """Test creation of application context setup code."""
         # Add SpringBootTest annotation to trigger context setup
         spring_method = TestMethod(
@@ -226,7 +230,7 @@ class TestSpringTestAdapter:
         assert any("application_context" in line for line in setup_lines)
         assert any("DependencyContainer" in line for line in setup_lines)
 
-    def test_create_dependency_injection_setup(self):
+    def test_create_dependency_injection_setup(self) -> None:
         """Test creation of dependency injection setup."""
         # Mock the _extract_autowired_fields method to return test data
         with patch.object(self.adapter, "_extract_autowired_fields") as mock_extract:
@@ -245,7 +249,7 @@ class TestSpringTestAdapter:
             assert any("userService" in line for line in fixtures)
             assert any("dataRepository" in line for line in fixtures)
 
-    def test_handle_spring_annotations_integration(self):
+    def test_handle_spring_annotations_integration(self) -> None:
         """Test the main handle_spring_annotations method."""
         # Create a test file with various Spring annotations
         test_file = TestFile(
@@ -293,11 +297,11 @@ class TestSpringTestAdapter:
 class TestDependencyContainer:
     """Test cases for DependencyContainer."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.container = DependencyContainer()
 
-    def test_register_and_get_singleton_component(self):
+    def test_register_and_get_singleton_component(self) -> None:
         """Test registering and retrieving singleton components."""
         mock_service = Mock()
 
@@ -311,10 +315,10 @@ class TestDependencyContainer:
         retrieved_again = self.container.get_component("UserService")
         assert retrieved_again is mock_service
 
-    def test_register_and_get_non_singleton_component(self):
+    def test_register_and_get_non_singleton_component(self) -> Any:
         """Test registering and retrieving non-singleton components."""
 
-        def service_factory():
+        def service_factory() -> Any:
             return Mock()
 
         self.container.register_component("UserService", service_factory, singleton=False)
@@ -325,7 +329,7 @@ class TestDependencyContainer:
         # Should be different instances for non-singleton
         assert service1 is not service2
 
-    def test_has_component(self):
+    def test_has_component(self) -> None:
         """Test checking if component is registered."""
         mock_service = Mock()
 
@@ -335,12 +339,12 @@ class TestDependencyContainer:
 
         assert self.container.has_component("UserService")
 
-    def test_get_unregistered_component_raises_error(self):
+    def test_get_unregistered_component_raises_error(self) -> None:
         """Test that getting unregistered component raises ValueError."""
         with pytest.raises(ValueError, match="Component 'UnknownService' not registered"):
             self.container.get_component("UnknownService")
 
-    def test_register_non_callable_non_singleton(self):
+    def test_register_non_callable_non_singleton(self) -> None:
         """Test registering non-callable instance as non-singleton."""
         mock_service = Mock()
 

@@ -296,7 +296,7 @@ def run_all_scenarios() -> dict[str, RaceTestResult]:
         "list_append": test_list_append,
     }
 
-    results = {}
+    results: dict[Any, Any] = {}
     for name, scenario_func in scenarios.items():
         print(f"Running scenario: {name}...")
         results[name] = scenario_func()

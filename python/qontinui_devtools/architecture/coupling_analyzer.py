@@ -44,7 +44,7 @@ class CohesionMetrics:
 class CouplingCohesionAnalyzer:
     """Analyze coupling and cohesion metrics for Python code."""
 
-    def __init__(self, verbose: bool = False):
+    def __init__(self, verbose: bool = False) -> None:
         """Initialize the analyzer.
 
         Args:

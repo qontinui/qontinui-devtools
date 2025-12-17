@@ -8,6 +8,7 @@ This module includes:
 - Long-running monitoring tests
 """
 
+from typing import Any
 import gc
 import threading
 import time
@@ -26,7 +27,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.profiles = []
+            self.profiles: list[Any] = []
 
         def start(self) -> None:
             self.is_running = True
@@ -44,7 +45,7 @@ except ImportError:
 
             return wrapper
 
-        def get_profile_data(self) -> None:
+        def get_profile_data(self) -> Any:
             return {
                 "profiles": self.profiles,
                 "total_calls": len(self.profiles),
@@ -55,7 +56,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.events = []
+            self.events: list[Any] = []
 
         def start(self) -> None:
             self.is_running = True
@@ -67,14 +68,14 @@ except ImportError:
             if self.is_running:
                 self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
 
-        def get_events(self) -> None:
+        def get_events(self) -> Any:
             return self.events
 
     class MemoryProfiler:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.snapshots = []
+            self.snapshots: list[Any] = []
 
         def start(self) -> None:
             self.is_running = True
@@ -94,7 +95,7 @@ except ImportError:
                 }
             )
 
-        def get_memory_usage(self) -> None:
+        def get_memory_usage(self) -> Any:
             if not self.snapshots:
                 return {"current_mb": 0, "peak_mb": 0}
             current = self.snapshots[-1]["memory_mb"]
@@ -105,7 +106,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.metrics = {}
+            self.metrics: dict[Any, Any] = {}
 
         def start(self) -> None:
             self.is_running = True
@@ -113,7 +114,7 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def update_metrics(self, metrics):
+        def update_metrics(self, metrics) -> None:
             self.metrics.update(metrics)
 
 
@@ -127,7 +128,7 @@ class TestProfilerPerformance:
     ):
         """Test that profiler overhead is below threshold."""
         # Baseline: measure without profiler
-        baseline_times = []
+        baseline_times: list[Any] = []
         for _ in range(10):
             start = time.perf_counter()
             sample_action_instance.execute(iterations=10)
@@ -139,10 +140,10 @@ class TestProfilerPerformance:
         profiler = ActionProfiler(profiler_config)
         profiler.start()
 
-        profiled_times = []
+        profiled_times: list[Any] = []
 
         @profiler.profile
-        def execute_profiled():
+        def execute_profiled() -> Any:
             start = time.perf_counter()
             sample_action_instance.execute(iterations=10)
             return time.perf_counter() - start
@@ -165,18 +166,18 @@ class TestProfilerPerformance:
             overhead_percent < performance_thresholds["max_overhead_percent"]
         ), f"Profiler overhead {overhead_percent:.2f}% exceeds threshold"
 
-    def test_profiler_scalability(self, sample_action_instance, profiler_config):
+    def test_profiler_scalability(self, sample_action_instance, profiler_config) -> None:
         """Test profiler performance with increasing load."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
 
         @profiler.profile
-        def execute():
+        def execute() -> None:
             sample_action_instance.execute(iterations=5)
 
         # Test with increasing number of calls
         call_counts = [10, 100, 1000]
-        overhead_percentages = []
+        overhead_percentages: list[Any] = []
 
         for count in call_counts:
             # Baseline
@@ -218,7 +219,7 @@ class TestProfilerPerformance:
         profiler.start()
 
         @profiler.profile
-        def execute():
+        def execute() -> None:
             sample_action_instance.execute(iterations=10)
 
         # Generate many profile entries
@@ -281,12 +282,12 @@ class TestEventTracerPerformance:
             overhead_percent < performance_thresholds["max_overhead_percent"]
         ), f"Event tracer overhead {overhead_percent:.2f}% exceeds threshold"
 
-    def test_event_tracer_latency(self, event_tracer_config, performance_thresholds):
+    def test_event_tracer_latency(self, event_tracer_config, performance_thresholds) -> None:
         """Test event tracing latency."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
 
-        latencies = []
+        latencies: list[Any] = []
         for i in range(1000):
             start = time.perf_counter()
             tracer.trace_event("test", {"index": i})
@@ -308,7 +309,7 @@ class TestEventTracerPerformance:
             avg_latency < performance_thresholds["max_event_latency_ms"]
         ), f"Average event latency {avg_latency:.4f}ms exceeds threshold"
 
-    def test_event_tracer_memory_growth(self, event_tracer_config, performance_thresholds):
+    def test_event_tracer_memory_growth(self, event_tracer_config, performance_thresholds) -> None:
         """Test event tracer memory growth over time."""
         import sys
 
@@ -331,20 +332,20 @@ class TestEventTracerPerformance:
             memory_mb < performance_thresholds["max_memory_mb"]
         ), f"Event tracer memory {memory_mb:.2f}MB exceeds threshold"
 
-    def test_event_tracer_concurrent_writes(self, event_tracer_config) -> None:
+    def test_event_tracer_concurrent_writes(self, event_tracer_config) -> Any:
         """Test event tracer performance with concurrent writes."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
 
-        def worker(thread_id: int, count: int):
+        def worker(thread_id: int, count: int) -> Any:
             start = time.perf_counter()
             for i in range(count):
                 tracer.trace_event("thread_event", {"thread_id": thread_id, "index": i})
             return time.perf_counter() - start
 
         # Test with increasing thread count
-        threads = []
-        results = {}
+        threads: list[Any] = []
+        results: dict[Any, Any] = {}
 
         num_threads = 10
         events_per_thread = 100
@@ -416,7 +417,7 @@ class TestMemoryProfilerPerformance:
         """Test memory profiler sampling performance."""
         # Test with different sampling intervals
         intervals = [0.001, 0.01, 0.1]
-        results = []
+        results: list[Any] = []
 
         for interval in intervals:
             config = memory_profiler_config.copy()
@@ -465,7 +466,7 @@ class TestStressTests:
         profiler.start()
 
         @profiler.profile
-        def fast_function():
+        def fast_function() -> Any:
             return sample_action_instance._process_iteration(0)
 
         start = time.perf_counter()
@@ -489,7 +490,7 @@ class TestStressTests:
         # Verify all calls were captured
         assert profile_data["total_calls"] == iterations
 
-    def test_event_tracer_stress_high_volume(self, event_tracer_config, stress_test_config):
+    def test_event_tracer_stress_high_volume(self, event_tracer_config, stress_test_config) -> None:
         """Stress test event tracer with high event volume."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -534,9 +535,9 @@ class TestStressTests:
         tracer.start()
         mem_profiler.start()
 
-        def worker(thread_id: int):
+        def worker(thread_id: int) -> Any:
             @profiler.profile
-            def execute():
+            def execute() -> Any:
                 tracer.trace_event("thread_start", {"thread_id": thread_id})
 
                 for i in range(stress_test_config["iterations_per_thread"]):
@@ -550,7 +551,7 @@ class TestStressTests:
 
         start = time.perf_counter()
 
-        threads = []
+        threads: list[Any] = []
         for i in range(stress_test_config["num_threads"]):
             t = threading.Thread(target=worker, args=(i,))
             threads.append(t)
@@ -593,7 +594,7 @@ class TestStressTests:
         tracer.start()
 
         @profiler.profile
-        def execute():
+        def execute() -> Any:
             tracer.trace_event("action", {})
             return sample_action_instance.execute(iterations=5)
 
@@ -630,14 +631,14 @@ class TestStressTests:
 class TestMemoryLeakDetection:
     """Tests to detect memory leaks in monitoring tools."""
 
-    def test_profiler_no_memory_leak(self, sample_action_instance, profiler_config):
+    def test_profiler_no_memory_leak(self, sample_action_instance, profiler_config) -> None:
         """Test that profiler doesn't leak memory over time."""
         import sys
 
         profiler = ActionProfiler(profiler_config)
 
         @profiler.profile
-        def execute():
+        def execute() -> None:
             sample_action_instance.execute(iterations=5)
 
         # Warm up
@@ -647,7 +648,7 @@ class TestMemoryLeakDetection:
         profiler.stop()
 
         # Measure memory at intervals
-        memory_samples = []
+        memory_samples: list[Any] = []
 
         for cycle in range(5):
             gc.collect()
@@ -681,7 +682,7 @@ class TestMemoryLeakDetection:
         """Test that event tracer doesn't leak memory."""
         import sys
 
-        memory_samples = []
+        memory_samples: list[Any] = []
 
         for cycle in range(5):
             gc.collect()
@@ -728,7 +729,7 @@ class TestOverallPerformanceMetrics:
     ):
         """Test that combined overhead of all tools meets threshold."""
         # Baseline
-        baseline_times = []
+        baseline_times: list[Any] = []
         for _ in range(10):
             start = time.perf_counter()
             sample_action_instance.execute(iterations=10)
@@ -745,10 +746,10 @@ class TestOverallPerformanceMetrics:
         tracer.start()
         mem_profiler.start()
 
-        monitored_times = []
+        monitored_times: list[Any] = []
 
         @profiler.profile
-        def execute_monitored():
+        def execute_monitored() -> Any:
             tracer.trace_event("execute", {})
             start = time.perf_counter()
             sample_action_instance.execute(iterations=10)

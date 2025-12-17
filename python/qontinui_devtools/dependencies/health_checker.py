@@ -427,7 +427,7 @@ class DependencyHealthChecker:
         update_type = self._compare_versions(current_version, latest_version)
 
         # Check for vulnerabilities
-        vulnerabilities = []
+        vulnerabilities: list[Any] = []
         if self.check_vulnerabilities:
             vulnerabilities = self._check_vulnerabilities(name, current_version)
 

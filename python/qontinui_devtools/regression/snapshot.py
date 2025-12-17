@@ -103,7 +103,7 @@ class APISnapshot:
             is_public = not node.name.startswith("_")
 
             # Extract parameters
-            parameters = []
+            parameters: list[Any] = []
             for arg in node.args.args:
                 param_name = arg.arg
                 if arg.annotation:
@@ -146,7 +146,7 @@ class APISnapshot:
             is_public = not node.name.startswith("_")
 
             # Extract base classes
-            base_classes = []
+            base_classes: list[Any] = []
             for base in node.bases:
                 base_classes.append(ast.unparse(base))
 
@@ -157,7 +157,7 @@ class APISnapshot:
             docstring = ast.get_docstring(node)
 
             # Extract methods
-            methods = []
+            methods: list[Any] = []
             for item in node.body:
                 if isinstance(item, ast.FunctionDef | ast.AsyncFunctionDef):
                     method_sig = self._extract_function_signature(item, module_path)

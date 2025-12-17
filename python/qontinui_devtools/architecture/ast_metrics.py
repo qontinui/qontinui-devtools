@@ -1,5 +1,13 @@
 """AST-based metrics utilities for analyzing Python code structure."""
 
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 import ast
 
 try:
@@ -116,7 +124,7 @@ def count_attributes(class_node: ast.ClassDef) -> int:
                         self.attributes.add(target.attr)
             self.generic_visit(node)
 
-        def visit_AnnAssign(self, node: ast.AnnAssign) -> None:
+        def visit_AnnAssign(self, node: ast.AnnAssign) -> Any:
             if isinstance(node.target, ast.Attribute):
                 if isinstance(node.target.value, ast.Name) and node.target.value.id == "self":
                     self.attributes.add(node.target.attr)
@@ -186,7 +194,7 @@ def _estimate_complexity(node: ast.AST) -> int:
             self.complexity += 1
             self.generic_visit(node)
 
-        def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        def visit_BoolOp(self, node: ast.BoolOp) -> Any:
             # Add complexity for and/or operators
             self.complexity += len(node.values) - 1
             self.generic_visit(node)
@@ -206,7 +214,7 @@ def extract_method_names(class_node: ast.ClassDef) -> list[str]:
     Returns:
         List of method names
     """
-    method_names = []
+    method_names: list[Any] = []
 
     for node in class_node.body:
         if isinstance(node, ast.FunctionDef):
@@ -231,7 +239,7 @@ def find_shared_attributes(method1: ast.FunctionDef, method2: ast.FunctionDef) -
         attributes = set()
 
         class AttributeAccessVisitor(ast.NodeVisitor):
-            def visit_Attribute(self, node: ast.Attribute) -> None:
+            def visit_Attribute(self, node: ast.Attribute) -> Any:
                 if isinstance(node.value, ast.Name) and node.value.id == "self":
                     attributes.add(node.attr)
                 self.generic_visit(node)
@@ -277,7 +285,7 @@ def analyze_method_calls(class_node: ast.ClassDef) -> dict[str, set[str]]:
         """Create a visitor that captures method calls into the given set."""
 
         class MethodCallVisitor(ast.NodeVisitor):
-            def visit_Call(self, call_node: ast.Call) -> None:
+            def visit_Call(self, call_node: ast.Call) -> Any:
                 # Check for self.method() calls
                 if isinstance(call_node.func, ast.Attribute):
                     if (

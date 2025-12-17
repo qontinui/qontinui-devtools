@@ -1,4 +1,16 @@
 """
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 Demonstration of the complete end-to-end migration workflow.
 """
 
@@ -10,7 +22,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 
-def create_sample_java_tests(source_dir: Path):
+def create_sample_java_tests(source_dir: Path) -> None:
     """Create sample Java test files for demonstration."""
 
     # Simple unit test
@@ -92,7 +104,7 @@ public class DatabaseIntegrationTest {
     )
 
 
-def demonstrate_discovery_phase(orchestrator, source_dir: Path):
+def demonstrate_discovery_phase(orchestrator, source_dir: Path) -> Any:
     """Demonstrate the test discovery phase."""
     print("Phase 1: Test Discovery")
     print("-" * 30)
@@ -114,7 +126,7 @@ def demonstrate_discovery_phase(orchestrator, source_dir: Path):
     return discovered_tests
 
 
-def demonstrate_validation_phase(orchestrator, target_dir: Path):
+def demonstrate_validation_phase(orchestrator, target_dir: Path) -> None:
     """Demonstrate the validation phase."""
     print("Phase 2: Test Validation")
     print("-" * 30)
@@ -127,30 +139,30 @@ import pytest
 
 class TestCalculator:
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         # This would be the migrated Calculator class
         self.calculator = MockCalculator()
 
-    def test_addition(self):
+    def test_addition(self) -> None:
         result = self.calculator.add(2, 3)
         assert result == 5
 
-    def test_subtraction(self):
+    def test_subtraction(self) -> None:
         result = self.calculator.subtract(5, 3)
         assert result == 2
 
-    def test_division_by_zero(self):
+    def test_division_by_zero(self) -> None:
         with pytest.raises(ZeroDivisionError):
             self.calculator.divide(1, 0)
 
 class MockCalculator:
-    def add(self, a, b):
+    def add(self, a, b) -> Any:
         return a + b
 
-    def subtract(self, a, b):
+    def subtract(self, a, b) -> Any:
         return a - b
 
-    def divide(self, a, b):
+    def divide(self, a, b) -> Any:
         if b == 0:
             raise ZeroDivisionError("Division by zero")
         return a / b
@@ -166,15 +178,15 @@ from unittest.mock import Mock
 @pytest.mark.integration
 class TestDatabaseIntegration:
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         self.database_service = Mock()
 
-    def test_database_connection(self):
+    def test_database_connection(self) -> None:
         self.database_service.is_connected.return_value = True
         connected = self.database_service.is_connected()
         assert connected is True
 
-    def test_data_retrieval(self):
+    def test_data_retrieval(self) -> None:
         test_data = "test data"
         self.database_service.get_data.return_value = test_data
         result = self.database_service.get_data("key")
@@ -199,7 +211,7 @@ class TestDatabaseIntegration:
     return results
 
 
-def demonstrate_reporting_phase(target_dir: Path):
+def demonstrate_reporting_phase(target_dir: Path) -> Any:
     """Demonstrate the reporting phase."""
     print("\nPhase 3: Report Generation")
     print("-" * 30)
@@ -242,7 +254,7 @@ def demonstrate_reporting_phase(target_dir: Path):
         return None
 
 
-def demonstrate_cli_usage():
+def demonstrate_cli_usage() -> None:
     """Demonstrate CLI usage examples."""
     print("\nCLI Usage Examples")
     print("-" * 30)
@@ -267,7 +279,7 @@ def demonstrate_cli_usage():
     print("   python cli.py migrate /path/to/brobot/tests /path/to/qontinui/tests --dry-run")
 
 
-def main():
+def main() -> Any:
     """Run the complete workflow demonstration."""
     print("Brobot to Qontinui Test Migration Workflow Demonstration")
     print("=" * 60)

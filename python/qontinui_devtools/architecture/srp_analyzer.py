@@ -1,5 +1,7 @@
 """Single Responsibility Principle (SRP) Analyzer.
 
+from typing import Any
+
 This module analyzes Python classes to detect SRP violations by identifying
 classes with multiple distinct responsibilities through semantic analysis
 of method names and clustering.
@@ -35,7 +37,7 @@ class SRPViolation:
     recommendation: str
     suggested_refactorings: list[str]
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate severity."""
         if self.severity not in ("critical", "high", "medium"):
             raise ValueError(f"Invalid severity: {self.severity}")
@@ -75,7 +77,7 @@ class SRPAnalyzer:
         if not path_obj.exists():
             raise ValueError(f"Path does not exist: {path}")
 
-        violations = []
+        violations: list[Any] = []
 
         # Find all Python files
         if path_obj.is_file():
@@ -109,7 +111,7 @@ class SRPAnalyzer:
         Returns:
             List of violations found in this file
         """
-        violations = []
+        violations: list[Any] = []
 
         try:
             with open(file_path, encoding="utf-8") as f:
@@ -196,7 +198,7 @@ class SRPAnalyzer:
         Returns:
             List of method names
         """
-        methods = []
+        methods: list[Any] = []
 
         for node in class_node.body:
             if isinstance(node, ast.FunctionDef):
@@ -274,7 +276,7 @@ class SRPAnalyzer:
         Returns:
             List of refactoring suggestions
         """
-        suggestions = []
+        suggestions: list[Any] = []
 
         for cluster in clusters:
             # Suggest a new class name based on responsibility

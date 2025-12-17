@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Report data collection and aggregation for diagnostic reporting.
 """
 
@@ -58,7 +60,7 @@ class ReportDataCollector:
         Returns:
             List of setup method names
         """
-        setup_methods = []
+        setup_methods: list[Any] = []
 
         # Look for pytest fixtures and setup methods
         fixture_pattern = r"@pytest\.fixture.*?\ndef\s+(\w+)"
@@ -80,7 +82,7 @@ class ReportDataCollector:
         Returns:
             List of assertion statements
         """
-        assertions = []
+        assertions: list[Any] = []
 
         # Extract assert statements and pytest.raises
         assert_pattern = r"(assert\s+.*?)(?:\n|$)"

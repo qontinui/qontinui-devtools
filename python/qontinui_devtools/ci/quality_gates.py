@@ -19,7 +19,7 @@ console = Console()
 class QualityGate:
     """Represents a single quality gate check."""
 
-    def __init__(self, name: str, actual: int, threshold: int, severity: str = "error"):
+    def __init__(self, name: str, actual: int, threshold: int, severity: str = "error") -> None:
         self.name = name
         self.actual = actual
         self.threshold = threshold
@@ -34,7 +34,7 @@ class QualityGate:
 class QualityGateChecker:
     """Checks multiple quality gates and reports results."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.gates: list[QualityGate] = []
         self.warnings: list[str] = []
 

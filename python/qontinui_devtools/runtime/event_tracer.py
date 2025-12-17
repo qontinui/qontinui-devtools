@@ -91,7 +91,7 @@ class EventTrace:
         Returns:
             Dictionary mapping stage names to latencies
         """
-        latencies = {}
+        latencies: dict[Any, Any] = {}
 
         for i in range(len(self.checkpoints) - 1):
             stage_name = f"{self.checkpoints[i].name} -> {self.checkpoints[i + 1].name}"
@@ -332,7 +332,7 @@ class EventTracer:
         """
         with self._lock:
             current_time = time.time()
-            lost_traces = []
+            lost_traces: list[Any] = []
 
             for trace in self._traces.values():
                 if not trace.completed:

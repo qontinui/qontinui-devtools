@@ -1,5 +1,7 @@
 """Cross-language ID type consistency checker.
 
+from typing import Any
+
 Detects type mismatches for ID fields across TypeScript, Rust, and Python codebases.
 Common issues detected:
 - TypeScript using `number` for UUID fields (should be `string`)
@@ -114,9 +116,9 @@ class IDTypeChecker:
         Returns:
             List of detected issues
         """
-        self.id_fields = []
-        self.issues = []
-        self.parseint_usages = []
+        self.id_fields: list[Any] = []
+        self.issues: list[Any] = []
+        self.parseint_usages: list[Any] = []
 
         for path in paths:
             if path.is_file():
@@ -474,7 +476,7 @@ class IDTypeChecker:
                 continue
 
             # Check if types are inconsistent
-            types_by_language = {}
+            types_by_language: dict[Any, Any] = {}
             for f in fields:
                 lang = f.language.value
                 if lang not in types_by_language:

@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Assertion fix suggestion strategies for JUnit to pytest migration.
 """
 
@@ -36,7 +38,7 @@ class AssertionSuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for JUnit assertion errors."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         # Find JUnit assertion methods
         assertion_pattern = (

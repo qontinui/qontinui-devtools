@@ -316,17 +316,17 @@ from qontinui.actions import ActionConfig
 class {python_class_name}:
     """Migrated from {test_file.class_name}."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.qontinui = QontinuiCore()
         self.test_state = State()
 
-    def test_example_method(self):
+    def test_example_method(self) -> None:
         """Example test method - replace with actual translated methods."""
         # TODO: Replace with actual translated test logic
         assert True
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         """Clean up after tests."""
         pass
 '''
@@ -334,7 +334,7 @@ class {python_class_name}:
     def _generate_mock_method_response(self, method_code: str) -> str:
         """Generate mock method response."""
         return """
-    def test_example_method(self):
+    def test_example_method(self) -> None:
         \"\"\"Translated test method.\"\"\"
         # TODO: Implement actual test logic
         assert True
@@ -355,7 +355,7 @@ class {python_class_name}:
 
         # If no code block, try to extract everything after a common prefix
         lines = response.split("\n")
-        code_lines = []
+        code_lines: list[Any] = []
         in_code = False
 
         for line in lines:
@@ -390,7 +390,7 @@ class {python_class_name}:
         """Fix common translation issues."""
         # Fix indentation issues
         lines = code.split("\n")
-        fixed_lines = []
+        fixed_lines: list[Any] = []
 
         for line in lines:
             # Convert tabs to spaces
@@ -443,7 +443,7 @@ class {python_class_name}:
             )
 
         # Check which imports are missing
-        missing_imports = []
+        missing_imports: list[Any] = []
         for import_stmt in required_imports:
             if import_stmt not in code:
                 missing_imports.append(import_stmt)
@@ -481,7 +481,7 @@ class {python_class_name}:
         """Basic code formatting."""
         # Remove excessive blank lines
         lines = code.split("\n")
-        formatted_lines = []
+        formatted_lines: list[Any] = []
         prev_blank = False
 
         for line in lines:
@@ -506,7 +506,7 @@ class {python_class_name}:
         Returns:
             List of validation errors
         """
-        errors = []
+        errors=[],
 
         # Check for basic Python syntax
         try:

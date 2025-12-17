@@ -120,7 +120,7 @@ class RaceConditionTester:
     Example:
         tester = RaceConditionTester(threads=10, iterations=100)
 
-        def test_function():
+        def test_function() -> None:
             # Code to test
             pass
 
@@ -233,7 +233,7 @@ class RaceConditionTester:
         )
 
         # Get conflicts from instrumentation
-        conflicts = []
+        conflicts: list[Any] = []
         if self._tracker:
             conflicts = self._tracker.detect_conflicts()
             if conflicts:
@@ -347,7 +347,7 @@ class RaceConditionTester:
             tester = RaceConditionTester()
 
             @tester.concurrent_test(threads=20)
-            def test_function():
+            def test_function() -> None:
                 pass
 
             result = test_function()

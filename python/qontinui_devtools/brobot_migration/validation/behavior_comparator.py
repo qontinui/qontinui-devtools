@@ -160,7 +160,7 @@ class BehaviorComparatorImpl(BehaviorComparator):
         Returns:
             Component-level comparison result
         """
-        results = []
+        results: list[Any] = []
 
         for test_input in test_inputs:
             try:
@@ -311,7 +311,7 @@ class BehaviorComparatorImpl(BehaviorComparator):
         self, java_result: TestResult, python_result: TestResult
     ) -> ComparisonResult:
         """Perform detailed comparison of test results."""
-        differences = []
+        differences: list[Any] = []
 
         # Compare pass/fail status
         if java_result.passed != python_result.passed:
@@ -460,7 +460,7 @@ class BehaviorComparatorImpl(BehaviorComparator):
 
     def _extract_component_differences(self, results: list[dict[str, Any]]) -> list[str]:
         """Extract differences from component comparison results."""
-        differences = []
+        differences: list[Any] = []
 
         for i, result in enumerate(results):
             if not result.get("match", False):
@@ -503,7 +503,7 @@ class BehaviorComparatorImpl(BehaviorComparator):
 
     def _extract_junit_assertions(self, test_content: str) -> list[str]:
         """Extract JUnit assertions from test content."""
-        assertions = []
+        assertions: list[Any] = []
 
         # Common JUnit assertion patterns
         patterns = [
@@ -522,7 +522,7 @@ class BehaviorComparatorImpl(BehaviorComparator):
 
     def _extract_pytest_assertions(self, test_content: str) -> list[str]:
         """Extract pytest assertions from test content."""
-        assertions = []
+        assertions: list[Any] = []
 
         # Find assert statements
         assert_pattern = r"assert [^#\n]+"

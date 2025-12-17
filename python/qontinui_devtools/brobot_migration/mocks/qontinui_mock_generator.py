@@ -2,7 +2,7 @@
 Qontinui mock generator for creating equivalent Qontinui mocks from Brobot patterns.
 """
 
-from typing import cast
+from typing import cast, Any
 
 from ..core.interfaces import MockGenerator
 from ..core.models import GuiModel, MockUsage
@@ -65,37 +65,37 @@ class QontinuiMockGenerator(MockGenerator):
 class MockState:
     def __init__(self, name: str) -> None:
         self.name = name
-        self.elements = {}
+        self.elements: dict[Any, Any] = {}
         self.is_active = False
 
-    def add_element(self, element_name: str, element_config: dict):
+    def add_element(self, element_name: str, element_config: dict) -> None:
         self.elements[element_name] = element_config
 
-    def get_element(self, element_name: str):
+    def get_element(self, element_name: str) -> Any:
         return self.elements.get(element_name)
 
-    def activate(self):
+    def activate(self) -> None:
         self.is_active = True
 
-    def deactivate(self):
+    def deactivate(self) -> None:
         self.is_active = False
 """,
             "gui_simulation": """
 class GuiSimulator:
     def __init__(self) -> None:
-        self.states = {}
+        self.states: dict[Any, Any] = {}
         self.current_state = None
 
-    def add_state(self, state_name: str, state_config: dict):
+    def add_state(self, state_name: str, state_config: dict) -> None:
         self.states[state_name] = state_config
 
-    def transition_to(self, state_name: str):
+    def transition_to(self, state_name: str) -> Any:
         if state_name in self.states:
             self.current_state = state_name
             return True
         return False
 
-    def simulate_action(self, action_name: str, **kwargs):
+    def simulate_action(self, action_name: str, **kwargs) -> Any:
         # Simulate GUI action without actual GUI interaction
         return {"action": action_name, "result": "success", "kwargs": kwargs}
 """,
@@ -111,7 +111,7 @@ class GuiSimulator:
         Returns:
             Python code string for equivalent Qontinui mock
         """
-        mock_code_parts = []
+        mock_code_parts: list[Any] = []
 
         # Add imports
         mock_code_parts.append(self._generate_imports(mock_usage))
@@ -142,7 +142,7 @@ class GuiSimulator:
         Returns:
             Python code for state simulation
         """
-        simulation_code_parts = []
+        simulation_code_parts: list[Any] = []
 
         # Add state simulation class
         simulation_code_parts.append(self.state_simulation_templates["basic_state"])
@@ -164,7 +164,7 @@ class GuiSimulator:
 
     def _generate_imports(self, mock_usage: MockUsage) -> str:
         """Generate necessary import statements."""
-        imports = []
+        imports: list[Any] = []
 
         # Always include basic mock imports
         imports.append("from unittest.mock import Mock, MagicMock, patch")
@@ -226,7 +226,7 @@ def {field_name}():
 {variable_name}.elements = {{}}
 
 # Mock element access
-def mock_get_element(element_name):
+def mock_get_element(element_name) -> Any:
     if element_name not in {variable_name}.elements:
         element_mock = Mock(spec=Element)
         element_mock.name = element_name
@@ -249,11 +249,11 @@ def mock_get_element(element_name):
 # GUI Model Mock with element and action simulation
 class GuiModelMock:
     def __init__(self) -> None:
-        self.elements = {}
-        self.actions = {}
-        self.state_properties = {}
+        self.elements: dict[Any, Any] = {}
+        self.actions: dict[Any, Any] = {}
+        self.state_properties: dict[Any, Any] = {}
 
-    def add_element(self, name, config):
+    def add_element(self, name, config) -> Any:
         element_mock = Mock(spec=Element)
         element_mock.name = name
         element_mock.config = config
@@ -261,7 +261,7 @@ class GuiModelMock:
         self.elements[name] = element_mock
         return element_mock
 
-    def add_action(self, name, behavior=None):
+    def add_action(self, name, behavior=None) -> Any:
         action_mock = Mock()
         if behavior:
             action_mock.side_effect = behavior
@@ -270,7 +270,7 @@ class GuiModelMock:
         self.actions[name] = action_mock
         return action_mock
 
-    def simulate_interaction(self, element_name, action_name, **kwargs):
+    def simulate_interaction(self, element_name, action_name, **kwargs) -> Any:
         element = self.elements.get(element_name)
         action = self.actions.get(action_name)
         if element and action:
@@ -294,7 +294,7 @@ gui_model_mock = GuiModelMock()"""
         return """
 # Qontinui Test Environment Mock
 @pytest.fixture(scope="class")
-def qontinui_test_environment():
+def qontinui_test_environment() -> Any:
     \"\"\"Mock test environment that simulates Brobot's @BrobotTest functionality.\"\"\"
 
     class QontinuiTestEnvironment:
@@ -303,12 +303,12 @@ def qontinui_test_environment():
             self.gui_simulator = Mock()
             self.action_executor = Mock()
 
-        def setup_gui_simulation(self):
+        def setup_gui_simulation(self) -> None:
             \"\"\"Setup GUI simulation without actual GUI components.\"\"\"
             self.gui_simulator.is_active = True
             self.gui_simulator.simulate_action = Mock(return_value=ActionResult(success=True))
 
-        def cleanup(self):
+        def cleanup(self) -> None:
             \"\"\"Cleanup test environment.\"\"\"
             self.gui_simulator.is_active = False
 
@@ -377,9 +377,9 @@ mock_state = MockState("{gui_model.model_name}")"""
 # Action simulation
 class ActionSimulator:
     def __init__(self) -> None:
-        self.action_history = []
+        self.action_history: list[Any] = []
 
-    def simulate_action(self, action_name, element_name=None, **kwargs):
+    def simulate_action(self, action_name, element_name=None, **kwargs) -> Any:
         qontinui_action = self._map_action(action_name)
         result = ActionResult(
             success=True,
@@ -390,7 +390,7 @@ class ActionSimulator:
         self.action_history.append(result)
         return result
 
-    def _map_action(self, brobot_action):
+    def _map_action(self, brobot_action) -> Any:
         action_mapping = {"""
 
         # Add action mappings
@@ -402,10 +402,10 @@ class ActionSimulator:
         }
         return action_mapping.get(brobot_action, brobot_action)
 
-    def get_action_history(self):
+    def get_action_history(self) -> Any:
         return self.action_history.copy()
 
-    def clear_history(self):
+    def clear_history(self) -> Any:
         self.action_history.clear()
 
 action_simulator = ActionSimulator()"""
@@ -462,7 +462,7 @@ action_simulator = ActionSimulator()"""
 
     def _map_action_behaviors(self, mock_usage: MockUsage) -> dict[str, str]:
         """Map Brobot action behaviors to Qontinui equivalents."""
-        action_behaviors = {}
+        action_behaviors: dict[Any, Any] = {}
 
         # Map actions from configuration
         if "actions" in mock_usage.configuration:
@@ -505,23 +505,23 @@ action_simulator = ActionSimulator()"""
         setup_code = """
 # Integration test setup with multiple Qontinui mocks
 @pytest.fixture(scope="function")
-def integrated_mock_environment():
+def integrated_mock_environment() -> Any:
     \"\"\"Setup integrated mock environment for complex test scenarios.\"\"\"
 
     class IntegratedMockEnvironment:
         def __init__(self) -> None:
-            self.mocks = {}
+            self.mocks: dict[Any, Any] = {}
             self.state_manager = Mock(spec=StateManager)
             self.gui_simulator = GuiSimulator()
 
-        def add_mock(self, name, mock_obj):
+        def add_mock(self, name, mock_obj) -> None:
             self.mocks[name] = mock_obj
 
-        def get_mock(self, name):
+        def get_mock(self, name) -> Any:
             return self.mocks.get(name)
 
-        def simulate_workflow(self, steps):
-            results = []
+        def simulate_workflow(self, steps) -> Any:
+            results: list[Any] = []
             for step in steps:
                 result = self.gui_simulator.simulate_action(**step)
                 results.append(result)

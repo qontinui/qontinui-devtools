@@ -34,7 +34,7 @@ except ImportError:
         def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.profiles = []
+            self.profiles: list[Any] = []
 
         def start(self) -> None:
             """Start profiling."""
@@ -66,7 +66,7 @@ except ImportError:
                 "total_time": sum(p["duration"] for p in self.profiles),
             }
 
-        def export(self, output_path: Path, format: str = "json"):
+        def export(self, output_path: Path, format: str = "json") -> None:
             """Export profile data."""
             data = self.get_profile_data()
             with open(output_path, "w") as f:
@@ -78,7 +78,7 @@ except ImportError:
         def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.events = []
+            self.events: list[Any] = []
 
         def start(self) -> None:
             """Start tracing."""
@@ -88,7 +88,7 @@ except ImportError:
             """Stop tracing."""
             self.is_running = False
 
-        def trace_event(self, event_type: str, data: dict[str, Any]):
+        def trace_event(self, event_type: str, data: dict[str, Any]) -> None:
             """Trace an event."""
             if self.is_running:
                 self.events.append(
@@ -106,7 +106,7 @@ except ImportError:
                 return [e for e in self.events if e["type"] == event_type]
             return self.events
 
-        def export(self, output_path: Path, format: str = "json"):
+        def export(self, output_path: Path, format: str = "json") -> None:
             """Export event data."""
             with open(output_path, "w") as f:
                 json.dump(self.events, f, indent=2)
@@ -117,7 +117,7 @@ except ImportError:
         def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.snapshots = []
+            self.snapshots: list[Any] = []
 
         def start(self) -> None:
             """Start memory profiling."""
@@ -151,7 +151,7 @@ except ImportError:
 
             return {"current_mb": current, "peak_mb": peak, "snapshots": len(self.snapshots)}
 
-        def export(self, output_path: Path, format: str = "json"):
+        def export(self, output_path: Path, format: str = "json") -> None:
             """Export memory profile data."""
             with open(output_path, "w") as f:
                 json.dump(self.snapshots, f, indent=2)
@@ -162,7 +162,7 @@ except ImportError:
         def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.metrics = {}
+            self.metrics: dict[Any, Any] = {}
 
         def start(self) -> None:
             """Start dashboard."""
@@ -172,7 +172,7 @@ except ImportError:
             """Stop dashboard."""
             self.is_running = False
 
-        def update_metrics(self, metrics: dict[str, Any]):
+        def update_metrics(self, metrics: dict[str, Any]) -> None:
             """Update dashboard metrics."""
             self.metrics.update(metrics)
 
@@ -200,7 +200,7 @@ class TestProfilerEventTracerIntegration:
         try:
             # Execute action with both tools active
             @profiler.profile
-            def execute_with_events():
+            def execute_with_events() -> Any:
                 tracer.trace_event("action_start", {"action": "sample"})
                 result = sample_action_instance.execute(iterations=5)
                 tracer.trace_event("action_end", {"action": "sample", "result": result})
@@ -238,7 +238,7 @@ class TestProfilerEventTracerIntegration:
         profiler.start()
 
         @profiler.profile
-        def without_tracer():
+        def without_tracer() -> Any:
             return sample_action_instance.execute(iterations=3)
 
         without_tracer()
@@ -251,7 +251,7 @@ class TestProfilerEventTracerIntegration:
         tracer.start()
 
         @profiler.profile
-        def with_tracer():
+        def with_tracer() -> Any:
             for i in range(3):
                 tracer.trace_event("iteration", {"index": i})
             return sample_action_instance.execute(iterations=3)
@@ -278,11 +278,11 @@ class TestProfilerEventTracerIntegration:
         profiler.start()
         tracer.start()
 
-        def worker(thread_id: int):
+        def worker(thread_id: int) -> Any:
             tracer.trace_event("thread_start", {"thread_id": thread_id})
 
             @profiler.profile
-            def execute():
+            def execute() -> Any:
                 result = concurrent_action.execute_threaded(thread_id, iterations=5)
                 tracer.trace_event("thread_complete", {"thread_id": thread_id, "result": result})
                 return result
@@ -290,7 +290,7 @@ class TestProfilerEventTracerIntegration:
             return execute()
 
         # Run multiple threads
-        threads = []
+        threads: list[Any] = []
         for i in range(5):
             t = threading.Thread(target=worker, args=(i,))
             threads.append(t)
@@ -321,7 +321,7 @@ class TestProfilerEventTracerIntegration:
         tracer.start()
 
         @profiler.profile
-        def execute_with_error():
+        def execute_with_error() -> None:
             tracer.trace_event("action_start", {"action": "error_test"})
             try:
                 sample_action_instance.execute_with_error()
@@ -362,7 +362,7 @@ class TestMemoryProfilerIntegration:
         mem_profiler.start()
 
         @profiler.profile
-        def allocate_memory():
+        def allocate_memory() -> Any:
             return memory_intensive_action.execute(size_mb=10)
 
         allocate_memory()
@@ -403,7 +403,7 @@ class TestMemoryProfilerIntegration:
         assert len(snapshot_events) > 0
         assert "current_mb" in snapshot_events[0]["data"]
 
-    def test_memory_cleanup_verification(self, memory_intensive_action, memory_profiler_config):
+    def test_memory_cleanup_verification(self, memory_intensive_action, memory_profiler_config) -> None:
         """Test that memory profiler detects cleanup."""
         mem_profiler = MemoryProfiler(memory_profiler_config)
 
@@ -451,7 +451,7 @@ class TestDashboardIntegration:
         try:
             # Execute action
             @profiler.profile
-            def execute_monitored():
+            def execute_monitored() -> Any:
                 tracer.trace_event("action_start", {})
                 result = sample_action_instance.execute(iterations=5)
                 tracer.trace_event("action_end", {})
@@ -492,10 +492,10 @@ class TestDashboardIntegration:
         profiler.start()
         dashboard.start()
 
-        metrics_snapshots = []
+        metrics_snapshots: list[Any] = []
 
         @profiler.profile
-        def execute_with_updates():
+        def execute_with_updates() -> None:
             for i in range(5):
                 sample_action_instance._process_iteration(i)
 
@@ -526,9 +526,9 @@ class TestDashboardIntegration:
         profiler.start()
         dashboard.start()
 
-        def worker(thread_id: int):
+        def worker(thread_id: int) -> Any:
             @profiler.profile
-            def execute():
+            def execute() -> Any:
                 result = concurrent_action.execute_threaded(thread_id, iterations=10)
                 # Each thread updates dashboard
                 dashboard.update_metrics({f"thread_{thread_id}": profiler.get_profile_data()})
@@ -536,7 +536,7 @@ class TestDashboardIntegration:
 
             return execute()
 
-        threads = []
+        threads: list[Any] = []
         for i in range(3):
             t = threading.Thread(target=worker, args=(i,))
             threads.append(t)
@@ -586,7 +586,7 @@ class TestAllToolsConcurrently:
             for i in range(10):
 
                 @profiler.profile
-                def execute_iteration(iteration_num: int = i):
+                def execute_iteration(iteration_num: int = i) -> Any:
                     tracer.trace_event("iteration_start", {"iteration": iteration_num})
 
                     result = sample_action_instance.execute(iterations=3)
@@ -651,7 +651,7 @@ class TestAllToolsConcurrently:
             tracer.trace_event("async_start", {})
 
             @profiler.profile
-            def sync_wrapper():
+            def sync_wrapper() -> Any:
                 # Since we can't profile async directly, wrap it
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
@@ -692,7 +692,7 @@ class TestAllToolsConcurrently:
         mem_profiler.start()
 
         @profiler.profile
-        def execute_with_error():
+        def execute_with_error() -> None:
             tracer.trace_event("before_error", {})
             try:
                 sample_action_instance.execute_with_error()
@@ -733,7 +733,7 @@ class TestAllToolsConcurrently:
 
         # Execute some actions
         @profiler.profile
-        def execute():
+        def execute() -> Any:
             tracer.trace_event("action", {})
             return sample_action_instance.execute(iterations=5)
 

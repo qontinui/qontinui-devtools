@@ -63,7 +63,7 @@ class JavaToPythonTranslator(TestTranslator):
         Returns:
             Python test code as a string
         """
-        python_code = []
+        python_code: list[Any] = []
 
         # Add imports
         python_imports = self._generate_python_imports(test_file)
@@ -169,7 +169,7 @@ class JavaToPythonTranslator(TestTranslator):
 
     def _translate_setup_method(self, method: TestMethod) -> list[str]:
         """Translate Java @Before/@BeforeClass methods to pytest fixtures."""
-        lines = []
+        lines: list[Any] = []
 
         if "@BeforeClass" in method.annotations or "@BeforeAll" in method.annotations:
             lines.append("@pytest.fixture(scope='class', autouse=True)")
@@ -191,7 +191,7 @@ class JavaToPythonTranslator(TestTranslator):
 
     def _translate_teardown_method(self, method: TestMethod) -> list[str]:
         """Translate Java @After/@AfterClass methods to pytest fixtures."""
-        lines = []
+        lines: list[Any] = []
 
         if "@AfterClass" in method.annotations or "@AfterAll" in method.annotations:
             lines.append("@pytest.fixture(scope='class', autouse=True)")
@@ -212,7 +212,7 @@ class JavaToPythonTranslator(TestTranslator):
 
     def _translate_test_method_full(self, method: TestMethod) -> list[str]:
         """Translate a complete test method including annotations."""
-        lines = []
+        lines: list[Any] = []
 
         # Add pytest decorators
         if "@Test" in method.annotations:
@@ -263,7 +263,7 @@ class JavaToPythonTranslator(TestTranslator):
         # Find the opening brace and extract everything until the matching closing brace
         brace_count = 0
         in_body = False
-        body_lines = []
+        body_lines: list[Any] = []
 
         for line in method_code.split("\n"):
             if "{" in line and not in_body:
@@ -338,7 +338,7 @@ class JavaToPythonTranslator(TestTranslator):
         if not body.strip():
             return []
 
-        lines = []
+        lines: list[Any] = []
         for line in body.split("\n"):
             line = line.strip()
             if not line:
@@ -392,7 +392,7 @@ class JavaToPythonTranslator(TestTranslator):
         # Convert camelCase method names to snake_case
         method_pattern = r"(\w+)\.(\w+)\("
 
-        def replace_method_call(match):
+        def replace_method_call(match) -> Any:
             object_name = match.group(1)
             method_name = match.group(2)
             python_object = self._camel_to_snake(object_name)

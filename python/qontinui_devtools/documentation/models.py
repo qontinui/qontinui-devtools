@@ -168,14 +168,14 @@ class DocItem:
         if self.type not in (DocItemType.FUNCTION, DocItemType.METHOD):
             return self.name
 
-        parts = []
+        parts: list[Any] = []
         if self.is_async:
             parts.append("async")
         parts.append("def")
         parts.append(self.name)
 
         # Build parameters
-        params = []
+        params: list[Any] = []
         for param in self.parameters:
             param_str = param.name
             if param.type_hint:
@@ -222,7 +222,7 @@ class DocumentationTree:
 
     def get_public_items(self, item_type: DocItemType | None = None) -> list[DocItem]:
         """Get all public items, optionally filtered by type."""
-        items = []
+        items: list[Any] = []
         for item in self.all_items.values():
             if item.is_public:
                 if item_type is None or item.type == item_type:
@@ -235,7 +235,7 @@ class DocumentationTree:
         if not item:
             return []
 
-        children = []
+        children: list[Any] = []
         for child_name in item.children:
             child = self.get_item(child_name)
             if child:
@@ -245,7 +245,7 @@ class DocumentationTree:
     def search(self, query: str) -> list[DocItem]:
         """Search for items matching the query."""
         query_lower = query.lower()
-        matches = []
+        matches: list[Any] = []
 
         for item in self.all_items.values():
             # Search in name

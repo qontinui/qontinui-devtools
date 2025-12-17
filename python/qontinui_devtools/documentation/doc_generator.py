@@ -25,7 +25,7 @@ from .models import (
 class DocstringParser:
     """Parse docstrings in various formats."""
 
-    def __init__(self, style: DocstringStyle = DocstringStyle.AUTO):
+    def __init__(self, style: DocstringStyle = DocstringStyle.AUTO) -> None:
         """Initialize parser.
 
         Args:
@@ -116,8 +116,8 @@ class DocstringParser:
 
         # Parse sections
         current_section = None
-        current_content = []
-        description_lines = []
+        current_content: list[Any] = []
+        description_lines: list[Any] = []
         in_description = True
 
         for _i, line in enumerate(lines[1:], 1):
@@ -146,7 +146,7 @@ class DocstringParser:
 
                 in_description = False
                 current_section = stripped[:-1]
-                current_content = []
+                current_content: list[Any] = []
             elif current_section:
                 current_content.append(line)
             elif in_description and stripped:
@@ -193,7 +193,7 @@ class DocstringParser:
 
     def _parse_google_parameters(self, lines: list[str]) -> list[dict[str, Any]]:
         """Parse Google-style parameters."""
-        parameters = []
+        parameters: list[Any] = []
         current_param = None
 
         # Find the base indentation level
@@ -258,7 +258,7 @@ class DocstringParser:
 
     def _parse_google_raises(self, lines: list[str]) -> list[tuple[str, str]]:
         """Parse Google-style raises section."""
-        raises = []
+        raises: list[Any] = []
         current_exception = None
 
         # Find the base indentation level
@@ -313,10 +313,10 @@ class DocstringParser:
             result["summary"] = lines[0].strip()
 
         # Find sections
-        sections = {}
+        sections: dict[Any, Any] = {}
         current_section = None
-        current_content = []
-        description_lines = []
+        current_content: list[Any] = []
+        description_lines: list[Any] = []
         in_description = True
         i = 1
 
@@ -330,7 +330,7 @@ class DocstringParser:
 
                 in_description = False
                 current_section = line.strip()
-                current_content = []
+                current_content: list[Any] = []
                 i += 2  # Skip header and dashes
                 continue
             elif current_section:
@@ -374,7 +374,7 @@ class DocstringParser:
 
     def _parse_numpy_parameters(self, lines: list[str]) -> list[dict[str, Any]]:
         """Parse NumPy-style parameters."""
-        parameters = []
+        parameters: list[Any] = []
         current_param = None
 
         # Find the base indentation level
@@ -436,7 +436,7 @@ class DocstringParser:
         # In NumPy style, the type is on the first line at base indent
         # and description is indented more
         type_str = None
-        description_parts = []
+        description_parts: list[Any] = []
 
         for line in lines:
             stripped = line.strip()
@@ -460,7 +460,7 @@ class DocstringParser:
 
     def _parse_numpy_raises(self, lines: list[str]) -> list[tuple[str, str]]:
         """Parse NumPy-style raises section."""
-        raises = []
+        raises: list[Any] = []
         current_exception = None
 
         for line in lines:
@@ -491,7 +491,7 @@ class DocstringParser:
 
     def _parse_examples(self, lines: list[str]) -> list[dict[str, Any]]:
         """Parse examples from docstring."""
-        examples = []
+        examples: list[Any] = []
         content = "\n".join(lines).strip()
 
         if not content:
@@ -509,7 +509,7 @@ class DocstringParser:
 
     def _parse_see_also(self, lines: list[str]) -> list[str]:
         """Parse see also references."""
-        refs = []
+        refs: list[Any] = []
         for line in lines:
             stripped = line.strip()
             if stripped:
@@ -523,7 +523,7 @@ class DocstringParser:
 class ASTDocExtractor(ast.NodeVisitor):
     """Extract documentation from Python AST."""
 
-    def __init__(self, file_path: str, source_code: str):
+    def __init__(self, file_path: str, source_code: str) -> None:
         """Initialize extractor.
 
         Args:
@@ -648,7 +648,7 @@ class ASTDocExtractor(ast.NodeVisitor):
         is_staticmethod = "staticmethod" in decorators
 
         # Extract examples
-        examples = []
+        examples: list[Any] = []
         for ex in parsed["examples"]:
             examples.append(Example(code=ex["code"], description=ex.get("description", "")))
 
@@ -690,7 +690,7 @@ class ASTDocExtractor(ast.NodeVisitor):
         self, node: ast.FunctionDef | ast.AsyncFunctionDef, parsed_params: list[dict]
     ) -> list[Parameter]:
         """Extract parameters from function."""
-        parameters = []
+        parameters: list[Any] = []
         args = node.args
 
         # Create mapping of parsed parameters
@@ -784,7 +784,7 @@ class ASTDocExtractor(ast.NodeVisitor):
 class DocumentationGenerator:
     """Generate documentation from Python source code."""
 
-    def __init__(self, docstring_style: DocstringStyle = DocstringStyle.AUTO):
+    def __init__(self, docstring_style: DocstringStyle = DocstringStyle.AUTO) -> None:
         """Initialize generator.
 
         Args:
@@ -816,14 +816,14 @@ class DocumentationGenerator:
         source_path = Path(source_path)
 
         # Collect all Python files
-        python_files = []
+        python_files: list[Any] = []
         if source_path.is_file():
             python_files = [source_path]
         else:
             python_files = list(source_path.rglob("*.py"))
 
         # Extract documentation from each file
-        all_items = []
+        all_items: list[Any] = []
         for file_path in python_files:
             try:
                 source_code = file_path.read_text(encoding="utf-8")
@@ -851,10 +851,10 @@ class DocumentationGenerator:
             items = [item for item in items if item.is_public or item.is_dunder]
 
         # Organize items
-        modules = {}
-        classes = {}
-        functions = {}
-        all_items = {}
+        modules: dict[Any, Any] = {}
+        classes: dict[Any, Any] = {}
+        functions: dict[Any, Any] = {}
+        all_items: dict[Any, Any] = {}
 
         root = None
 
@@ -907,7 +907,7 @@ class DocumentationGenerator:
 
     def _build_search_index(self, tree: DocumentationTree) -> dict[str, list[str]]:
         """Build search index for documentation."""
-        index = {}
+        index: dict[Any, Any] = {}
 
         for qualified_name, item in tree.all_items.items():
             # Index by name
@@ -1028,7 +1028,7 @@ class DocumentationGenerator:
 
     def _generate_markdown_index(self, tree: DocumentationTree) -> str:
         """Generate markdown index page."""
-        lines = []
+        lines: list[Any] = []
         lines.append(f"# {tree.package_name or 'Documentation'}")
 
         if tree.version:
@@ -1045,7 +1045,7 @@ class DocumentationGenerator:
 
     def _generate_module_markdown(self, module: DocItem, tree: DocumentationTree) -> str:
         """Generate markdown for a module."""
-        lines = []
+        lines: list[Any] = []
         lines.append(f"# {module.name}\n")
 
         if module.summary:

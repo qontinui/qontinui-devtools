@@ -75,7 +75,7 @@ from os.path import *
         test_file.write_text(
             """import os
 
-def foo():
+def foo() -> None:
     pass
 
 from pathlib import Path

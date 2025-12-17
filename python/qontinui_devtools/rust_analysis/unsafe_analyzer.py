@@ -64,7 +64,7 @@ class UnsafeAnalyzer:
 
     def _find_rust_files(self) -> list[Path]:
         """Find all Rust files in the project."""
-        rust_files = []
+        rust_files: list[Any] = []
         for path in self.root_path.rglob("*.rs"):
             parts = path.parts
             skip_dirs = {"target", ".git", "vendor"}

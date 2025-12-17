@@ -4,7 +4,7 @@ This module provides advanced latency analysis including percentile calculations
 bottleneck detection, and anomaly detection.
 """
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .event_tracer import EventTrace
@@ -47,7 +47,7 @@ def analyze_latencies(traces: list["EventTrace"]) -> dict[str, dict[str, float]]
             stage_latencies[stage].append(latency)
 
     # Calculate statistics for each stage
-    result = {}
+    result: dict[Any, Any] = {}
 
     for stage, latencies in stage_latencies.items():
         if not latencies:
@@ -121,7 +121,7 @@ def detect_anomalies(
     if not latencies:
         return []
 
-    anomalies = []
+    anomalies: list[Any] = []
 
     for trace in traces:
         for stage, latency in trace.get_stage_latencies().items():
@@ -167,7 +167,7 @@ def calculate_throughput(
     max_time = max(t.created_at for t in traces)
 
     # Create time windows
-    windows = {}
+    windows: dict[Any, Any] = {}
     current_time = min_time
 
     while current_time <= max_time:
@@ -214,7 +214,7 @@ def compare_traces(trace1: "EventTrace", trace2: "EventTrace") -> dict[str, dict
     # Find common stages
     common_stages = set(latencies1.keys()) & set(latencies2.keys())
 
-    result = {}
+    result: dict[Any, Any] = {}
 
     for stage in common_stages:
         lat1 = latencies1[stage]

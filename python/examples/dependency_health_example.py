@@ -9,7 +9,7 @@ from pathlib import Path
 from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus, UpdateType
 
 
-def main():
+def main() -> None:
     """Run dependency health check example."""
     # Initialize the checker
     print("Initializing Dependency Health Checker...")

@@ -227,7 +227,7 @@ class MockPatternMatcher(IPatternMatcher):
         if limit is not None:
             num_matches = min(num_matches, limit)
 
-        matches = []
+        matches: list[Any] = []
         w, h = needle.size
         for i in range(num_matches):
             x = self.default_location[0] + i * 50
@@ -260,7 +260,7 @@ class MockPatternMatcher(IPatternMatcher):
 
         # Return mock features
         num_features = random.randint(10, 50)
-        features = []
+        features: list[Any] = []
         width, height = image.size
 
         for _i in range(num_features):
@@ -301,7 +301,7 @@ class MockPatternMatcher(IPatternMatcher):
 
         # Return random matches
         num_matches = min(len(features1), len(features2)) // 2
-        matches = []
+        matches: list[Any] = []
 
         indices1 = random.sample(range(len(features1)), min(num_matches, len(features1)))
         indices2 = random.sample(range(len(features2)), min(num_matches, len(features2)))

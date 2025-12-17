@@ -1,5 +1,7 @@
 """AST utilities for extracting import statements from Python source files.
 
+from typing import Any
+
 This module provides tools for parsing Python files using the AST module
 and extracting import information without executing the code.
 """

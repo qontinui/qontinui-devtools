@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+from typing import Any
+
 Example script demonstrating how to use the ImportTracer to detect
 circular dependencies in real-time.
 
@@ -24,7 +26,7 @@ from qontinui_devtools.import_analysis import (
 )
 
 
-def example_trace_imports():
+def example_trace_imports() -> Any:
     """Example 1: Trace imports and detect circular dependencies."""
     print("=" * 80)
     print("Example 1: Trace imports from test module")
@@ -67,7 +69,7 @@ def example_trace_imports():
     return tracer
 
 
-def example_visualize_graph(tracer):
+def example_visualize_graph(tracer) -> None:
     """Example 2: Generate visualization of import graph."""
     print("=" * 80)
     print("Example 2: Generate import graph visualization")
@@ -128,7 +130,7 @@ def example_visualize_graph(tracer):
     print()
 
 
-def example_export_data(tracer):
+def example_export_data(tracer) -> None:
     """Example 3: Export import data to JSON."""
     print("=" * 80)
     print("Example 3: Export import data")
@@ -152,7 +154,7 @@ def example_export_data(tracer):
     print()
 
 
-def example_simulated_qontinui_issue():
+def example_simulated_qontinui_issue() -> None:
     """Example 4: Simulate the pynput_controller circular dependency issue."""
     print("=" * 80)
     print("Example 4: How ImportTracer would catch the pynput_controller issue")
@@ -199,7 +201,7 @@ def example_simulated_qontinui_issue():
     print()
 
 
-def example_practical_usage():
+def example_practical_usage() -> None:
     """Example 5: Practical usage - checking if a module is safe to import."""
     print("=" * 80)
     print("Example 5: Check if a module is safe to import")
@@ -229,7 +231,7 @@ def example_practical_usage():
     print()
 
 
-def main():
+def main() -> None:
     """Run all examples."""
     print("\n")
     print("╔" + "═" * 78 + "╗")

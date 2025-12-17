@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Example script demonstrating SRP Analyzer usage.
 
+from typing import Any
+
 This script shows how to use the SRP Analyzer programmatically
 to detect Single Responsibility Principle violations in Python code.
 """
@@ -14,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 from qontinui_devtools.architecture import SRPAnalyzer
 
 
-def main():
+def main() -> Any:
     """Run SRP analysis on example code."""
 
     # Path to analyze (can be a file or directory)
@@ -100,7 +102,7 @@ def main():
     return 0
 
 
-def analyze_custom_path(path: str):
+def analyze_custom_path(path: str) -> None:
     """Analyze a custom path.
 
     Args:
@@ -121,7 +123,7 @@ def analyze_custom_path(path: str):
         print(f"\n✅ No violations found in {path}")
 
 
-def demonstrate_clustering():
+def demonstrate_clustering() -> None:
     """Demonstrate the clustering algorithm."""
     from qontinui_devtools.architecture.clustering import cluster_methods_by_keywords
 

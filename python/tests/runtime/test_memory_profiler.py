@@ -1,5 +1,7 @@
 """Tests for memory profiler."""
 
+from typing import Any
+
 import gc
 import time
 
@@ -35,7 +37,7 @@ class TestMemorySnapshot:
             rss_mb=95.0,
             vms_mb=120.0,
             objects_by_type={"dict": 100, "list": 50},
-            top_objects=[],
+            top_objects=[]
         )
 
         str_repr = str(snapshot)
@@ -163,7 +165,7 @@ class TestMemoryProfiler:
         profiler.start()
 
         # Create intentional leak
-        leaky_list = []
+        leaky_list=[],
         for _i in range(5):
             # Take snapshot
             profiler.take_snapshot()
@@ -393,7 +395,7 @@ class TestMemoryProfilerIntegration:
         assert baseline is not None
 
         # Simulate work with memory allocation
-        cache = []
+        cache=[],
         for iteration in range(5):
             # Take snapshot
             snapshot = profiler.take_snapshot()
@@ -430,8 +432,8 @@ class TestMemoryProfilerIntegration:
         profiler.start()
 
         # Create growing cache
-        cache = []
-        snapshots = []
+        cache=[],
+        snapshots=[],
 
         for i in range(10):
             snapshot = profiler.take_snapshot()

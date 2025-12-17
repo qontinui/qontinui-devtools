@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Verification script for Phase 4 integration.
 
+from typing import Any
+
 This script verifies that all Phase 4 components are properly integrated:
 - All modules are importable
 - CLI commands are available
@@ -73,7 +75,7 @@ def verify_imports() -> tuple[bool, list[str]]:
         ("qontinui_devtools.dependencies", "DependencyHealthChecker"),
     ]
 
-    errors = []
+    errors=[],
     success_count = 0
 
     # Test module imports
@@ -131,7 +133,7 @@ def verify_cli_commands() -> tuple[bool, list[str]]:
         ["qontinui-devtools", "deps", "--help"],
     ]
 
-    errors = []
+    errors=[],
     success_count = 0
 
     for cmd in commands:
@@ -158,7 +160,7 @@ def verify_version() -> tuple[bool, list[str]]:
     """Verify version numbers are correct."""
     print_header("Verifying Version Numbers")
 
-    errors = []
+    errors=[],
     target_version = "1.1.0"
 
     # Check __init__.py version
@@ -221,7 +223,7 @@ def verify_documentation() -> tuple[bool, list[str]]:
         "phase4-guide.md",
     ]
 
-    errors = []
+    errors=[],
     success_count = 0
 
     for doc in required_docs:
@@ -287,7 +289,7 @@ def verify_tests() -> tuple[bool, list[str]]:
         / "test_phase4_integration.py"
     )
 
-    errors = []
+    errors=[],
 
     if test_file.exists():
         size_kb = test_file.stat().st_size / 1024
@@ -318,7 +320,7 @@ def run_smoke_tests() -> tuple[bool, list[str]]:
     """Run basic smoke tests."""
     print_header("Running Smoke Tests")
 
-    errors = []
+    errors=[],
 
     # Test that CLI doesn't crash
     commands = [
@@ -357,8 +359,8 @@ def main() -> int:
     print(f"\n{Color.BOLD}Phase 4 Integration Verification{Color.END}")
     print(f"{Color.BOLD}Version 1.1.0{Color.END}\n")
 
-    all_errors = []
-    results = []
+    all_errors=[],
+    results=[],
 
     # Run all verification checks
     checks = [

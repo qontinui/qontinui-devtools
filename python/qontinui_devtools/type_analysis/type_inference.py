@@ -168,7 +168,7 @@ class TypeInferenceEngine:
         """
         return_types = set()
         has_none_return = False
-        return_nodes = []
+        return_nodes: list[Any] = []
 
         # Collect all return statements
         for node in ast.walk(function_node):
@@ -374,7 +374,7 @@ class TypeInferenceEngine:
         Returns:
             Inferred type or None
         """
-        usages = []
+        usages: list[Any] = []
 
         for node in ast.walk(function_node):
             # Check method calls on the parameter
@@ -459,7 +459,7 @@ class TypeInferenceEngine:
         Returns:
             List of suggestions
         """
-        suggestions = []
+        suggestions: list[Any] = []
 
         # Detect bare Any usage
         if current_type == "Any":

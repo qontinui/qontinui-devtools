@@ -29,7 +29,7 @@ Examples:
 """
 )
 @click.version_option(package_name="qontinui")
-def main():
+def main() -> None:
     """Qontinui CLI - Visual automation for CI/CD pipelines."""
     pass
 

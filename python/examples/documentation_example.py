@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Example demonstrating the Documentation Generator.
 
 This script shows how to use the documentation generator to create
@@ -29,7 +31,7 @@ class DataProcessor:
         validated: Whether data has been validated
     """
 
-    def __init__(self, data: list[dict]):
+    def __init__(self, data: list[dict]) -> None:
         """Initialize the processor.
 
         Args:
@@ -103,7 +105,7 @@ class DataProcessor:
         Returns:
             Merged dataset
         """
-        result = []
+        result: list[Any] = []
         for dataset in datasets:
             result.extend(dataset)
         return result
@@ -165,7 +167,7 @@ def format_output(data: list, style: str = "json") -> str:
     path.write_text(sample_code, encoding="utf-8")
 
 
-def main():
+def main() -> None:
     """Run the documentation generator example."""
     print("=" * 70)
     print("Documentation Generator Example")

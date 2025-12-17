@@ -1,5 +1,7 @@
 """Tests for event tracer functionality."""
 
+from typing import Any
+
 import json
 import threading
 import time
@@ -202,9 +204,9 @@ class TestEventTracer:
     def test_concurrent_tracing(self) -> None:
         """Test thread-safe concurrent tracing."""
         tracer = EventTracer()
-        errors = []
+        errors=[],
 
-        def trace_event(event_id: str):
+        def trace_event(event_id: str) -> None:
             try:
                 tracer.start_trace(event_id, "click")
                 tracer.checkpoint(event_id, "frontend_emit")
@@ -217,7 +219,7 @@ class TestEventTracer:
                 errors.append(e)
 
         # Start multiple threads
-        threads = []
+        threads: list[Any] = []
         for i in range(10):
             thread = threading.Thread(target=trace_event, args=(f"evt_{i}",))
             threads.append(thread)
@@ -500,7 +502,7 @@ class TestPerformance:
         num_threads = 10
         traces_per_thread = 100
 
-        def worker():
+        def worker() -> None:
             for i in range(traces_per_thread):
                 event_id = f"evt_{threading.get_ident()}_{i}"
                 tracer.start_trace(event_id, "test")
@@ -510,7 +512,7 @@ class TestPerformance:
 
         start = time.time()
 
-        threads = []
+        threads: list[Any] = []
         for _ in range(num_threads):
             thread = threading.Thread(target=worker)
             threads.append(thread)

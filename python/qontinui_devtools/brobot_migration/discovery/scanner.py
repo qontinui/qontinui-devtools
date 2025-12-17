@@ -4,7 +4,7 @@ Java test file scanner for discovering Brobot test files.
 
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..core.interfaces import TestScanner
@@ -52,7 +52,7 @@ class BrobotTestScanner(TestScanner):
         if not path.exists() or not path.is_dir():
             return []
 
-        test_files = []
+        test_files: list[Any] = []
 
         # Find all Java files matching test patterns
         for pattern in self.java_test_patterns:
@@ -131,7 +131,7 @@ class BrobotTestScanner(TestScanner):
         if not test_file.path.exists():
             return []
 
-        dependencies = []
+        dependencies=[],
 
         try:
             content = test_file.path.read_text(encoding="utf-8")

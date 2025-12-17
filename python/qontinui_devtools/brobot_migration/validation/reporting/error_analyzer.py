@@ -5,7 +5,7 @@ Error analysis and assertion comparison for diagnostic reporting.
 import difflib
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ...core.models import TestFile
@@ -46,7 +46,7 @@ class ErrorAnalyzer:
         Returns:
             List of assertion differences
         """
-        differences = []
+        differences: list[Any] = []
 
         # Read Python test content
         python_content = python_test_path.read_text(encoding="utf-8")
@@ -158,7 +158,7 @@ class ErrorAnalyzer:
 
     def _extract_python_assertions(self, python_content: str) -> list[str]:
         """Extract assertion statements from Python test content."""
-        assertions = []
+        assertions: list[Any] = []
 
         # Extract assert statements and pytest.raises
         assert_pattern = r"(assert\s+.*?)(?:\n|$)"

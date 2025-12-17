@@ -32,12 +32,12 @@ class SampleAction:
 
     def __init__(self) -> None:
         self.hal = None
-        self.state = {}
+        self.state: dict[Any, Any] = {}
         self.counter = 0
 
     def execute(self, iterations: int = 10) -> Dict[str, Any]:
         '''Execute the action.'''
-        results = []
+        results: list[Any] = []
 
         for i in range(iterations):
             # Simulate HAL operations
@@ -85,7 +85,7 @@ class SampleAction:
 
     async def execute_async(self, iterations: int = 5) -> Dict[str, Any]:
         '''Execute action asynchronously.'''
-        results = []
+        results: list[Any] = []
 
         for i in range(iterations):
             result = await self._process_iteration_async(i)
@@ -107,7 +107,7 @@ class MemoryIntensiveAction:
     '''Action that allocates memory for testing memory profiler.'''
 
     def __init__(self) -> None:
-        self.data = []
+        self.data: list[Any] = []
 
     def execute(self, size_mb: int = 10) -> int:
         '''Allocate memory.'''
@@ -127,11 +127,11 @@ class ConcurrentAction:
     def __init__(self) -> None:
         self.lock = threading.Lock()
         self.shared_counter = 0
-        self.thread_results = []
+        self.thread_results: list[Any] = []
 
     def execute_threaded(self, thread_id: int, iterations: int = 10) -> Dict[str, Any]:
         '''Execute action in a thread.'''
-        results = []
+        results: list[Any] = []
 
         for i in range(iterations):
             with self.lock:
@@ -277,7 +277,7 @@ def dashboard_config() -> dict[str, Any]:
 
 
 @pytest.fixture
-def sample_action_instance(sample_qontinui_action: Path):
+def sample_action_instance(sample_qontinui_action: Path) -> Any:
     """Create an instance of the sample action."""
     # Import the action dynamically
     import importlib.util
@@ -292,7 +292,7 @@ def sample_action_instance(sample_qontinui_action: Path):
 
 
 @pytest.fixture
-def memory_intensive_action(sample_qontinui_action: Path):
+def memory_intensive_action(sample_qontinui_action: Path) -> Any:
     """Create an instance of the memory intensive action."""
     import importlib.util
     import sys
@@ -306,7 +306,7 @@ def memory_intensive_action(sample_qontinui_action: Path):
 
 
 @pytest.fixture
-def concurrent_action(sample_qontinui_action: Path):
+def concurrent_action(sample_qontinui_action: Path) -> Any:
     """Create an instance of the concurrent action."""
     import importlib.util
     import sys
@@ -348,7 +348,7 @@ def measure_overhead(func: Callable, *args, **kwargs) -> dict[str, float]:
         Dictionary with timing information including overhead percentage.
     """
     # Measure baseline without instrumentation
-    baseline_times = []
+    baseline_times: list[Any] = []
     for _ in range(5):
         start = time.perf_counter()
         func(*args, **kwargs)

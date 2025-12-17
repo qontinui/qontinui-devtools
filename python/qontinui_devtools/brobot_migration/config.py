@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Configuration management for the test migration system.
 """
 
@@ -61,7 +63,7 @@ class TestMigrationConfig:
     @classmethod
     def from_environment(cls) -> MigrationConfig:
         """Create configuration from environment variables."""
-        source_dirs = []
+        source_dirs: list[Any] = []
         if source_env := os.getenv("BROBOT_SOURCE_DIRS"):
             source_dirs = [Path(p.strip()) for p in source_env.split(",")]
 

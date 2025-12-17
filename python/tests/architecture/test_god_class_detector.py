@@ -1,5 +1,17 @@
 """Tests for God Class Detector."""
 
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 import ast
 from pathlib import Path
 
@@ -125,13 +137,13 @@ class TestClass:
         self.x = 0
         self.y = 0
 
-    def method1(self) -> None:
+    def method1(self) -> Any:
         return self.x + self.y
 
-    def method2(self) -> None:
+    def method2(self) -> Any:
         return self.x * 2
 
-    def method3(self) -> None:
+    def method3(self) -> Any:
         return 42
 """
         tree = ast.parse(source)
@@ -348,7 +360,7 @@ class TestGodClassDetector:
         # Class with only one method
         source_one_method = """
 class OneMethod:
-    def method1(self) -> None:
+    def method1(self) -> Any:
         return 42
 """
         tree = ast.parse(source_one_method)
@@ -362,10 +374,10 @@ class Cohesive:
     def __init__(self) -> None:
         self.x = 0
 
-    def method1(self) -> None:
+    def method1(self) -> Any:
         return self.x + 1
 
-    def method2(self) -> None:
+    def method2(self) -> Any:
         return self.x * 2
 
     def method3(self) -> None:
@@ -384,11 +396,11 @@ class MixedMethods:
         pass
 
     @classmethod
-    def class_method(cls):
+    def class_method(cls) -> None:
         pass
 
     @staticmethod
-    def static_method():
+    def static_method() -> None:
         pass
 
     def _private_method(self) -> None:

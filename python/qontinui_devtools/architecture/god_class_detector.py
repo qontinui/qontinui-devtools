@@ -1,5 +1,7 @@
 """God Class Detector for identifying classes that violate Single Responsibility Principle."""
 
+from typing import Any
+
 import ast
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -88,7 +90,7 @@ class GodClassDetector:
         Returns:
             List of god class metrics
         """
-        god_classes = []
+        god_classes: list[Any] = []
         path_obj = Path(path)
 
         # Find all Python files
@@ -117,7 +119,7 @@ class GodClassDetector:
         Returns:
             List of god class metrics found in file
         """
-        god_classes = []
+        god_classes: list[Any] = []
 
         try:
             with open(file_path, encoding="utf-8") as f:
@@ -354,7 +356,7 @@ class GodClassDetector:
             }
 
             for class_name, prefixes in patterns.items():
-                matching_methods = []
+                matching_methods: list[Any] = []
                 for method_name in method_names:
                     for prefix in prefixes:
                         if method_name.lower().startswith(prefix):

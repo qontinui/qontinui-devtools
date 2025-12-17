@@ -1,5 +1,7 @@
 """Test command - Run workflows in test mode with result reporting."""
 
+from typing import Any
+
 import sys
 import time
 from pathlib import Path
@@ -188,7 +190,7 @@ def test(
 
         # Run tests
         click.echo(f"\nRunning {len(workflows_to_test)} workflow(s) in test mode...")
-        test_results = []
+        test_results: list[Any] = []
 
         for idx, wf_id in enumerate(workflows_to_test, 1):
             wf_name = next(
@@ -383,7 +385,7 @@ def _run_with_timeout(
 
     result = {"success": False, "error": None}
 
-    def run_workflow():
+    def run_workflow() -> None:
         try:
             result["success"] = runner.run(process_id=workflow_id, monitor_index=monitor)
         except Exception as e:
@@ -408,7 +410,7 @@ def _run_with_timeout(
     return bool(result["success"])
 
 
-def _save_results(content: str, output_path: Path, format_type: str):
+def _save_results(content: str, output_path: Path, format_type: str) -> None:
     """Save test results to file.
 
     Args:

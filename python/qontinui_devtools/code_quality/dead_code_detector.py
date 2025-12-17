@@ -1,5 +1,7 @@
 """Dead code detection for Python codebases.
 
+from typing import Any
+
 This module provides functionality to detect unused code including:
 - Unused functions
 - Unused classes
@@ -181,7 +183,7 @@ class DeadCodeDetector:
 
     def _find_python_files(self) -> list[Path]:
         """Find all Python files in the project."""
-        python_files = []
+        python_files: list[Any] = []
         for path in self.root_path.rglob("*.py"):
             # Skip common directories
             parts = path.parts

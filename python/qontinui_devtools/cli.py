@@ -1383,7 +1383,7 @@ def detect_dead_code(
         return
 
     # Group by type
-    by_type = {}
+    by_type: dict[Any, Any] = {}
     for dc in dead_code:
         by_type.setdefault(dc.type, []).append(dc)
 

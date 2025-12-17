@@ -13,7 +13,7 @@ class ResultStreamer:
     as tests complete, allowing for real-time monitoring of CI/CD test runs.
     """
 
-    def __init__(self, url: str, api_token: str | None = None):
+    def __init__(self, url: str, api_token: str | None = None) -> None:
         """Initialize result streamer.
 
         Args:
@@ -24,7 +24,7 @@ class ResultStreamer:
         self.api_token = api_token
         self._validate_url()
 
-    def _validate_url(self):
+    def _validate_url(self) -> None:
         """Validate the streaming URL.
 
         Raises:

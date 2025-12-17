@@ -7,6 +7,7 @@ This module tests:
 - Data consistency during concurrent operations
 """
 
+from typing import Any
 import asyncio
 import threading
 import time
@@ -26,7 +27,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.profiles = []
+            self.profiles: list[Any] = []
             self._lock = threading.Lock()
 
         def start(self) -> None:
@@ -52,7 +53,7 @@ except ImportError:
 
             return wrapper
 
-        def get_profile_data(self) -> None:
+        def get_profile_data(self) -> Any:
             with self._lock:
                 return {
                     "profiles": self.profiles.copy(),
@@ -64,7 +65,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.events = []
+            self.events: list[Any] = []
             self._lock = threading.Lock()
 
         def start(self) -> None:
@@ -85,7 +86,7 @@ except ImportError:
                         }
                     )
 
-        def get_events(self, event_type=None):
+        def get_events(self, event_type=None) -> Any:
             with self._lock:
                 events = self.events.copy()
 
@@ -97,7 +98,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.snapshots = []
+            self.snapshots: list[Any] = []
             self._lock = threading.Lock()
 
         def start(self) -> None:
@@ -120,7 +121,7 @@ except ImportError:
                     }
                 )
 
-        def get_memory_usage(self) -> None:
+        def get_memory_usage(self) -> Any:
             with self._lock:
                 if not self.snapshots:
                     return {"current_mb": 0, "peak_mb": 0}
@@ -132,7 +133,7 @@ except ImportError:
         def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
-            self.metrics = {}
+            self.metrics: dict[Any, Any] = {}
             self._lock = threading.Lock()
 
         def start(self) -> None:
@@ -141,11 +142,11 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def update_metrics(self, metrics):
+        def update_metrics(self, metrics) -> None:
             with self._lock:
                 self.metrics.update(metrics)
 
-        def get_metrics(self) -> None:
+        def get_metrics(self) -> Any:
             with self._lock:
                 return self.metrics.copy()
 
@@ -155,21 +156,21 @@ except ImportError:
 class TestConcurrentToolAccess:
     """Test concurrent access to monitoring tools."""
 
-    def test_profiler_thread_safety(self, sample_action_instance, profiler_config):
+    def test_profiler_thread_safety(self, sample_action_instance, profiler_config) -> Any:
         """Test that profiler is thread-safe."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
 
         @profiler.profile
-        def execute_in_thread(thread_id: int, iterations: int):
-            results = []
+        def execute_in_thread(thread_id: int, iterations: int) -> Any:
+            results: list[Any] = []
             for i in range(iterations):
                 result = sample_action_instance._process_iteration(i)
                 results.append(result)
             return results
 
         # Run multiple threads
-        threads = []
+        threads: list[Any] = []
         num_threads = 10
         iterations_per_thread = 20
 
@@ -196,13 +197,13 @@ class TestConcurrentToolAccess:
         tracer = EventTracer(event_tracer_config)
         tracer.start()
 
-        def trace_events(thread_id: int, count: int):
+        def trace_events(thread_id: int, count: int) -> None:
             for i in range(count):
                 tracer.trace_event("thread_event", {"thread_id": thread_id, "index": i})
                 time.sleep(0.001)
 
         # Run multiple threads
-        threads = []
+        threads: list[Any] = []
         num_threads = 10
         events_per_thread = 50
 
@@ -234,13 +235,13 @@ class TestConcurrentToolAccess:
         mem_profiler = MemoryProfiler(memory_profiler_config)
         mem_profiler.start()
 
-        def take_snapshots(count: int):
+        def take_snapshots(count: int) -> None:
             for _ in range(count):
                 mem_profiler._take_snapshot()
                 time.sleep(0.001)
 
         # Run multiple threads taking snapshots
-        threads = []
+        threads: list[Any] = []
         num_threads = 5
         snapshots_per_thread = 10
 
@@ -265,7 +266,7 @@ class TestConcurrentToolAccess:
         dashboard = PerformanceDashboard(dashboard_config)
         dashboard.start()
 
-        def update_metrics(thread_id: int, count: int):
+        def update_metrics(thread_id: int, count: int) -> None:
             for i in range(count):
                 dashboard.update_metrics(
                     {f"thread_{thread_id}_metric_{i}": {"value": i, "timestamp": time.time()}}
@@ -273,7 +274,7 @@ class TestConcurrentToolAccess:
                 time.sleep(0.001)
 
         # Run multiple threads updating metrics
-        threads = []
+        threads: list[Any] = []
         num_threads = 5
         updates_per_thread = 20
 
@@ -302,31 +303,31 @@ class TestConcurrentToolLifecycle:
         self, profiler_config, event_tracer_config, memory_profiler_config, dashboard_config
     ):
         """Test initializing all tools concurrently."""
-        tools = {}
-        errors = []
+        tools: dict[Any, Any] = {}
+        errors=[],
 
-        def init_profiler():
+        def init_profiler() -> None:
             try:
                 tools["profiler"] = ActionProfiler(profiler_config)
                 tools["profiler"].start()
             except Exception as e:
                 errors.append(("profiler", e))
 
-        def init_tracer():
+        def init_tracer() -> None:
             try:
                 tools["tracer"] = EventTracer(event_tracer_config)
                 tools["tracer"].start()
             except Exception as e:
                 errors.append(("tracer", e))
 
-        def init_memory():
+        def init_memory() -> None:
             try:
                 tools["memory"] = MemoryProfiler(memory_profiler_config)
                 tools["memory"].start()
             except Exception as e:
                 errors.append(("memory", e))
 
-        def init_dashboard():
+        def init_dashboard() -> None:
             try:
                 tools["dashboard"] = PerformanceDashboard(dashboard_config)
                 tools["dashboard"].start()
@@ -374,21 +375,21 @@ class TestConcurrentToolLifecycle:
         # Use tools briefly
         time.sleep(0.1)
 
-        errors = []
+        errors=[],
 
-        def stop_profiler():
+        def stop_profiler() -> None:
             try:
                 profiler.stop()
             except Exception as e:
                 errors.append(("profiler", e))
 
-        def stop_tracer():
+        def stop_tracer() -> None:
             try:
                 tracer.stop()
             except Exception as e:
                 errors.append(("tracer", e))
 
-        def stop_memory():
+        def stop_memory() -> None:
             try:
                 mem_profiler.stop()
             except Exception as e:
@@ -417,9 +418,9 @@ class TestConcurrentToolLifecycle:
 
     def test_rapid_start_stop_cycles(self, profiler_config) -> None:
         """Test rapid start/stop cycles don't cause issues."""
-        errors = []
+        errors=[],
 
-        def cycle_tool(cycle_id: int):
+        def cycle_tool(cycle_id: int) -> None:
             try:
                 for _i in range(10):
                     profiler = ActionProfiler(profiler_config)
@@ -430,7 +431,7 @@ class TestConcurrentToolLifecycle:
                 errors.append((cycle_id, e))
 
         # Run multiple threads doing rapid cycles
-        threads = []
+        threads: list[Any] = []
         for i in range(5):
             t = threading.Thread(target=cycle_tool, args=(i,))
             threads.append(t)
@@ -459,7 +460,7 @@ class TestConcurrentDataCollection:
         tracer.start()
 
         @profiler.profile
-        def worker(thread_id: int, iterations: int):
+        def worker(thread_id: int, iterations: int) -> None:
             tracer.trace_event("worker_start", {"thread_id": thread_id})
 
             for i in range(iterations):
@@ -469,7 +470,7 @@ class TestConcurrentDataCollection:
             tracer.trace_event("worker_end", {"thread_id": thread_id})
 
         # Run workers concurrently
-        threads = []
+        threads: list[Any] = []
         num_threads = 8
         iterations = 10
 
@@ -519,9 +520,9 @@ class TestConcurrentDataCollection:
         mem_profiler.start()
         dashboard.start()
 
-        def data_collector(collector_id: int):
+        def data_collector(collector_id: int) -> None:
             @profiler.profile
-            def collect():
+            def collect() -> None:
                 for i in range(20):
                     tracer.trace_event("collection", {"collector_id": collector_id, "index": i})
 
@@ -543,7 +544,7 @@ class TestConcurrentDataCollection:
             collect()
 
         # Run multiple data collectors
-        threads = []
+        threads: list[Any] = []
         num_collectors = 4
 
         for i in range(num_collectors):
@@ -575,14 +576,14 @@ class TestRaceConditions:
         tracer = EventTracer(event_tracer_config)
         tracer.start()
 
-        def trace_sequence(thread_id: int, count: int):
+        def trace_sequence(thread_id: int, count: int) -> None:
             for i in range(count):
                 tracer.trace_event(
                     "sequence", {"thread_id": thread_id, "sequence": i, "timestamp": time.time()}
                 )
 
         # Trace events from multiple threads
-        threads = []
+        threads: list[Any] = []
         num_threads = 5
         events_per_thread = 20
 
@@ -611,22 +612,22 @@ class TestRaceConditions:
                 range(events_per_thread)
             ), f"Thread {thread_id} events out of order: {sequences}"
 
-    def test_no_race_in_profile_data(self, sample_action_instance, profiler_config):
+    def test_no_race_in_profile_data(self, sample_action_instance, profiler_config) -> Any:
         """Test that profile data remains consistent under concurrent access."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
 
         @profiler.profile
-        def profiled_function(value: int):
+        def profiled_function(value: int) -> Any:
             time.sleep(0.001)
             return value * 2
 
-        results = []
-        errors = []
+        results: list[Any] = []
+        errors=[],
 
-        def worker(thread_id: int):
+        def worker(thread_id: int) -> None:
             try:
-                local_results = []
+                local_results: list[Any] = []
                 for i in range(50):
                     result = profiled_function(i)
                     local_results.append(result)
@@ -641,7 +642,7 @@ class TestRaceConditions:
                 errors.append((thread_id, e))
 
         # Run workers
-        threads = []
+        threads: list[Any] = []
         num_threads = 5
 
         for i in range(num_threads):
@@ -682,9 +683,9 @@ class TestRaceConditions:
 
         completed = threading.Event()
 
-        def intensive_worker(thread_id: int):
+        def intensive_worker(thread_id: int) -> None:
             @profiler.profile
-            def work():
+            def work() -> None:
                 for i in range(50):
                     tracer.trace_event("work", {"thread_id": thread_id, "i": i})
 
@@ -705,14 +706,14 @@ class TestRaceConditions:
             work()
 
         # Run multiple intensive workers
-        threads = []
+        threads: list[Any] = []
         for i in range(6):
             t = threading.Thread(target=intensive_worker, args=(i,))
             threads.append(t)
             t.start()
 
         # Set timeout to detect deadlocks
-        def set_completed():
+        def set_completed() -> None:
             for t in threads:
                 t.join()
             completed.set()
@@ -736,17 +737,17 @@ class TestRaceConditions:
 class TestAsyncConcurrency:
     """Test tools with async/await patterns."""
 
-    def test_profiler_with_async_await(self, sample_action_instance, profiler_config):
+    def test_profiler_with_async_await(self, sample_action_instance, profiler_config) -> Any:
         """Test profiler with async functions."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
 
         async def async_worker(worker_id: int):
             @profiler.profile
-            def sync_work():
+            def sync_work() -> Any:
                 return sample_action_instance._process_iteration(worker_id)
 
-            results = []
+            results: list[Any] = []
             for _i in range(10):
                 result = sync_work()
                 results.append(result)

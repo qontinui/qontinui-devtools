@@ -4,7 +4,7 @@ Comprehensive analysis for detecting differences and calculating metrics.
 
 from datetime import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ...core.models import FailureAnalysis, TestFile
@@ -54,7 +54,7 @@ class ComprehensiveAnalyzer:
         Returns:
             List of dependency differences
         """
-        differences = []
+        differences: list[Any] = []
 
         # Read Python test file to extract imports
         python_imports = self._data_collector.extract_python_imports(python_test_path)
@@ -103,7 +103,7 @@ class ComprehensiveAnalyzer:
         Returns:
             List of setup differences
         """
-        differences = []
+        differences: list[Any] = []
 
         # Read Python test content
         python_content = python_test_path.read_text(encoding="utf-8")
@@ -249,7 +249,7 @@ class ComprehensiveAnalyzer:
         failure_analysis: FailureAnalysis | None,
     ) -> float:
         """Calculate overall confidence in migration quality."""
-        confidence_scores = []
+        confidence_scores: list[Any] = []
 
         # Dependency confidence
         if dependency_diffs:
@@ -284,7 +284,7 @@ class ComprehensiveAnalyzer:
         failure_analysis: FailureAnalysis | None,
     ) -> list[str]:
         """Generate actionable recommendations for improving migration."""
-        recommendations = []
+        recommendations: list[Any] = []
 
         # Dependency recommendations
         missing_deps = [d for d in dependency_diffs if d.missing_in_python]

@@ -5,7 +5,7 @@ This module implements validation logic for comparing test outputs,
 calculating similarity scores, and finding specific differences.
 """
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ...core.models import TestResult
@@ -89,7 +89,7 @@ class OutputValidator:
         Returns:
             List of difference descriptions (limited to first 10)
         """
-        differences = []
+        differences: list[Any] = []
 
         lines1 = output1.split("\n")
         lines2 = output2.split("\n")

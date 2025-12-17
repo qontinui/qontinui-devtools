@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Comprehensive tests for the ImportTracer module.
 
 This test suite verifies:
@@ -69,7 +71,7 @@ class TestImportEvent(unittest.TestCase):
 class TestImportGraph(unittest.TestCase):
     """Test the ImportGraph class."""
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Set up test fixtures."""
         self.graph = ImportGraph()
 
@@ -168,11 +170,11 @@ class TestImportGraph(unittest.TestCase):
     def test_thread_safety(self) -> None:
         """Test that graph is thread-safe."""
 
-        def add_imports(start_idx):
+        def add_imports(start_idx) -> None:
             for i in range(start_idx, start_idx + 100):
                 self.graph.add_import(f"module_{i}", f"module_{i+1}")
 
-        threads = []
+        threads: list[Any] = []
         for i in range(5):
             thread = threading.Thread(target=add_imports, args=(i * 100,))
             threads.append(thread)
@@ -316,15 +318,15 @@ class TestImportTracer(unittest.TestCase):
         if "fixtures.simple_module" in sys.modules:
             del sys.modules["fixtures.simple_module"]
 
-        events_collected = []
+        events_collected: list[Any] = []
 
-        def import_in_thread(tracer):
+        def import_in_thread(tracer) -> None:
             import fixtures.simple_module  # noqa: F401
 
             events_collected.extend(tracer.get_events())
 
         with ImportTracer() as tracer:
-            threads = []
+            threads: list[Any] = []
             for _ in range(3):
                 thread = threading.Thread(target=import_in_thread, args=(tracer,))
                 threads.append(thread)
@@ -416,7 +418,7 @@ class TestIntegration(unittest.TestCase):
             self.assertIn("CIRCULAR", report.upper())
 
 
-def run_tests():
+def run_tests() -> Any:
     """Run all tests and return results."""
     loader = unittest.TestLoader()
     suite = loader.loadTestsFromModule(sys.modules[__name__])

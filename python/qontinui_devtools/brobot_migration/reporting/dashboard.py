@@ -107,7 +107,7 @@ class MigrationReportingDashboard:
         else:
             raise ValueError(f"Unsupported format type: {format_type}")
 
-    def save_migration_report(self, report_data: dict[str, Any], output_file: Path):
+    def save_migration_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save a migration-specific report."""
         with open(output_file, "w") as f:
             json.dump(report_data, f, indent=2, default=str)
@@ -214,7 +214,7 @@ class MigrationReportingDashboard:
             "smallest_file": None,
         }
 
-        file_sizes = []
+        file_sizes: list[Any] = []
 
         for test_file in test_files:
             try:
@@ -266,12 +266,12 @@ class MigrationReportingDashboard:
 
         output_file.write_text(html_content)
 
-    def _save_json_report(self, report_data: dict[str, Any], output_file: Path):
+    def _save_json_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save JSON report."""
         with open(output_file, "w") as f:
             json.dump(report_data, f, indent=2, default=str)
 
-    def _save_yaml_report(self, report_data: dict[str, Any], output_file: Path):
+    def _save_yaml_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save YAML report."""
         try:
             import yaml
@@ -281,12 +281,12 @@ class MigrationReportingDashboard:
         except ImportError as e:
             raise ImportError("PyYAML is required for YAML output") from e
 
-    def _save_text_report(self, report_data: dict[str, Any], output_file: Path):
+    def _save_text_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save text report."""
         content = self._format_text_report(report_data)
         output_file.write_text(content)
 
-    def _save_pdf_report(self, report_data: dict[str, Any], output_file: Path):
+    def _save_pdf_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save PDF report."""
         try:
             from reportlab.lib.pagesizes import letter
@@ -314,7 +314,7 @@ class MigrationReportingDashboard:
 
     def _format_text_report(self, report_data: dict[str, Any]) -> str:
         """Format report data as text."""
-        lines = []
+        lines: list[Any] = []
         lines.append("Test Migration Report")
         lines.append("=" * 50)
         lines.append(f"Generated: {report_data['metadata']['generated_at']}")

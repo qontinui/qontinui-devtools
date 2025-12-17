@@ -111,7 +111,7 @@ class UntypedItem:
 
     def get_full_name(self) -> str:
         """Get fully qualified name of the item."""
-        parts = []
+        parts: list[Any] = []
         if self.class_name:
             parts.append(self.class_name)
         if self.function_name:

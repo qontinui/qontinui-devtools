@@ -15,7 +15,7 @@ from qontinui.test_migration.execution.hybrid_test_translator import (
 class TestTranslationResult:
     """Test cases for TranslationResult."""
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test TranslationResult initialization."""
         result = TranslationResult(
             content="test content",
@@ -32,7 +32,7 @@ class TestTranslationResult:
         assert result.execution_time == 1.5
         assert not result.success  # Has errors
 
-    def test_success_property(self):
+    def test_success_property(self) -> None:
         """Test success property calculation."""
         # Success case
         result = TranslationResult("content", "utility", 0.9)
@@ -46,7 +46,7 @@ class TestTranslationResult:
 class TestHybridTestTranslator:
     """Test cases for HybridTestTranslator."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.mock_llm_client = Mock()
         self.translator = HybridTestTranslator(
@@ -55,7 +55,7 @@ class TestHybridTestTranslator:
             llm_confidence_threshold=0.7,
         )
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test that translator initializes correctly."""
         assert self.translator is not None
         assert self.translator.utility_confidence_threshold == 0.8
@@ -64,14 +64,14 @@ class TestHybridTestTranslator:
         assert self.translator.utility_translator is not None
         assert self.translator.llm_translator is not None
 
-    def test_initialization_without_llm(self):
+    def test_initialization_without_llm(self) -> None:
         """Test initialization without LLM client."""
         translator = HybridTestTranslator()
         assert translator.llm_translator.llm_client is None
         assert not translator.enable_llm_validation
 
     @patch("time.time")
-    def test_try_utility_translation_success(self, mock_time):
+    def test_try_utility_translation_success(self, mock_time) -> None:
         """Test successful utility translation."""
         mock_time.side_effect = [0.0, 0.1]  # Start and end times
 
@@ -91,7 +91,7 @@ class TestHybridTestTranslator:
         assert "import pytest" in result.content
 
     @patch("time.time")
-    def test_try_utility_translation_failure(self, mock_time):
+    def test_try_utility_translation_failure(self, mock_time) -> None:
         """Test utility translation failure handling."""
         mock_time.side_effect = [0.0, 0.1]
 
@@ -111,7 +111,7 @@ class TestHybridTestTranslator:
             assert len(result.errors) > 0
 
     @patch("time.time")
-    def test_try_llm_translation_success(self, mock_time):
+    def test_try_llm_translation_success(self, mock_time) -> None:
         """Test successful LLM translation."""
         mock_time.side_effect = [0.0, 0.2]
 
@@ -129,7 +129,7 @@ class TestHybridTestTranslator:
         assert result.execution_time == 0.2
         assert result.content is not None
 
-    def test_calculate_utility_confidence_simple(self):
+    def test_calculate_utility_confidence_simple(self) -> None:
         """Test confidence calculation for simple test."""
         test_file = TestFile(
             path=Path("SimpleTest.java"),
@@ -142,21 +142,21 @@ class TestHybridTestTranslator:
 import pytest
 
 class TestSimple:
-    def test_simple(self):
+    def test_simple(self) -> None:
         assert True
 """
 
         confidence = self.translator._calculate_utility_confidence(test_file, content, [])
         assert confidence > 0.5
 
-    def test_calculate_utility_confidence_with_errors(self):
+    def test_calculate_utility_confidence_with_errors(self) -> None:
         """Test confidence calculation with errors."""
         test_file = TestFile(path=Path("test.java"), test_type=TestType.UNIT, class_name="Test")
 
         confidence = self.translator._calculate_utility_confidence(test_file, "", ["error"])
         assert confidence == 0.0
 
-    def test_calculate_utility_confidence_complex(self):
+    def test_calculate_utility_confidence_complex(self) -> None:
         """Test confidence calculation for complex test."""
         # Create complex test with many methods and mocks
         methods = [
@@ -176,7 +176,7 @@ class TestSimple:
         confidence = self.translator._calculate_utility_confidence(test_file, content, [])
         assert confidence < 0.8  # Should be lower for complex test
 
-    def test_translate_test_file_utility_success(self):
+    def test_translate_test_file_utility_success(self) -> None:
         """Test successful utility translation path."""
         test_file = TestFile(
             path=Path("SimpleTest.java"),
@@ -191,7 +191,7 @@ class TestSimple:
         assert "import pytest" in result
         assert "class TestSimple:" in result
 
-    def test_translate_test_file_llm_fallback(self):
+    def test_translate_test_file_llm_fallback(self) -> None:
         """Test LLM fallback when utility confidence is low."""
         # Create a complex test that should trigger LLM fallback
         methods = [
@@ -215,7 +215,7 @@ class TestSimple:
         assert isinstance(result, str)
         assert len(result) > 0
 
-    def test_translate_test_method_utility_success(self):
+    def test_translate_test_method_utility_success(self) -> None:
         """Test successful utility method translation."""
         java_method = """
         @Test
@@ -229,7 +229,7 @@ class TestSimple:
         assert isinstance(result, str)
         assert len(result) > 0
 
-    def test_translate_test_method_llm_fallback(self):
+    def test_translate_test_method_llm_fallback(self) -> None:
         """Test LLM fallback for method translation."""
         java_method = "complex method that utility can't handle"
 
@@ -245,7 +245,7 @@ class TestSimple:
             # Should contain either translated code or fallback
             assert len(result) > 0
 
-    def test_translate_assertions_utility_success(self):
+    def test_translate_assertions_utility_success(self) -> None:
         """Test successful utility assertion translation."""
         java_assertion = "assertEquals(expected, actual)"
 
@@ -254,7 +254,7 @@ class TestSimple:
         assert isinstance(result, str)
         assert "assert" in result or "TODO" in result
 
-    def test_translate_assertions_llm_fallback(self):
+    def test_translate_assertions_llm_fallback(self) -> None:
         """Test LLM fallback for assertion translation."""
         java_assertion = "assertEquals(expected, actual)"
 
@@ -269,10 +269,10 @@ class TestSimple:
             assert isinstance(result, str)
             assert len(result) > 0
 
-    def test_create_hybrid_translation_utility_better(self):
+    def test_create_hybrid_translation_utility_better(self) -> None:
         """Test hybrid translation when utility result is better."""
         utility_result = TranslationResult(
-            content="good utility result", method="utility", confidence=0.9, errors=[]
+            content="good utility result", method="utility", confidence=0.9, errors=[],
         )
 
         llm_result = TranslationResult(
@@ -289,7 +289,7 @@ class TestSimple:
         assert result.content == "good utility result"
         assert result.confidence == 0.9
 
-    def test_create_hybrid_translation_llm_better(self):
+    def test_create_hybrid_translation_llm_better(self) -> None:
         """Test hybrid translation when LLM result is better."""
         utility_result = TranslationResult(
             content="poor utility result",
@@ -299,7 +299,7 @@ class TestSimple:
         )
 
         llm_result = TranslationResult(
-            content="good llm result", method="llm", confidence=0.8, errors=[]
+            content="good llm result", method="llm", confidence=0.8, errors=[],
         )
 
         test_file = TestFile(path=Path("test.java"), test_type=TestType.UNIT, class_name="Test")
@@ -309,7 +309,7 @@ class TestSimple:
         assert result.content == "good llm result"
         assert result.confidence == 0.8
 
-    def test_create_hybrid_translation_both_failed(self):
+    def test_create_hybrid_translation_both_failed(self) -> None:
         """Test hybrid translation when both approaches fail."""
         utility_result = TranslationResult(
             content="", method="utility", confidence=0.0, errors=["utility error"]
@@ -333,7 +333,7 @@ class TestSimple:
         assert "Fallback translation" in result.content
         assert "TestExample" in result.content
 
-    def test_create_fallback_translation(self):
+    def test_create_fallback_translation(self) -> None:
         """Test fallback translation creation."""
         test_file = TestFile(
             path=Path("ExampleTest.java"),
@@ -354,7 +354,7 @@ class TestSimple:
         assert "def test_method2(self):" in result
         assert "pytest.skip" in result
 
-    def test_get_translation_stats_initial(self):
+    def test_get_translation_stats_initial(self) -> None:
         """Test getting initial translation statistics."""
         stats = self.translator.get_translation_stats()
 
@@ -365,7 +365,7 @@ class TestSimple:
         assert stats["hybrid_success"] == 0
         assert stats["total_time"] == 0.0
 
-    def test_get_translation_stats_after_translations(self):
+    def test_get_translation_stats_after_translations(self) -> None:
         """Test getting statistics after performing translations."""
         test_file = TestFile(
             path=Path("SimpleTest.java"),
@@ -385,7 +385,7 @@ class TestSimple:
         assert "hybrid_success_rate" in stats
         assert "average_time" in stats
 
-    def test_configure_thresholds(self):
+    def test_configure_thresholds(self) -> None:
         """Test configuring confidence thresholds."""
         original_utility = self.translator.utility_confidence_threshold
         original_llm = self.translator.llm_confidence_threshold
@@ -397,7 +397,7 @@ class TestSimple:
         assert self.translator.utility_confidence_threshold != original_utility
         assert self.translator.llm_confidence_threshold != original_llm
 
-    def test_reset_stats(self):
+    def test_reset_stats(self) -> None:
         """Test resetting translation statistics."""
         # Perform a translation to generate stats
         test_file = TestFile(path=Path("test.java"), test_type=TestType.UNIT, class_name="Test")
@@ -418,7 +418,7 @@ class TestSimple:
         assert stats_after["hybrid_success"] == 0
         assert stats_after["total_time"] == 0.0
 
-    def test_translation_with_exception_handling(self):
+    def test_translation_with_exception_handling(self) -> None:
         """Test that exceptions are handled gracefully."""
         test_file = TestFile(
             path=Path("ProblematicTest.java"),

@@ -273,7 +273,7 @@ def _run_with_timeout(runner: JSONRunner, workflow_id: str, monitor: int, timeou
 
     result = {"success": False, "error": None}
 
-    def run_workflow():
+    def run_workflow() -> None:
         try:
             result["success"] = runner.run(process_id=workflow_id, monitor_index=monitor)
         except Exception as e:

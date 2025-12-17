@@ -1,5 +1,7 @@
 """Example: Detect dead code in a Python project.
 
+from typing import Any
+
 This example demonstrates how to use the DeadCodeDetector to find
 unused functions, classes, imports, and variables in a codebase.
 """
@@ -31,7 +33,7 @@ def main() -> None:
         return
 
     # Group by type
-    by_type = {}
+    by_type: dict[Any, Any] = {}
     for dc in dead_code:
         by_type.setdefault(dc.type, []).append(dc)
 

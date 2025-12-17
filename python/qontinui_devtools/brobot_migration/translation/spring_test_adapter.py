@@ -112,7 +112,7 @@ class SpringTestAdapter:
         Returns:
             List of Python code lines for application context setup
         """
-        setup_lines = []
+        setup_lines: list[Any] = []
 
         # Check if SpringBootTest is present
         has_spring_boot_test = any(
@@ -538,7 +538,7 @@ class SpringTestAdapter:
 
     def _convert_properties_to_env_vars(self, properties: str) -> list[str]:
         """Convert Spring properties to environment variable assignments."""
-        env_vars = []
+        env_vars: list[Any] = []
 
         # Handle array of properties: {"key1=value1", "key2=value2"}
         if properties.startswith("{") and properties.endswith("}"):

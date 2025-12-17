@@ -342,7 +342,7 @@ class TestClassifier:
 
     def _detect_brobot_mocks(self, content: str, test_file: TestFile) -> list[MockUsage]:
         """Detect Brobot mock usage patterns."""
-        mock_usages = []
+        mock_usages: list[Any] = []
 
         for mock_pattern in self.mock_patterns["brobot_mocks"]:
             if mock_pattern in content:
@@ -361,7 +361,7 @@ class TestClassifier:
 
     def _detect_spring_mocks(self, content: str, test_file: TestFile) -> list[MockUsage]:
         """Detect Spring mock usage patterns."""
-        mock_usages = []
+        mock_usages: list[Any] = []
 
         for mock_pattern in self.mock_patterns["spring_mocks"]:
             if mock_pattern in content:
@@ -376,7 +376,7 @@ class TestClassifier:
 
     def _detect_mockito_mocks(self, content: str, test_file: TestFile) -> list[MockUsage]:
         """Detect Mockito mock usage patterns."""
-        mock_usages = []
+        mock_usages: list[Any] = []
 
         for mock_pattern in self.mock_patterns["mockito_mocks"]:
             if mock_pattern in content:

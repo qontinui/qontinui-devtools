@@ -10,7 +10,7 @@ from pathlib import Path
 from qontinui_devtools.architecture import DependencyGraphVisualizer
 
 
-def main():
+def main() -> None:
     """Generate various dependency visualizations."""
     visualizer = DependencyGraphVisualizer(verbose=True)
 

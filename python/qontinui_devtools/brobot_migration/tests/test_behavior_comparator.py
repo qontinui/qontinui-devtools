@@ -1,4 +1,16 @@
 """
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 Integration tests for the BehaviorComparator class.
 """
 
@@ -16,19 +28,19 @@ from qontinui.test_migration.validation.behavior_comparator import (
 class TestBehaviorComparator:
     """Test cases for BehaviorComparator."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.comparator = BehaviorComparatorImpl()
         self.isolation_config = TestIsolationConfig(timeout_seconds=10, use_separate_processes=True)
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test that comparator initializes properly."""
         assert self.comparator.isolation_config is not None
         assert len(self.comparator._output_normalizers) > 0
         assert "java" in self.comparator._output_normalizers
         assert "python" in self.comparator._output_normalizers
 
-    def test_initialization_with_custom_config(self):
+    def test_initialization_with_custom_config(self) -> None:
         """Test initialization with custom isolation config."""
         custom_config = TestIsolationConfig(timeout_seconds=60, clean_environment=False)
         comparator = BehaviorComparatorImpl(custom_config)
@@ -36,7 +48,7 @@ class TestBehaviorComparator:
         assert comparator.isolation_config.timeout_seconds == 60
         assert comparator.isolation_config.clean_environment is False
 
-    def test_compare_outputs_identical(self):
+    def test_compare_outputs_identical(self) -> None:
         """Test comparing identical outputs."""
         output1 = "Test passed successfully"
         output2 = "Test passed successfully"
@@ -45,7 +57,7 @@ class TestBehaviorComparator:
 
         assert result is True
 
-    def test_compare_outputs_different(self):
+    def test_compare_outputs_different(self) -> None:
         """Test comparing different outputs."""
         output1 = "Test passed successfully"
         output2 = "Test failed with error"
@@ -54,7 +66,7 @@ class TestBehaviorComparator:
 
         assert result is False
 
-    def test_compare_outputs_with_whitespace_differences(self):
+    def test_compare_outputs_with_whitespace_differences(self) -> None:
         """Test comparing outputs with whitespace differences."""
         output1 = "Test   passed\n  successfully"
         output2 = "Test passed successfully"
@@ -63,7 +75,7 @@ class TestBehaviorComparator:
 
         assert result is True
 
-    def test_compare_outputs_with_timestamps(self):
+    def test_compare_outputs_with_timestamps(self) -> None:
         """Test comparing outputs with timestamps that should be normalized."""
         output1 = "2024-01-15 10:30:45 Test passed successfully"
         output2 = "2024-01-15 11:45:22 Test passed successfully"
@@ -72,7 +84,7 @@ class TestBehaviorComparator:
 
         assert result is True
 
-    def test_compare_outputs_with_memory_addresses(self):
+    def test_compare_outputs_with_memory_addresses(self) -> None:
         """Test comparing outputs with memory addresses that should be normalized."""
         output1 = "Object at 0x7f8b8c0d1e40 created successfully"
         output2 = "Object at 0x7f8b8c0d2f50 created successfully"
@@ -81,7 +93,7 @@ class TestBehaviorComparator:
 
         assert result is True
 
-    def test_compare_outputs_json_format(self):
+    def test_compare_outputs_json_format(self) -> None:
         """Test comparing JSON formatted outputs."""
         output1 = '{"status": "success", "value": 42}'
         output2 = '{"value": 42, "status": "success"}'  # Different order
@@ -90,7 +102,7 @@ class TestBehaviorComparator:
 
         assert result is True
 
-    def test_compare_outputs_python_literals(self):
+    def test_compare_outputs_python_literals(self) -> None:
         """Test comparing Python literal outputs."""
         output1 = "[1, 2, 3]"
         output2 = "[1, 2, 3]"
@@ -99,7 +111,7 @@ class TestBehaviorComparator:
 
         assert result is True
 
-    def test_compare_outputs_similar_strings(self):
+    def test_compare_outputs_similar_strings(self) -> None:
         """Test comparing very similar strings."""
         output1 = "Test completed with 95% accuracy"
         output2 = "Test completed with 94% accuracy"
@@ -110,7 +122,7 @@ class TestBehaviorComparator:
         assert result is True
 
     @patch("subprocess.run")
-    def test_execute_python_test_success(self, mock_run):
+    def test_execute_python_test_success(self, mock_run) -> None:
         """Test successful Python test execution."""
         # Mock successful subprocess execution
         mock_result = Mock()
@@ -128,7 +140,7 @@ class TestBehaviorComparator:
         assert "PASSED" in result.output
 
     @patch("subprocess.run")
-    def test_execute_python_test_failure(self, mock_run):
+    def test_execute_python_test_failure(self, mock_run) -> None:
         """Test failed Python test execution."""
         # Mock failed subprocess execution
         mock_result = Mock()
@@ -145,7 +157,7 @@ class TestBehaviorComparator:
         assert result.stack_trace == "AssertionError: Test failed"
 
     @patch("subprocess.run")
-    def test_execute_python_test_timeout(self, mock_run):
+    def test_execute_python_test_timeout(self, mock_run) -> None:
         """Test Python test execution timeout."""
         # Mock timeout exception
         import subprocess
@@ -159,7 +171,7 @@ class TestBehaviorComparator:
         assert "timed out" in result.error_message
         assert result.execution_time == self.comparator.isolation_config.timeout_seconds
 
-    def test_execute_java_test_mock(self):
+    def test_execute_java_test_mock(self) -> None:
         """Test Java test execution (mocked implementation)."""
         java_test = TestFile(
             path=Path("TestExample.java"),
@@ -173,7 +185,7 @@ class TestBehaviorComparator:
         assert isinstance(result, TestResult)
         assert result.test_name == "TestExample"
 
-    def test_compare_behavior_with_mocked_execution(self):
+    def test_compare_behavior_with_mocked_execution(self) -> None:
         """Test behavior comparison with mocked test execution."""
         java_test = TestFile(
             path=Path("TestExample.java"),
@@ -209,7 +221,7 @@ class TestBehaviorComparator:
 
             assert result is True
 
-    def test_compare_behavior_detailed_success(self):
+    def test_compare_behavior_detailed_success(self) -> None:
         """Test detailed behavior comparison with successful tests."""
         java_test = TestFile(
             path=Path("TestExample.java"),
@@ -248,7 +260,7 @@ class TestBehaviorComparator:
             assert result.confidence == 1.0
             assert len(result.differences) == 0
 
-    def test_compare_behavior_detailed_output_mismatch(self):
+    def test_compare_behavior_detailed_output_mismatch(self) -> None:
         """Test detailed behavior comparison with output mismatch."""
         java_test = TestFile(
             path=Path("TestExample.java"),
@@ -288,7 +300,7 @@ class TestBehaviorComparator:
             assert len(result.differences) > 0
             assert any("outputs differ" in diff.lower() for diff in result.differences)
 
-    def test_compare_behavior_detailed_status_mismatch(self):
+    def test_compare_behavior_detailed_status_mismatch(self) -> None:
         """Test detailed behavior comparison with pass/fail status mismatch."""
         java_test = TestFile(
             path=Path("TestExample.java"),
@@ -328,7 +340,7 @@ class TestBehaviorComparator:
             assert result.confidence == 0.3  # Multiple differences
             assert any("status differs" in diff.lower() for diff in result.differences)
 
-    def test_isolate_and_compare_component(self):
+    def test_isolate_and_compare_component(self) -> Any:
         """Test component-level isolation and comparison."""
         java_component = "public static int add(int a, int b) { return a + b; }"
         python_component = "def add(a, b): return a + b"
@@ -341,11 +353,11 @@ class TestBehaviorComparator:
         ):
 
             # Set up mock results - matching outputs
-            def java_side_effect(component, test_input):
+            def java_side_effect(component, test_input) -> Any:
                 a, b = test_input
                 return str(a + b)
 
-            def python_side_effect(component, test_input):
+            def python_side_effect(component, test_input) -> Any:
                 a, b = test_input
                 return str(a + b)
 
@@ -363,7 +375,7 @@ class TestBehaviorComparator:
             assert result.comparison_details["total_tests"] == 3
             assert result.comparison_details["matching_tests"] == 3
 
-    def test_isolate_and_compare_component_with_mismatch(self):
+    def test_isolate_and_compare_component_with_mismatch(self) -> Any:
         """Test component-level comparison with output mismatch."""
         java_component = "public static int multiply(int a, int b) { return a * b; }"
         python_component = "def multiply(a, b): return a + b"  # Wrong implementation
@@ -376,11 +388,11 @@ class TestBehaviorComparator:
         ):
 
             # Set up mock results - different outputs
-            def java_side_effect(component, test_input):
+            def java_side_effect(component, test_input) -> Any:
                 a, b = test_input
                 return str(a * b)  # Correct multiplication
 
-            def python_side_effect(component, test_input):
+            def python_side_effect(component, test_input) -> Any:
                 a, b = test_input
                 return str(a + b)  # Wrong - addition instead
 
@@ -398,7 +410,7 @@ class TestBehaviorComparator:
             assert result.comparison_details["total_tests"] == 2
             assert result.comparison_details["matching_tests"] == 0
 
-    def test_normalize_output_java(self):
+    def test_normalize_output_java(self) -> None:
         """Test Java-specific output normalization."""
         java_output = "java.lang.String result: Hello World"
         normalized = self.comparator._normalize_output(java_output, "java")
@@ -407,7 +419,7 @@ class TestBehaviorComparator:
         assert "java.lang." not in normalized
         assert "String result: Hello World" in normalized
 
-    def test_normalize_output_python(self):
+    def test_normalize_output_python(self) -> None:
         """Test Python-specific output normalization."""
         python_output = """Traceback (most recent call last):
   File "test.py", line 10, in test_function
@@ -419,7 +431,7 @@ AssertionError"""
         # Should normalize traceback
         assert "Exception:" in normalized
 
-    def test_compare_error_messages(self):
+    def test_compare_error_messages(self) -> None:
         """Test error message comparison."""
         error1 = 'File "test.py", line 10, in test_function\nAssertionError: Test failed'
         error2 = 'File "other.py", line 15, in other_function\nAssertionError: Test failed'
@@ -429,7 +441,7 @@ AssertionError"""
         # Should be similar despite different file/line info
         assert similarity > 0.7
 
-    def test_generate_output_diff(self):
+    def test_generate_output_diff(self) -> None:
         """Test output diff generation."""
         output1 = "Line 1\nLine 2\nLine 3"
         output2 = "Line 1\nModified Line 2\nLine 3"
@@ -439,7 +451,7 @@ AssertionError"""
         assert len(diff) > 0
         assert any("Modified" in line for line in diff)
 
-    def test_extract_junit_assertions(self):
+    def test_extract_junit_assertions(self) -> None:
         """Test JUnit assertion extraction."""
         test_content = """
         public void testExample() {
@@ -456,10 +468,10 @@ AssertionError"""
         assert any("assertTrue" in assertion for assertion in assertions)
         assert any("assertFalse" in assertion for assertion in assertions)
 
-    def test_extract_pytest_assertions(self):
+    def test_extract_pytest_assertions(self) -> None:
         """Test pytest assertion extraction."""
         test_content = """
-        def test_example():
+        def test_example() -> None:
             assert result == 42
             assert condition is True
             assert not other_condition
@@ -472,7 +484,7 @@ AssertionError"""
         assert any("condition is True" in assertion for assertion in assertions)
         assert any("not other_condition" in assertion for assertion in assertions)
 
-    def test_comparison_result_dataclass(self):
+    def test_comparison_result_dataclass(self) -> None:
         """Test ComparisonResult dataclass."""
         result = ComparisonResult(
             tests_match=True,
@@ -488,7 +500,7 @@ AssertionError"""
         assert result.java_output == "Java output"
         assert result.python_output == "Python output"
 
-    def test_test_isolation_config_dataclass(self):
+    def test_test_isolation_config_dataclass(self) -> None:
         """Test TestIsolationConfig dataclass."""
         config = TestIsolationConfig(
             use_separate_processes=False,

@@ -157,7 +157,7 @@ class DeadCodeDetector:
 
     def _identify_dead_code(self) -> list[DeadCode]:
         """Identify unused exports."""
-        dead_code = []
+        dead_code: list[Any] = []
 
         for file_path, exports in self.exports.items():
             for export in exports:

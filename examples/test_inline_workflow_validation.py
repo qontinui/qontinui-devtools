@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Example demonstrating inline workflow validation.
 
 This script shows how the ConfigValidator detects and validates inline workflows
@@ -15,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 from qontinui_devtools.config_validator import ConfigValidator
 
 
-def create_test_config_with_inline_workflow():
+def create_test_config_with_inline_workflow() -> Any:
     """Create a test config with an inline workflow that has schema errors."""
     return {
         "workflows": [
@@ -68,7 +70,7 @@ def create_test_config_with_inline_workflow():
     }
 
 
-def main():
+def main() -> None:
     """Test inline workflow validation."""
     print("=" * 80)
     print("Testing Inline Workflow Validation")

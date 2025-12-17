@@ -67,7 +67,7 @@ class AssertionValidator:
             Tuple of (validation_result, differences_list)
             validation_result is one of: "equivalent", "different"
         """
-        differences = []
+        differences: list[Any] = []
 
         # Check if both tests have same pass/fail status
         if java_result.passed != python_result.passed:

@@ -6,7 +6,7 @@ when there are no circular dependencies.
 """
 
 
-def simple_function() -> None:
+def simple_function() -> str:
     """A simple function."""
     return "simple"
 
@@ -14,6 +14,6 @@ def simple_function() -> None:
 class SimpleClass:
     """A simple class."""
 
-    def method(self) -> None:
+    def method(self) -> str:
         """A simple method."""
         return "method"

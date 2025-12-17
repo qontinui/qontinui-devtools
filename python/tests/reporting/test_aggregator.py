@@ -42,11 +42,11 @@ class TestReportAggregator:
             file1 = Path(tmpdir) / "module1.py"
             file1.write_text(
                 """
-def hello():
+def hello() -> None:
     pass
 
 class MyClass:
-    def method1(self):
+    def method1(self) -> None:
         pass
 """
             )
@@ -56,7 +56,7 @@ class MyClass:
                 """
 import os
 
-def world():
+def world() -> None:
     pass
 """
             )
@@ -153,7 +153,7 @@ def world():
 
             # Mock god class details
             class MockGodClass:
-                def __init__(self, name: str, method_count: int):
+                def __init__(self, name: str, method_count: int) -> None:
                     self.class_name = name
                     self.method_count = method_count
 
@@ -223,7 +223,7 @@ def world():
 
             # Mock race condition
             class MockRace:
-                def __init__(self, desc: str):
+                def __init__(self, desc: str) -> None:
                     self.description = desc
 
             aggregator.results = {
@@ -293,7 +293,7 @@ class TestReportAggregatorIntegration:
                 """
 import helper
 
-def main():
+def main() -> None:
     helper.do_something()
 
 if __name__ == "__main__":
@@ -309,7 +309,7 @@ import threading
 counter = 0
 lock = threading.Lock()
 
-def do_something():
+def do_something() -> None:
     global counter
     with lock:
         counter += 1

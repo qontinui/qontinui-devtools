@@ -16,13 +16,13 @@ class TestDefinitionCollector:
     def test_collect_function_definitions(self, tmp_path: Path) -> None:
         """Test collecting function definitions."""
         code = """
-def public_function():
+def public_function() -> None:
     pass
 
-def _private_function():
+def _private_function() -> None:
     pass
 
-def __special_method__():
+def __special_method__() -> None:
     pass
 """
         file_path = tmp_path / "test.py"
@@ -66,7 +66,7 @@ class _PrivateClass:
 import os
 import sys as system
 from pathlib import Path
-from typing import List as ListType
+from typing import List as ListType, Any
 """
         file_path = tmp_path / "test.py"
         file_path.write_text(code)
@@ -91,7 +91,7 @@ _private_var = "private"
 class MyClass:
     class_var = "not collected"
 
-def func():
+def func() -> None:
     local_var = "not collected"
 """
         file_path = tmp_path / "test.py"
@@ -129,8 +129,8 @@ another_var: str
     def test_nested_functions(self, tmp_path: Path) -> None:
         """Test that nested functions are handled correctly."""
         code = """
-def outer():
-    def inner():
+def outer() -> Any:
+    def inner() -> None:
         pass
     return inner
 """
@@ -209,10 +209,10 @@ class TestDeadCodeDetector:
     def test_find_unused_function(self, temp_project: Path) -> None:
         """Test finding an unused function."""
         code = """
-def used_function():
+def used_function() -> Any:
     return 42
 
-def unused_function():
+def unused_function() -> Any:
     return 0
 
 result = used_function()
@@ -273,7 +273,7 @@ print(os.getcwd())
 USED_CONSTANT = 42
 UNUSED_CONSTANT = 0
 
-def function():
+def function() -> Any:
     return USED_CONSTANT
 """
         (temp_project / "module.py").write_text(code)
@@ -289,10 +289,10 @@ def function():
         """Test that cross-file usage is detected."""
         # Module A defines a function
         module_a = """
-def shared_function():
+def shared_function() -> Any:
     return 42
 
-def unused_function():
+def unused_function() -> Any:
     return 0
 """
         (temp_project / "module_a.py").write_text(module_a)
@@ -324,7 +324,7 @@ UNUSED_VAR = 42
 class UnusedClass:
     pass
 
-def unused_function():
+def unused_function() -> None:
     pass
 
 # Use Path to avoid marking it as dead
@@ -351,7 +351,7 @@ UNUSED_VAR = 42
 class UnusedClass:
     pass
 
-def unused_function():
+def unused_function() -> None:
     pass
 """
         (temp_project / "module.py").write_text(code)
@@ -372,7 +372,7 @@ class MyClass:
     def __init__(self) -> None:
         pass
 
-    def __str__(self) -> None:
+    def __str__(self) -> Any:
         return "MyClass"
 
     def public_method(self) -> None:
@@ -392,13 +392,13 @@ class MyClass:
     def test_confidence_levels(self, temp_project: Path) -> None:
         """Test confidence level calculation."""
         code = """
-def main():
+def main() -> None:
     pass
 
-def test_something():
+def test_something() -> None:
     pass
 
-def regular_function():
+def regular_function() -> None:
     pass
 """
         (temp_project / "module.py").write_text(code)
@@ -449,7 +449,7 @@ def broken function():
         (temp_project / "broken.py").write_text(invalid_code)
 
         valid_code = """
-def unused_function():
+def unused_function() -> None:
     pass
 """
         (temp_project / "valid.py").write_text(valid_code)
@@ -465,10 +465,10 @@ def unused_function():
         # File 1
         (temp_project / "file1.py").write_text(
             """
-def func1():
+def func1() -> None:
     pass
 
-def func2():
+def func2() -> None:
     pass
 """
         )
@@ -525,7 +525,7 @@ def sample_project(tmp_path: Path) -> Path:
 import os
 import sys
 import json
-from typing import List, Dict
+from typing import List, Dict, Any
 
 USED_CONSTANT = 42
 UNUSED_CONSTANT = "dead"
@@ -534,23 +534,23 @@ class UsedClass:
     def __init__(self) -> None:
         self.value = USED_CONSTANT
 
-    def used_method(self) -> None:
+    def used_method(self) -> Any:
         return self.value
 
-    def unused_method(self) -> None:
+    def unused_method(self) -> Any:
         return "never called"
 
 class UnusedClass:
     pass
 
-def used_function():
+def used_function() -> Any:
     obj = UsedClass()
     return obj.used_method()
 
-def unused_function():
+def unused_function() -> Any:
     return "never called"
 
-def main():
+def main() -> None:
     result = used_function()
     data = json.dumps({"result": result})
     print(data)
@@ -563,10 +563,10 @@ if __name__ == "__main__":
     # Helper module
     (project / "helpers.py").write_text(
         """
-def used_helper():
+def used_helper() -> Any:
     return "helper"
 
-def unused_helper():
+def unused_helper() -> Any:
     return "dead"
 """
     )

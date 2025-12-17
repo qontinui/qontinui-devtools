@@ -6,6 +6,7 @@ Provides formatters for different test result formats:
 - TAP: Test Anything Protocol for Perl-compatible test runners
 """
 
+from typing import Any
 import json
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -112,7 +113,7 @@ def _format_tap(test_results: list[dict], summary: dict) -> str:
     Returns:
         TAP formatted string
     """
-    lines = []
+    lines: list[Any] = []
 
     # TAP version
     lines.append("TAP version 13")
@@ -146,7 +147,7 @@ def _format_tap(test_results: list[dict], summary: dict) -> str:
     return "\n".join(lines)
 
 
-def _indent_xml(elem: ET.Element, level: int = 0):
+def _indent_xml(elem: ET.Element, level: int = 0) -> None:
     """Add pretty-printing indentation to XML element tree.
 
     Args:

@@ -9,11 +9,11 @@ from qontinui.test_migration.mocks.qontinui_mock_generator import QontinuiMockGe
 class TestQontinuiMockGenerator:
     """Test cases for QontinuiMockGenerator."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.generator = QontinuiMockGenerator()
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test generator initialization."""
         assert self.generator is not None
         assert len(self.generator.mock_class_mapping) > 0
@@ -21,7 +21,7 @@ class TestQontinuiMockGenerator:
         assert "BrobotMock" in self.generator.mock_class_mapping
         assert "click" in self.generator.action_mapping
 
-    def test_create_annotation_mock(self):
+    def test_create_annotation_mock(self) -> None:
         """Test creation of annotation-based mock."""
         mock_usage = MockUsage(
             mock_type="brobot_annotation_mock",
@@ -36,7 +36,7 @@ class TestQontinuiMockGenerator:
         assert "QontinuiMock" in mock_code
         assert "Mock(spec=" in mock_code
 
-    def test_create_programmatic_mock(self):
+    def test_create_programmatic_mock(self) -> None:
         """Test creation of programmatic mock."""
         mock_usage = MockUsage(
             mock_type="brobot_programmatic_mock",
@@ -54,7 +54,7 @@ class TestQontinuiMockGenerator:
         assert "Mock(spec=" in mock_code
         assert "configure_mock" in mock_code
 
-    def test_create_state_mock(self):
+    def test_create_state_mock(self) -> None:
         """Test creation of state object mock."""
         mock_usage = MockUsage(
             mock_type="brobot_state_mock",
@@ -70,7 +70,7 @@ class TestQontinuiMockGenerator:
         assert "elements" in mock_code
         assert "is_active" in mock_code
 
-    def test_create_gui_model_mock(self):
+    def test_create_gui_model_mock(self) -> None:
         """Test creation of GUI model mock."""
         mock_usage = MockUsage(
             mock_type="brobot_gui_model",
@@ -95,7 +95,7 @@ class TestQontinuiMockGenerator:
         assert "click" in mock_code
         assert "type_text" in mock_code  # Mapped from 'type'
 
-    def test_create_test_environment_mock(self):
+    def test_create_test_environment_mock(self) -> None:
         """Test creation of test environment mock."""
         mock_usage = MockUsage(
             mock_type="brobot_test_environment",
@@ -111,7 +111,7 @@ class TestQontinuiMockGenerator:
         assert "cleanup" in mock_code
         assert "StateManager" in mock_code
 
-    def test_preserve_state_simulation(self):
+    def test_preserve_state_simulation(self) -> None:
         """Test preservation of GUI state simulation."""
         gui_model = GuiModel(
             model_name="LoginState",
@@ -131,7 +131,7 @@ class TestQontinuiMockGenerator:
         assert "type_text" in simulation_code  # Mapped action
         assert "hover" in simulation_code
 
-    def test_action_mapping(self):
+    def test_action_mapping(self) -> None:
         """Test action mapping from Brobot to Qontinui."""
         test_cases = [
             ("click", "click"),
@@ -148,7 +148,7 @@ class TestQontinuiMockGenerator:
         for brobot_action, expected_qontinui_action in test_cases:
             assert self.generator.action_mapping[brobot_action] == expected_qontinui_action
 
-    def test_mock_class_mapping(self):
+    def test_mock_class_mapping(self) -> None:
         """Test mock class mapping from Brobot to Qontinui."""
         test_cases = [
             ("BrobotMock", "QontinuiMock"),
@@ -161,7 +161,7 @@ class TestQontinuiMockGenerator:
         for brobot_class, expected_qontinui_class in test_cases:
             assert self.generator.mock_class_mapping[brobot_class] == expected_qontinui_class
 
-    def test_generate_imports(self):
+    def test_generate_imports(self) -> None:
         """Test import generation for different mock types."""
         # Test state mock imports
         state_mock = MockUsage(mock_type="brobot_state_mock", mock_class="StateObject")
@@ -180,7 +180,7 @@ class TestQontinuiMockGenerator:
         assert "import pytest" in imports
         assert "QontinuiTestEnvironment" in imports
 
-    def test_create_mock_behavior_mapping(self):
+    def test_create_mock_behavior_mapping(self) -> None:
         """Test creation of behavior mapping."""
         mock_usage = MockUsage(
             mock_type="brobot_state_mock",
@@ -202,7 +202,7 @@ class TestQontinuiMockGenerator:
         assert behavior_mapping["actions"]["click"] == "click"
         assert behavior_mapping["actions"]["type"] == "type_text"
 
-    def test_map_setup_behavior(self):
+    def test_map_setup_behavior(self) -> None:
         """Test mapping of setup behavior patterns."""
         brobot_setup = "when(mock.performAction()).thenReturn(true); verify(mock).performAction();"
 
@@ -212,7 +212,7 @@ class TestQontinuiMockGenerator:
         assert ".assert_called_with(" in qontinui_setup
         assert "Mockito." not in qontinui_setup
 
-    def test_generate_element_mocks(self):
+    def test_generate_element_mocks(self) -> None:
         """Test generation of element mocks."""
         gui_model = GuiModel(
             model_name="TestModel",
@@ -229,7 +229,7 @@ class TestQontinuiMockGenerator:
         assert "click" in element_code
         assert "type_text" in element_code  # Mapped action
 
-    def test_generate_action_simulation(self):
+    def test_generate_action_simulation(self) -> None:
         """Test generation of action simulation code."""
         gui_model = GuiModel(model_name="TestModel", actions=["click", "doubleClick", "type"])
 
@@ -242,7 +242,7 @@ class TestQontinuiMockGenerator:
         assert "'doubleClick': 'double_click'" in action_code
         assert "'type': 'type_text'" in action_code
 
-    def test_generate_integration_test_setup(self):
+    def test_generate_integration_test_setup(self) -> None:
         """Test generation of integration test setup."""
         mock_usages = [
             MockUsage(mock_type="brobot_state_mock", mock_class="StateObject"),
@@ -258,7 +258,7 @@ class TestQontinuiMockGenerator:
         assert "QontinuiState" in setup_code
         assert "QontinuiActionMock" in setup_code
 
-    def test_empty_gui_model_handling(self):
+    def test_empty_gui_model_handling(self) -> None:
         """Test handling of empty GUI models."""
         empty_gui_model = GuiModel(model_name="EmptyModel")
 
@@ -269,7 +269,7 @@ class TestQontinuiMockGenerator:
         assert "GuiSimulator" in simulation_code
         assert "EmptyModel" in simulation_code
 
-    def test_unknown_mock_type_handling(self):
+    def test_unknown_mock_type_handling(self) -> None:
         """Test handling of unknown mock types."""
         unknown_mock = MockUsage(mock_type="unknown_mock_type", mock_class="UnknownClass")
 
@@ -279,7 +279,7 @@ class TestQontinuiMockGenerator:
         assert "Generic Qontinui mock" in mock_code
         assert "Mock(spec=" in mock_code
 
-    def test_complex_gui_model_simulation(self):
+    def test_complex_gui_model_simulation(self) -> None:
         """Test complex GUI model with multiple elements and actions."""
         complex_gui_model = GuiModel(
             model_name="ComplexLoginForm",
@@ -308,7 +308,7 @@ class TestQontinuiMockGenerator:
         for prop_name in complex_gui_model.state_properties:
             assert prop_name in simulation_code
 
-    def test_get_qontinui_mock_classes(self):
+    def test_get_qontinui_mock_classes(self) -> None:
         """Test retrieval of Qontinui mock class mappings."""
         mappings = self.generator.get_qontinui_mock_classes()
 
@@ -317,7 +317,7 @@ class TestQontinuiMockGenerator:
         assert "BrobotMock" in mappings
         assert mappings["BrobotMock"] == "QontinuiMock"
 
-    def test_get_action_mappings(self):
+    def test_get_action_mappings(self) -> None:
         """Test retrieval of action mappings."""
         mappings = self.generator.get_action_mappings()
 
@@ -326,7 +326,7 @@ class TestQontinuiMockGenerator:
         assert "click" in mappings
         assert mappings["type"] == "type_text"
 
-    def test_assertion_behavior_mapping(self):
+    def test_assertion_behavior_mapping(self) -> None:
         """Test mapping of assertion behaviors."""
         mock_usage = MockUsage(mock_type="brobot_programmatic_mock", mock_class="BrobotMock")
 

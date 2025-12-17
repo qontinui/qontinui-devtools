@@ -1,5 +1,7 @@
 """CLI entry point for config validator.
 
+from typing import Any
+
 Usage:
     python -m qontinui_devtools.config_validator [OPTIONS] <config_file.json> [<config_file2.json> ...]
 
@@ -68,7 +70,7 @@ Exit codes:
     args = parser.parse_args()
 
     all_valid = True
-    results = []
+    results: list[Any] = []
 
     for config_file in args.config_files:
         config_path = Path(config_file)

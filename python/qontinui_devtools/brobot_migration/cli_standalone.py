@@ -131,7 +131,7 @@ Examples:
 
         return parser
 
-    def _configure_logging(self, verbose_level: int):
+    def _configure_logging(self, verbose_level: int) -> None:
         """Configure logging based on verbosity level."""
         if verbose_level >= 3:
             level = logging.DEBUG
@@ -147,7 +147,7 @@ Examples:
         )
 
 
-def main():
+def main() -> None:
     """Main entry point for the CLI."""
     cli = StandaloneTestMigrationCLI()
     exit_code = cli.run()

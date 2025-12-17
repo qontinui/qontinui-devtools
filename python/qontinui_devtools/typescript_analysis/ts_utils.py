@@ -1,5 +1,7 @@
 """Utilities for parsing TypeScript/JavaScript files.
 
+from typing import Any
+
 This module provides functions to parse and analyze TS/JS files without
 requiring Node.js or external dependencies.
 """
@@ -48,7 +50,7 @@ def find_ts_js_files(root_path: Path) -> list[Path]:
         files.extend(root_path.glob(pattern))
 
     # Filter out node_modules, dist, build directories
-    filtered = []
+    filtered: list[Any] = []
     exclude_dirs = {"node_modules", "dist", "build", ".next", "out", "__tests__"}
 
     for file in files:
@@ -72,7 +74,7 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
     except Exception:
         return []
 
-    imports = []
+    imports: list[Any] = []
     lines = content.split("\n")
 
     # Patterns for different import styles
@@ -116,7 +118,7 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
             source = source_match.group(1)
 
             # Extract import names
-            names = []
+            names=[],
             default_import = None
             namespace_import = None
 
@@ -193,7 +195,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
     except Exception:
         return []
 
-    exports = []
+    exports: list[Any] = []
     lines = content.split("\n")
 
     for line_num, line in enumerate(lines, 1):

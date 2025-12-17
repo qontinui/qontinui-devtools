@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 End-to-end tests for the complete migration workflow.
 """
 
@@ -21,7 +23,7 @@ class TestEndToEndMigrationWorkflow:
     """End-to-end tests for the complete migration workflow."""
 
     @pytest.fixture
-    def temp_workspace(self):
+    def temp_workspace(self) -> None:
         """Create a temporary workspace for testing."""
         with tempfile.TemporaryDirectory() as temp_dir:
             workspace = Path(temp_dir)
@@ -39,7 +41,7 @@ class TestEndToEndMigrationWorkflow:
 
             yield workspace, source_dir, target_dir
 
-    def _create_sample_java_tests(self, source_dir: Path):
+    def _create_sample_java_tests(self, source_dir: Path) -> None:
         """Create sample Java test files for testing."""
 
         # Simple unit test
@@ -122,7 +124,7 @@ public class BrobotMockTest {
 """
         )
 
-    def test_complete_migration_workflow_with_orchestrator(self, temp_workspace):
+    def test_complete_migration_workflow_with_orchestrator(self, temp_workspace) -> None:
         """Test complete migration workflow using the orchestrator directly."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -179,11 +181,11 @@ public class BrobotMockTest {
 
         mock_scanner.return_value.scan_directory.return_value = [mock_test_file]
         mock_translator.return_value.translate_test_file.return_value = """
-def test_addition():
+def test_addition() -> None:
     result = 1 + 1
     assert result == 2
 
-def test_subtraction():
+def test_subtraction() -> None:
     result = 5 - 3
     assert result == 2
 """
@@ -235,7 +237,7 @@ def test_subtraction():
         assert len(orchestrator.migration_state["migrated_tests"]) == 1
         assert len(orchestrator.migration_state["failed_migrations"]) == 0
 
-    def test_cli_migrate_command(self, temp_workspace):
+    def test_cli_migrate_command(self, temp_workspace) -> None:
         """Test CLI migrate command."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -255,7 +257,7 @@ def test_subtraction():
         # Dry run should succeed
         assert exit_code == 0
 
-    def test_cli_config_creation(self, temp_workspace):
+    def test_cli_config_creation(self, temp_workspace) -> None:
         """Test CLI configuration file creation."""
         workspace, _, _ = temp_workspace
 
@@ -288,7 +290,7 @@ def test_subtraction():
         for field in required_fields:
             assert field in config_data
 
-    def test_cli_config_validation(self, temp_workspace):
+    def test_cli_config_validation(self, temp_workspace) -> None:
         """Test CLI configuration file validation."""
         workspace, _, _ = temp_workspace
 
@@ -315,7 +317,7 @@ def test_subtraction():
         # Validation should succeed
         assert exit_code == 0
 
-    def test_cli_config_validation_invalid_file(self, temp_workspace):
+    def test_cli_config_validation_invalid_file(self, temp_workspace) -> None:
         """Test CLI configuration validation with invalid file."""
         workspace, _, _ = temp_workspace
 
@@ -338,7 +340,7 @@ def test_subtraction():
         # Validation should fail
         assert exit_code == 1
 
-    def test_reporting_dashboard_comprehensive_report(self, temp_workspace):
+    def test_reporting_dashboard_comprehensive_report(self, temp_workspace) -> None:
         """Test reporting dashboard comprehensive report generation."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -348,15 +350,15 @@ def test_subtraction():
             """
 import pytest
 
-def test_addition():
+def test_addition() -> None:
     result = 1 + 1
     assert result == 2
 
 @pytest.fixture
-def sample_data():
+def sample_data() -> Any:
     return {"key": "value"}
 
-def test_with_fixture(sample_data):
+def test_with_fixture(sample_data) -> None:
     assert sample_data["key"] == "value"
 """
         )
@@ -388,7 +390,7 @@ def test_with_fixture(sample_data):
         assert patterns["pytest_fixtures"] == 1
         assert patterns["assert_statements"] >= 2
 
-    def test_reporting_dashboard_multiple_formats(self, temp_workspace):
+    def test_reporting_dashboard_multiple_formats(self, temp_workspace) -> None:
         """Test reporting dashboard with multiple output formats."""
         workspace, _, target_dir = temp_workspace
 
@@ -419,7 +421,7 @@ def test_with_fixture(sample_data):
         assert "<html>" in html_content
         assert "Test Migration Report" in html_content
 
-    def test_cli_report_generation(self, temp_workspace):
+    def test_cli_report_generation(self, temp_workspace) -> None:
         """Test CLI report generation command."""
         workspace, _, target_dir = temp_workspace
 
@@ -447,7 +449,7 @@ def test_with_fixture(sample_data):
         assert exit_code == 0
         assert report_file.exists()
 
-    def test_error_handling_in_workflow(self, temp_workspace):
+    def test_error_handling_in_workflow(self, temp_workspace) -> None:
         """Test error handling throughout the workflow."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -469,7 +471,7 @@ def test_with_fixture(sample_data):
         # Should handle gracefully
         assert results.total_tests == 0
 
-    def test_cli_error_handling(self, temp_workspace):
+    def test_cli_error_handling(self, temp_workspace) -> None:
         """Test CLI error handling."""
         workspace, _, _ = temp_workspace
 
@@ -487,7 +489,7 @@ def test_with_fixture(sample_data):
         assert exit_code == 1
 
     @pytest.mark.slow
-    def test_integration_with_real_pytest(self, temp_workspace):
+    def test_integration_with_real_pytest(self, temp_workspace) -> None:
         """Integration test with real pytest execution (marked as slow)."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -495,10 +497,10 @@ def test_with_fixture(sample_data):
         migrated_test = target_dir / "test_integration.py"
         migrated_test.write_text(
             """
-def test_simple_assertion():
+def test_simple_assertion() -> None:
     assert 1 + 1 == 2
 
-def test_string_operations():
+def test_string_operations() -> None:
     text = "hello world"
     assert "hello" in text
     assert text.upper() == "HELLO WORLD"
@@ -528,7 +530,7 @@ class TestWorkflowRecovery:
     """Test workflow recovery and error handling scenarios."""
 
     @pytest.fixture
-    def recovery_workspace(self):
+    def recovery_workspace(self) -> None:
         """Create workspace for recovery testing."""
         with tempfile.TemporaryDirectory() as temp_dir:
             workspace = Path(temp_dir)
@@ -559,7 +561,7 @@ public class ProblematicTest {
 
             yield workspace, source_dir, target_dir
 
-    def test_recovery_from_translation_failure(self, recovery_workspace):
+    def test_recovery_from_translation_failure(self, recovery_workspace) -> None:
         """Test recovery from translation failures."""
         workspace, source_dir, target_dir = recovery_workspace
 
@@ -594,7 +596,7 @@ public class ProblematicTest {
             # Current implementation returns False, but the mechanism is tested
             assert isinstance(recovery_result, bool)
 
-    def test_partial_migration_success(self, recovery_workspace):
+    def test_partial_migration_success(self, recovery_workspace) -> None:
         """Test handling of partial migration success."""
         workspace, source_dir, target_dir = recovery_workspace
 

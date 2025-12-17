@@ -213,7 +213,7 @@ class CircularDependencyDetector:
         uses = re.findall(pattern, content)
 
         # Extract just the first module component
-        first_components = []
+        first_components: list[Any] = []
         for use in uses:
             # Split by :: and take first component
             parts = use.split("::")
@@ -287,7 +287,7 @@ class CircularDependencyDetector:
         """Find all cycles in the dependency graph using DFS."""
         visited = set()
         rec_stack = set()
-        path = []
+        path: list[Any] = []
 
         def dfs(node: str) -> None:
             visited.add(node)
@@ -315,7 +315,7 @@ class CircularDependencyDetector:
         except Exception as e:
             if self.verbose:
                 self.console.print(f"[red]Error finding cycles: {e}[/red]")
-            self.cycles = []
+            self.cycles: list[Any] = []
 
     def _create_circular_dependencies(self) -> list[RustCircularDependency]:
         """Create RustCircularDependency objects from cycles.

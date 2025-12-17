@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 from qontinui_devtools.reporting import HTMLReportGenerator, ReportAggregator
 
 
-def main():
+def main() -> None:
     """Generate HTML report for a project."""
     if len(sys.argv) < 2:
         print("Usage: python generate_report.py <project_path> [output_report.html]")

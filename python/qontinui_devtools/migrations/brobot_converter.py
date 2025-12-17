@@ -85,7 +85,7 @@ class BrobotConverter:
         # Create output directories
         self._setup_output_directories()
 
-    def _setup_output_directories(self):
+    def _setup_output_directories(self) -> None:
         """Create necessary output directories."""
         directories = [
             self.output_dir,
@@ -111,7 +111,7 @@ class BrobotConverter:
         images = self._find_brobot_images()
         self.report.total_images = len(images)
 
-        states = []
+        states: list[Any] = []
         for image_path in images:
             try:
                 state = self.convert_image(image_path)
@@ -168,7 +168,7 @@ class BrobotConverter:
         segments = self.segmenter.segment_screen(img)
 
         # Convert segments to Elements
-        elements = []
+        elements=[],
         for i, segment in enumerate(segments):
             element = self._segment_to_element(segment, state_name, i)
             elements.append(element)
@@ -343,7 +343,7 @@ class BrobotConverter:
         logger.info(f"Found {len(configs)} Brobot config files")
         return configs
 
-    def _convert_patterns(self, patterns: list[Path]):
+    def _convert_patterns(self, patterns: list[Path]) -> None:
         """Convert Brobot patterns to Qontinui format.
 
         Args:
@@ -390,7 +390,7 @@ class BrobotConverter:
 
         return converted
 
-    def _convert_configs(self, configs: list[Path], states: list[State]):
+    def _convert_configs(self, configs: list[Path], states: list[State]) -> None:
         """Convert Brobot configuration files.
 
         Args:
@@ -436,7 +436,7 @@ class BrobotConverter:
         Returns:
             List of transitions
         """
-        transitions = []
+        transitions: list[Any] = []
         state_names = {state.name for state in states}
 
         # Look for transition definitions in config
@@ -454,7 +454,7 @@ class BrobotConverter:
 
         return transitions
 
-    def _save_states(self, states: list[State]):
+    def _save_states(self, states: list[State]) -> None:
         """Save converted states to files.
 
         Args:
@@ -495,7 +495,7 @@ class BrobotConverter:
 
         return cast(dict[str, Any], state_dict)
 
-    def _save_report(self):
+    def _save_report(self) -> None:
         """Save conversion report."""
         report_file = self.output_dir / "conversion_report.json"
 
@@ -531,7 +531,7 @@ class BrobotConverter:
         logger.info(f"Saved conversion report to {report_file}")
 
 
-def main():
+def main() -> None:
     """CLI entry point for Brobot converter."""
     import argparse
 

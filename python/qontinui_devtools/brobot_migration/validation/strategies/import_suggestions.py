@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Import fix suggestion strategies for Java/Brobot to Python/Qontinui migration.
 """
 
@@ -55,7 +57,7 @@ class ImportSuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for Brobot import errors."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         # Extract the specific Brobot import from the error
         brobot_import_match = re.search(r"brobot\.[\w.]+", error_message + stack_trace)
@@ -91,7 +93,7 @@ class ImportSuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for Java import errors."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         # Extract Java import from error
         java_import_match = re.search(r"java\.[\w.]+", error_message + stack_trace)

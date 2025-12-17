@@ -238,7 +238,7 @@ def plot_leak_heatmap(
         tracked_types = [t for t, _ in sorted_types[:20]]
 
     # Build data matrix
-    data = []
+    data: list[Any] = []
     for obj_type in tracked_types:
         counts = [s.objects_by_type.get(obj_type, 0) for s in snapshots]
         # Normalize to show growth from baseline
@@ -296,7 +296,7 @@ def plot_comparison(
     # Calculate differences
     all_types = set(snapshot1.objects_by_type.keys()) | set(snapshot2.objects_by_type.keys())
 
-    diffs = {}
+    diffs: dict[Any, Any] = {}
     for obj_type in all_types:
         count1 = snapshot1.objects_by_type.get(obj_type, 0)
         count2 = snapshot2.objects_by_type.get(obj_type, 0)
@@ -593,7 +593,7 @@ def generate_html_report(
 
     # Get top object changes
     all_types = set(first.objects_by_type.keys()) | set(last.objects_by_type.keys())
-    changes = []
+    changes: list[Any] = []
     for obj_type in all_types:
         initial = first.objects_by_type.get(obj_type, 0)
         final = last.objects_by_type.get(obj_type, 0)

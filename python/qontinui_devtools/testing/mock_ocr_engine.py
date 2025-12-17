@@ -227,7 +227,7 @@ class MockOCREngine(IOCREngine):
         regions = self.get_text_regions(image, min_confidence=confidence)
 
         # Search for text in all regions
-        matches = []
+        matches: list[Any] = []
         for region in regions:
             region_text = region.text if case_sensitive else region.text.lower()
             search_text = text if case_sensitive else text.lower()

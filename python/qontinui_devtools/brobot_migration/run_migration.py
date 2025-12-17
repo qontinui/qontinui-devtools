@@ -16,7 +16,7 @@ sys.path.insert(0, str(qontinui_src))
 try:
     from qontinui.test_migration.cli import TestMigrationCLI
 
-    def main():
+    def main() -> None:
         """Main entry point."""
         cli = TestMigrationCLI()
         exit_code = cli.run()
@@ -33,7 +33,7 @@ except ImportError as e:
     sys.path.insert(0, str(migration_dir))
     from cli_standalone import StandaloneTestMigrationCLI
 
-    def main():
+    def main() -> None:
         """Fallback main entry point."""
         cli = StandaloneTestMigrationCLI()
         exit_code = cli.run()

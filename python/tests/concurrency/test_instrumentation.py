@@ -11,7 +11,7 @@ from qontinui_devtools.concurrency.instrumentation import (
 )
 
 
-def test_shared_state_tracker_record_read():
+def test_shared_state_tracker_record_read() -> None:
     """Test recording read accesses."""
     tracker = SharedStateTracker()
     obj_id = 123
@@ -25,7 +25,7 @@ def test_shared_state_tracker_record_read():
     assert stats["write_count"] == 0
 
 
-def test_shared_state_tracker_record_write():
+def test_shared_state_tracker_record_write() -> None:
     """Test recording write accesses."""
     tracker = SharedStateTracker()
     obj_id = 123
@@ -39,7 +39,7 @@ def test_shared_state_tracker_record_write():
     assert stats["write_count"] == 2
 
 
-def test_detect_write_write_conflict():
+def test_detect_write_write_conflict() -> None:
     """Test detecting write-write conflicts."""
     tracker = SharedStateTracker(conflict_window=0.01)
     obj_id = 123
@@ -54,7 +54,7 @@ def test_detect_write_write_conflict():
     assert conflicts[0].obj_id == obj_id
 
 
-def test_detect_read_write_conflict():
+def test_detect_read_write_conflict() -> None:
     """Test detecting read-write conflicts."""
     tracker = SharedStateTracker(conflict_window=0.01)
     obj_id = 123
@@ -68,7 +68,7 @@ def test_detect_read_write_conflict():
     assert conflicts[0].conflict_type == "read-write"
 
 
-def test_detect_write_read_conflict():
+def test_detect_write_read_conflict() -> None:
     """Test detecting write-read conflicts."""
     tracker = SharedStateTracker(conflict_window=0.01)
     obj_id = 123
@@ -82,7 +82,7 @@ def test_detect_write_read_conflict():
     assert conflicts[0].conflict_type == "write-read"
 
 
-def test_no_conflict_same_thread():
+def test_no_conflict_same_thread() -> None:
     """Test that same thread accesses don't create conflicts."""
     tracker = SharedStateTracker(conflict_window=0.01)
     obj_id = 123
@@ -95,7 +95,7 @@ def test_no_conflict_same_thread():
     assert len(conflicts) == 0
 
 
-def test_no_conflict_outside_window():
+def test_no_conflict_outside_window() -> None:
     """Test that accesses outside conflict window don't conflict."""
     tracker = SharedStateTracker(conflict_window=0.001)
     obj_id = 123
@@ -108,7 +108,7 @@ def test_no_conflict_outside_window():
     assert len(conflicts) == 0
 
 
-def test_tracker_clear():
+def test_tracker_clear() -> None:
     """Test clearing tracked accesses."""
     tracker = SharedStateTracker()
     obj_id = 123
@@ -122,7 +122,7 @@ def test_tracker_clear():
     assert tracker.get_stats()["total_accesses"] == 0
 
 
-def test_tracker_get_stats():
+def test_tracker_get_stats() -> None:
     """Test getting tracker statistics."""
     tracker = SharedStateTracker()
 
@@ -140,7 +140,7 @@ def test_tracker_get_stats():
     assert 2 in stats["threads"]
 
 
-def test_tracker_with_location():
+def test_tracker_with_location() -> None:
     """Test recording accesses with location information."""
     tracker = SharedStateTracker()
     obj_id = 123
@@ -154,7 +154,7 @@ def test_tracker_with_location():
     assert conflicts[0].access_2.location == "file.py:20"
 
 
-def test_tracker_default_thread_id():
+def test_tracker_default_thread_id() -> None:
     """Test that tracker uses current thread ID by default."""
     tracker = SharedStateTracker()
     obj_id = 123
@@ -166,7 +166,7 @@ def test_tracker_default_thread_id():
     assert threading.get_ident() in stats["threads"]
 
 
-def test_tracker_default_timestamp():
+def test_tracker_default_timestamp() -> None:
     """Test that tracker uses current time by default."""
     tracker = SharedStateTracker()
     obj_id = 123
@@ -180,7 +180,7 @@ def test_tracker_default_timestamp():
     assert stats["total_accesses"] == 1
 
 
-def test_access_repr():
+def test_access_repr() -> None:
     """Test Access string representation."""
     access = Access(thread_id=123, timestamp=1.5, access_type="read")
     repr_str = repr(access)
@@ -190,7 +190,7 @@ def test_access_repr():
     assert "1.5" in repr_str
 
 
-def test_race_conflict_repr():
+def test_race_conflict_repr() -> None:
     """Test RaceConflict string representation."""
     access_1 = Access(thread_id=1, timestamp=1.0, access_type="write")
     access_2 = Access(thread_id=2, timestamp=1.001, access_type="write")
@@ -210,7 +210,7 @@ def test_race_conflict_repr():
     assert "2" in repr_str
 
 
-def test_instrumented_object_getattr():
+def test_instrumented_object_getattr() -> None:
     """Test InstrumentedObject tracks attribute access."""
     tracker = SharedStateTracker()
 
@@ -229,7 +229,7 @@ def test_instrumented_object_getattr():
     assert stats["read_count"] >= 1
 
 
-def test_instrumented_object_setattr():
+def test_instrumented_object_setattr() -> None:
     """Test InstrumentedObject tracks attribute modification."""
     tracker = SharedStateTracker()
 
@@ -248,7 +248,7 @@ def test_instrumented_object_setattr():
     assert stats["write_count"] >= 1
 
 
-def test_instrumented_object_getitem():
+def test_instrumented_object_getitem() -> None:
     """Test InstrumentedObject tracks container access."""
     tracker = SharedStateTracker()
     obj = {"key": "value"}
@@ -262,7 +262,7 @@ def test_instrumented_object_getitem():
     assert stats["read_count"] == 1
 
 
-def test_instrumented_object_setitem():
+def test_instrumented_object_setitem() -> None:
     """Test InstrumentedObject tracks container modification."""
     tracker = SharedStateTracker()
     obj = {"key": "value"}
@@ -276,7 +276,7 @@ def test_instrumented_object_setitem():
     assert stats["write_count"] == 1
 
 
-def test_multiple_objects_tracking():
+def test_multiple_objects_tracking() -> None:
     """Test tracking multiple objects."""
     tracker = SharedStateTracker(conflict_window=0.01)
 
@@ -298,13 +298,13 @@ def test_multiple_objects_tracking():
     assert conflicts[0].obj_id == obj1_id
 
 
-def test_concurrent_tracking():
+def test_concurrent_tracking() -> None:
     """Test tracker with actual concurrent access."""
     tracker = SharedStateTracker()
     shared_dict = {"value": 0}
     obj_id = id(shared_dict)
 
-    def worker(thread_id: int):
+    def worker(thread_id: int) -> None:
         for _i in range(100):
             tracker.record_read(obj_id, thread_id=thread_id)
             shared_dict["value"] += 1

@@ -69,7 +69,7 @@ class ComplexityAnalyzer:
 
     def _find_rust_files(self) -> list[Path]:
         """Find all Rust files in the project."""
-        rust_files = []
+        rust_files: list[Any] = []
         for path in self.root_path.rglob("*.rs"):
             parts = path.parts
             skip_dirs = {"target", ".git", "vendor"}
@@ -129,7 +129,7 @@ class ComplexityAnalyzer:
         """
         # Find the opening brace
         brace_count = 0
-        body_lines = []
+        body_lines: list[Any] = []
         in_body = False
 
         for i in range(start_line, len(lines)):
@@ -190,7 +190,7 @@ class ComplexityAnalyzer:
 
                 # Flag if complex or large
                 if complexity >= self.complexity_threshold or body_lines > 100:
-                    details_parts = []
+                    details_parts: list[Any] = []
                     if complexity >= self.complexity_threshold:
                         details_parts.append(f"complexity {complexity}")
                     if body_lines > 100:

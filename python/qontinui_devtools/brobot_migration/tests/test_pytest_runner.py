@@ -15,24 +15,24 @@ from qontinui.test_migration.execution.pytest_runner import PytestRunner
 class TestPytestRunner:
     """Test cases for PytestRunner."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.runner = PytestRunner()
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test that runner initializes correctly."""
         assert self.runner is not None
         assert self.runner.python_executable == sys.executable
         assert len(self.runner.default_pytest_args) > 0
         assert "-v" in self.runner.default_pytest_args
 
-    def test_initialization_with_custom_python(self):
+    def test_initialization_with_custom_python(self) -> None:
         """Test initialization with custom Python executable."""
         custom_python = "/usr/bin/python3"
         runner = PytestRunner(python_executable=custom_python)
         assert runner.python_executable == custom_python
 
-    def test_configure_test_environment_verbose(self):
+    def test_configure_test_environment_verbose(self) -> None:
         """Test configuring test environment with verbose output."""
         config = {"verbose": True, "capture_output": False}
         self.runner.configure_test_environment(config)
@@ -41,7 +41,7 @@ class TestPytestRunner:
         assert "-v" in self.runner.default_pytest_args
         assert "-s" in self.runner.default_pytest_args
 
-    def test_configure_test_environment_quiet(self):
+    def test_configure_test_environment_quiet(self) -> None:
         """Test configuring test environment without verbose output."""
         config = {"verbose": False, "capture_output": True}
         self.runner.configure_test_environment(config)
@@ -49,7 +49,7 @@ class TestPytestRunner:
         assert "-v" not in self.runner.default_pytest_args
         assert "-s" not in self.runner.default_pytest_args
 
-    def test_configure_test_environment_coverage(self):
+    def test_configure_test_environment_coverage(self) -> None:
         """Test configuring test environment with coverage."""
         config = {"collect_coverage": True}
         self.runner.configure_test_environment(config)
@@ -57,7 +57,7 @@ class TestPytestRunner:
         assert "--cov" in self.runner.default_pytest_args
         assert "--cov-report=term-missing" in self.runner.default_pytest_args
 
-    def test_discover_test_files(self):
+    def test_discover_test_files(self) -> None:
         """Test test file discovery."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -81,7 +81,7 @@ class TestPytestRunner:
             assert "test_sub.py" in test_names
             assert "not_a_test.py" not in test_names
 
-    def test_run_single_test_file_not_found(self):
+    def test_run_single_test_file_not_found(self) -> None:
         """Test running a single test when file doesn't exist."""
         non_existent_file = Path("/non/existent/test.py")
         result = self.runner.run_single_test(non_existent_file)
@@ -92,7 +92,7 @@ class TestPytestRunner:
         assert result.test_name == "test.py"
 
     @patch("subprocess.run")
-    def test_run_single_test_success(self, mock_subprocess):
+    def test_run_single_test_success(self, mock_subprocess) -> None:
         """Test successful single test execution."""
         # Mock successful subprocess result
         mock_result = Mock()
@@ -124,7 +124,7 @@ class TestPytestRunner:
                 test_file.unlink()
 
     @patch("subprocess.run")
-    def test_run_single_test_failure(self, mock_subprocess):
+    def test_run_single_test_failure(self, mock_subprocess) -> None:
         """Test single test execution with failure."""
         # Mock failed subprocess result
         mock_result = Mock()
@@ -148,7 +148,7 @@ class TestPytestRunner:
                 test_file.unlink()
 
     @patch("subprocess.run")
-    def test_run_single_test_timeout(self, mock_subprocess):
+    def test_run_single_test_timeout(self, mock_subprocess) -> None:
         """Test single test execution with timeout."""
         # Mock timeout exception
         mock_subprocess.side_effect = subprocess.TimeoutExpired("pytest", 300)
@@ -166,7 +166,7 @@ class TestPytestRunner:
             finally:
                 test_file.unlink()
 
-    def test_run_test_suite_empty_directory(self):
+    def test_run_test_suite_empty_directory(self) -> None:
         """Test running test suite on empty directory."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -179,7 +179,7 @@ class TestPytestRunner:
             assert result.failed_tests == 0
             assert result.skipped_tests == 0
 
-    def test_run_test_suite_nonexistent_directory(self):
+    def test_run_test_suite_nonexistent_directory(self) -> None:
         """Test running test suite on non-existent directory."""
         non_existent_dir = Path("/non/existent/directory")
 
@@ -190,7 +190,7 @@ class TestPytestRunner:
         assert result.execution_time >= 0
 
     @patch("subprocess.run")
-    def test_run_test_suite_success(self, mock_subprocess):
+    def test_run_test_suite_success(self, mock_subprocess) -> None:
         """Test successful test suite execution."""
         # Mock successful subprocess result
         mock_result = Mock()
@@ -218,7 +218,7 @@ test_example.py::test_function2 PASSED
             mock_subprocess.assert_called_once()
 
     @patch("subprocess.run")
-    def test_run_test_suite_timeout(self, mock_subprocess):
+    def test_run_test_suite_timeout(self, mock_subprocess) -> None:
         """Test test suite execution with timeout."""
         # Mock timeout exception
         mock_subprocess.side_effect = subprocess.TimeoutExpired("pytest", 1800)
@@ -235,7 +235,7 @@ test_example.py::test_function2 PASSED
             assert result.failed_tests > 0
             assert all("timed out" in r.error_message for r in result.individual_results)
 
-    def test_parse_test_counts_simple(self):
+    def test_parse_test_counts_simple(self) -> None:
         """Test parsing test counts from pytest output."""
         output = "5 passed, 2 failed, 1 skipped in 0.5s"
 
@@ -246,7 +246,7 @@ test_example.py::test_function2 PASSED
         assert failed == 2
         assert skipped == 1
 
-    def test_parse_test_counts_no_matches(self):
+    def test_parse_test_counts_no_matches(self) -> None:
         """Test parsing test counts when no matches found."""
         output = "No tests found"
 
@@ -257,7 +257,7 @@ test_example.py::test_function2 PASSED
         assert failed == 0
         assert skipped == 0
 
-    def test_extract_error_message(self):
+    def test_extract_error_message(self) -> None:
         """Test extracting error message from pytest output."""
         output = """
 test_example.py::test_function FAILED
@@ -271,7 +271,7 @@ E   assert 5 == 3
         assert "AssertionError" in error_message
         assert "Expected 5 but got 3" in error_message
 
-    def test_extract_stack_trace(self):
+    def test_extract_stack_trace(self) -> None:
         """Test extracting stack trace from pytest output."""
         output = """
 Traceback (most recent call last):
@@ -287,7 +287,7 @@ AssertionError
         assert "AssertionError" in stack_trace
 
     @patch("subprocess.run")
-    def test_get_test_environment_info(self, mock_subprocess):
+    def test_get_test_environment_info(self, mock_subprocess) -> None:
         """Test getting test environment information."""
         # Mock subprocess calls for version info
         mock_subprocess.side_effect = [
@@ -304,7 +304,7 @@ AssertionError
         assert "pytest 7.0.0" in env_info["pytest_version"]
 
     @patch("subprocess.run")
-    def test_get_test_environment_info_error(self, mock_subprocess):
+    def test_get_test_environment_info_error(self, mock_subprocess) -> None:
         """Test getting test environment info when commands fail."""
         mock_subprocess.side_effect = Exception("Command failed")
 
@@ -314,7 +314,7 @@ AssertionError
         assert "Failed to get environment info" in env_info["error"]
 
     @patch("subprocess.run")
-    def test_validate_test_environment_success(self, mock_subprocess):
+    def test_validate_test_environment_success(self, mock_subprocess) -> None:
         """Test successful test environment validation."""
         # Mock successful subprocess calls
         mock_subprocess.return_value = Mock(returncode=0, stdout="", stderr="")
@@ -325,7 +325,7 @@ AssertionError
         assert mock_subprocess.call_count == 2  # Python version + pytest version
 
     @patch("subprocess.run")
-    def test_validate_test_environment_python_error(self, mock_subprocess):
+    def test_validate_test_environment_python_error(self, mock_subprocess) -> None:
         """Test test environment validation with Python error."""
         # Mock failed Python call
         mock_subprocess.side_effect = [
@@ -339,7 +339,7 @@ AssertionError
         assert any("Python executable not working" in error for error in errors)
 
     @patch("subprocess.run")
-    def test_validate_test_environment_pytest_error(self, mock_subprocess):
+    def test_validate_test_environment_pytest_error(self, mock_subprocess) -> None:
         """Test test environment validation with pytest error."""
         # Mock successful Python but failed pytest
         mock_subprocess.side_effect = [
@@ -353,7 +353,7 @@ AssertionError
         assert any("pytest is not available" in error for error in errors)
 
     @patch("subprocess.run")
-    def test_validate_test_environment_exception(self, mock_subprocess):
+    def test_validate_test_environment_exception(self, mock_subprocess) -> None:
         """Test test environment validation with exception."""
         mock_subprocess.side_effect = Exception("Command not found")
 
@@ -363,7 +363,7 @@ AssertionError
         assert any("Cannot execute Python" in error for error in errors)
 
     @patch("subprocess.run")
-    def test_run_specific_tests(self, mock_subprocess):
+    def test_run_specific_tests(self, mock_subprocess) -> None:
         """Test running specific tests with patterns."""
         # Mock successful subprocess result
         mock_result = Mock()
@@ -385,7 +385,7 @@ AssertionError
             call_args = mock_subprocess.call_args[0][0]
             assert "test_specific.py::test_method" in call_args
 
-    def test_parse_individual_results(self):
+    def test_parse_individual_results(self) -> None:
         """Test parsing individual test results from output."""
         output = """
 test_example.py::test_function1 PASSED

@@ -4,7 +4,7 @@ Report formatting with Strategy pattern for multiple output formats.
 
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ...core.models import FailureAnalysis, TestResults
@@ -49,7 +49,7 @@ class TextReportFormatter(ReportFormatter):
         Returns:
             Formatted text report
         """
-        report_lines = []
+        report_lines: list[Any] = []
 
         # Header
         report_lines.append("=" * 80)
@@ -109,7 +109,7 @@ class TextReportFormatter(ReportFormatter):
         Returns:
             Formatted text summary
         """
-        summary_lines = []
+        summary_lines: list[Any] = []
 
         # Header
         summary_lines.append("=" * 80)

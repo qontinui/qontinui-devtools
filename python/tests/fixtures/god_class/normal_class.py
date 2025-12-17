@@ -1,6 +1,8 @@
 """Example well-designed class with single responsibility for testing."""
 
 
+from typing import Any
+
 class NormalClass:
     """Well-designed class with single responsibility (counter)."""
 
@@ -30,7 +32,7 @@ class WellDesignedValidator:
 
     def __init__(self) -> None:
         """Initialize validator."""
-        self.errors = []
+        self.errors=[],
 
     def validate_email(self, email: str) -> bool:
         """Validate email format."""

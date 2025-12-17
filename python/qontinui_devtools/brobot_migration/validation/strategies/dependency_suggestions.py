@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Dependency fix suggestion strategies for Spring Boot and Mockito migration.
 """
 
@@ -19,7 +21,7 @@ class DependencySuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for Spring Boot annotation errors."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         spring_annotations = ["@SpringBootTest", "@Autowired", "@Component", "@Service"]
 
@@ -60,7 +62,7 @@ class DependencySuggestionStrategy:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate fixes for Mockito errors."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         if "mockito" in (error_message + stack_trace).lower():
             suggestions.append(

@@ -1,5 +1,9 @@
 """Example: Testing HAL Factory pattern for race conditions.
 
+from typing import Any
+
+from typing import Any
+
 This example demonstrates testing a singleton factory pattern
 for thread safety issues.
 """
@@ -14,7 +18,7 @@ from qontinui_devtools.concurrency import RaceConditionTester
 class MockInputController:
     """Mock input controller."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.initialized = time.time()
         time.sleep(0.001)  # Simulate initialization time
 
@@ -27,14 +31,14 @@ class HALFactory:
     _creation_count = 0
 
     @classmethod
-    def reset(cls):
+    def reset(cls) -> None:
         """Reset factory state for testing."""
         cls._instance = None
         cls._controller = None
         cls._creation_count = 0
 
     @classmethod
-    def get_input_controller(cls):
+    def get_input_controller(cls) -> Any:
         """Get input controller - UNSAFE lazy initialization."""
         if cls._controller is None:
             # Race condition: multiple threads can enter here!
@@ -52,7 +56,7 @@ class SafeHALFactory:
     _lock = threading.Lock()
 
     @classmethod
-    def reset(cls):
+    def reset(cls) -> None:
         """Reset factory state for testing."""
         with cls._lock:
             cls._instance = None
@@ -60,7 +64,7 @@ class SafeHALFactory:
             cls._creation_count = 0
 
     @classmethod
-    def get_input_controller(cls):
+    def get_input_controller(cls) -> Any:
         """Get input controller - SAFE lazy initialization."""
         if cls._controller is None:
             with cls._lock:
@@ -71,7 +75,7 @@ class SafeHALFactory:
         return cls._controller
 
 
-def test_unsafe_factory():
+def test_unsafe_factory() -> None:
     """Test the unsafe factory pattern."""
     print("=" * 80)
     print("Testing UNSAFE HAL Factory Pattern")
@@ -79,7 +83,7 @@ def test_unsafe_factory():
 
     HALFactory.reset()
 
-    def worker():
+    def worker() -> None:
         """Worker that gets controller."""
         controller = HALFactory.get_input_controller()
         assert controller is not None
@@ -111,7 +115,7 @@ def test_unsafe_factory():
         print(f"  Variance: {result.timing_variance*1000:.2f}ms")
 
 
-def test_safe_factory():
+def test_safe_factory() -> None:
     """Test the safe factory pattern."""
     print("\n" + "=" * 80)
     print("Testing SAFE HAL Factory Pattern")
@@ -119,7 +123,7 @@ def test_safe_factory():
 
     SafeHALFactory.reset()
 
-    def worker():
+    def worker() -> None:
         """Worker that gets controller."""
         controller = SafeHALFactory.get_input_controller()
         assert controller is not None
@@ -151,7 +155,7 @@ def test_safe_factory():
         print(f"  Variance: {result.timing_variance*1000:.2f}ms")
 
 
-def test_comparison():
+def test_comparison() -> None:
     """Compare both implementations."""
     print("\n" + "=" * 80)
     print("Performance Comparison")
@@ -187,7 +191,7 @@ def test_comparison():
     print(f"\nSynchronization Overhead: {overhead:.1f}%")
 
 
-def main():
+def main() -> None:
     """Run all factory tests."""
     print("\n")
     print("╔" + "═" * 78 + "╗")

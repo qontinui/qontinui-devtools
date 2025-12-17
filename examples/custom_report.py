@@ -26,7 +26,7 @@ from qontinui_devtools.reporting import (
 )
 
 
-def create_custom_report():
+def create_custom_report() -> None:
     """Create a custom report with manually defined sections."""
 
     # Create report data

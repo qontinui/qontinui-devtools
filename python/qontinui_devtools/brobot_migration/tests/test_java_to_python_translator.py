@@ -17,11 +17,11 @@ from qontinui.test_migration.translation.java_to_python_translator import JavaTo
 class TestJavaToPythonTranslator:
     """Test cases for JavaToPythonTranslator."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.translator = JavaToPythonTranslator()
 
-    def test_camel_to_snake_conversion(self):
+    def test_camel_to_snake_conversion(self) -> None:
         """Test camelCase to snake_case conversion."""
         assert self.translator._camel_to_snake("testMethod") == "test_method"
         assert self.translator._camel_to_snake("getUserName") == "get_user_name"
@@ -29,7 +29,7 @@ class TestJavaToPythonTranslator:
         assert self.translator._camel_to_snake("simpleTest") == "simple_test"
         assert self.translator._camel_to_snake("test") == "test"
 
-    def test_java_type_translation(self):
+    def test_java_type_translation(self) -> None:
         """Test Java type to Python type translation."""
         type_mappings = self.translator._java_to_python_types
 
@@ -40,7 +40,7 @@ class TestJavaToPythonTranslator:
         assert type_mappings["Map"] == "Dict"
         assert type_mappings["void"] == "None"
 
-    def test_method_signature_translation(self):
+    def test_method_signature_translation(self) -> None:
         """Test Java method signature translation."""
         java_signature = "public void testSomething(String param1, Integer param2)"
         python_signature = self.translator._translate_method_signature(java_signature)
@@ -48,7 +48,7 @@ class TestJavaToPythonTranslator:
         expected = "def test_something(self, param1: str, param2: int):"
         assert python_signature == expected
 
-    def test_parameter_translation(self):
+    def test_parameter_translation(self) -> None:
         """Test Java parameter translation."""
         # Simple parameter
         result = self.translator._translate_parameter("String userName")
@@ -58,20 +58,20 @@ class TestJavaToPythonTranslator:
         result = self.translator._translate_parameter("@Mock UserService userService")
         assert result == "user_service: UserService"
 
-    def test_variable_declaration_translation(self):
+    def test_variable_declaration_translation(self) -> None:
         """Test Java variable declaration translation."""
         java_line = 'String userName = "test"'
         python_line = self.translator._translate_variable_declarations(java_line)
 
         assert python_line == 'user_name = "test"'
 
-    def test_boolean_value_translation(self):
+    def test_boolean_value_translation(self) -> None:
         """Test Java boolean value translation."""
         assert self.translator._translate_value("true") == "True"
         assert self.translator._translate_value("false") == "False"
         assert self.translator._translate_value("null") == "None"
 
-    def test_constructor_call_translation(self):
+    def test_constructor_call_translation(self) -> None:
         """Test Java constructor call translation."""
         # ArrayList
         result = self.translator._translate_constructor_call("new ArrayList()")
@@ -85,14 +85,14 @@ class TestJavaToPythonTranslator:
         result = self.translator._translate_constructor_call("new UserService(param)")
         assert result == "UserService(param)"
 
-    def test_method_call_translation(self):
+    def test_method_call_translation(self) -> None:
         """Test Java method call translation."""
         java_line = "userService.getUserName()"
         python_line = self.translator._translate_method_calls(java_line)
 
         assert python_line == "user_service.get_user_name()"
 
-    def test_basic_assertion_translation(self):
+    def test_basic_assertion_translation(self) -> None:
         """Test basic assertion translation."""
         # assertTrue
         result = self.translator._basic_assertion_translation("assertTrue(condition)")
@@ -106,7 +106,7 @@ class TestJavaToPythonTranslator:
         result = self.translator._basic_assertion_translation("assertEquals(expected, actual)")
         assert result == "assert(expected, actual)"
 
-    def test_java_line_translation(self):
+    def test_java_line_translation(self) -> None:
         """Test complete Java line translation."""
         # Variable declaration with method call
         java_line = "String result = userService.getUserName();"
@@ -115,7 +115,7 @@ class TestJavaToPythonTranslator:
         expected = "result = user_service.get_user_name()"
         assert python_line == expected
 
-    def test_method_body_translation(self):
+    def test_method_body_translation(self) -> None:
         """Test Java method body translation."""
         java_body = """
         String userName = "test";
@@ -133,7 +133,7 @@ class TestJavaToPythonTranslator:
 
         assert python_lines == expected_lines
 
-    def test_setup_method_translation(self):
+    def test_setup_method_translation(self) -> None:
         """Test @Before method translation."""
         setup_method = TestMethod(
             name="setUp",
@@ -147,7 +147,7 @@ class TestJavaToPythonTranslator:
         assert "def set_up(self):" in python_lines
         assert "    user_service = UserService()" in python_lines
 
-    def test_teardown_method_translation(self):
+    def test_teardown_method_translation(self) -> None:
         """Test @After method translation."""
         teardown_method = TestMethod(
             name="tearDown", annotations=["@After"], body="userService.cleanup();"
@@ -160,7 +160,7 @@ class TestJavaToPythonTranslator:
         assert "    yield" in python_lines
         assert "    user_service.cleanup()" in python_lines
 
-    def test_test_method_translation(self):
+    def test_test_method_translation(self) -> None:
         """Test @Test method translation."""
         test_method = TestMethod(
             name="testUserValidation",
@@ -175,7 +175,7 @@ class TestJavaToPythonTranslator:
         assert "    result = user_service.validate_user(user_name)" in python_lines
         assert "    assert(result)" in python_lines
 
-    def test_test_method_with_timeout(self):
+    def test_test_method_with_timeout(self) -> None:
         """Test @Test method with timeout annotation."""
         test_method = TestMethod(
             name="testWithTimeout",
@@ -188,7 +188,7 @@ class TestJavaToPythonTranslator:
         assert "@pytest.mark.timeout(5.0)" in python_lines
         assert "def test_with_timeout(self):" in python_lines
 
-    def test_python_imports_generation(self):
+    def test_python_imports_generation(self) -> None:
         """Test Python import generation from Java dependencies."""
         test_file = TestFile(
             path=Path("TestClass.java"),
@@ -209,7 +209,7 @@ class TestJavaToPythonTranslator:
         assert "from typing import List" in imports
         assert "from unittest.mock import Mock, patch, MagicMock" in imports
 
-    def test_class_definition_translation(self):
+    def test_class_definition_translation(self) -> None:
         """Test Java class definition translation."""
         result = self.translator._translate_class_definition("UserServiceTest")
         assert result == "class UserServiceTest:"
@@ -217,7 +217,7 @@ class TestJavaToPythonTranslator:
         result = self.translator._translate_class_definition("SimpleTest")
         assert result == "class SimpleTest:"
 
-    def test_complete_test_file_translation(self):
+    def test_complete_test_file_translation(self) -> None:
         """Test complete test file translation."""
         test_file = TestFile(
             path=Path("UserServiceTest.java"),
@@ -254,7 +254,7 @@ class TestJavaToPythonTranslator:
         assert "user_service = UserService()" in python_code
         assert "assert(result)" in python_code
 
-    def test_extract_method_signature(self):
+    def test_extract_method_signature(self) -> None:
         """Test method signature extraction from Java code."""
         java_method = """
         @Test
@@ -266,7 +266,7 @@ class TestJavaToPythonTranslator:
         signature = self.translator._extract_method_signature(java_method)
         assert "public void testSomething(String param)" in signature
 
-    def test_extract_method_body(self):
+    def test_extract_method_body(self) -> None:
         """Test method body extraction from Java code."""
         java_method = """
         public void testMethod() {

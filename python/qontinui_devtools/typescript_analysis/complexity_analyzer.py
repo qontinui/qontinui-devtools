@@ -231,7 +231,7 @@ class ComplexityAnalyzer:
         Returns:
             List of tuples (function_name, start_line, end_line)
         """
-        functions = []
+        functions: list[Any] = []
         lines = content.split("\n")
 
         i = 0

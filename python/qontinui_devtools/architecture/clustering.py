@@ -1,5 +1,7 @@
 """Clustering algorithm for grouping methods by semantic similarity.
 
+from typing import Any
+
 This module implements a keyword-based clustering algorithm that groups methods
 with similar responsibilities together based on their naming patterns.
 """
@@ -32,7 +34,7 @@ class MethodCluster:
     keywords: set[str]
     confidence: float
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Ensure methods is a list and keywords is a set."""
         if not isinstance(self.methods, list):
             self.methods = list(self.methods)
@@ -219,7 +221,7 @@ def merge_similar_clusters(
     if len(clusters) <= 1:
         return clusters
 
-    merged = []
+    merged: list[Any] = []
     used = set()
 
     for i, cluster1 in enumerate(clusters):
@@ -287,7 +289,7 @@ def name_cluster(methods: list[str]) -> str:
             return most_common[0][0]
 
     # Fall back to keyword analysis
-    all_keywords = []
+    all_keywords: list[Any] = []
     for method in methods:
         all_keywords.extend(extract_keywords(method))
 
@@ -326,7 +328,7 @@ def analyze_cluster_cohesion(cluster: MethodCluster) -> float:
     if len(cluster.methods) < 2:
         return 1.0  # Single method is perfectly cohesive
 
-    similarities = []
+    similarities: list[Any] = []
     methods = cluster.methods
 
     # Calculate pairwise similarities

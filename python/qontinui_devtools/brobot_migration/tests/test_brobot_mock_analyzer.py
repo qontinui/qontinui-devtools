@@ -19,7 +19,7 @@ from qontinui.test_migration.mocks.brobot_mock_analyzer import BrobotMockAnalyze
 class TestBrobotMockAnalyzer:
     """Test cases for BrobotMockAnalyzer."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.analyzer = BrobotMockAnalyzer()
 
@@ -46,7 +46,7 @@ class TestBrobotMockAnalyzer:
             ],
         )
 
-    def test_identify_annotation_mocks(self):
+    def test_identify_annotation_mocks(self) -> None:
         """Test identification of annotation-based mocks."""
         java_content = """
         @Mock
@@ -80,7 +80,7 @@ class TestBrobotMockAnalyzer:
         ]
         assert len(brobot_mocks) >= 2  # BrobotMock, StateObject, ActionMock
 
-    def test_identify_programmatic_mocks(self):
+    def test_identify_programmatic_mocks(self) -> None:
         """Test identification of programmatically created mocks."""
         java_content = """
         BrobotMock brobotMock = mock(BrobotMock.class);
@@ -103,7 +103,7 @@ class TestBrobotMockAnalyzer:
         programmatic_mocks = [m for m in mock_usages if m.mock_type == "brobot_programmatic_mock"]
         assert len(programmatic_mocks) >= 2  # Should find BrobotMock and RegionMock
 
-    def test_identify_brobot_specific_mocks(self):
+    def test_identify_brobot_specific_mocks(self) -> None:
         """Test identification of Brobot-specific mock patterns."""
         java_content = """
         @BrobotTest
@@ -142,7 +142,7 @@ class TestBrobotMockAnalyzer:
         assert len(brobot_test_mocks) >= 1
         assert len(state_mocks) >= 1
 
-    def test_extract_gui_model_from_state_mock(self):
+    def test_extract_gui_model_from_state_mock(self) -> None:
         """Test GUI model extraction from state mock usage."""
         mock_usage = MockUsage(
             mock_type="brobot_state_mock",
@@ -165,7 +165,7 @@ class TestBrobotMockAnalyzer:
         assert "click" in gui_model.actions
         assert gui_model.state_properties["active"] is True
 
-    def test_extract_gui_model_from_non_gui_mock(self):
+    def test_extract_gui_model_from_non_gui_mock(self) -> None:
         """Test that non-GUI mocks return None for GUI model extraction."""
         mock_usage = MockUsage(
             mock_type="brobot_programmatic_mock",
@@ -176,7 +176,7 @@ class TestBrobotMockAnalyzer:
         gui_model = self.analyzer.extract_gui_model(mock_usage)
         assert gui_model is None
 
-    def test_extract_gui_configurations(self):
+    def test_extract_gui_configurations(self) -> None:
         """Test extraction of GUI configurations from method body."""
         method_body = """
         stateObj.element("loginButton").action("click");
@@ -196,7 +196,7 @@ class TestBrobotMockAnalyzer:
         assert "image_definition" in pattern_types
         assert "transition_definition" in pattern_types
 
-    def test_is_brobot_mock_class(self):
+    def test_is_brobot_mock_class(self) -> None:
         """Test identification of Brobot mock classes."""
         # Direct matches
         assert self.analyzer._is_brobot_mock_class("BrobotMock")
@@ -212,7 +212,7 @@ class TestBrobotMockAnalyzer:
         assert not self.analyzer._is_brobot_mock_class("StringUtils")
         assert not self.analyzer._is_brobot_mock_class("DatabaseConnection")
 
-    def test_is_brobot_gui_mock(self):
+    def test_is_brobot_gui_mock(self) -> None:
         """Test identification of GUI-related mocks."""
         gui_mock = MockUsage(mock_type="brobot_state_mock", mock_class="StateObject")
 
@@ -221,7 +221,7 @@ class TestBrobotMockAnalyzer:
         assert self.analyzer._is_brobot_gui_mock(gui_mock)
         assert not self.analyzer._is_brobot_gui_mock(non_gui_mock)
 
-    def test_get_mock_dependency_mapping(self):
+    def test_get_mock_dependency_mapping(self) -> None:
         """Test retrieval of mock dependency mappings."""
         mappings = self.analyzer.get_mock_dependency_mapping()
 
@@ -233,7 +233,7 @@ class TestBrobotMockAnalyzer:
         assert "io.github.jspinak.brobot.actions" in mappings
         assert mappings["io.github.jspinak.brobot.actions"] == "qontinui.actions"
 
-    def test_analyze_mock_complexity(self):
+    def test_analyze_mock_complexity(self) -> None:
         """Test mock complexity analysis."""
         # Simple annotation mock
         simple_mock = MockUsage(
@@ -269,7 +269,7 @@ class TestBrobotMockAnalyzer:
         assert self.analyzer.analyze_mock_complexity(moderate_mock) == "moderate"
         assert self.analyzer.analyze_mock_complexity(complex_mock) == "complex"
 
-    def test_extract_from_setup_code(self):
+    def test_extract_from_setup_code(self) -> None:
         """Test extraction of GUI model details from setup code."""
         gui_model = GuiModel(model_name="TestModel")
         setup_code = """
@@ -288,7 +288,7 @@ class TestBrobotMockAnalyzer:
         assert "type" in gui_model.actions
         assert "loginState" in gui_model.state_properties
 
-    def test_reconstruct_file_content(self):
+    def test_reconstruct_file_content(self) -> None:
         """Test reconstruction of file content from TestFile object."""
         test_file = TestFile(
             path=Path("test.java"),
@@ -313,7 +313,7 @@ class TestBrobotMockAnalyzer:
         assert "public void testMethod()" in content
         assert "assertEquals(1, 1);" in content
 
-    def test_integration_with_real_file_content(self):
+    def test_integration_with_real_file_content(self) -> None:
         """Test analyzer with realistic Java test file content."""
         java_content = """
         package com.example.test;
@@ -352,7 +352,7 @@ class TestBrobotMockAnalyzer:
         assert "brobot_test_environment" in mock_types
         assert "brobot_annotation_mock" in mock_types or "brobot_programmatic_mock" in mock_types
 
-    def test_empty_file_handling(self):
+    def test_empty_file_handling(self) -> None:
         """Test handling of empty or minimal test files."""
         empty_test_file = TestFile(
             path=Path("empty.java"), test_type=TestType.UNIT, class_name="EmptyTest"
@@ -365,7 +365,7 @@ class TestBrobotMockAnalyzer:
         assert isinstance(mock_usages, list)
         # Should not crash and return empty list for files with no mocks
 
-    def test_malformed_java_handling(self):
+    def test_malformed_java_handling(self) -> None:
         """Test handling of malformed Java content."""
         malformed_content = """
         This is not valid Java code

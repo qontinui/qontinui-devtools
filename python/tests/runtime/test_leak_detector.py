@@ -196,7 +196,7 @@ class TestAnalyzeObjectRetention:
         """Test retention analysis for custom object."""
 
         class CustomClass:
-            def __init__(self):
+            def __init__(self) -> None:
                 self.data = "test"
 
         obj = CustomClass()

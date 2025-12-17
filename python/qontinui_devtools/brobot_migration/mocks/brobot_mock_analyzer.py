@@ -70,7 +70,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
         Returns:
             List of MockUsage objects representing identified mock patterns
         """
-        mock_usages = []
+        mock_usages: list[Any] = []
 
         # Read the actual file content if path exists
         if test_file.path.exists():
@@ -107,7 +107,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
             model_name=mock_usage.mock_class,
             elements={},
             actions=[],
-            state_properties={},
+            state_properties={}
         )
 
         # Extract elements from configuration
@@ -130,7 +130,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
     def _find_annotation_mocks(self, content: str, test_file: TestFile) -> list[MockUsage]:
         """Find mocks declared using annotations."""
-        mock_usages = []
+        mock_usages: list[Any] = []
 
         # Pattern to match mock annotations with field declarations
         annotation_pattern = r"(@(?:Mock|MockBean|Spy|InjectMocks)(?:\([^)]*\))?)\s+(?:private\s+)?(\w+(?:\.\w+)*)\s+(\w+);"
@@ -158,7 +158,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
     def _find_programmatic_mocks(self, content: str, test_file: TestFile) -> list[MockUsage]:
         """Find mocks created programmatically."""
-        mock_usages = []
+        mock_usages: list[Any] = []
 
         # Pattern to match Mockito.mock() calls
         mock_pattern = r"(\w+)\s*=\s*(?:Mockito\.)?mock\(\s*(\w+(?:\.\w+)*)\.class\s*\)"
@@ -184,7 +184,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
     def _find_brobot_specific_mocks(self, content: str, test_file: TestFile) -> list[MockUsage]:
         """Find Brobot-specific mock patterns."""
-        mock_usages = []
+        mock_usages: list[Any] = []
 
         # Look for Brobot test annotations
         brobot_test_pattern = r"@BrobotTest(?:\([^)]*\))?"
@@ -229,7 +229,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
     def _extract_gui_configurations(self, method_body: str) -> list[dict[str, Any]]:
         """Extract GUI model configurations from method body."""
-        configurations = []
+        configurations: list[Any] = []
 
         for pattern_name, pattern in self.gui_model_patterns.items():
             matches = re.finditer(pattern, method_body)
@@ -243,7 +243,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
         return configurations
 
-    def _extract_from_setup_code(self, gui_model: GuiModel, setup_code: str):
+    def _extract_from_setup_code(self, gui_model: GuiModel, setup_code: str) -> None:
         """Extract GUI model details from setup code."""
         # Extract elements
         element_matches = re.finditer(r'\.element\(\s*"([^"]+)"\s*,\s*([^)]+)\)', setup_code)
@@ -295,7 +295,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
     def _reconstruct_file_content(self, test_file: TestFile) -> str:
         """Reconstruct file content from TestFile object for analysis."""
-        content_parts = []
+        content_parts: list[Any] = []
 
         # Add package declaration
         if test_file.package:
@@ -310,7 +310,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
         # Add test methods
         for method in test_file.test_methods:
-            method_content = []
+            method_content: list[Any] = []
             for annotation in method.annotations:
                 method_content.append(f"    {annotation}")
             method_content.append(f"    public void {method.name}() {{")

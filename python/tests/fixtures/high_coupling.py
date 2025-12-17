@@ -1,5 +1,7 @@
 """Test fixture: Module with high coupling (many dependencies)."""
 
+from typing import Any
+
 import ast
 import json
 import logging
@@ -40,7 +42,7 @@ class HighlyCoupledClass:
     def run_parallel(self, tasks: list) -> None:
         """Run tasks in parallel."""
         # Uses: threading, time
-        threads = []
+        threads: list[Any] = []
         for task in tasks:
             t = threading.Thread(target=task)
             threads.append(t)

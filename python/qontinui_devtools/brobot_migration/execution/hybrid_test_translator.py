@@ -403,7 +403,7 @@ from qontinui.core import QontinuiCore
 class {class_name}:
     """Migrated from {test_file.class_name}."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.qontinui = QontinuiCore()
 
@@ -447,7 +447,7 @@ class {class_name}:
         if llm_threshold is not None:
             self.llm_confidence_threshold = llm_threshold
 
-    def reset_stats(self):
+    def reset_stats(self) -> None:
         """Reset translation statistics."""
         self.stats = {
             "utility_success": 0,

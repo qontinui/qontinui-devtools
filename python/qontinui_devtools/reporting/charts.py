@@ -95,8 +95,8 @@ def create_pie_chart(
         "pink": ("rgba(236, 72, 153, 0.8)", "rgba(236, 72, 153, 1)"),
     }
 
-    bg_colors = []
-    border_colors = []
+    bg_colors: list[Any] = []
+    border_colors: list[Any] = []
     for i, _ in enumerate(data):
         color = colors[i % len(colors)]
         bg, border = color_map.get(color, color_map["blue"])
@@ -177,7 +177,7 @@ def create_line_chart(
     }
 
     default_colors = ["blue", "red", "green", "yellow", "purple"]
-    formatted_datasets = []
+    formatted_datasets: list[Any] = []
 
     for i, dataset in enumerate(datasets):
         color = dataset.get("color", default_colors[i % len(default_colors)])
@@ -244,7 +244,7 @@ def create_scatter_chart(
     }
 
     default_colors = ["blue", "red", "green", "yellow", "purple"]
-    formatted_datasets = []
+    formatted_datasets: list[Any] = []
 
     for i, dataset in enumerate(datasets):
         color = dataset.get("color", default_colors[i % len(default_colors)])
@@ -305,7 +305,7 @@ def create_stacked_bar_chart(
     }
 
     default_colors = ["blue", "red", "green", "yellow", "purple"]
-    formatted_datasets = []
+    formatted_datasets: list[Any] = []
 
     for i, dataset in enumerate(datasets):
         color = dataset.get("color", default_colors[i % len(default_colors)])
@@ -362,7 +362,7 @@ def create_radar_chart(
     }
 
     default_colors = ["blue", "red", "green", "yellow", "purple"]
-    formatted_datasets = []
+    formatted_datasets: list[Any] = []
 
     for i, dataset in enumerate(datasets):
         color = dataset.get("color", default_colors[i % len(default_colors)])
@@ -423,7 +423,7 @@ def create_multi_axis_chart(
     }
 
     default_colors = ["blue", "red", "green", "yellow", "purple"]
-    formatted_datasets = []
+    formatted_datasets: list[Any] = []
 
     for i, dataset in enumerate(datasets):
         color = dataset.get("color", default_colors[i % len(default_colors)])

@@ -410,7 +410,7 @@ from qontinui.core import QontinuiCore
 class TestExample:
     """Migrated from Java test class."""
 
-    def test_example_method(self):
+    def test_example_method(self) -> Any:
         """Test method translated by LLM."""
         # LLM-generated test logic
         result = True
@@ -526,7 +526,7 @@ class MockLLMClient:
                     "translated_code": """import pytest
 
 class TestMockTranslation:
-    def test_mock_method(self):
+    def test_mock_method(self) -> Any:
         assert True
 """,
                     "confidence": 0.9,

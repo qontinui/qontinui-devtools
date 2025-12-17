@@ -1,4 +1,8 @@
 """
+from typing import Any
+
+from typing import Any
+
 Tests for documentation generator.
 """
 
@@ -479,7 +483,7 @@ class TestASTDocExtractor:
         """Test extracting module docstring."""
         source = '''"""Module docstring."""
 
-def foo():
+def foo() -> None:
     pass
 '''
 
@@ -562,17 +566,17 @@ class Calculator:
         source = '''
 class MyClass:
     @property
-    def value(self):
+    def value(self) -> Any:
         """A property."""
         return self._value
 
     @staticmethod
-    def static_method():
+    def static_method() -> None:
         """A static method."""
         pass
 
     @classmethod
-    def class_method(cls):
+    def class_method(cls) -> None:
         """A class method."""
         pass
 '''
@@ -653,7 +657,7 @@ def foo(x: int) -> int:
             (Path(tmpdir) / "module1.py").write_text(
                 '''"""Module 1."""
 
-def func1():
+def func1() -> None:
     """Function 1."""
     pass
 '''
@@ -681,11 +685,11 @@ class MyClass:
             f.write(
                 '''"""Test module."""
 
-def public_func():
+def public_func() -> None:
     """Public function."""
     pass
 
-def _private_func():
+def _private_func() -> None:
     """Private function."""
     pass
 '''
@@ -708,11 +712,11 @@ def _private_func():
             f.write(
                 '''"""Test module."""
 
-def public_func():
+def public_func() -> None:
     """Public function."""
     pass
 
-def _private_func():
+def _private_func() -> None:
     """Private function."""
     pass
 '''
@@ -1029,7 +1033,7 @@ def multiply(x: int, y: int) -> int:
             f.write(
                 '''"""Module with NumPy docstrings."""
 
-def calculate(x, y):
+def calculate(x, y) -> Any:
     """
     Calculate something.
 

@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Suggestion formatting and application utilities.
 """
 
@@ -79,7 +81,7 @@ class SuggestionFormatter:
         python_file_path: Path | None,
     ) -> list[FixSuggestion]:
         """Generate general migration suggestions based on failure analysis."""
-        suggestions = []
+        suggestions: list[Any] = []
 
         if failure_analysis.is_migration_issue and failure_analysis.confidence > 0.7:
             suggestions.append(

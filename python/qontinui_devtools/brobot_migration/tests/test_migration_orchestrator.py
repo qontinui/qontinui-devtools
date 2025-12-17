@@ -1,4 +1,8 @@
 """
+from typing import Any
+
+from typing import Any
+
 Integration tests for the migration orchestrator.
 """
 
@@ -16,7 +20,7 @@ class TestMigrationOrchestratorTests:
     """Test cases for the TestMigrationOrchestrator class."""
 
     @pytest.fixture
-    def temp_directories(self):
+    def temp_directories(self) -> None:
         """Create temporary directories for testing."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -28,7 +32,7 @@ class TestMigrationOrchestratorTests:
             yield source_dir, target_dir
 
     @pytest.fixture
-    def sample_config(self, temp_directories):
+    def sample_config(self, temp_directories) -> Any:
         """Create a sample migration configuration."""
         source_dir, target_dir = temp_directories
         return MigrationConfig(
@@ -42,12 +46,12 @@ class TestMigrationOrchestratorTests:
         )
 
     @pytest.fixture
-    def orchestrator(self, sample_config):
+    def orchestrator(self, sample_config) -> Any:
         """Create a migration orchestrator instance."""
         return TestMigrationOrchestrator(sample_config)
 
     @pytest.fixture
-    def sample_java_test(self, temp_directories):
+    def sample_java_test(self, temp_directories) -> None:
         """Create a sample Java test file."""
         source_dir, _ = temp_directories
         test_file = source_dir / "SampleTest.java"
@@ -68,7 +72,7 @@ public class SampleTest {
         test_file.write_text(test_content)
         return test_file
 
-    def test_orchestrator_initialization(self, sample_config):
+    def test_orchestrator_initialization(self, sample_config) -> None:
         """Test that the orchestrator initializes correctly."""
         orchestrator = TestMigrationOrchestrator(sample_config)
 
@@ -89,7 +93,7 @@ public class SampleTest {
         assert orchestrator.migration_state["execution_results"] is None
         assert orchestrator.migration_state["validation_results"] is None
 
-    def test_orchestrator_default_config(self):
+    def test_orchestrator_default_config(self) -> None:
         """Test orchestrator with default configuration."""
         orchestrator = TestMigrationOrchestrator()
 
@@ -162,7 +166,7 @@ public class SampleTest {
         assert len(orchestrator.migration_state["failed_migrations"]) == 0
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.BrobotTestScanner")
-    def test_migrate_test_suite_no_tests_found(self, mock_scanner, orchestrator, temp_directories):
+    def test_migrate_test_suite_no_tests_found(self, mock_scanner, orchestrator, temp_directories) -> None:
         """Test migration when no tests are found."""
         source_dir, target_dir = temp_directories
 
@@ -224,7 +228,7 @@ public class SampleTest {
         assert "Translation failed" in failed_migration["error"]
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.PytestRunner")
-    def test_validate_migration(self, mock_runner, orchestrator, temp_directories):
+    def test_validate_migration(self, mock_runner, orchestrator, temp_directories) -> None:
         """Test migration validation."""
         _, target_dir = temp_directories
 
@@ -239,7 +243,7 @@ public class SampleTest {
             failed_tests=0,
             skipped_tests=0,
             execution_time=0.1,
-            individual_results=[],
+            individual_results=[]
         )
         mock_runner.return_value.run_test_suite.return_value = mock_results
 
@@ -251,7 +255,7 @@ public class SampleTest {
         assert results.passed_tests == 1
         assert results.failed_tests == 0
 
-    def test_get_migration_progress(self, orchestrator):
+    def test_get_migration_progress(self, orchestrator) -> None:
         """Test migration progress tracking."""
         # Initial progress
         progress = orchestrator.get_migration_progress()
@@ -278,7 +282,7 @@ public class SampleTest {
         assert progress["validation_status"] == "pending"
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.TestFailureAnalyzer")
-    def test_recover_from_failure(self, mock_analyzer, orchestrator):
+    def test_recover_from_failure(self, mock_analyzer, orchestrator) -> None:
         """Test failure recovery mechanism."""
         # Mock failure analysis
         mock_analysis = Mock()
@@ -302,7 +306,7 @@ public class SampleTest {
         # Current implementation should return False
         assert result is False
 
-    def test_generate_target_path_preserve_structure(self, orchestrator, temp_directories):
+    def test_generate_target_path_preserve_structure(self, orchestrator, temp_directories) -> None:
         """Test target path generation with structure preservation."""
         source_dir, target_dir = temp_directories
 
@@ -327,7 +331,7 @@ public class SampleTest {
         assert "com" in str(target_path)
         assert "example" in str(target_path)
 
-    def test_generate_target_path_flat_structure(self, temp_directories):
+    def test_generate_target_path_flat_structure(self, temp_directories) -> None:
         """Test target path generation without structure preservation."""
         source_dir, target_dir = temp_directories
 
@@ -357,7 +361,7 @@ public class SampleTest {
         assert target_path.parent == target_dir
         assert target_path.name == "Sample_test.py"
 
-    def test_error_handling_in_migration(self, orchestrator, temp_directories):
+    def test_error_handling_in_migration(self, orchestrator, temp_directories) -> None:
         """Test error handling during migration process."""
         source_dir, target_dir = temp_directories
 
@@ -369,7 +373,7 @@ public class SampleTest {
         # Should handle gracefully and return empty results
         assert results.total_tests == 0
 
-    def test_logging_configuration(self, sample_config):
+    def test_logging_configuration(self, sample_config) -> None:
         """Test logging configuration based on diagnostic level."""
         # Test detailed logging
         config_detailed = sample_config
@@ -394,7 +398,7 @@ class TestMigrationOrchestratorIntegration:
     """Integration tests for the migration orchestrator with real components."""
 
     @pytest.fixture
-    def integration_setup(self):
+    def integration_setup(self) -> None:
         """Set up integration test environment."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -437,7 +441,7 @@ public class SimpleTest {
 
             yield source_dir, target_dir, config
 
-    def test_end_to_end_migration_workflow(self, integration_setup):
+    def test_end_to_end_migration_workflow(self, integration_setup) -> None:
         """Test complete end-to-end migration workflow."""
         source_dir, target_dir, config = integration_setup
 
@@ -459,7 +463,7 @@ public class SimpleTest {
         assert progress["discovered_tests"] > 0
 
     @pytest.mark.slow
-    def test_migration_with_real_pytest_execution(self, integration_setup):
+    def test_migration_with_real_pytest_execution(self, integration_setup) -> None:
         """Test migration with actual pytest execution (marked as slow)."""
         source_dir, target_dir, config = integration_setup
 

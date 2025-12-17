@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 from qontinui_devtools.architecture import CouplingCohesionAnalyzer
 
 
-def main():
+def main() -> None:
     """Analyze coupling and cohesion in a codebase."""
     # Change this to point to your codebase
     target_path = "../qontinui/src"

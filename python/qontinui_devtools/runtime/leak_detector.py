@@ -124,7 +124,7 @@ def find_leaked_objects(baseline_objects: set[int], current_objects: list[Any]) 
     Returns:
         List of new objects not in baseline
     """
-    leaked = []
+    leaked: list[Any] = []
     for obj in current_objects:
         if id(obj) not in baseline_objects:
             leaked.append(obj)
@@ -284,7 +284,7 @@ def detect_common_leak_patterns(objects_by_type: dict[str, int]) -> list[str]:
     Returns:
         List of detected patterns with descriptions
     """
-    patterns = []
+    patterns: list[Any] = []
 
     # Pattern 1: Excessive list/dict growth
     if objects_by_type.get("list", 0) > 10000:
@@ -330,7 +330,7 @@ def suggest_fixes(leak_type: str, pattern: str | None = None) -> list[str]:
     Returns:
         List of suggested fixes
     """
-    suggestions = []
+    suggestions: list[Any] = []
 
     # Type-specific suggestions
     if leak_type == "dict":

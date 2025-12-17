@@ -18,7 +18,7 @@ from ..utils import configure_logging, print_error, print_success
     is_flag=True,
     help="Enable verbose validation output.",
 )
-def validate(config: Path, verbose: bool):
+def validate(config: Path, verbose: bool) -> None:
     """Validate a JSON configuration file without executing it.
 
     This command loads and validates a Qontinui configuration file, checking

@@ -9,7 +9,7 @@ from pathlib import Path
 class DependencyGraphBuilder:
     """Build and analyze module dependency graphs."""
 
-    def __init__(self, verbose: bool = False):
+    def __init__(self, verbose: bool = False) -> None:
         """Initialize the dependency graph builder.
 
         Args:

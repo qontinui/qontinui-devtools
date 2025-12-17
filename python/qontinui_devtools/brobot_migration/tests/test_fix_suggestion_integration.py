@@ -17,12 +17,12 @@ from qontinui.test_migration.validation.fix_suggestion_engine import (  # type: 
 class TestFixSuggestionIntegration:
     """Integration test cases for FixSuggestionEngine with DiagnosticReporter."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.fix_engine = FixSuggestionEngine()
         self.diagnostic_reporter = DiagnosticReporterImpl()
 
-    def test_end_to_end_brobot_migration_fix(self):
+    def test_end_to_end_brobot_migration_fix(self) -> None:
         """Test end-to-end fix suggestion for Brobot migration issue."""
         # Create Java test file
         java_test = TestFile(
@@ -43,7 +43,7 @@ class TestFixSuggestionIntegration:
 from brobot.library import Action
 import pytest
 
-def test_action():
+def test_action() -> None:
     action = Action()
     assertEquals(expected, actual)
 """
@@ -107,7 +107,7 @@ def test_action():
         finally:
             python_path.unlink()
 
-    def test_junit_annotation_and_assertion_fixes(self):
+    def test_junit_annotation_and_assertion_fixes(self) -> None:
         """Test fix suggestions for JUnit annotations and assertions."""
         # Create Java test file
         java_test = TestFile(
@@ -129,13 +129,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
 
 @Test
-def testCalculation():
+def testCalculation() -> None:
     result = 2 + 3
     assertEquals(5, result)
     assertTrue(isValid)
 
 @BeforeEach
-def setUp():
+def setUp() -> None:
     pass
 """
 
@@ -204,7 +204,7 @@ def setUp():
         finally:
             python_path.unlink()
 
-    def test_spring_boot_integration_fixes(self):
+    def test_spring_boot_integration_fixes(self) -> None:
         """Test fix suggestions for Spring Boot integration test issues."""
         # Create Java test file
         java_test = TestFile(
@@ -232,7 +232,7 @@ class TestServiceIntegration:
     private Service service
 
     @Test
-    def testServiceIntegration(self):
+    def testServiceIntegration(self) -> None:
         assertNotNull(service)
 """
 
@@ -290,7 +290,7 @@ class TestServiceIntegration:
         finally:
             python_path.unlink()
 
-    def test_fix_suggestion_confidence_correlation(self):
+    def test_fix_suggestion_confidence_correlation(self) -> None:
         """Test that fix suggestion confidence correlates with diagnostic confidence."""
         # Create failure analysis with high confidence
         high_confidence_analysis = FailureAnalysis(
@@ -332,7 +332,7 @@ class TestServiceIntegration:
             # High confidence analysis should generally produce higher confidence suggestions
             assert avg_high_confidence >= avg_low_confidence
 
-    def test_fix_application_with_diagnostic_validation(self):
+    def test_fix_application_with_diagnostic_validation(self) -> None:
         """Test that applied fixes improve diagnostic scores."""
         # Create Java test file
         java_test = TestFile(
@@ -353,7 +353,7 @@ class TestServiceIntegration:
 from brobot.library import Action
 
 @Test
-def testMethod():
+def testMethod() -> None:
     assertEquals(expected, actual)
 """
 
@@ -416,7 +416,7 @@ def testMethod():
         finally:
             python_path.unlink()
 
-    def test_complex_migration_scenario(self):
+    def test_complex_migration_scenario(self) -> None:
         """Test a complex migration scenario with multiple issue types."""
         # Create comprehensive Java test file
         java_test = TestFile(
@@ -445,7 +445,7 @@ from org.springframework.boot.test.context import SpringBootTest
 
 @SpringBootTest
 @Test
-def testComplexScenario():
+def testComplexScenario() -> None:
     action = Action()
     list_obj = List()
 
@@ -516,7 +516,7 @@ def testComplexScenario():
         finally:
             python_path.unlink()
 
-    def test_pattern_recognition_integration(self):
+    def test_pattern_recognition_integration(self) -> None:
         """Test integration between pattern recognition and diagnostic reporting."""
         # Test various error patterns
         test_cases = [
@@ -571,7 +571,7 @@ def testComplexScenario():
                 or "migration issue: yes" in report.lower()
             )
 
-    def test_fix_suggestion_sorting_and_prioritization(self):
+    def test_fix_suggestion_sorting_and_prioritization(self) -> None:
         """Test that fix suggestions are properly sorted and prioritized."""
         # Create failure analysis that matches multiple patterns
         failure_analysis = FailureAnalysis(

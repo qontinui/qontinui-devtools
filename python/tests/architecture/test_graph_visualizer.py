@@ -22,10 +22,10 @@ def sample_python_code(tmp_path: Path) -> Path:
     # Create module_a.py
     module_a = """
 class ClassA:
-    def method_a(self):
+    def method_a(self) -> Any:
         return "A"
 
-    def method_b(self):
+    def method_b(self) -> Any:
         return self.method_a()
 
 def function_a() -> Any:
@@ -38,10 +38,10 @@ def function_a() -> Any:
 from .module_a import ClassA
 
 class ClassB(ClassA):
-    def method_c(self):
+    def method_c(self) -> Any:
         return "B"
 
-    def method_d(self):
+    def method_d(self) -> Any:
         return self.method_c()
 
 def function_b() -> Any:
@@ -56,10 +56,10 @@ from .module_b import ClassB
 import json
 
 class ClassC:
-    def __init__(self):
+    def __init__(self) -> None:
         self.b = ClassB()
 
-    def method_e(self):
+    def method_e(self) -> Any:
         return json.dumps({"value": "C"})
 """
     (pkg / "module_c.py").write_text(module_c)

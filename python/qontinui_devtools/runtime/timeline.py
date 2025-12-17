@@ -5,7 +5,7 @@ including Chrome Trace Event Format and interactive HTML timelines.
 """
 
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .event_tracer import EventTrace
@@ -29,7 +29,7 @@ def export_chrome_trace(traces: list["EventTrace"], output_path: str) -> None:
         >>> export_chrome_trace(tracer.get_all_traces(), "timeline.json")
         >>> # Open chrome://tracing and load timeline.json
     """
-    events = []
+    events: list[Any] = []
 
     for trace in traces:
         # Add trace metadata as instant event
@@ -399,7 +399,7 @@ def export_timeline_html(traces: list["EventTrace"], output_path: str) -> None:
 </html>"""
 
     # Convert traces to JSON
-    traces_data = []
+    traces_data: list[Any] = []
     for trace in traces:
         traces_data.append(
             {

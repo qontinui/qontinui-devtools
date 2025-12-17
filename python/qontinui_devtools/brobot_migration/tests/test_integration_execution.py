@@ -15,12 +15,12 @@ from qontinui.test_migration.execution.python_test_generator import PythonTestGe
 class TestExecutionIntegration:
     """Integration tests for test generation and execution."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.generator = PythonTestGenerator()
         self.runner = PytestRunner()
 
-    def test_generate_and_validate_test_file(self):
+    def test_generate_and_validate_test_file(self) -> None:
         """Test generating a test file and validating it."""
         # Create a test file model
         test_method = TestMethod(name="shouldCreateUser", body="assertEquals(expected, actual);")
@@ -47,7 +47,7 @@ class TestExecutionIntegration:
         assert "def test_shouldCreateUser(self):" in python_content
         assert "assert expected == actual" in python_content
 
-    def test_generate_and_save_test_file(self):
+    def test_generate_and_save_test_file(self) -> None:
         """Test generating and saving a test file to disk."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -79,7 +79,7 @@ class TestExecutionIntegration:
             assert "assert true" in saved_content
 
     @patch("subprocess.run")
-    def test_generate_and_run_test_file(self, mock_subprocess):
+    def test_generate_and_run_test_file(self, mock_subprocess) -> None:
         """Test generating a test file and running it with pytest."""
         # Mock successful pytest execution
         mock_result = Mock()
@@ -122,7 +122,7 @@ class TestExecutionIntegration:
             assert str(target_path) in call_args
 
     @patch("subprocess.run")
-    def test_generate_and_run_test_suite(self, mock_subprocess):
+    def test_generate_and_run_test_suite(self, mock_subprocess) -> None:
         """Test generating multiple test files and running as a suite."""
         # Mock successful pytest execution
         mock_result = Mock()
@@ -174,7 +174,7 @@ test_service.py::test_processData PASSED
             assert results.failed_tests == 0
             assert results.execution_time >= 0
 
-    def test_generate_test_with_mocks(self):
+    def test_generate_test_with_mocks(self) -> None:
         """Test generating a test file with mock usage."""
         from qontinui.test_migration.core.models import MockUsage
 
@@ -206,7 +206,7 @@ test_service.py::test_processData PASSED
         errors = self.generator.validate_generated_file(python_content)
         assert len(errors) == 0
 
-    def test_generate_integration_test(self):
+    def test_generate_integration_test(self) -> None:
         """Test generating an integration test file."""
         test_method = TestMethod(name="testIntegration", body="// Integration test logic")
 
@@ -228,7 +228,7 @@ test_service.py::test_processData PASSED
         errors = self.generator.validate_generated_file(python_content)
         assert len(errors) == 0
 
-    def test_runner_environment_validation(self):
+    def test_runner_environment_validation(self) -> None:
         """Test that the runner can validate its environment."""
         errors = self.runner.validate_test_environment()
 
@@ -239,7 +239,7 @@ test_service.py::test_processData PASSED
         env_info = self.runner.get_test_environment_info()
         assert isinstance(env_info, dict)
 
-    def test_runner_configuration(self):
+    def test_runner_configuration(self) -> None:
         """Test runner configuration options."""
         config = {
             "verbose": True,
@@ -255,7 +255,7 @@ test_service.py::test_processData PASSED
         assert "-s" in self.runner.default_pytest_args
         assert "--cov" in self.runner.default_pytest_args
 
-    def test_end_to_end_workflow(self):
+    def test_end_to_end_workflow(self) -> None:
         """Test the complete workflow from Java test to Python execution."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)

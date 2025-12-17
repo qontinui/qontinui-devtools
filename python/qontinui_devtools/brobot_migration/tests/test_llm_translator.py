@@ -18,25 +18,25 @@ from qontinui.test_migration.translation.llm_test_translator import (
 class TestLLMTestTranslator:
     """Test cases for LLMTestTranslator."""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures."""
         self.mock_client = MockLLMClient()
         self.translator = LLMTestTranslator(llm_client=self.mock_client)
 
-    def test_initialization_with_client(self):
+    def test_initialization_with_client(self) -> None:
         """Test translator initialization with LLM client."""
         assert self.translator.llm_client is not None
         assert self.translator.model_name == "gpt-4"
         assert self.translator.brobot_context is not None
         assert self.translator.qontinui_context is not None
 
-    def test_initialization_without_client(self):
+    def test_initialization_without_client(self) -> None:
         """Test translator initialization without LLM client."""
         translator = LLMTestTranslator()
         assert translator.llm_client is None
         assert translator.model_name == "gpt-4"
 
-    def test_translate_test_file_without_client_raises_error(self):
+    def test_translate_test_file_without_client_raises_error(self) -> None:
         """Test that translation without client raises error."""
         translator = LLMTestTranslator()
 
@@ -45,7 +45,7 @@ class TestLLMTestTranslator:
         with pytest.raises(ValueError, match="LLM client not configured"):
             translator.translate_test_file(test_file)
 
-    def test_translate_simple_test_file(self):
+    def test_translate_simple_test_file(self) -> None:
         """Test translating a simple test file."""
         test_method = TestMethod(name="testExample", body="assertTrue(true);")
 
@@ -63,7 +63,7 @@ class TestLLMTestTranslator:
         assert "class TestMockTranslation" in result
         assert "def test_mock_method" in result
 
-    def test_translate_with_detailed_result(self):
+    def test_translate_with_detailed_result(self) -> None:
         """Test translation with detailed result metadata."""
         test_file = TestFile(
             path=Path("ExampleTest.java"),
@@ -80,7 +80,7 @@ class TestLLMTestTranslator:
         assert isinstance(result.identified_patterns, list)
         assert isinstance(result.suggested_improvements, list)
 
-    def test_translate_test_method(self):
+    def test_translate_test_method(self) -> None:
         """Test translating a single test method."""
         java_method = """
         @Test
@@ -95,7 +95,7 @@ class TestLLMTestTranslator:
         assert isinstance(result, str)
         assert "def test_mock_method" in result
 
-    def test_translate_assertions(self):
+    def test_translate_assertions(self) -> None:
         """Test translating assertions."""
         java_assertion = "assertEquals(expected, actual);"
 
@@ -105,13 +105,13 @@ class TestLLMTestTranslator:
         # Mock client returns simple assertion
         assert "assert" in result or "test_mock_method" in result
 
-    def test_enhance_utility_translation(self):
+    def test_enhance_utility_translation(self) -> None:
         """Test enhancing utility translation with LLM."""
         utility_result = """
 import pytest
 
 class TestExample:
-    def test_method(self):
+    def test_method(self) -> None:
         assert True
 """
 
@@ -127,13 +127,13 @@ class TestExample:
         assert result.translated_code is not None
         assert result.confidence_score > 0
 
-    def test_validate_translation(self):
+    def test_validate_translation(self) -> None:
         """Test validating a Python translation."""
         python_code = """
 import pytest
 
 class TestExample:
-    def test_method(self):
+    def test_method(self) -> None:
         assert True
 """
 
@@ -149,7 +149,7 @@ class TestExample:
         assert "is_valid" in result
         assert "confidence" in result
 
-    def test_build_translation_prompt(self):
+    def test_build_translation_prompt(self) -> None:
         """Test building translation prompt."""
         test_file = TestFile(
             path=Path("UserServiceTest.java"),
@@ -166,7 +166,7 @@ class TestExample:
         assert "Qontinui" in prompt
         assert "pytest" in prompt
 
-    def test_extract_java_code_with_original_content(self):
+    def test_extract_java_code_with_original_content(self) -> None:
         """Test extracting Java code when original content is available."""
         test_file = TestFile(path=Path("Test.java"), test_type=TestType.UNIT, class_name="Test")
 
@@ -177,7 +177,7 @@ class TestExample:
 
         assert result == test_file.original_content
 
-    def test_extract_java_code_reconstruction(self):
+    def test_extract_java_code_reconstruction(self) -> None:
         """Test reconstructing Java code from TestFile data."""
         test_method = TestMethod(name="testExample", body="assertTrue(true);")
 
@@ -197,7 +197,7 @@ class TestExample:
         assert "testExample" in result
         assert "assertTrue(true);" in result
 
-    def test_parse_json_llm_response(self):
+    def test_parse_json_llm_response(self) -> None:
         """Test parsing JSON LLM response."""
         json_response = json.dumps(
             {
@@ -220,13 +220,13 @@ class TestExample:
         assert "JUnit test" in result.identified_patterns
         assert "Add more assertions" in result.suggested_improvements
 
-    def test_parse_raw_code_response(self):
+    def test_parse_raw_code_response(self) -> None:
         """Test parsing raw code LLM response."""
         raw_response = """
 import pytest
 
 class TestExample:
-    def test_method(self):
+    def test_method(self) -> None:
         assert True
 """
 
@@ -239,7 +239,7 @@ class TestExample:
         assert result.confidence_score == 0.7  # Default for raw response
         assert "Raw LLM response" in result.translation_notes
 
-    def test_extract_code_from_response_with_code_blocks(self):
+    def test_extract_code_from_response_with_code_blocks(self) -> None:
         """Test extracting code from response with code blocks."""
         response = """
 Here's the translated code:
@@ -248,7 +248,7 @@ Here's the translated code:
 import pytest
 
 class TestExample:
-    def test_method(self):
+    def test_method(self) -> None:
         assert True
 ```
 
@@ -262,7 +262,7 @@ This translation preserves the test intent.
         assert "def test_method" in result
         assert "This translation" not in result  # Should exclude explanation
 
-    def test_extract_code_from_response_without_code_blocks(self):
+    def test_extract_code_from_response_without_code_blocks(self) -> None:
         """Test extracting code from response without code blocks."""
         response = "def test_method(self):\n    assert True"
 
@@ -270,7 +270,7 @@ This translation preserves the test intent.
 
         assert result == response.strip()
 
-    def test_get_translation_stats(self):
+    def test_get_translation_stats(self) -> None:
         """Test getting translation statistics."""
         stats = self.translator.get_translation_stats()
 
@@ -282,7 +282,7 @@ This translation preserves the test intent.
         assert stats["model_name"] == "gpt-4"
         assert stats["client_configured"] is True
 
-    def test_mock_llm_client_complete(self):
+    def test_mock_llm_client_complete(self) -> None:
         """Test MockLLMClient complete method."""
         client = MockLLMClient()
 
@@ -302,7 +302,7 @@ This translation preserves the test intent.
         assert isinstance(result, str)
         assert "def test_mock_method" in result
 
-    def test_translation_with_mocks(self):
+    def test_translation_with_mocks(self) -> None:
         """Test translation of test file with mock usage."""
         mock_usage = MockUsage(mock_type="spring_mock", mock_class="UserRepository")
 
@@ -327,7 +327,7 @@ This translation preserves the test intent.
         # Mock client should return some code
         assert len(result.translated_code) > 0
 
-    def test_translation_with_integration_test(self):
+    def test_translation_with_integration_test(self) -> None:
         """Test translation of integration test."""
         test_method = TestMethod(name="testIntegration", body="// Integration test logic")
 
@@ -344,7 +344,7 @@ This translation preserves the test intent.
         assert result.translated_code is not None
 
     @patch("qontinui.test_migration.translation.llm_test_translator.json.loads")
-    def test_parse_invalid_json_response(self, mock_json_loads):
+    def test_parse_invalid_json_response(self, mock_json_loads) -> None:
         """Test handling of invalid JSON response."""
         mock_json_loads.side_effect = json.JSONDecodeError("Invalid JSON", "", 0)
 

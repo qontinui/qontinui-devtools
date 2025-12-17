@@ -1,4 +1,12 @@
 """
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 Simple test script to verify migration components work.
 """
 
@@ -10,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 
-def test_orchestrator_creation():
+def test_orchestrator_creation() -> Any:
     """Test that we can create a migration orchestrator."""
     try:
         from core.models import MigrationConfig
@@ -47,7 +55,7 @@ def test_orchestrator_creation():
         return False
 
 
-def test_cli_creation():
+def test_cli_creation() -> Any:
     """Test that we can create the CLI."""
     try:
         from cli import TestMigrationCLI
@@ -63,7 +71,7 @@ def test_cli_creation():
         return False
 
 
-def test_reporting_dashboard():
+def test_reporting_dashboard() -> Any:
     """Test that we can create the reporting dashboard."""
     try:
         from reporting.dashboard import MigrationReportingDashboard
@@ -88,14 +96,14 @@ def test_reporting_dashboard():
         return False
 
 
-def main():
+def main() -> Any:
     """Run all component tests."""
     print("Testing Migration Components")
     print("=" * 40)
 
     tests = [test_orchestrator_creation, test_cli_creation, test_reporting_dashboard]
 
-    results = []
+    results: list[Any] = []
     for test in tests:
         results.append(test())
         print()

@@ -87,7 +87,7 @@ def simulate_event_flow(tracer: EventTracer, event_id: str, event_type: str) -> 
     tracer.complete_trace(event_id)
 
 
-def main():
+def main() -> None:
     """Run event tracing example."""
     print("=" * 60)
     print("Event Tracer Example")

@@ -170,7 +170,7 @@ class PytestRunner(TestRunner):
                 failed_tests=0,
                 skipped_tests=0,
                 execution_time=0.0,
-                individual_results=[],
+                individual_results=[]
             )
 
         start_time = time.time()
@@ -185,7 +185,7 @@ class PytestRunner(TestRunner):
                 failed_tests=0,
                 skipped_tests=0,
                 execution_time=time.time() - start_time,
-                individual_results=[],
+                individual_results=[]
             )
 
         # Build pytest command for the entire suite
@@ -305,7 +305,7 @@ class PytestRunner(TestRunner):
                 failed_tests=0,
                 skipped_tests=0,
                 execution_time=execution_time,
-                individual_results=[],
+                individual_results=[]
             )
 
     def _discover_test_files(self, directory: Path) -> list[Path]:
@@ -409,7 +409,7 @@ class PytestRunner(TestRunner):
 
     def _parse_individual_results(self, output: str, test_files: list[Path]) -> list[TestResult]:
         """Parse individual test results from pytest output."""
-        results = []
+        results: list[Any] = []
 
         # This is a simplified parser - in practice, you'd want to use
         # pytest's JSON report feature for more accurate parsing
@@ -444,7 +444,7 @@ class PytestRunner(TestRunner):
         for i, line in enumerate(lines):
             if "FAILED" in line or "ERROR" in line:
                 # Look for the next few lines for error details
-                error_lines = []
+                error_lines: list[Any] = []
                 for j in range(i + 1, min(i + 10, len(lines))):
                     if lines[j].strip() and not lines[j].startswith("="):
                         error_lines.append(lines[j].strip())
@@ -459,7 +459,7 @@ class PytestRunner(TestRunner):
     def _extract_stack_trace(self, output: str) -> str:
         """Extract stack trace from pytest output."""
         lines = output.split("\n")
-        stack_trace_lines = []
+        stack_trace_lines: list[Any] = []
         in_traceback = False
 
         for line in lines:
@@ -515,7 +515,7 @@ class PytestRunner(TestRunner):
         Returns:
             List of validation errors (empty if valid)
         """
-        errors = []
+        errors=[],
 
         # Check Python executable
         try:

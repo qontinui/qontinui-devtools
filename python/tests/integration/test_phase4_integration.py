@@ -1,5 +1,17 @@
 """Integration tests for Phase 4: Advanced Analysis Tools.
 
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
+from typing import Any
+
 This module tests the integration of Phase 4 tools:
 - Security Analyzer
 - Documentation Generator
@@ -31,7 +43,7 @@ from qontinui_devtools.cli import (
 
 
 @pytest.fixture
-def runner():
+def runner() -> Any:
     """Create CLI runner for testing."""
     return CliRunner()
 
@@ -56,15 +68,15 @@ import pickle
 API_KEY = "secret123"
 PASSWORD = "password"
 
-def unsafe_command(user_input):
+def unsafe_command(user_input) -> None:
     # Command injection vulnerability
     os.system(f"echo {user_input}")
 
-def unsafe_pickle(data):
+def unsafe_pickle(data) -> Any:
     # Insecure deserialization
     return pickle.loads(data)
 
-def sql_query(user_input):
+def sql_query(user_input) -> Any:
     # SQL injection vulnerability
     query = f"SELECT * FROM users WHERE name = '{user_input}'"
     return query
@@ -74,14 +86,14 @@ def sql_query(user_input):
     # File with missing type hints
     (src / "type_test.py").write_text(
         """
-def add(a, b):
+def add(a, b) -> Any:
     return a + b
 
-def multiply(x, y):
+def multiply(x, y) -> Any:
     return x * y
 
 class Calculator:
-    def divide(self, a, b):
+    def divide(self, a, b) -> Any:
         return a / b
 
     def subtract(self, x: int, y: int) -> int:
@@ -109,7 +121,7 @@ def example_function(param1: str, param2: int) -> bool:
 class ExampleClass:
     """Example class for testing."""
 
-    def __init__(self, value: int):
+    def __init__(self, value: int) -> None:
         """Initialize the class.
 
         Args:
@@ -157,18 +169,18 @@ rich = "^13.0"
 class TestSecurityAnalyzer:
     """Tests for Security Analyzer."""
 
-    def test_security_scan_basic(self, runner, temp_project):
+    def test_security_scan_basic(self, runner, temp_project) -> None:
         """Test basic security scan."""
         result = runner.invoke(scan_security, [str(temp_project / "src"), "--severity", "low"])
         # Should detect security issues (may fail if module not implemented)
         assert result.exit_code in (0, 1)  # 0 if no issues, 1 if issues found
 
-    def test_security_scan_critical_only(self, runner, temp_project):
+    def test_security_scan_critical_only(self, runner, temp_project) -> None:
         """Test scanning for critical issues only."""
         result = runner.invoke(scan_security, [str(temp_project / "src"), "--severity", "critical"])
         assert result.exit_code in (0, 1)
 
-    def test_security_scan_output_text(self, runner, temp_project, tmp_path):
+    def test_security_scan_output_text(self, runner, temp_project, tmp_path) -> None:
         """Test security scan with text output."""
         output_file = tmp_path / "security.txt"
         result = runner.invoke(
@@ -177,7 +189,7 @@ class TestSecurityAnalyzer:
         )
         assert result.exit_code in (0, 1)
 
-    def test_security_scan_output_json(self, runner, temp_project, tmp_path):
+    def test_security_scan_output_json(self, runner, temp_project, tmp_path) -> None:
         """Test security scan with JSON output."""
         output_file = tmp_path / "security.json"
         result = runner.invoke(
@@ -186,7 +198,7 @@ class TestSecurityAnalyzer:
         )
         assert result.exit_code in (0, 1)
 
-    def test_security_scan_output_html(self, runner, temp_project, tmp_path):
+    def test_security_scan_output_html(self, runner, temp_project, tmp_path) -> None:
         """Test security scan with HTML output."""
         output_file = tmp_path / "security.html"
         result = runner.invoke(
@@ -195,20 +207,20 @@ class TestSecurityAnalyzer:
         )
         assert result.exit_code in (0, 1)
 
-    def test_security_hardcoded_credentials(self, temp_project):
+    def test_security_hardcoded_credentials(self, temp_project) -> None:
         """Test detection of hardcoded credentials."""
         # This would test the actual analyzer if implemented
         pytest.skip("Requires SecurityAnalyzer implementation")
 
-    def test_security_command_injection(self, temp_project):
+    def test_security_command_injection(self, temp_project) -> None:
         """Test detection of command injection."""
         pytest.skip("Requires SecurityAnalyzer implementation")
 
-    def test_security_sql_injection(self, temp_project):
+    def test_security_sql_injection(self, temp_project) -> None:
         """Test detection of SQL injection."""
         pytest.skip("Requires SecurityAnalyzer implementation")
 
-    def test_security_insecure_deserialization(self, temp_project):
+    def test_security_insecure_deserialization(self, temp_project) -> None:
         """Test detection of insecure deserialization."""
         pytest.skip("Requires SecurityAnalyzer implementation")
 
@@ -221,7 +233,7 @@ class TestSecurityAnalyzer:
 class TestDocumentationGenerator:
     """Tests for Documentation Generator."""
 
-    def test_docs_generate_basic(self, runner, temp_project, tmp_path):
+    def test_docs_generate_basic(self, runner, temp_project, tmp_path) -> None:
         """Test basic documentation generation."""
         output_dir = tmp_path / "docs"
         result = runner.invoke(
@@ -229,7 +241,7 @@ class TestDocumentationGenerator:
         )
         assert result.exit_code in (0, 1)
 
-    def test_docs_generate_html(self, runner, temp_project, tmp_path):
+    def test_docs_generate_html(self, runner, temp_project, tmp_path) -> None:
         """Test HTML documentation generation."""
         output_dir = tmp_path / "docs_html"
         result = runner.invoke(
@@ -238,7 +250,7 @@ class TestDocumentationGenerator:
         )
         assert result.exit_code in (0, 1)
 
-    def test_docs_generate_markdown(self, runner, temp_project, tmp_path):
+    def test_docs_generate_markdown(self, runner, temp_project, tmp_path) -> None:
         """Test Markdown documentation generation."""
         output_dir = tmp_path / "docs_md"
         result = runner.invoke(
@@ -247,7 +259,7 @@ class TestDocumentationGenerator:
         )
         assert result.exit_code in (0, 1)
 
-    def test_docs_generate_json(self, runner, temp_project, tmp_path):
+    def test_docs_generate_json(self, runner, temp_project, tmp_path) -> None:
         """Test JSON documentation generation."""
         output_dir = tmp_path / "docs_json"
         result = runner.invoke(
@@ -256,19 +268,19 @@ class TestDocumentationGenerator:
         )
         assert result.exit_code in (0, 1)
 
-    def test_docs_api_reference(self, temp_project):
+    def test_docs_api_reference(self, temp_project) -> None:
         """Test API reference generation."""
         pytest.skip("Requires DocumentationGenerator implementation")
 
-    def test_docs_module_docs(self, temp_project):
+    def test_docs_module_docs(self, temp_project) -> None:
         """Test module documentation generation."""
         pytest.skip("Requires DocumentationGenerator implementation")
 
-    def test_docs_class_docs(self, temp_project):
+    def test_docs_class_docs(self, temp_project) -> None:
         """Test class documentation extraction."""
         pytest.skip("Requires DocumentationGenerator implementation")
 
-    def test_docs_function_docs(self, temp_project):
+    def test_docs_function_docs(self, temp_project) -> None:
         """Test function documentation extraction."""
         pytest.skip("Requires DocumentationGenerator implementation")
 
@@ -281,35 +293,35 @@ class TestDocumentationGenerator:
 class TestRegressionDetector:
     """Tests for Regression Detector."""
 
-    def test_regression_check_basic(self, runner, temp_project):
+    def test_regression_check_basic(self, runner, temp_project) -> None:
         """Test basic regression check."""
         result = runner.invoke(check_regression, [str(temp_project / "src")])
         assert result.exit_code in (0, 1)
 
-    def test_regression_check_with_baseline(self, runner, temp_project):
+    def test_regression_check_with_baseline(self, runner, temp_project) -> None:
         """Test regression check with baseline."""
         result = runner.invoke(
             check_regression, [str(temp_project / "src"), "--baseline", "v1.0.0"]
         )
         assert result.exit_code in (0, 1)
 
-    def test_regression_performance(self, temp_project):
+    def test_regression_performance(self, temp_project) -> None:
         """Test performance regression detection."""
         pytest.skip("Requires RegressionDetector implementation")
 
-    def test_regression_api_changes(self, temp_project):
+    def test_regression_api_changes(self, temp_project) -> None:
         """Test API change detection."""
         pytest.skip("Requires RegressionDetector implementation")
 
-    def test_regression_behavioral(self, temp_project):
+    def test_regression_behavioral(self, temp_project) -> None:
         """Test behavioral regression detection."""
         pytest.skip("Requires RegressionDetector implementation")
 
-    def test_regression_baseline_creation(self, temp_project):
+    def test_regression_baseline_creation(self, temp_project) -> None:
         """Test baseline snapshot creation."""
         pytest.skip("Requires RegressionDetector implementation")
 
-    def test_regression_comparison(self, temp_project):
+    def test_regression_comparison(self, temp_project) -> None:
         """Test baseline comparison."""
         pytest.skip("Requires RegressionDetector implementation")
 
@@ -322,33 +334,33 @@ class TestRegressionDetector:
 class TestTypeAnalyzer:
     """Tests for Type Hint Analyzer."""
 
-    def test_type_coverage_basic(self, runner, temp_project):
+    def test_type_coverage_basic(self, runner, temp_project) -> None:
         """Test basic type coverage analysis."""
         result = runner.invoke(type_coverage, [str(temp_project / "src")])
         assert result.exit_code in (0, 1)
 
-    def test_type_coverage_with_suggestions(self, runner, temp_project):
+    def test_type_coverage_with_suggestions(self, runner, temp_project) -> None:
         """Test type coverage with suggestions."""
         result = runner.invoke(type_coverage, [str(temp_project / "src"), "--suggest"])
         assert result.exit_code in (0, 1)
 
-    def test_type_coverage_calculation(self, temp_project):
+    def test_type_coverage_calculation(self, temp_project) -> None:
         """Test type coverage percentage calculation."""
         pytest.skip("Requires TypeAnalyzer implementation")
 
-    def test_type_suggestion_generation(self, temp_project):
+    def test_type_suggestion_generation(self, temp_project) -> None:
         """Test type hint suggestion generation."""
         pytest.skip("Requires TypeAnalyzer implementation")
 
-    def test_type_function_analysis(self, temp_project):
+    def test_type_function_analysis(self, temp_project) -> None:
         """Test function type hint analysis."""
         pytest.skip("Requires TypeAnalyzer implementation")
 
-    def test_type_parameter_analysis(self, temp_project):
+    def test_type_parameter_analysis(self, temp_project) -> None:
         """Test parameter type hint analysis."""
         pytest.skip("Requires TypeAnalyzer implementation")
 
-    def test_type_return_annotation_analysis(self, temp_project):
+    def test_type_return_annotation_analysis(self, temp_project) -> None:
         """Test return type annotation analysis."""
         pytest.skip("Requires TypeAnalyzer implementation")
 
@@ -361,29 +373,29 @@ class TestTypeAnalyzer:
 class TestDependencyHealthChecker:
     """Tests for Dependency Health Checker."""
 
-    def test_deps_check_basic(self, runner, temp_project):
+    def test_deps_check_basic(self, runner, temp_project) -> None:
         """Test basic dependency check."""
         result = runner.invoke(check_deps, [str(temp_project)])
         assert result.exit_code in (0, 1)
 
-    def test_deps_check_with_updates(self, runner, temp_project):
+    def test_deps_check_with_updates(self, runner, temp_project) -> None:
         """Test dependency check with update commands."""
         result = runner.invoke(check_deps, [str(temp_project), "--update"])
         assert result.exit_code in (0, 1)
 
-    def test_deps_outdated_detection(self, temp_project):
+    def test_deps_outdated_detection(self, temp_project) -> None:
         """Test outdated package detection."""
         pytest.skip("Requires DependencyHealthChecker implementation")
 
-    def test_deps_vulnerability_detection(self, temp_project):
+    def test_deps_vulnerability_detection(self, temp_project) -> None:
         """Test vulnerability detection."""
         pytest.skip("Requires DependencyHealthChecker implementation")
 
-    def test_deps_license_check(self, temp_project):
+    def test_deps_license_check(self, temp_project) -> None:
         """Test license compatibility check."""
         pytest.skip("Requires DependencyHealthChecker implementation")
 
-    def test_deps_update_commands(self, temp_project):
+    def test_deps_update_commands(self, temp_project) -> None:
         """Test update command generation."""
         pytest.skip("Requires DependencyHealthChecker implementation")
 
@@ -396,7 +408,7 @@ class TestDependencyHealthChecker:
 class TestEndToEndWorkflows:
     """Tests for end-to-end Phase 4 workflows."""
 
-    def test_full_security_workflow(self, runner, temp_project, tmp_path):
+    def test_full_security_workflow(self, runner, temp_project, tmp_path) -> None:
         """Test full security analysis workflow."""
         # Run security scan
         output_file = tmp_path / "security_report.html"
@@ -414,7 +426,7 @@ class TestEndToEndWorkflows:
         )
         assert result.exit_code in (0, 1)
 
-    def test_full_documentation_workflow(self, runner, temp_project, tmp_path):
+    def test_full_documentation_workflow(self, runner, temp_project, tmp_path) -> None:
         """Test full documentation generation workflow."""
         output_dir = tmp_path / "complete_docs"
         result = runner.invoke(
@@ -423,12 +435,12 @@ class TestEndToEndWorkflows:
         )
         assert result.exit_code in (0, 1)
 
-    def test_full_type_analysis_workflow(self, runner, temp_project):
+    def test_full_type_analysis_workflow(self, runner, temp_project) -> None:
         """Test full type analysis workflow."""
         result = runner.invoke(type_coverage, [str(temp_project / "src"), "--suggest"])
         assert result.exit_code in (0, 1)
 
-    def test_combined_analysis(self, runner, temp_project, tmp_path):
+    def test_combined_analysis(self, runner, temp_project, tmp_path) -> None:
         """Test running multiple Phase 4 analyses together."""
         # Security scan
         sec_result = runner.invoke(scan_security, [str(temp_project / "src")])
@@ -453,15 +465,15 @@ class TestEndToEndWorkflows:
 class TestReportAggregation:
     """Tests for Phase 4 integration with report aggregation."""
 
-    def test_aggregated_report_includes_phase4(self, temp_project):
+    def test_aggregated_report_includes_phase4(self, temp_project) -> None:
         """Test that aggregated reports include Phase 4 data."""
         pytest.skip("Requires report aggregation update")
 
-    def test_html_report_phase4_sections(self, temp_project):
+    def test_html_report_phase4_sections(self, temp_project) -> None:
         """Test HTML report includes Phase 4 sections."""
         pytest.skip("Requires HTMLReportGenerator update")
 
-    def test_json_export_phase4_data(self, temp_project):
+    def test_json_export_phase4_data(self, temp_project) -> None:
         """Test JSON export includes Phase 4 data."""
         pytest.skip("Requires report aggregation update")
 
@@ -474,19 +486,19 @@ class TestReportAggregation:
 class TestCICDIntegration:
     """Tests for CI/CD integration with Phase 4 tools."""
 
-    def test_ci_security_gate(self, temp_project):
+    def test_ci_security_gate(self, temp_project) -> None:
         """Test CI quality gate for security."""
         pytest.skip("Requires CI integration update")
 
-    def test_ci_type_coverage_gate(self, temp_project):
+    def test_ci_type_coverage_gate(self, temp_project) -> None:
         """Test CI quality gate for type coverage."""
         pytest.skip("Requires CI integration update")
 
-    def test_ci_dependency_gate(self, temp_project):
+    def test_ci_dependency_gate(self, temp_project) -> None:
         """Test CI quality gate for dependencies."""
         pytest.skip("Requires CI integration update")
 
-    def test_ci_pr_comment_phase4(self, temp_project):
+    def test_ci_pr_comment_phase4(self, temp_project) -> None:
         """Test PR comment generation with Phase 4 data."""
         pytest.skip("Requires CI integration update")
 
@@ -499,15 +511,15 @@ class TestCICDIntegration:
 class TestPhase4Performance:
     """Performance tests for Phase 4 tools."""
 
-    def test_security_scan_performance(self, temp_project):
+    def test_security_scan_performance(self, temp_project) -> None:
         """Test security scan performance on large codebase."""
         pytest.skip("Performance test - requires large codebase")
 
-    def test_doc_generation_performance(self, temp_project):
+    def test_doc_generation_performance(self, temp_project) -> None:
         """Test documentation generation performance."""
         pytest.skip("Performance test - requires large codebase")
 
-    def test_type_analysis_performance(self, temp_project):
+    def test_type_analysis_performance(self, temp_project) -> None:
         """Test type analysis performance."""
         pytest.skip("Performance test - requires large codebase")
 
@@ -520,27 +532,27 @@ class TestPhase4Performance:
 class TestPhase4ErrorHandling:
     """Tests for error handling in Phase 4 tools."""
 
-    def test_security_scan_invalid_path(self, runner):
+    def test_security_scan_invalid_path(self, runner) -> None:
         """Test security scan with invalid path."""
         result = runner.invoke(scan_security, ["/nonexistent/path"])
         assert result.exit_code != 0
 
-    def test_docs_generate_invalid_path(self, runner):
+    def test_docs_generate_invalid_path(self, runner) -> None:
         """Test doc generation with invalid path."""
         result = runner.invoke(generate_docs, ["/nonexistent/path"])
         assert result.exit_code != 0
 
-    def test_regression_check_invalid_path(self, runner):
+    def test_regression_check_invalid_path(self, runner) -> None:
         """Test regression check with invalid path."""
         result = runner.invoke(check_regression, ["/nonexistent/path"])
         assert result.exit_code != 0
 
-    def test_type_coverage_invalid_path(self, runner):
+    def test_type_coverage_invalid_path(self, runner) -> None:
         """Test type coverage with invalid path."""
         result = runner.invoke(type_coverage, ["/nonexistent/path"])
         assert result.exit_code != 0
 
-    def test_deps_check_invalid_path(self, runner):
+    def test_deps_check_invalid_path(self, runner) -> None:
         """Test dependency check with invalid path."""
         result = runner.invoke(check_deps, ["/nonexistent/path"])
         assert result.exit_code != 0

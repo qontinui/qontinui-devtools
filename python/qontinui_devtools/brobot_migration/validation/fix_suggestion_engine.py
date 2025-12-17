@@ -1,4 +1,6 @@
 """
+from typing import Any
+
 Fix suggestion engine for providing automated repair recommendations for test migration issues.
 
 This module serves as a facade that delegates to specialized strategy modules.
@@ -53,7 +55,7 @@ class FixSuggestionEngine:
         Returns:
             List of fix suggestions
         """
-        suggestions = []
+        suggestions: list[Any] = []
 
         # Extract error information from diagnostic info
         diagnostic_info = failure_analysis.diagnostic_info
@@ -109,7 +111,7 @@ class FixSuggestionEngine:
         """
         return self._scorer.recognize_common_patterns(error_message, stack_trace)
 
-    def _get_fix_method(self, method_name: str):
+    def _get_fix_method(self, method_name: str) -> Any:
         """Get the fix method from the appropriate strategy."""
         method_mapping = {
             "_generate_brobot_import_fix": self._import_strategy.generate_brobot_import_fix,
