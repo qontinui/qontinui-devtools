@@ -66,6 +66,8 @@ all = ["memray"]
 
 [tool.poetry.scripts]
 qontinui-devtools = "qontinui_devtools.cli:main"
+qontinui = "qontinui_devtools.cli.main:main"
+brobot-converter = "qontinui_devtools.migrations.brobot_converter:main"
 
 [build-system]
 requires = ["poetry-core"]

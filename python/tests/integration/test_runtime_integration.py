@@ -591,7 +591,9 @@ class TestAllToolsConcurrently:
 
                     result = sample_action_instance.execute(iterations=3)
 
-                    tracer.trace_event("iteration_end", {"iteration": iteration_num, "result": result})
+                    tracer.trace_event(
+                        "iteration_end", {"iteration": iteration_num, "result": result}
+                    )
 
                     # Update dashboard
                     dashboard.update_metrics(

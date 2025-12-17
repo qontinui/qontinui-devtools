@@ -7,13 +7,13 @@ from Python source code, including docstrings, type hints, and code structure.
 
 from .doc_generator import ASTDocExtractor, DocstringParser, DocumentationGenerator
 from .models import (
-    DocItem,
-    DocItemType,
-    DocstringStyle,
-    DocumentationTree,
-    Example,
-    OutputFormat,
-    Parameter,
+                            DocItem,
+                            DocItemType,
+                            DocstringStyle,
+                            DocumentationTree,
+                            Example,
+                            OutputFormat,
+                            Parameter,
 )
 
 __all__ = [

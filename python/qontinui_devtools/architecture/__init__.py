@@ -6,11 +6,11 @@ from .dependency_graph import DependencyGraphBuilder
 from .god_class_detector import ClassMetrics, ExtractionSuggestion, GodClassDetector
 from .graph_visualizer import DependencyGraphVisualizer, GraphEdge, GraphNode
 from .metrics_utils import (
-    calculate_lcc,
-    calculate_lcom,
-    calculate_lcom4,
-    calculate_tcc,
-    count_abstract_classes,
+                                calculate_lcc,
+                                calculate_lcom,
+                                calculate_lcom4,
+                                calculate_tcc,
+                                count_abstract_classes,
 )
 from .srp_analyzer import SRPAnalyzer, SRPViolation
 
