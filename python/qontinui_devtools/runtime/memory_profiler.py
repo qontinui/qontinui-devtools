@@ -17,12 +17,12 @@ from typing import Any
 try:
     import psutil
 except ImportError:
-    psutil = None
+    psutil = None  # type: ignore[assignment]
 
 try:
     import tracemalloc
 except ImportError:
-    tracemalloc = None
+    tracemalloc = None  # type: ignore[assignment]
 
 
 @dataclass
@@ -237,7 +237,7 @@ class MemoryProfiler:
         leaks: list[MemoryLeak] = []
 
         # Get all object types that appear in snapshots
-        all_types = set()
+        all_types: set[str] = set()
         for snapshot in self._snapshots:
             all_types.update(snapshot.objects_by_type.keys())
 

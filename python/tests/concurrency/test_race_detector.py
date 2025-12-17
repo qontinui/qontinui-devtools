@@ -560,7 +560,7 @@ class SingleWrite:
 
 
 @pytest.fixture
-def tmp_path() -> None:
+def tmp_path() -> Any:
     """Create a temporary directory for tests."""
     with tempfile.TemporaryDirectory() as tmpdir:
         yield Path(tmpdir)

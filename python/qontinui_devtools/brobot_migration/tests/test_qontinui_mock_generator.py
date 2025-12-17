@@ -3,6 +3,7 @@ Unit tests for QontinuiMockGenerator.
 """
 
 from qontinui.test_migration.core.models import GuiModel, MockUsage
+from typing import cast
 from qontinui.test_migration.mocks.qontinui_mock_generator import QontinuiMockGenerator
 
 
@@ -199,8 +200,8 @@ class TestQontinuiMockGenerator:
         assert "assertions" in behavior_mapping
 
         # Check action mappings
-        assert behavior_mapping["actions"]["click"] == "click"
-        assert behavior_mapping["actions"]["type"] == "type_text"
+        assert cast(dict, behavior_mapping["actions"])["click"] == "click"
+        assert cast(dict, behavior_mapping["actions"])["type"] == "type_text"
 
     def test_map_setup_behavior(self) -> None:
         """Test mapping of setup behavior patterns."""

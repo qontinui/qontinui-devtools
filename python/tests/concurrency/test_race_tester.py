@@ -247,7 +247,7 @@ def test_lazy_initialization_race() -> Any:
         if instance is None:
             creation_count["value"] += 1
             time.sleep(0.001)  # Make race more likely
-            instance = {"created": True}
+            instance = {"created": "True"}
         return instance
 
     def worker() -> None:

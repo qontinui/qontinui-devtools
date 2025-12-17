@@ -264,7 +264,7 @@ class TestJavaToPythonTranslator:
         """
 
         signature = self.translator._extract_method_signature(java_method)
-        assert "public void testSomething(String param)" in signature
+        assert signature is not None and "public void testSomething(String param)" in signature
 
     def test_extract_method_body(self) -> None:
         """Test method body extraction from Java code."""

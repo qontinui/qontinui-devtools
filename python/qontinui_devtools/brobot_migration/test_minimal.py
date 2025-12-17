@@ -13,7 +13,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).parent))
 
 
-def test_minimal_orchestrator() -> None:
+def test_minimal_orchestrator() -> bool:
     """Test the minimal orchestrator."""
     try:
         from core.models import MigrationConfig

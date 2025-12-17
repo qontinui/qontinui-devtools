@@ -366,7 +366,7 @@ class TestHTMLReportGenerator:
 
         with pytest.raises(ValueError, match="No report data"):
             generator.generate(
-                report_data=None,  # type: ignore
+                report_data=None,
                 output_path="test.html",
             )
 

@@ -117,9 +117,9 @@ class IDTypeChecker:
         Returns:
             List of detected issues
         """
-        self.id_fields: list[Any] = []
-        self.issues: list[Any] = []
-        self.parseint_usages: list[Any] = []
+        self.id_fields = []
+        self.issues = []
+        self.parseint_usages = []
 
         for path in paths:
             if path.is_file():

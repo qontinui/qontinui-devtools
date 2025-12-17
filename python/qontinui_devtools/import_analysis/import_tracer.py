@@ -189,7 +189,7 @@ class ImportHook:
                 ):
                     importer = potential_importer
                     break
-            frame = frame.f_back
+            frame = frame.f_back  # type: ignore[assignment]
 
         # Get stack trace
         stack = traceback.format_stack()
@@ -357,7 +357,7 @@ class ImportTracer:
             lines.append("")
 
         # Top imported modules
-        import_counts = defaultdict(int)
+        import_counts: defaultdict[str, int] = defaultdict(int)
         for event in events:
             import_counts[event.module_name] += 1
 

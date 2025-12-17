@@ -155,7 +155,7 @@ class SecurityAnalyzer:
         Returns:
             List of detected vulnerabilities
         """
-        self.vulnerabilities: list[Any] = []
+        self.vulnerabilities = []
         self.current_file = file_path
 
         try:

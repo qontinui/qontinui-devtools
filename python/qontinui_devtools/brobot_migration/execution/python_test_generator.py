@@ -369,7 +369,7 @@ class PythonTestGenerator(TestTranslator):
         if dependency.python_equivalent:
             return dependency.python_equivalent
 
-        return cast(str | None, self.dependency_mappings.get(dependency.java_import))
+        return self.dependency_mappings.get(dependency.java_import)
 
     def generate_test_file_path(self, test_file: TestFile, target_directory: Path) -> Path:
         """

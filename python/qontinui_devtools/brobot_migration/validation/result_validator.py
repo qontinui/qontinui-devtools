@@ -143,7 +143,7 @@ class ResultValidator:
                 )
             else:
                 result = "inconclusive"
-                differences: list[Any] = []
+                differences = []
                 similarity = 0.0
 
             # Create comparison object

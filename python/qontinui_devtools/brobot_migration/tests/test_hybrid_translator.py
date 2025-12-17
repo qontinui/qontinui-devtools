@@ -72,7 +72,7 @@ class TestHybridTestTranslator:
         assert not translator.enable_llm_validation
 
     @patch("time.time")
-    def test_try_utility_translation_success(self, mock_time) -> None:
+    def test_try_utility_translation_success(self, mock_time: Any) -> None:
         """Test successful utility translation."""
         mock_time.side_effect = [0.0, 0.1]  # Start and end times
 
@@ -92,7 +92,7 @@ class TestHybridTestTranslator:
         assert "import pytest" in result.content
 
     @patch("time.time")
-    def test_try_utility_translation_failure(self, mock_time) -> None:
+    def test_try_utility_translation_failure(self, mock_time: Any) -> None:
         """Test utility translation failure handling."""
         mock_time.side_effect = [0.0, 0.1]
 
@@ -112,7 +112,7 @@ class TestHybridTestTranslator:
             assert len(result.errors) > 0
 
     @patch("time.time")
-    def test_try_llm_translation_success(self, mock_time) -> None:
+    def test_try_llm_translation_success(self, mock_time: Any) -> None:
         """Test successful LLM translation."""
         mock_time.side_effect = [0.0, 0.2]
 

@@ -21,7 +21,7 @@ class HighlyCoupledClass:
         self.logger = logging.getLogger(__name__)
         self.patterns: set[str] = set()
 
-    def process_data(self, input_file: str) -> list[dict]:
+    def process_data(self, input_file: str) -> list[dict[Any, Any]]:
         """Process data from a file."""
         # Uses: os, json, Path, logging
         if not os.path.exists(input_file):
@@ -31,7 +31,7 @@ class HighlyCoupledClass:
         with open(input_file) as f:
             data = json.load(f)
 
-        return data
+        data_list: list[dict[Any, Any]] = data if isinstance(data, list) else [data]; return data_list
 
     def parse_code(self, source: str) -> ast.Module:
         """Parse Python source code."""

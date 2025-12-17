@@ -268,7 +268,7 @@ class ReportAggregator:
         if god_classes > 3:
             count += god_classes - 3
 
-        return count
+        return int(count)
 
     def _create_import_section(self) -> ReportSection:
         """Create import analysis section."""

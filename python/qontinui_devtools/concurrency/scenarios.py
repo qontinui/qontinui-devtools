@@ -285,7 +285,7 @@ def run_all_scenarios() -> dict[str, RaceTestResult]:
     Returns:
         Dictionary mapping scenario name to result
     """
-    scenarios = {
+    scenarios: dict[str, Any] = {
         "dictionary_access": test_dictionary_concurrent_access,
         "check_then_act": test_check_then_act,
         "check_then_act_safe": test_check_then_act_safe,

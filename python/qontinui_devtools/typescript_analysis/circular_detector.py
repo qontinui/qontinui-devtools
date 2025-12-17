@@ -167,7 +167,7 @@ class CircularDependencyDetector:
         except Exception as e:
             if self.verbose:
                 self.console.print(f"[red]Error finding cycles: {e}[/red]")
-            self.cycles: list[Any] = []
+            self.cycles = []
 
     def _analyze_cycles(self) -> list[CircularDependency]:
         """Analyze detected cycles and create CircularDependency objects."""

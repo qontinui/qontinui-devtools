@@ -11,7 +11,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -190,7 +190,7 @@ class PyPIClient:
 
         try:
             with open(cache_file) as f:
-                return json.load(f)
+                data = json.load(f); return cast(dict[str, Any], data) if isinstance(data, dict) else None
         except (OSError, json.JSONDecodeError):
             return None
 
@@ -235,7 +235,7 @@ class PyPIClient:
 
                 if response.status == 200:
                     data = json.loads(response.read().decode("utf-8"))
-                    return data
+                    return cast(dict[str, Any], data) if isinstance(data, dict) else None
 
         except HTTPError as e:
             if e.code == 404:

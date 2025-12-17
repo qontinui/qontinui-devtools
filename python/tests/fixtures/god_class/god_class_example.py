@@ -82,7 +82,7 @@ class HugeClass:
 
     def calculate_total(self, items: list) -> float:
         """Calculate total from items."""
-        return sum(items)
+        return float(sum(items))
 
     def process_workflow(self, workflow: dict) -> None:
         """Process workflow steps."""

@@ -89,7 +89,7 @@ class EmailValidator:
     def validate_domain(self, email: str) -> bool:
         """Validate email domain exists."""
         domain = email.split("@")[1] if "@" in email else None
-        return domain and "." in domain
+        return bool(domain and "." in domain)
 
     def validate_length(self, email: str) -> bool:
         """Validate email length."""

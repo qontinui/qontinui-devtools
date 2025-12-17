@@ -95,7 +95,7 @@ class APISnapshot:
             return file_path.stem
 
     def _extract_function_signature(
-        self, node: ast.FunctionDef, module_path: str
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef, module_path: str
     ) -> FunctionSignature | None:
         """Extract function signature from AST node."""
         try:

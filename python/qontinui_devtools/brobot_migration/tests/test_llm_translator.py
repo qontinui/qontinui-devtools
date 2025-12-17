@@ -172,11 +172,11 @@ class TestExample:
         test_file = TestFile(path=Path("Test.java"), test_type=TestType.UNIT, class_name="Test")
 
         # Add original content
-        test_file.original_content = "public class Test { @Test public void test() {} }"
+        test_file.original_content = "public class Test { @Test public void test() {} }" # type: ignore[attr-defined]
 
         result = self.translator._extract_java_code(test_file)
 
-        assert result == test_file.original_content
+        assert result == test_file.original_content  # type: ignore[attr-defined]
 
     def test_extract_java_code_reconstruction(self) -> None:
         """Test reconstructing Java code from TestFile data."""

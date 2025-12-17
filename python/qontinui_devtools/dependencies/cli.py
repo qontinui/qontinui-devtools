@@ -157,10 +157,10 @@ Examples:
                     UpdateType.PATCH: "🟢",
                 }
                 for dep in report.get_outdated_dependencies():
-                    emoji = update_emoji.get(dep.update_type, "⚪")
+                    emoji = update_emoji.get(dep.update_type, "⚪") if dep.update_type else "⚪"
                     print(
                         f"{emoji} {dep.name:25} {dep.current_version:12} → "
-                        f"{dep.latest_version:12} ({dep.update_type.value})"
+                        f"{dep.latest_version:12} ({dep.update_type.value if dep.update_type else 'unknown'})"
                     )
                 print()
 

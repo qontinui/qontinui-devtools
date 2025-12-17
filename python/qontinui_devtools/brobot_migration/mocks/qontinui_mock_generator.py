@@ -486,11 +486,11 @@ action_simulator = ActionSimulator()"""
 
     def get_qontinui_mock_classes(self) -> dict[str, str]:
         """Get mapping of Brobot to Qontinui mock classes."""
-        return cast(dict[str, str], self.mock_class_mapping.copy())
+        return self.mock_class_mapping.copy()
 
     def get_action_mappings(self) -> dict[str, str]:
         """Get mapping of Brobot to Qontinui actions."""
-        return cast(dict[str, str], self.action_mapping.copy())
+        return self.action_mapping.copy()
 
     def generate_integration_test_setup(self, mock_usages: list[MockUsage]) -> str:
         """

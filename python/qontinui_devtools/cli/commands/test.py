@@ -383,7 +383,7 @@ def _run_with_timeout(
     """Run workflow with timeout."""
     import threading
 
-    result = {"success": False, "error": None}
+    result: dict[str, Any] = {"success": False, "error": None}
 
     def run_workflow() -> None:
         try:

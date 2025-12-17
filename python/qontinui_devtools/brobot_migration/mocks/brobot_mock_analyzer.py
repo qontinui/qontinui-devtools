@@ -324,7 +324,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
 
     def get_mock_dependency_mapping(self) -> dict[str, str]:
         """Get the mapping of Brobot mock dependencies to Qontinui equivalents."""
-        return cast(dict[str, str], self.mock_dependencies.copy())
+        return self.mock_dependencies.copy()
 
     def analyze_mock_complexity(self, mock_usage: MockUsage) -> str:
         """

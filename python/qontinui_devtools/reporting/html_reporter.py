@@ -312,7 +312,7 @@ class HTMLReportGenerator:
         race_conditions = metrics.get("race_conditions", 0)
         score -= min(race_conditions * 10, 20)
 
-        return max(score, 0.0)
+        return float(max(score, 0.0))
 
     def _generate_inline_html(self, context: dict[str, Any]) -> str:
         """Generate HTML using inline template (fallback)."""

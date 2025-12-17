@@ -351,7 +351,7 @@ class SRPAnalyzer:
         lines.append("")
 
         # Group by severity
-        by_severity = {"critical": [], "high": [], "medium": []}
+        by_severity: dict[str, list[SRPViolation]] = {"critical": [], "high": [], "medium": []}
         for violation in violations:
             by_severity[violation.severity].append(violation)
 

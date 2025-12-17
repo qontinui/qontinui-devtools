@@ -632,7 +632,7 @@ def test_example() -> None:
         assert isinstance(assert_diffs, list)
 
     @patch("qontinui.test_migration.validation.diagnostic_reporter.datetime")
-    def test_report_timestamp_generation(self, mock_datetime) -> None:
+    def test_report_timestamp_generation(self, mock_datetime: Any) -> None:
         """Test that reports include proper timestamps."""
         mock_now = datetime(2023, 1, 1, 12, 0, 0)
         mock_datetime.now.return_value = mock_now

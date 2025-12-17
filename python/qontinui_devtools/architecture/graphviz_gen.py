@@ -86,7 +86,7 @@ def generate_dot(
 
         color = "#ff0000" if is_cycle_edge else edge_type_colors.get(edge.edge_type, "#555555")
         penwidth = 2.0 if is_cycle_edge else 1.0
-        style = "bold" if is_cycle_edge else "solid"
+        edge_style = "bold" if is_cycle_edge else "solid"
 
         attrs = [
             f'color="{color}"',

@@ -114,7 +114,7 @@ class TestCoverageTracker:
         # Update to completed
         self.tracker.update_migration_status(self.java_test_file.path, MigrationStatus.COMPLETED)
 
-        assert mapping.migration_status == MigrationStatus.COMPLETED
+        assert mapping.migration_status == MigrationStatus.COMPLETED  # type: ignore[comparison-overlap]
         assert mapping.migration_date is not None
 
     def test_add_method_mapping(self) -> None:

@@ -92,7 +92,7 @@ class CircularDependencyDetector:
 
         if self.verbose:
             self.console.print(f"Files scanned: {len(self.file_map)}")
-            self.console.print(f"Dependencies: {len(self.graph.edges())}")
+            self.console.print(f"Dependencies: {sum(len(deps) for deps in self.graph.values())}")
             self.console.print(f"Cycles found: {len(circular_deps)}")
 
         return circular_deps
@@ -315,7 +315,7 @@ class CircularDependencyDetector:
         except Exception as e:
             if self.verbose:
                 self.console.print(f"[red]Error finding cycles: {e}[/red]")
-            self.cycles: list[Any] = []
+            self.cycles = []
 
     def _create_circular_dependencies(self) -> list[RustCircularDependency]:
         """Create RustCircularDependency objects from cycles.

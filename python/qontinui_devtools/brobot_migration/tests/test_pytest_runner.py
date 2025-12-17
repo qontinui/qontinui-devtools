@@ -89,7 +89,7 @@ class TestPytestRunner:
 
         assert isinstance(result, TestResult)
         assert not result.passed
-        assert "Test file not found" in result.error_message
+        assert result.error_message is not None and "Test file not found" in result.error_message
         assert result.test_name == "test.py"
 
     @patch("subprocess.run")
@@ -162,7 +162,7 @@ class TestPytestRunner:
 
                 assert isinstance(result, TestResult)
                 assert not result.passed
-                assert "timed out" in result.error_message
+                assert result.error_message is not None and "timed out" in result.error_message
 
             finally:
                 test_file.unlink()
@@ -234,7 +234,7 @@ test_example.py::test_function2 PASSED
             assert result.total_tests > 0
             assert result.passed_tests == 0
             assert result.failed_tests > 0
-            assert all("timed out" in r.error_message for r in result.individual_results)
+            assert all(r.error_message is not None and "timed out" in r.error_message for r in result.individual_results)
 
     def test_parse_test_counts_simple(self) -> None:
         """Test parsing test counts from pytest output."""
