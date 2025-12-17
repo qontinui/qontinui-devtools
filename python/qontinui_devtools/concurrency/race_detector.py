@@ -45,15 +45,19 @@ class RaceCondition:
 class RaceConditionDetector:
     """Static analyzer for race conditions."""
 
-    def __init__(self, root_path: str | Path, exclude_patterns: list[str] | None = None) -> None:
+    def __init__(
+        self,
+        root_path: str | Path | None = None,
+        exclude_patterns: list[str] | None = None,
+    ) -> None:
         """
         Initialize race condition detector.
 
         Args:
-            root_path: Root directory to analyze
+            root_path: Root directory to analyze (optional, defaults to current directory)
             exclude_patterns: Patterns to exclude (e.g., ["test_", "venv/"])
         """
-        self.root_path = Path(root_path)
+        self.root_path = Path(root_path) if root_path else Path.cwd()
         self.exclude_patterns = exclude_patterns or [
             "test_",
             "__pycache__",
@@ -96,6 +100,47 @@ class RaceConditionDetector:
         self.race_conditions.sort(key=lambda r: severity_order.get(r.severity, 4))
 
         return self.race_conditions
+
+    def analyze_file(self, file_path: str | Path) -> list[RaceCondition]:
+        """
+        Analyze a single Python file for race conditions.
+
+        Args:
+            file_path: Path to Python file to analyze
+
+        Returns:
+            List of detected race conditions in this file
+        """
+        file_path = Path(file_path)
+
+        # Analyze the file and store context
+        try:
+            context = analyze_file(file_path)
+            self.contexts[str(file_path)] = context
+        except Exception as e:
+            # Return empty list on error
+            print(f"Error analyzing {file_path}: {e}")
+            return []
+
+        # Find shared state for this file
+        self.shared_states = self.find_shared_state()
+
+        # Detect race conditions
+        all_race_conditions = self._detect_race_conditions()
+
+        # Filter to only race conditions from this specific file
+        file_race_conditions = [
+            rc for rc in all_race_conditions if rc.shared_state.file_path == str(file_path)
+        ]
+
+        # Update instance variable with all detected race conditions
+        self.race_conditions = all_race_conditions
+
+        # Sort by severity
+        severity_order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
+        file_race_conditions.sort(key=lambda r: severity_order.get(r.severity, 4))
+
+        return file_race_conditions
 
     def find_shared_state(self) -> list[SharedState]:
         """Find all shared mutable state across analyzed files."""

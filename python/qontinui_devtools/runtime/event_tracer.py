@@ -155,6 +155,7 @@ class EventTracer:
         self._lock = threading.Lock()
         self._max_traces = max_traces
         self._enable_metadata = enable_metadata
+        self._running = True  # Tracer is active once instantiated
 
     def start_trace(
         self, event_id: str, event_type: str, metadata: dict[str, Any] | None = None
@@ -416,3 +417,8 @@ class EventTracer:
                     for trace in self._traces.values()
                 ),
             }
+
+    @property
+    def is_running(self) -> bool:
+        """Get whether the tracer is currently running."""
+        return self._running

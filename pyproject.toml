@@ -108,6 +108,8 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 strict_equality = true
+namespace_packages = true
+explicit_package_bases = true
 
 [[tool.mypy.overrides]]
 module = [
@@ -117,6 +119,43 @@ module = [
     "matplotlib.*",
     "networkx.*",
     "aiohttp.*",
+]
+ignore_missing_imports = true
+
+# brobot_migration uses sys.path manipulation for bare imports
+# Ignore missing imports for modules that work at runtime via sys.path
+[[tool.mypy.overrides]]
+module = "qontinui_devtools.brobot_migration.*"
+ignore_missing_imports = true
+
+# Ignore bare imports used within brobot_migration (work via sys.path at runtime)
+[[tool.mypy.overrides]]
+module = [
+    "cli",
+    "cli_commands",
+    "cli_commands.*",
+    "cli_utils",
+    "cli_utils.*",
+    "cli_standalone",
+    "orchestrator",
+    "minimal_orchestrator",
+    "config",
+    "core",
+    "core.*",
+    "discovery",
+    "discovery.*",
+    "execution",
+    "execution.*",
+    "reporting",
+    "reporting.*",
+    "translation",
+    "translation.*",
+    "validation",
+    "validation.*",
+    "mocks",
+    "mocks.*",
+    "python.qontinui_devtools.brobot_migration.*",
+    "qontinui.test_migration.*",
 ]
 ignore_missing_imports = true
 

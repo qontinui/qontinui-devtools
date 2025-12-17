@@ -464,6 +464,11 @@ class MemoryProfiler:
         """Get baseline snapshot."""
         return self._baseline
 
+    @property
+    def is_running(self) -> bool:
+        """Get whether the profiler is currently running."""
+        return self._running
+
     def clear(self) -> None:
         """Clear all collected snapshots."""
         self._snapshots.clear()

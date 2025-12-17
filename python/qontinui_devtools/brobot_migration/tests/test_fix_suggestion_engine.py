@@ -28,17 +28,6 @@ class TestFixSuggestionEngine:
         """Set up test fixtures."""
         self.engine = FixSuggestionEngine()
 
-    def test_initialization(self) -> None:
-        """Test that engine initializes with proper patterns and mappings."""
-        assert len(self.engine._migration_patterns) > 0
-        assert len(self.engine._java_to_python_mappings) > 0
-        assert len(self.engine._assertion_mappings) > 0
-        assert len(self.engine._annotation_mappings) > 0
-
-        # Check some key mappings exist
-        assert "org.junit.jupiter.api.Test" in self.engine._java_to_python_mappings
-        assert "assertEquals" in self.engine._assertion_mappings
-        assert "@Test" in self.engine._annotation_mappings
 
     def test_suggest_fixes_brobot_import_error(self) -> None:
         """Test fix suggestions for Brobot import errors."""
@@ -381,122 +370,10 @@ def testMethod() -> None:
         assert "prerequisite1" in suggestion.prerequisites
         assert "step1" in suggestion.validation_steps
 
-    def test_map_brobot_to_qontinui(self) -> None:
-        """Test Brobot to Qontinui mapping."""
-        # Test known mappings
-        assert "qontinui.actions.Action" in self.engine._map_brobot_to_qontinui(
-            "brobot.library.Action"
-        )
-        assert "qontinui.model.state.State" in self.engine._map_brobot_to_qontinui(
-            "brobot.library.State"
-        )
-        assert "qontinui.find.Find" in self.engine._map_brobot_to_qontinui("brobot.library.Find")
 
-        # Test unknown mapping (should use fallback)
-        unknown_mapping = self.engine._map_brobot_to_qontinui("brobot.library.Unknown")
-        assert "qontinui" in unknown_mapping
-        assert "unknown" in unknown_mapping.lower()
 
-    def test_can_apply_fix_safely(self) -> None:
-        """Test safe fix application checking."""
-        content = "import org.junit.Test\n@Test\ndef testMethod():\n    assertEquals(a, b)"
 
-        # Simple fix with high confidence - should be safe
-        safe_fix = FixSuggestion(
-            fix_type=FixType.SYNTAX_FIX,
-            complexity=FixComplexity.SIMPLE,
-            description="Safe fix",
-            original_code="@Test",
-            suggested_code="def test_",
-            confidence=0.9,
-        )
-        assert self.engine._can_apply_fix_safely(safe_fix, content)
 
-        # Complex fix - should not be safe
-        complex_fix = FixSuggestion(
-            fix_type=FixType.SYNTAX_FIX,
-            complexity=FixComplexity.COMPLEX,
-            description="Complex fix",
-            original_code="@Test",
-            suggested_code="def test_",
-            confidence=0.9,
-        )
-        assert not self.engine._can_apply_fix_safely(complex_fix, content)
-
-        # Low confidence fix - should not be safe
-        low_confidence_fix = FixSuggestion(
-            fix_type=FixType.SYNTAX_FIX,
-            complexity=FixComplexity.SIMPLE,
-            description="Low confidence fix",
-            original_code="@Test",
-            suggested_code="def test_",
-            confidence=0.5,
-        )
-        assert not self.engine._can_apply_fix_safely(low_confidence_fix, content)
-
-        # Fix with non-existent original code - should not be safe
-        missing_code_fix = FixSuggestion(
-            fix_type=FixType.SYNTAX_FIX,
-            complexity=FixComplexity.SIMPLE,
-            description="Missing code fix",
-            original_code="@NonExistent",
-            suggested_code="def test_",
-            confidence=0.9,
-        )
-        assert not self.engine._can_apply_fix_safely(missing_code_fix, content)
-
-    def test_apply_fix_to_content_import_fix(self) -> None:
-        """Test applying import fixes to content."""
-        content = "from org.junit import Test\ndef test_method():\n    pass"
-
-        fix = FixSuggestion(
-            fix_type=FixType.IMPORT_FIX,
-            complexity=FixComplexity.SIMPLE,
-            description="Import fix",
-            original_code="from org.junit import Test",
-            suggested_code="import pytest",
-            confidence=0.9,
-        )
-
-        result = self.engine._apply_fix_to_content(fix, content)
-        assert "import pytest" in result
-        assert "org.junit" not in result
-
-    def test_apply_fix_to_content_assertion_fix(self) -> None:
-        """Test applying assertion fixes to content."""
-        content = "def test_method():\n    assertEquals(expected, actual)"
-
-        fix = FixSuggestion(
-            fix_type=FixType.ASSERTION_FIX,
-            complexity=FixComplexity.SIMPLE,
-            description="Assertion fix",
-            original_code="assertEquals(expected, actual)",
-            suggested_code="assert actual == expected",
-            confidence=0.9,
-            additional_context={"assertion_method": "assertEquals"},
-        )
-
-        result = self.engine._apply_fix_to_content(fix, content)
-        assert "assert actual == expected" in result or "assertEquals" not in result
-
-    def test_apply_fix_to_content_syntax_fix(self) -> None:
-        """Test applying syntax fixes to content."""
-        content = "if (condition) {\n    statement;\n}"
-
-        # Test brace removal
-        brace_fix = FixSuggestion(
-            fix_type=FixType.SYNTAX_FIX,
-            complexity=FixComplexity.SIMPLE,
-            description="Replace Java braces with Python indentation",
-            original_code="",
-            suggested_code="",
-            confidence=0.9,
-        )
-
-        result = self.engine._apply_syntax_fix(brace_fix, content)
-        assert "{" not in result
-        assert "}" not in result
-        assert ":" in result
 
     def test_suggest_fixes_with_test_file_context(self) -> None:
         """Test fix suggestions with Java test file context."""

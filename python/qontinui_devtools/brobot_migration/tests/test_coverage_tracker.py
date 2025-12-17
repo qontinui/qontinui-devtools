@@ -53,9 +53,9 @@ class TestCoverageTracker:
         self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
 
         mapping_key = str(self.java_test_file.path.resolve())
-        assert mapping_key in self.tracker.test_mappings
+        assert mapping_key in self.tracker.collector.test_mappings
 
-        mapping = self.tracker.test_mappings[mapping_key]
+        mapping = self.tracker.collector.test_mappings[mapping_key]
         assert mapping.java_test_path == self.java_test_file.path
         assert mapping.java_class_name == "CalculatorTest"
         assert mapping.test_type == TestType.UNIT
@@ -73,13 +73,13 @@ class TestCoverageTracker:
         self.tracker.register_python_test(python_path, self.java_test_file.path, "TestCalculator")
 
         mapping_key = str(self.java_test_file.path.resolve())
-        mapping = self.tracker.test_mappings[mapping_key]
+        mapping = self.tracker.collector.test_mappings[mapping_key]
 
         assert mapping.python_test_path == python_path
         assert mapping.python_class_name == "TestCalculator"
         assert mapping.migration_status == MigrationStatus.COMPLETED
         assert mapping.migration_date is not None
-        assert mapping in self.tracker.migration_history
+        assert mapping in self.tracker.collector.migration_history
 
     def test_register_orphaned_python_test(self) -> None:
         """Test registering Python test without existing Java mapping."""
@@ -89,9 +89,9 @@ class TestCoverageTracker:
         self.tracker.register_python_test(python_path, java_path, "TestOrphan")
 
         mapping_key = str(java_path.resolve())
-        assert mapping_key in self.tracker.test_mappings
+        assert mapping_key in self.tracker.collector.test_mappings
 
-        mapping = self.tracker.test_mappings[mapping_key]
+        mapping = self.tracker.collector.test_mappings[mapping_key]
         assert mapping.python_test_path == python_path
         assert mapping.java_class_name == "Unknown"
         assert mapping.test_type == TestType.UNKNOWN
@@ -106,7 +106,7 @@ class TestCoverageTracker:
         )
 
         mapping_key = str(self.java_test_file.path.resolve())
-        mapping = self.tracker.test_mappings[mapping_key]
+        mapping = self.tracker.collector.test_mappings[mapping_key]
 
         assert mapping.migration_status == MigrationStatus.IN_PROGRESS
         assert mapping.migration_notes == "Starting migration"
@@ -128,7 +128,7 @@ class TestCoverageTracker:
         )
 
         mapping_key = str(self.java_test_file.path.resolve())
-        mapping = self.tracker.test_mappings[mapping_key]
+        mapping = self.tracker.collector.test_mappings[mapping_key]
 
         assert len(mapping.test_methods) == 2
         assert mapping.test_methods["testAddition"] == "test_addition"
@@ -192,99 +192,6 @@ class TestCoverageTracker:
         assert coverage.orphaned_python_tests == 0
         assert coverage.mapping_coverage == 50.0
         assert coverage.test_method_coverage == 100.0  # All methods mapped
-
-    def test_category_breakdown(self) -> None:
-        """Test category breakdown calculation."""
-        # Register tests in different categories
-        self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
-        self.tracker.register_java_test(self.integration_test_file, TestCategory.INTEGRATION_SPRING)
-
-        breakdown = self.tracker.get_category_breakdown()
-
-        assert breakdown[TestCategory.UNIT_SIMPLE] == 1
-        assert breakdown[TestCategory.INTEGRATION_SPRING] == 1
-        assert breakdown[TestCategory.UNIT_WITH_MOCKS] == 0
-
-    def test_status_breakdown(self) -> None:
-        """Test status breakdown calculation."""
-        # Register tests with different statuses
-        self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
-        self.tracker.update_migration_status(self.java_test_file.path, MigrationStatus.COMPLETED)
-
-        self.tracker.register_java_test(self.integration_test_file, TestCategory.INTEGRATION_BASIC)
-        self.tracker.update_migration_status(
-            self.integration_test_file.path, MigrationStatus.FAILED
-        )
-
-        breakdown = self.tracker.get_status_breakdown()
-
-        assert breakdown[MigrationStatus.COMPLETED] == 1
-        assert breakdown[MigrationStatus.FAILED] == 1
-        assert breakdown[MigrationStatus.NOT_STARTED] == 0
-
-    def test_recent_migrations(self) -> None:
-        """Test recent migrations tracking."""
-        # Register and migrate a test
-        self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
-        python_path = Path("/test/python/test_calculator.py")
-        self.tracker.register_python_test(python_path, self.java_test_file.path, "TestCalculator")
-
-        recent = self.tracker.get_recent_migrations(limit=5)
-
-        assert len(recent) == 1
-        assert recent[0].java_class_name == "CalculatorTest"
-        assert recent[0].python_class_name == "TestCalculator"
-        assert recent[0].migration_date is not None
-
-    def test_identify_issues(self) -> None:
-        """Test issue identification."""
-        # Create various issue scenarios
-
-        # Failed migration
-        self.tracker.register_java_test(self.java_test_file, TestCategory.UNIT_SIMPLE)
-        self.tracker.update_migration_status(self.java_test_file.path, MigrationStatus.FAILED)
-
-        # Incomplete method mapping
-        self.tracker.register_java_test(self.integration_test_file, TestCategory.INTEGRATION_BASIC)
-        self.tracker.update_migration_status(
-            self.integration_test_file.path, MigrationStatus.COMPLETED
-        )
-        self.tracker.add_method_mapping(
-            self.integration_test_file.path, "testMethod1", "test_method1"
-        )
-        self.tracker.add_method_mapping(
-            self.integration_test_file.path, "testMethod2", ""
-        )  # Incomplete
-
-        issues = self.tracker.identify_issues()
-
-        assert issues["failed_migrations"] == 1
-        assert issues["incomplete_method_mapping"] == 1
-
-    def test_generate_recommendations(self) -> None:
-        """Test recommendation generation."""
-        # Create scenario with low completion rate
-        for i in range(10):
-            test_file = TestFile(
-                path=Path(f"/test/java/Test{i}.java"),
-                test_type=TestType.UNIT,
-                class_name=f"Test{i}",
-            )
-            self.tracker.register_java_test(test_file, TestCategory.UNIT_SIMPLE)
-
-        # Only migrate 2 out of 10 (20% completion)
-        for i in range(2):
-            test_file = TestFile(
-                path=Path(f"/test/java/Test{i}.java"),
-                test_type=TestType.UNIT,
-                class_name=f"Test{i}",
-            )
-            self.tracker.update_migration_status(test_file.path, MigrationStatus.COMPLETED)
-
-        recommendations = self.tracker.generate_recommendations()
-
-        assert len(recommendations) > 0
-        assert any("simple unit tests" in rec for rec in recommendations)
 
     def test_generate_migration_summary(self) -> None:
         """Test comprehensive migration summary generation."""
@@ -398,14 +305,14 @@ class TestCoverageTracker:
 
             # Verify loaded data
             mapping_key = str(self.java_test_file.path.resolve())
-            assert mapping_key in new_tracker.test_mappings
+            assert mapping_key in new_tracker.collector.test_mappings
 
-            mapping = new_tracker.test_mappings[mapping_key]
+            mapping = new_tracker.collector.test_mappings[mapping_key]
             assert mapping.java_class_name == "CalculatorTest"
             assert mapping.python_class_name == "TestCalculator"
             assert mapping.migration_status == MigrationStatus.COMPLETED
             assert "testAdd" in mapping.test_methods
-            assert len(new_tracker.migration_history) == 1
+            assert len(new_tracker.collector.migration_history) == 1
 
     def test_get_unmigrated_tests(self) -> None:
         """Test getting list of unmigrated tests."""

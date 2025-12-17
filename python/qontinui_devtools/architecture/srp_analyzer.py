@@ -91,7 +91,7 @@ class SRPAnalyzer:
 
         for file_path in python_files:
             try:
-                file_violations = self._analyze_file(str(file_path), min_methods)
+                file_violations = self.analyze_file(str(file_path), min_methods)
                 violations.extend(file_violations)
                 self.stats["files_analyzed"] += 1
             except Exception as e:
@@ -102,12 +102,12 @@ class SRPAnalyzer:
 
         return violations
 
-    def _analyze_file(self, file_path: str, min_methods: int) -> list[SRPViolation]:
+    def analyze_file(self, file_path: str, min_methods: int = 5) -> list[SRPViolation]:
         """Analyze a single Python file for SRP violations.
 
         Args:
             file_path: Path to Python file
-            min_methods: Minimum number of methods to analyze
+            min_methods: Minimum number of methods to analyze (default: 5)
 
         Returns:
             List of violations found in this file
