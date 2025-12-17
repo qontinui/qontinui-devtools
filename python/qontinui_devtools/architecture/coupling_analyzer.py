@@ -375,14 +375,14 @@ class CouplingCohesionAnalyzer:
             # Sort by LCOM (highest first - worst cohesion)
             sorted_cohesion = sorted(cohesion, key=lambda x: x.lcom, reverse=True)
 
-            for metric in sorted_cohesion[:20]:  # Top 20
-                lines.append(f"Class: {metric.name}")
-                lines.append(f"  File: {metric.file_path}")
-                lines.append(f"  LCOM: {metric.lcom:.3f} (lower is better)")
-                lines.append(f"  LCOM4: {metric.lcom4:.1f} (1 is ideal)")
-                lines.append(f"  TCC: {metric.tcc:.3f} (higher is better)")
-                lines.append(f"  LCC: {metric.lcc:.3f} (higher is better)")
-                lines.append(f"  Score: {metric.cohesion_score.upper()}")
+            for cohesion_metric in sorted_cohesion[:20]:  # Top 20
+                lines.append(f"Class: {cohesion_metric.name}")
+                lines.append(f"  File: {cohesion_metric.file_path}")
+                lines.append(f"  LCOM: {cohesion_metric.lcom:.3f} (lower is better)")
+                lines.append(f"  LCOM4: {cohesion_metric.lcom4:.1f} (1 is ideal)")
+                lines.append(f"  TCC: {cohesion_metric.tcc:.3f} (higher is better)")
+                lines.append(f"  LCC: {cohesion_metric.lcc:.3f} (higher is better)")
+                lines.append(f"  Score: {cohesion_metric.cohesion_score.upper()}")
                 lines.append("")
         else:
             lines.append("No classes analyzed.")

@@ -306,7 +306,7 @@ class GodClassDetector:
         Returns:
             List of extraction suggestions
         """
-        suggestions = []
+        suggestions: list[ExtractionSuggestion] = []
 
         try:
             # Read the source file
