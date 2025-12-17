@@ -317,7 +317,7 @@ def _private_function():
 
 class PublicClass:
     '''Public class.'''
-    def method1(self):
+    def method1(self) -> None:
         pass
 """
         )
@@ -743,7 +743,7 @@ def test_func(x: int, y: str = "default"):
         (baseline_dir / "test.py").write_text(
             """
 class MyClass:
-    def method1(self):
+    def method1(self) -> None:
         pass
 """
         )

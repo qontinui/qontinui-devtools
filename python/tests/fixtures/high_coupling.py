@@ -13,7 +13,7 @@ from pathlib import Path
 class HighlyCoupledClass:
     """A class that depends on many external modules."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.path = Path("/tmp")
         self.data: dict = {}
         self.logger = logging.getLogger(__name__)

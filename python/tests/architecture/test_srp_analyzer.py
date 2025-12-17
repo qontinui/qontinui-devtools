@@ -21,32 +21,32 @@ from qontinui_devtools.architecture.semantic_utils import (
 class TestMethodTokenization:
     """Tests for method name tokenization."""
 
-    def test_tokenize_snake_case(self):
+    def test_tokenize_snake_case(self) -> None:
         """Test tokenizing snake_case method names."""
         tokens = tokenize_method_name("get_user_data")
         assert tokens == ["get", "user", "data"]
 
-    def test_tokenize_camel_case(self):
+    def test_tokenize_camel_case(self) -> None:
         """Test tokenizing camelCase method names."""
         tokens = tokenize_method_name("calculateTotal")
         assert tokens == ["calculate", "total"]
 
-    def test_tokenize_pascal_case(self):
+    def test_tokenize_pascal_case(self) -> None:
         """Test tokenizing PascalCase method names."""
         tokens = tokenize_method_name("ProcessUserData")
         assert tokens == ["process", "user", "data"]
 
-    def test_tokenize_mixed_case(self):
+    def test_tokenize_mixed_case(self) -> None:
         """Test tokenizing mixed case with acronyms."""
         tokens = tokenize_method_name("handleHTTPRequest")
         assert tokens == ["handle", "http", "request"]
 
-    def test_tokenize_empty_string(self):
+    def test_tokenize_empty_string(self) -> None:
         """Test tokenizing empty string."""
         tokens = tokenize_method_name("")
         assert tokens == []
 
-    def test_tokenize_with_underscores(self):
+    def test_tokenize_with_underscores(self) -> None:
         """Test tokenizing with leading/trailing underscores."""
         tokens = tokenize_method_name("_private_method_")
         assert tokens == ["private", "method"]
@@ -55,17 +55,17 @@ class TestMethodTokenization:
 class TestVerbExtraction:
     """Tests for verb extraction from method names."""
 
-    def test_extract_verb_simple(self):
+    def test_extract_verb_simple(self) -> None:
         """Test extracting verb from simple method name."""
         verb = extract_verb(["get", "user", "data"])
         assert verb == "get"
 
-    def test_extract_verb_single_token(self):
+    def test_extract_verb_single_token(self) -> None:
         """Test extracting verb from single token."""
         verb = extract_verb(["calculate"])
         assert verb == "calculate"
 
-    def test_extract_verb_empty(self):
+    def test_extract_verb_empty(self) -> None:
         """Test extracting verb from empty list."""
         verb = extract_verb([])
         assert verb is None
@@ -74,17 +74,17 @@ class TestVerbExtraction:
 class TestKeywordExtraction:
     """Tests for keyword extraction."""
 
-    def test_extract_keywords_basic(self):
+    def test_extract_keywords_basic(self) -> None:
         """Test basic keyword extraction."""
         keywords = extract_keywords("get_user_by_email")
         assert keywords == {"get", "user", "email"}
 
-    def test_extract_keywords_camel_case(self):
+    def test_extract_keywords_camel_case(self) -> None:
         """Test keyword extraction from camelCase."""
         keywords = extract_keywords("calculateUserScore")
         assert keywords == {"calculate", "user", "score"}
 
-    def test_extract_keywords_with_stop_words(self):
+    def test_extract_keywords_with_stop_words(self) -> None:
         """Test that stop words are filtered out."""
         keywords = extract_keywords("get_user_from_database")
         assert "from" not in keywords
@@ -96,37 +96,37 @@ class TestKeywordExtraction:
 class TestMethodClassification:
     """Tests for method classification into responsibilities."""
 
-    def test_classify_data_access(self):
+    def test_classify_data_access(self) -> None:
         """Test classifying data access methods."""
         assert classify_method("get_user_data") == "Data Access"
         assert classify_method("fetch_records") == "Data Access"
         assert classify_method("retrieve_profile") == "Data Access"
 
-    def test_classify_validation(self):
+    def test_classify_validation(self) -> None:
         """Test classifying validation methods."""
         assert classify_method("validate_email") == "Validation"
         assert classify_method("check_password") == "Validation"
         assert classify_method("verify_credentials") == "Validation"
 
-    def test_classify_business_logic(self):
+    def test_classify_business_logic(self) -> None:
         """Test classifying business logic methods."""
         assert classify_method("calculate_total") == "Business Logic"
         assert classify_method("process_order") == "Business Logic"
         assert classify_method("compute_score") == "Business Logic"
 
-    def test_classify_persistence(self):
+    def test_classify_persistence(self) -> None:
         """Test classifying persistence methods."""
         assert classify_method("save_to_database") == "Persistence"
         assert classify_method("load_from_cache") == "Persistence"
         assert classify_method("persist_data") == "Persistence"
 
-    def test_classify_presentation(self):
+    def test_classify_presentation(self) -> None:
         """Test classifying presentation methods."""
         assert classify_method("render_template") == "Presentation"
         assert classify_method("display_results") == "Presentation"
         assert classify_method("format_output") == "Presentation"
 
-    def test_classify_other(self):
+    def test_classify_other(self) -> None:
         """Test classifying unrecognized methods."""
         assert classify_method("do_something") == "Other"
         assert classify_method("helper_function") == "Other"
@@ -135,22 +135,22 @@ class TestMethodClassification:
 class TestSimilarityCalculation:
     """Tests for similarity score calculation."""
 
-    def test_similarity_identical(self):
+    def test_similarity_identical(self) -> None:
         """Test similarity of identical method names."""
         score = calculate_similarity_score("get_user", "get_user")
         assert score == 1.0
 
-    def test_similarity_partial_overlap(self):
+    def test_similarity_partial_overlap(self) -> None:
         """Test similarity with partial keyword overlap."""
         score = calculate_similarity_score("get_user", "get_customer")
         assert 0.3 < score < 0.7  # Should have some similarity
 
-    def test_similarity_no_overlap(self):
+    def test_similarity_no_overlap(self) -> None:
         """Test similarity with no keyword overlap."""
         score = calculate_similarity_score("get_user", "calculate_total")
         assert score < 0.3  # Should have low similarity
 
-    def test_similarity_empty(self):
+    def test_similarity_empty(self) -> None:
         """Test similarity with empty strings."""
         score = calculate_similarity_score("", "get_user")
         assert score == 0.0
@@ -159,7 +159,7 @@ class TestSimilarityCalculation:
 class TestClustering:
     """Tests for method clustering algorithm."""
 
-    def test_cluster_data_access_methods(self):
+    def test_cluster_data_access_methods(self) -> None:
         """Test clustering data access methods."""
         methods = [
             "get_user",
@@ -175,7 +175,7 @@ class TestClustering:
         assert len(clusters) >= 1
         assert any(c.name == "Data Access" for c in clusters)
 
-    def test_cluster_mixed_responsibilities(self):
+    def test_cluster_mixed_responsibilities(self) -> None:
         """Test clustering methods with mixed responsibilities."""
         methods = [
             "get_user",
@@ -191,7 +191,7 @@ class TestClustering:
         # Should create multiple clusters
         assert len(clusters) >= 2
 
-    def test_cluster_min_size(self):
+    def test_cluster_min_size(self) -> None:
         """Test minimum cluster size enforcement."""
         methods = ["get_user", "validate_email", "calculate_total"]
 
@@ -200,7 +200,7 @@ class TestClustering:
         # No cluster should be created (not enough methods in any category)
         assert len(clusters) == 0
 
-    def test_name_cluster(self):
+    def test_name_cluster(self) -> None:
         """Test cluster naming."""
         methods = ["get_user", "fetch_data", "retrieve_records"]
         name = name_cluster(methods)
@@ -211,7 +211,7 @@ class TestClustering:
 class TestMergeCluster:
     """Tests for cluster merging."""
 
-    def test_merge_similar_clusters(self):
+    def test_merge_similar_clusters(self) -> None:
         """Test merging similar clusters."""
         cluster1 = MethodCluster(
             name="Data Access",
@@ -341,7 +341,7 @@ class TestSRPAnalyzer:
 class TestIntegration:
     """Integration tests for the complete SRP analysis workflow."""
 
-    def test_full_analysis_workflow(self):
+    def test_full_analysis_workflow(self) -> None:
         """Test complete analysis workflow."""
         analyzer = SRPAnalyzer(verbose=False)
         fixtures_path = Path(__file__).parent.parent / "fixtures" / "srp"
@@ -371,7 +371,7 @@ class TestIntegration:
             assert violation.recommendation
             assert len(violation.suggested_refactorings) > 0
 
-    def test_cluster_quality(self):
+    def test_cluster_quality(self) -> None:
         """Test quality of clustering for known method groups."""
         methods = [
             # Data access

@@ -198,7 +198,7 @@ class MockHALBuilder:
         self._ocr_default_text = "Mock OCR Text"
         self._platform_latency = 0.0
         self._test_image = None
-        self._config = None
+        self._config: HALConfig | None = None
 
     def with_input_latency(self, latency: float) -> "MockHALBuilder":
         """Set input operation latency."""

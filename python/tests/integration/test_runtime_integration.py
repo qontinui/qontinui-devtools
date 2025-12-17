@@ -31,23 +31,23 @@ except ImportError:
     class ActionProfiler:
         """Mock Action Profiler for testing."""
 
-        def __init__(self, config: dict[str, Any] = None):
+        def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.profiles = []
 
-        def start(self):
+        def start(self) -> None:
             """Start profiling."""
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             """Stop profiling."""
             self.is_running = False
 
-        def profile(self, func):
+        def profile(self, func) -> Any:
             """Decorator to profile a function."""
 
-            def wrapper(*args, **kwargs):
+            def wrapper(*args, **kwargs) -> Any:
                 start = time.perf_counter()
                 result = func(*args, **kwargs)
                 duration = time.perf_counter() - start
@@ -75,16 +75,16 @@ except ImportError:
     class EventTracer:
         """Mock Event Tracer for testing."""
 
-        def __init__(self, config: dict[str, Any] = None):
+        def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.events = []
 
-        def start(self):
+        def start(self) -> None:
             """Start tracing."""
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             """Stop tracing."""
             self.is_running = False
 
@@ -114,22 +114,22 @@ except ImportError:
     class MemoryProfiler:
         """Mock Memory Profiler for testing."""
 
-        def __init__(self, config: dict[str, Any] = None):
+        def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.snapshots = []
 
-        def start(self):
+        def start(self) -> None:
             """Start memory profiling."""
             self.is_running = True
             self._take_snapshot()
 
-        def stop(self):
+        def stop(self) -> None:
             """Stop memory profiling."""
             self.is_running = False
             self._take_snapshot()
 
-        def _take_snapshot(self):
+        def _take_snapshot(self) -> None:
             """Take a memory snapshot."""
             import sys
 
@@ -159,16 +159,16 @@ except ImportError:
     class PerformanceDashboard:
         """Mock Performance Dashboard for testing."""
 
-        def __init__(self, config: dict[str, Any] = None):
+        def __init__(self, config: dict[str, Any] = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.metrics = {}
 
-        def start(self):
+        def start(self) -> None:
             """Start dashboard."""
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             """Stop dashboard."""
             self.is_running = False
 

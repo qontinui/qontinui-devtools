@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 
-def setup_cli():
+def setup_cli() -> None:
     """Set up the CLI tool for easy execution."""
 
     # Get the current directory

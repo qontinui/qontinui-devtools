@@ -7,6 +7,7 @@ against Pydantic schemas, catching schema mismatches before execution.
 
 import json
 from pathlib import Path
+from typing import Any, Generator, Iterator
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -161,7 +162,7 @@ def multiple_workflows_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def mock_validator():
+def mock_validator() -> None:
     """Create a mock validator that doesn't require qontinui library."""
     with (
         patch.object(ConfigValidator, "_find_qontinui_path") as mock_find,

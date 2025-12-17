@@ -3,13 +3,14 @@
 import json
 import tempfile
 from pathlib import Path
+from typing import Any, Generator, Iterator
 
 import pytest
 from qontinui_devtools.architecture import DependencyGraphVisualizer, GraphEdge, GraphNode
 
 
 @pytest.fixture
-def sample_python_code(tmp_path):
+def sample_python_code(tmp_path: Path) -> Path:
     """Create a sample Python project for testing."""
     # Create package structure
     pkg = tmp_path / "sample_pkg"
@@ -27,7 +28,7 @@ class ClassA:
     def method_b(self):
         return self.method_a()
 
-def function_a():
+def function_a() -> Any:
     return "function_a"
 """
     (pkg / "module_a.py").write_text(module_a)
@@ -43,7 +44,7 @@ class ClassB(ClassA):
     def method_d(self):
         return self.method_c()
 
-def function_b():
+def function_b() -> Any:
     from .module_a import function_a
     return function_a()
 """
@@ -67,7 +68,7 @@ class ClassC:
 
 
 @pytest.fixture
-def visualizer():
+def visualizer() -> DependencyGraphVisualizer:
     """Create a graph visualizer instance."""
     return DependencyGraphVisualizer(verbose=False)
 
@@ -75,7 +76,7 @@ def visualizer():
 class TestGraphNode:
     """Test GraphNode dataclass."""
 
-    def test_create_node(self):
+    def test_create_node(self) -> None:
         """Test creating a graph node."""
         node = GraphNode(
             id="test.module",
@@ -93,7 +94,7 @@ class TestGraphNode:
         assert node.color == "#ff0000"
         assert node.size == 20
 
-    def test_node_to_dict(self):
+    def test_node_to_dict(self) -> None:
         """Test converting node to dictionary."""
         node = GraphNode(
             id="test.module",
@@ -112,7 +113,7 @@ class TestGraphNode:
 class TestGraphEdge:
     """Test GraphEdge dataclass."""
 
-    def test_create_edge(self):
+    def test_create_edge(self) -> None:
         """Test creating a graph edge."""
         edge = GraphEdge(source="module_a", target="module_b", edge_type="imports", weight=2)
 
@@ -121,7 +122,7 @@ class TestGraphEdge:
         assert edge.edge_type == "imports"
         assert edge.weight == 2
 
-    def test_edge_to_dict(self):
+    def test_edge_to_dict(self) -> None:
         """Test converting edge to dictionary."""
         edge = GraphEdge(source="module_a", target="module_b", edge_type="imports")
 
@@ -135,12 +136,12 @@ class TestGraphEdge:
 class TestDependencyGraphVisualizer:
     """Test DependencyGraphVisualizer class."""
 
-    def test_init(self):
+    def test_init(self) -> None:
         """Test initializing the visualizer."""
         visualizer = DependencyGraphVisualizer(verbose=True)
         assert visualizer.verbose is True
 
-    def test_build_module_graph(self, visualizer, sample_python_code):
+    def test_build_module_graph(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test building a module-level dependency graph."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -160,7 +161,7 @@ class TestDependencyGraphVisualizer:
         for edge in edges:
             assert edge.edge_type == "imports"
 
-    def test_build_class_graph(self, visualizer, sample_python_code):
+    def test_build_class_graph(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test building a class-level dependency graph."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="class")
 
@@ -177,7 +178,7 @@ class TestDependencyGraphVisualizer:
             inheritance_edges = [e for e in edges if e.edge_type == "inherits"]
             assert len(inheritance_edges) >= 0  # At least ClassB inherits from ClassA
 
-    def test_build_function_graph(self, visualizer, sample_python_code):
+    def test_build_function_graph(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test building a function-level dependency graph."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="function")
 
@@ -190,17 +191,17 @@ class TestDependencyGraphVisualizer:
             assert "lines" in node.metrics
             assert "calls" in node.metrics
 
-    def test_invalid_level(self, visualizer, sample_python_code):
+    def test_invalid_level(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test with invalid level parameter."""
         with pytest.raises(ValueError, match="Invalid level"):
             visualizer.build_graph(str(sample_python_code), level="invalid")
 
-    def test_invalid_path(self, visualizer):
+    def test_invalid_path(self, visualizer: DependencyGraphVisualizer) -> None:
         """Test with non-existent path."""
         with pytest.raises(FileNotFoundError):
             visualizer.build_graph("/non/existent/path")
 
-    def test_detect_cycles(self, visualizer):
+    def test_detect_cycles(self, visualizer: DependencyGraphVisualizer) -> None:
         """Test circular dependency detection."""
         # Create nodes with circular dependencies
         nodes = [
@@ -219,7 +220,7 @@ class TestDependencyGraphVisualizer:
         assert len(cycles) > 0
         assert len(cycles[0]) == 3  # Triangle cycle
 
-    def test_no_cycles(self, visualizer):
+    def test_no_cycles(self, visualizer: DependencyGraphVisualizer) -> None:
         """Test with acyclic graph."""
         nodes = [
             GraphNode("a", "A", "module", {}),
@@ -235,7 +236,7 @@ class TestDependencyGraphVisualizer:
         cycles = visualizer.detect_cycles(nodes, edges)
         assert len(cycles) == 0
 
-    def test_generate_html_interactive(self, visualizer, sample_python_code):
+    def test_generate_html_interactive(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test generating interactive HTML visualization."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -258,7 +259,7 @@ class TestDependencyGraphVisualizer:
         finally:
             Path(output_path).unlink()
 
-    def test_visualize_html(self, visualizer, sample_python_code):
+    def test_visualize_html(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test visualize method with HTML format."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -272,7 +273,7 @@ class TestDependencyGraphVisualizer:
         finally:
             Path(output_path).unlink()
 
-    def test_export_json(self, visualizer, sample_python_code):
+    def test_export_json(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test exporting graph to JSON."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -295,7 +296,7 @@ class TestDependencyGraphVisualizer:
         finally:
             Path(output_path).unlink()
 
-    def test_apply_layout(self, visualizer):
+    def test_apply_layout(self, visualizer: DependencyGraphVisualizer) -> None:
         """Test applying layout algorithms."""
         nodes = [
             GraphNode("a", "A", "module", {}),
@@ -321,7 +322,7 @@ class TestDependencyGraphVisualizer:
         positions = visualizer.apply_layout(nodes, edges, "circular")
         assert len(positions) == 3
 
-    def test_calculate_node_metrics(self, visualizer, sample_python_code):
+    def test_calculate_node_metrics(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test that node metrics are calculated correctly."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -338,7 +339,7 @@ class TestDependencyGraphVisualizer:
 class TestGraphvizGeneration:
     """Test Graphviz DOT generation."""
 
-    def test_generate_dot(self):
+    def test_generate_dot(self) -> None:
         """Test generating DOT format."""
         from qontinui_devtools.architecture.graphviz_gen import generate_dot
 
@@ -358,7 +359,7 @@ class TestGraphvizGeneration:
         assert '"b"' in dot_string
         assert '"a" -> "b"' in dot_string
 
-    def test_generate_dot_with_cycles(self):
+    def test_generate_dot_with_cycles(self) -> None:
         """Test generating DOT with cycle highlighting."""
         from qontinui_devtools.architecture.graphviz_gen import generate_dot
 
@@ -379,7 +380,7 @@ class TestGraphvizGeneration:
         # Should highlight cycle edges in red
         assert "#ff0000" in dot_string
 
-    def test_apply_styling(self):
+    def test_apply_styling(self) -> None:
         """Test node styling."""
         from qontinui_devtools.architecture.graphviz_gen import apply_styling
 
@@ -397,7 +398,7 @@ class TestGraphvizGeneration:
 class TestHTMLGeneration:
     """Test HTML graph generation."""
 
-    def test_generate_html_graph(self):
+    def test_generate_html_graph(self) -> None:
         """Test generating HTML graph."""
         from qontinui_devtools.architecture.html_graph import generate_html_graph
 
@@ -420,7 +421,7 @@ class TestHTMLGeneration:
 class TestLayouts:
     """Test layout algorithms."""
 
-    def test_force_directed_layout(self):
+    def test_force_directed_layout(self) -> None:
         """Test force-directed layout."""
         from qontinui_devtools.architecture.layouts import force_directed_layout
 
@@ -445,7 +446,7 @@ class TestLayouts:
             assert not (x != x)  # Not NaN
             assert not (y != y)  # Not NaN
 
-    def test_hierarchical_layout(self):
+    def test_hierarchical_layout(self) -> None:
         """Test hierarchical layout."""
         from qontinui_devtools.architecture.layouts import hierarchical_layout
 
@@ -464,7 +465,7 @@ class TestLayouts:
 
         assert len(positions) == 3
 
-    def test_circular_layout(self):
+    def test_circular_layout(self) -> None:
         """Test circular layout."""
         from qontinui_devtools.architecture.layouts import circular_layout
 
@@ -490,7 +491,7 @@ class TestLayouts:
             distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
             assert 350 <= distance <= 450  # Allow some tolerance
 
-    def test_grid_layout(self):
+    def test_grid_layout(self) -> None:
         """Test grid layout."""
         from qontinui_devtools.architecture.layouts import grid_layout
 
@@ -501,7 +502,7 @@ class TestLayouts:
             GraphNode("d", "D", "module", {}),
         ]
 
-        edges = []
+        edges: list[GraphEdge] = []
 
         positions = grid_layout(nodes, edges)
 
@@ -511,7 +512,7 @@ class TestLayouts:
 class TestIntegration:
     """Integration tests with real code."""
 
-    def test_visualize_qontinui_devtools(self, visualizer):
+    def test_visualize_qontinui_devtools(self, visualizer: DependencyGraphVisualizer) -> None:
         """Test visualizing the qontinui-devtools codebase itself."""
         # Get the path to the qontinui_devtools package
         import qontinui_devtools
@@ -535,7 +536,7 @@ class TestIntegration:
         finally:
             Path(output_path).unlink()
 
-    def test_full_workflow(self, visualizer, sample_python_code):
+    def test_full_workflow(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
         """Test complete workflow from parsing to visualization."""
         # Build graph
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")

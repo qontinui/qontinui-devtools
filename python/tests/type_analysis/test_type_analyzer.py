@@ -4,6 +4,7 @@ This module contains comprehensive tests for the type hint analysis tools.
 """
 
 import ast
+from pathlib import Path
 
 from qontinui_devtools.type_analysis import (
     TypeAnalysisReport,
@@ -18,7 +19,7 @@ from qontinui_devtools.type_analysis import (
 class TestTypeInferenceEngine:
     """Tests for type inference engine."""
 
-    def test_infer_from_default_none(self):
+    def test_infer_from_default_none(self) -> None:
         """Test inference from None default."""
         engine = TypeInferenceEngine()
         node = ast.Constant(value=None)
@@ -26,7 +27,7 @@ class TestTypeInferenceEngine:
         assert inferred == "None"
         assert confidence == 0.9
 
-    def test_infer_from_default_bool(self):
+    def test_infer_from_default_bool(self) -> None:
         """Test inference from bool default."""
         engine = TypeInferenceEngine()
         node = ast.Constant(value=True)
@@ -34,7 +35,7 @@ class TestTypeInferenceEngine:
         assert inferred == "bool"
         assert confidence == 1.0
 
-    def test_infer_from_default_int(self):
+    def test_infer_from_default_int(self) -> None:
         """Test inference from int default."""
         engine = TypeInferenceEngine()
         node = ast.Constant(value=42)
@@ -42,7 +43,7 @@ class TestTypeInferenceEngine:
         assert inferred == "int"
         assert confidence == 1.0
 
-    def test_infer_from_default_float(self):
+    def test_infer_from_default_float(self) -> None:
         """Test inference from float default."""
         engine = TypeInferenceEngine()
         node = ast.Constant(value=3.14)
@@ -50,7 +51,7 @@ class TestTypeInferenceEngine:
         assert inferred == "float"
         assert confidence == 1.0
 
-    def test_infer_from_default_str(self):
+    def test_infer_from_default_str(self) -> None:
         """Test inference from str default."""
         engine = TypeInferenceEngine()
         node = ast.Constant(value="hello")
@@ -58,7 +59,7 @@ class TestTypeInferenceEngine:
         assert inferred == "str"
         assert confidence == 1.0
 
-    def test_infer_from_default_empty_list(self):
+    def test_infer_from_default_empty_list(self) -> None:
         """Test inference from empty list default."""
         engine = TypeInferenceEngine()
         node = ast.List(elts=[])
@@ -66,7 +67,7 @@ class TestTypeInferenceEngine:
         assert inferred == "list[Any]"
         assert confidence == 0.8
 
-    def test_infer_from_default_list_with_elements(self):
+    def test_infer_from_default_list_with_elements(self) -> None:
         """Test inference from list with elements."""
         engine = TypeInferenceEngine()
         node = ast.List(elts=[ast.Constant(value=1), ast.Constant(value=2)])
@@ -74,7 +75,7 @@ class TestTypeInferenceEngine:
         assert inferred == "list[int]"
         assert confidence == 0.8
 
-    def test_infer_from_default_empty_dict(self):
+    def test_infer_from_default_empty_dict(self) -> None:
         """Test inference from empty dict default."""
         engine = TypeInferenceEngine()
         node = ast.Dict(keys=[], values=[])
@@ -82,7 +83,7 @@ class TestTypeInferenceEngine:
         assert inferred == "dict[str, Any]"
         assert confidence == 0.8
 
-    def test_infer_from_default_empty_tuple(self):
+    def test_infer_from_default_empty_tuple(self) -> None:
         """Test inference from empty tuple default."""
         engine = TypeInferenceEngine()
         node = ast.Tuple(elts=[])
@@ -90,7 +91,7 @@ class TestTypeInferenceEngine:
         assert inferred == "tuple[()]"
         assert confidence == 0.9
 
-    def test_infer_from_default_tuple_with_elements(self):
+    def test_infer_from_default_tuple_with_elements(self) -> None:
         """Test inference from tuple with elements."""
         engine = TypeInferenceEngine()
         node = ast.Tuple(elts=[ast.Constant(value=1), ast.Constant(value="a")])
@@ -98,28 +99,28 @@ class TestTypeInferenceEngine:
         assert inferred == "tuple[int, str]"
         assert confidence == 0.7
 
-    def test_infer_from_name_with_suffix(self):
+    def test_infer_from_name_with_suffix(self) -> None:
         """Test inference from parameter name with suffix."""
         engine = TypeInferenceEngine()
         inferred, confidence = engine.infer_from_name("user_id")
         assert inferred == "int"
         assert confidence == 0.5
 
-    def test_infer_from_name_with_prefix(self):
+    def test_infer_from_name_with_prefix(self) -> None:
         """Test inference from parameter name with prefix."""
         engine = TypeInferenceEngine()
         inferred, confidence = engine.infer_from_name("is_active")
         assert inferred == "bool"
         assert confidence == 0.5
 
-    def test_infer_from_name_count(self):
+    def test_infer_from_name_count(self) -> None:
         """Test inference from count parameter."""
         engine = TypeInferenceEngine()
         inferred, confidence = engine.infer_from_name("count")
         # Won't match without suffix
         assert inferred is None
 
-    def test_infer_return_type_no_returns(self):
+    def test_infer_return_type_no_returns(self) -> None:
         """Test inference when function has no return statements."""
         engine = TypeInferenceEngine()
         code = """
@@ -133,7 +134,7 @@ def func():
         assert confidence == 0.9
         assert "No return statements" in reason
 
-    def test_infer_return_type_none_returns(self):
+    def test_infer_return_type_none_returns(self) -> None:
         """Test inference when function returns None."""
         engine = TypeInferenceEngine()
         code = """
@@ -146,7 +147,7 @@ def func():
         assert inferred == "None"
         assert confidence == 0.9
 
-    def test_infer_return_type_constant(self):
+    def test_infer_return_type_constant(self) -> None:
         """Test inference when function returns a constant."""
         engine = TypeInferenceEngine()
         code = """
@@ -159,7 +160,7 @@ def func():
         assert inferred == "int"
         assert confidence == 0.7
 
-    def test_infer_return_type_multiple_types(self):
+    def test_infer_return_type_multiple_types(self) -> None:
         """Test inference when function returns multiple types."""
         engine = TypeInferenceEngine()
         code = """
@@ -174,7 +175,7 @@ def func(x):
         assert "int" in inferred and "str" in inferred
         assert "|" in inferred
 
-    def test_infer_return_type_with_none(self):
+    def test_infer_return_type_with_none(self) -> None:
         """Test inference when function returns value or None."""
         engine = TypeInferenceEngine()
         code = """
@@ -190,21 +191,21 @@ def func(x):
         assert "None" in inferred
         assert "|" in inferred
 
-    def test_infer_expr_type_list(self):
+    def test_infer_expr_type_list(self) -> None:
         """Test expression type inference for list."""
         engine = TypeInferenceEngine()
         node = ast.List(elts=[])
         result = engine._infer_expr_type(node)
         assert result == "list[Any]"
 
-    def test_infer_expr_type_dict(self):
+    def test_infer_expr_type_dict(self) -> None:
         """Test expression type inference for dict."""
         engine = TypeInferenceEngine()
         node = ast.Dict(keys=[], values=[])
         result = engine._infer_expr_type(node)
         assert result == "dict[str, Any]"
 
-    def test_infer_expr_type_comparison(self):
+    def test_infer_expr_type_comparison(self) -> None:
         """Test expression type inference for comparison."""
         engine = TypeInferenceEngine()
         node = ast.Compare(
@@ -213,21 +214,21 @@ def func(x):
         result = engine._infer_expr_type(node)
         assert result == "bool"
 
-    def test_suggest_type_improvements_any(self):
+    def test_suggest_type_improvements_any(self) -> None:
         """Test suggestions for Any type."""
         engine = TypeInferenceEngine()
         suggestions = engine.suggest_type_improvements("Any")
         assert len(suggestions) > 0
         assert any("more specific" in s for s in suggestions)
 
-    def test_suggest_type_improvements_bare_list(self):
+    def test_suggest_type_improvements_bare_list(self) -> None:
         """Test suggestions for bare list."""
         engine = TypeInferenceEngine()
         suggestions = engine.suggest_type_improvements("list")
         assert len(suggestions) > 0
         assert any("list[T]" in s for s in suggestions)
 
-    def test_suggest_type_improvements_optional(self):
+    def test_suggest_type_improvements_optional(self) -> None:
         """Test suggestions for Optional."""
         engine = TypeInferenceEngine()
         suggestions = engine.suggest_type_improvements("Optional[int]")
@@ -238,7 +239,7 @@ def func(x):
 class TestTypeCoverage:
     """Tests for TypeCoverage model."""
 
-    def test_calculate_percentages_all_typed(self):
+    def test_calculate_percentages_all_typed(self) -> None:
         """Test percentage calculation when everything is typed."""
         coverage = TypeCoverage(
             total_functions=10,
@@ -253,7 +254,7 @@ class TestTypeCoverage:
         assert coverage.parameter_coverage == 100.0
         assert coverage.return_coverage == 100.0
 
-    def test_calculate_percentages_half_typed(self):
+    def test_calculate_percentages_half_typed(self) -> None:
         """Test percentage calculation when half is typed."""
         coverage = TypeCoverage(
             total_functions=10,
@@ -268,7 +269,7 @@ class TestTypeCoverage:
         assert coverage.parameter_coverage == 50.0
         assert coverage.return_coverage == 50.0
 
-    def test_calculate_percentages_no_items(self):
+    def test_calculate_percentages_no_items(self) -> None:
         """Test percentage calculation with no items."""
         coverage = TypeCoverage()
         coverage.calculate_percentages()
@@ -280,7 +281,7 @@ class TestTypeCoverage:
 class TestUntypedItem:
     """Tests for UntypedItem model."""
 
-    def test_get_full_name_simple(self):
+    def test_get_full_name_simple(self) -> None:
         """Test full name for simple item."""
         item = UntypedItem(
             item_type="parameter",
@@ -290,7 +291,7 @@ class TestUntypedItem:
         )
         assert item.get_full_name() == "x"
 
-    def test_get_full_name_with_function(self):
+    def test_get_full_name_with_function(self) -> None:
         """Test full name with function."""
         item = UntypedItem(
             item_type="parameter",
@@ -301,7 +302,7 @@ class TestUntypedItem:
         )
         assert item.get_full_name() == "foo.x"
 
-    def test_get_full_name_with_class_and_function(self):
+    def test_get_full_name_with_class_and_function(self) -> None:
         """Test full name with class and function."""
         item = UntypedItem(
             item_type="parameter",
@@ -317,7 +318,7 @@ class TestUntypedItem:
 class TestTypeHintVisitor:
     """Tests for TypeHintVisitor."""
 
-    def test_visit_typed_function(self):
+    def test_visit_typed_function(self) -> None:
         """Test visiting a fully typed function."""
         code = """
 def add(x: int, y: int) -> int:
@@ -334,7 +335,7 @@ def add(x: int, y: int) -> int:
         assert coverage.typed_returns == 1
         assert len(visitor.untyped_items) == 0
 
-    def test_visit_untyped_function(self):
+    def test_visit_untyped_function(self) -> None:
         """Test visiting an untyped function."""
         code = """
 def add(x, y):
@@ -352,7 +353,7 @@ def add(x, y):
         assert coverage.typed_returns == 0
         assert len(visitor.untyped_items) == 3  # 2 params + 1 return
 
-    def test_visit_partially_typed_function(self):
+    def test_visit_partially_typed_function(self) -> None:
         """Test visiting a partially typed function."""
         code = """
 def add(x: int, y) -> int:
@@ -369,7 +370,7 @@ def add(x: int, y) -> int:
         assert coverage.typed_parameters == 1
         assert coverage.typed_returns == 1
 
-    def test_visit_function_with_defaults(self):
+    def test_visit_function_with_defaults(self) -> None:
         """Test visiting function with default values."""
         code = """
 def greet(name: str, greeting="Hello"):
@@ -385,7 +386,7 @@ def greet(name: str, greeting="Hello"):
         assert untyped_params[0].name == "greeting"
         assert untyped_params[0].suggested_type == "str"
 
-    def test_visit_class_method(self):
+    def test_visit_class_method(self) -> None:
         """Test visiting class method."""
         code = """
 class Calculator:
@@ -402,7 +403,7 @@ class Calculator:
         # self is not counted
         assert coverage.total_parameters == 2
 
-    def test_visit_async_function(self):
+    def test_visit_async_function(self) -> None:
         """Test visiting async function."""
         code = """
 async def fetch(url: str) -> str:
@@ -416,7 +417,7 @@ async def fetch(url: str) -> str:
         assert coverage.total_functions == 1
         assert coverage.fully_typed_functions == 1
 
-    def test_skip_special_methods(self):
+    def test_skip_special_methods(self) -> None:
         """Test that special methods are skipped."""
         code = """
 class MyClass:
@@ -433,7 +434,7 @@ class MyClass:
         coverage = visitor.get_coverage()
         assert coverage.total_functions == 0  # Special methods skipped
 
-    def test_detect_any_usage_parameter(self):
+    def test_detect_any_usage_parameter(self) -> None:
         """Test detection of Any in parameter."""
         code = """
 from typing import Any
@@ -448,7 +449,7 @@ def process(data: Any) -> None:
         assert len(visitor.any_usages) == 1
         assert "data" in visitor.any_usages[0].context
 
-    def test_detect_any_usage_return(self):
+    def test_detect_any_usage_return(self) -> None:
         """Test detection of Any in return type."""
         code = """
 from typing import Any
@@ -463,7 +464,7 @@ def get_data() -> Any:
         assert len(visitor.any_usages) == 1
         assert "get_data" in visitor.any_usages[0].context
 
-    def test_detect_any_in_generic(self):
+    def test_detect_any_in_generic(self) -> None:
         """Test detection of Any in generic types."""
         code = """
 from typing import Any
@@ -481,7 +482,7 @@ def process(items: list[Any]) -> None:
 class TestTypeAnalyzer:
     """Tests for TypeAnalyzer."""
 
-    def test_analyze_file_typed(self, tmp_path):
+    def test_analyze_file_typed(self, tmp_path: Path) -> None:
         """Test analyzing a well-typed file."""
         code = """
 def add(x: int, y: int) -> int:
@@ -500,7 +501,7 @@ def greet(name: str) -> str:
         assert coverage.fully_typed_functions == 2
         assert len(untyped_items) == 0
 
-    def test_analyze_file_untyped(self, tmp_path):
+    def test_analyze_file_untyped(self, tmp_path: Path) -> None:
         """Test analyzing an untyped file."""
         code = """
 def add(x, y):
@@ -519,7 +520,7 @@ def greet(name):
         assert coverage.fully_typed_functions == 0
         assert len(untyped_items) > 0
 
-    def test_analyze_file_syntax_error(self, tmp_path):
+    def test_analyze_file_syntax_error(self, tmp_path: Path) -> None:
         """Test analyzing file with syntax error."""
         code = """
 def broken(
@@ -534,7 +535,7 @@ def broken(
         # Should return empty results without crashing
         assert coverage.total_functions == 0
 
-    def test_analyze_directory(self, tmp_path):
+    def test_analyze_directory(self, tmp_path: Path) -> None:
         """Test analyzing a directory."""
         # Create multiple files
         file1 = tmp_path / "module1.py"
@@ -560,7 +561,7 @@ def untyped_func(x, y):
         assert report.overall_coverage.total_functions == 2
         assert len(report.module_coverage) == 2
 
-    def test_analyze_directory_with_exclusions(self, tmp_path):
+    def test_analyze_directory_with_exclusions(self, tmp_path: Path) -> None:
         """Test analyzing directory with exclusions."""
         # Create files
         (tmp_path / "main.py").write_text("def foo(): pass")
@@ -571,7 +572,7 @@ def untyped_func(x, y):
 
         assert report.files_analyzed == 1
 
-    def test_get_module_name(self, tmp_path):
+    def test_get_module_name(self, tmp_path: Path) -> None:
         """Test module name extraction."""
         analyzer = TypeAnalyzer(run_mypy=False)
 
@@ -582,7 +583,7 @@ def untyped_func(x, y):
         module_name = analyzer._get_module_name(file_path, tmp_path)
         assert module_name == "package.module"
 
-    def test_generate_report_text(self, tmp_path):
+    def test_generate_report_text(self, tmp_path: Path) -> None:
         """Test text report generation."""
         code = """
 def add(x: int, y: int) -> int:
@@ -603,7 +604,7 @@ def add(x: int, y: int) -> int:
 class TestTypeAnalysisReport:
     """Tests for TypeAnalysisReport."""
 
-    def test_get_summary(self):
+    def test_get_summary(self) -> None:
         """Test getting report summary."""
         coverage = TypeCoverage(
             total_functions=10,
@@ -628,7 +629,7 @@ class TestTypeAnalysisReport:
         assert summary["files_analyzed"] == 5
         assert summary["analysis_time"] == 1.5
 
-    def test_get_sorted_untyped_items(self):
+    def test_get_sorted_untyped_items(self) -> None:
         """Test sorting untyped items."""
         items = [
             UntypedItem("parameter", "x", "/test.py", 10),
@@ -648,7 +649,7 @@ class TestTypeAnalysisReport:
         assert sorted_items[1].item_type == "return"
         assert sorted_items[2].item_type == "parameter"
 
-    def test_get_sorted_untyped_items_with_limit(self):
+    def test_get_sorted_untyped_items_with_limit(self) -> None:
         """Test sorting with limit."""
         items = [UntypedItem("parameter", f"x{i}", "/test.py", i) for i in range(100)]
 
@@ -664,7 +665,7 @@ class TestTypeAnalysisReport:
 class TestIntegration:
     """Integration tests for type analysis."""
 
-    def test_full_analysis_workflow(self, tmp_path):
+    def test_full_analysis_workflow(self, tmp_path: Path) -> None:
         """Test complete analysis workflow."""
         # Create a realistic Python package
         package = tmp_path / "mypackage"
@@ -715,7 +716,7 @@ def reverse(s):
         text = analyzer.generate_report_text(report)
         assert len(text) > 0
 
-    def test_inference_suggestions(self, tmp_path):
+    def test_inference_suggestions(self, tmp_path: Path) -> None:
         """Test that inference provides useful suggestions."""
         code = """
 def process(count=10, name="default", items=[], enabled=True):
@@ -739,7 +740,7 @@ def process(count=10, name="default", items=[], enabled=True):
         assert name_item and name_item.suggested_type == "str"
         assert enabled_item and enabled_item.suggested_type == "bool"
 
-    def test_any_detection(self, tmp_path):
+    def test_any_detection(self, tmp_path: Path) -> None:
         """Test that Any usage is properly detected."""
         code = """
 from typing import Any
@@ -759,7 +760,7 @@ def convert(items: list[Any]) -> dict[str, Any]:
         # Should detect multiple Any usages
         assert len(any_usages) >= 4  # data param, return, list[Any], dict[str, Any]
 
-    def test_complex_return_inference(self, tmp_path):
+    def test_complex_return_inference(self, tmp_path: Path) -> None:
         """Test inference for complex return types."""
         code = """
 def get_value(use_int):

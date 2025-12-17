@@ -18,7 +18,7 @@ from qontinui_devtools.runtime import (
 class TestEventTrace:
     """Tests for EventTrace class."""
 
-    def test_create_trace(self):
+    def test_create_trace(self) -> None:
         """Test creating an event trace."""
         trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
@@ -28,7 +28,7 @@ class TestEventTrace:
         assert trace.total_latency == 0.0
         assert len(trace.checkpoints) == 0
 
-    def test_add_checkpoint(self):
+    def test_add_checkpoint(self) -> None:
         """Test adding checkpoints to a trace."""
         trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
@@ -45,7 +45,7 @@ class TestEventTrace:
         assert trace.checkpoints[2].name == "python_receive"
         assert trace.total_latency >= 0.02
 
-    def test_add_checkpoint_with_metadata(self):
+    def test_add_checkpoint_with_metadata(self) -> None:
         """Test adding checkpoints with metadata."""
         trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
@@ -54,7 +54,7 @@ class TestEventTrace:
 
         assert trace.checkpoints[0].metadata == metadata
 
-    def test_get_latency(self):
+    def test_get_latency(self) -> None:
         """Test calculating latency between checkpoints."""
         trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
@@ -71,7 +71,7 @@ class TestEventTrace:
         latency = trace.get_latency("tauri_receive", "python_receive")
         assert latency >= 0.02
 
-    def test_get_latency_invalid_checkpoint(self):
+    def test_get_latency_invalid_checkpoint(self) -> None:
         """Test error handling for invalid checkpoints."""
         trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
@@ -84,7 +84,7 @@ class TestEventTrace:
         with pytest.raises(ValueError, match="Checkpoint not found"):
             trace.get_latency("nonexistent", "tauri_receive")
 
-    def test_get_latency_invalid_order(self):
+    def test_get_latency_invalid_order(self) -> None:
         """Test error handling for invalid checkpoint order."""
         trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
@@ -94,7 +94,7 @@ class TestEventTrace:
         with pytest.raises(ValueError, match="must come after"):
             trace.get_latency("tauri_receive", "frontend_emit")
 
-    def test_get_stage_latencies(self):
+    def test_get_stage_latencies(self) -> None:
         """Test getting all stage latencies."""
         trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
 
@@ -115,7 +115,7 @@ class TestEventTrace:
 class TestEventTracer:
     """Tests for EventTracer class."""
 
-    def test_create_tracer(self):
+    def test_create_tracer(self) -> None:
         """Test creating an event tracer."""
         tracer = EventTracer()
 
@@ -124,7 +124,7 @@ class TestEventTracer:
         assert stats["max_traces"] == 10000
         assert stats["enable_metadata"] is True
 
-    def test_start_trace(self):
+    def test_start_trace(self) -> None:
         """Test starting a trace."""
         tracer = EventTracer()
 
@@ -138,7 +138,7 @@ class TestEventTracer:
         assert retrieved is not None
         assert retrieved.event_id == "evt_001"
 
-    def test_start_trace_with_metadata(self):
+    def test_start_trace_with_metadata(self) -> None:
         """Test starting a trace with metadata."""
         tracer = EventTracer()
 
@@ -150,7 +150,7 @@ class TestEventTracer:
         assert trace.checkpoints[0].name == "trace_start"
         assert trace.checkpoints[0].metadata == metadata
 
-    def test_checkpoint(self):
+    def test_checkpoint(self) -> None:
         """Test recording checkpoints."""
         tracer = EventTracer()
 
@@ -167,7 +167,7 @@ class TestEventTracer:
         assert "frontend_emit" in checkpoint_names
         assert "tauri_receive" in checkpoint_names
 
-    def test_checkpoint_auto_create(self):
+    def test_checkpoint_auto_create(self) -> None:
         """Test auto-creating trace on checkpoint."""
         tracer = EventTracer()
 
@@ -178,7 +178,7 @@ class TestEventTracer:
         assert trace is not None
         assert trace.event_type == "unknown"
 
-    def test_complete_trace(self):
+    def test_complete_trace(self) -> None:
         """Test completing a trace."""
         tracer = EventTracer()
 
@@ -192,14 +192,14 @@ class TestEventTracer:
         assert completed.completed
         assert completed.total_latency >= 0.01
 
-    def test_complete_trace_not_found(self):
+    def test_complete_trace_not_found(self) -> None:
         """Test error handling for completing non-existent trace."""
         tracer = EventTracer()
 
         with pytest.raises(KeyError, match="Trace not found"):
             tracer.complete_trace("nonexistent")
 
-    def test_concurrent_tracing(self):
+    def test_concurrent_tracing(self) -> None:
         """Test thread-safe concurrent tracing."""
         tracer = EventTracer()
         errors = []
@@ -238,7 +238,7 @@ class TestEventTracer:
             trace = tracer.get_trace(f"evt_{i}")
             assert trace.completed
 
-    def test_max_traces_eviction(self):
+    def test_max_traces_eviction(self) -> None:
         """Test eviction of oldest traces when max is reached."""
         tracer = EventTracer(max_traces=5)
 
@@ -257,7 +257,7 @@ class TestEventTracer:
         assert tracer.get_trace("evt_5") is not None
         assert tracer.get_trace("evt_9") is not None
 
-    def test_analyze_flow(self):
+    def test_analyze_flow(self) -> None:
         """Test flow analysis."""
         tracer = EventTracer()
 
@@ -283,7 +283,7 @@ class TestEventTracer:
         assert flow.avg_latency >= 0.03
         assert flow.bottleneck_stage != "N/A"
 
-    def test_find_lost_events(self):
+    def test_find_lost_events(self) -> None:
         """Test finding lost events."""
         tracer = EventTracer()
 
@@ -305,7 +305,7 @@ class TestEventTracer:
         assert lost[0].event_id == "evt_lost"
         assert not lost[0].completed
 
-    def test_clear(self):
+    def test_clear(self) -> None:
         """Test clearing all traces."""
         tracer = EventTracer()
 
@@ -318,7 +318,7 @@ class TestEventTracer:
 
         assert len(tracer.get_all_traces()) == 0
 
-    def test_export_trace_timeline(self, tmp_path):
+    def test_export_trace_timeline(self, tmp_path: Path) -> None:
         """Test exporting trace timeline."""
         tracer = EventTracer()
 
@@ -345,7 +345,7 @@ class TestEventTracer:
 class TestLatencyAnalyzer:
     """Tests for latency analysis functions."""
 
-    def test_analyze_latencies(self):
+    def test_analyze_latencies(self) -> None:
         """Test latency analysis."""
         tracer = EventTracer()
 
@@ -378,7 +378,7 @@ class TestLatencyAnalyzer:
             assert "count" in stats
             assert stats["count"] == 10
 
-    def test_find_bottleneck(self):
+    def test_find_bottleneck(self) -> None:
         """Test bottleneck detection."""
         tracer = EventTracer()
 
@@ -399,7 +399,7 @@ class TestLatencyAnalyzer:
 
         assert "tauri_receive -> python_receive" in bottleneck
 
-    def test_detect_anomalies(self):
+    def test_detect_anomalies(self) -> None:
         """Test anomaly detection."""
         tracer = EventTracer()
 
@@ -430,7 +430,7 @@ class TestLatencyAnalyzer:
 class TestChromeTraceExport:
     """Tests for Chrome trace export."""
 
-    def test_export_chrome_trace(self, tmp_path):
+    def test_export_chrome_trace(self, tmp_path: Path) -> None:
         """Test exporting to Chrome trace format."""
         tracer = EventTracer()
 
@@ -468,7 +468,7 @@ class TestChromeTraceExport:
 class TestPerformance:
     """Performance tests for event tracer."""
 
-    def test_tracer_overhead(self):
+    def test_tracer_overhead(self) -> None:
         """Test that tracer has minimal overhead."""
         tracer = EventTracer()
 
@@ -494,7 +494,7 @@ class TestPerformance:
         # Should be reasonably fast
         assert traced < 1.0  # Less than 1 second for 1000 traces
 
-    def test_concurrent_performance(self):
+    def test_concurrent_performance(self) -> None:
         """Test concurrent tracing performance."""
         tracer = EventTracer()
         num_threads = 10

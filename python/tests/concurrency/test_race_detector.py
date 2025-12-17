@@ -16,7 +16,7 @@ class TestRaceDetectorBasics:
 class Cache:
     _data = {}
 
-    def get(self, key):
+    def get(self, key)) -> Any:
         return self._data.get(key)
 
     def set(self, key, value):
@@ -111,7 +111,7 @@ class TestRacePatterns:
 class Cache:
     _cache = {}
 
-    def get_or_create(self, key):
+    def get_or_create(self, key)) -> Any:
         if key not in self._cache:  # Check
             self._cache[key] = expensive_operation()  # Act
         return self._cache[key]
@@ -467,7 +467,7 @@ class TestExclusions:
 class TestCache:
     _data = {}
 
-    def test_set(self):
+    def test_set(self) -> None:
         self._data['key'] = 'value'
 """
         )

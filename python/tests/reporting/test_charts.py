@@ -17,7 +17,7 @@ from qontinui_devtools.reporting.charts import (
 class TestBarChart:
     """Tests for bar chart creation."""
 
-    def test_create_basic_bar_chart(self):
+    def test_create_basic_bar_chart(self) -> None:
         """Test creating a basic bar chart."""
         chart = create_bar_chart(
             labels=["A", "B", "C"],
@@ -30,7 +30,7 @@ class TestBarChart:
         assert chart["data"]["datasets"][0]["data"] == [10, 20, 30]
         assert chart["options"]["plugins"]["title"]["text"] == "Test Chart"
 
-    def test_bar_chart_colors(self):
+    def test_bar_chart_colors(self) -> None:
         """Test bar chart with different colors."""
         for color in ["blue", "red", "green", "yellow", "purple"]:
             chart = create_bar_chart(
@@ -42,7 +42,7 @@ class TestBarChart:
 
             assert "rgba" in chart["data"]["datasets"][0]["backgroundColor"]
 
-    def test_horizontal_bar_chart(self):
+    def test_horizontal_bar_chart(self) -> None:
         """Test creating horizontal bar chart."""
         chart = create_bar_chart(
             labels=["A", "B"],
@@ -57,7 +57,7 @@ class TestBarChart:
 class TestPieChart:
     """Tests for pie chart creation."""
 
-    def test_create_basic_pie_chart(self):
+    def test_create_basic_pie_chart(self) -> None:
         """Test creating a basic pie chart."""
         chart = create_pie_chart(
             labels=["Red", "Blue", "Green"],
@@ -70,7 +70,7 @@ class TestPieChart:
         assert chart["data"]["datasets"][0]["data"] == [30, 50, 20]
         assert len(chart["data"]["datasets"][0]["backgroundColor"]) == 3
 
-    def test_pie_chart_custom_colors(self):
+    def test_pie_chart_custom_colors(self) -> None:
         """Test pie chart with custom colors."""
         chart = create_pie_chart(
             labels=["A", "B"],
@@ -86,7 +86,7 @@ class TestPieChart:
 class TestDoughnutChart:
     """Tests for doughnut chart creation."""
 
-    def test_create_doughnut_chart(self):
+    def test_create_doughnut_chart(self) -> None:
         """Test creating a doughnut chart."""
         chart = create_doughnut_chart(
             labels=["X", "Y", "Z"],
@@ -101,7 +101,7 @@ class TestDoughnutChart:
 class TestLineChart:
     """Tests for line chart creation."""
 
-    def test_create_basic_line_chart(self):
+    def test_create_basic_line_chart(self) -> None:
         """Test creating a basic line chart."""
         chart = create_line_chart(
             labels=["Jan", "Feb", "Mar"],
@@ -117,7 +117,7 @@ class TestLineChart:
         assert len(chart["data"]["datasets"]) == 2
         assert chart["data"]["datasets"][0]["label"] == "Series 1"
 
-    def test_line_chart_with_axis_labels(self):
+    def test_line_chart_with_axis_labels(self) -> None:
         """Test line chart with axis labels."""
         chart = create_line_chart(
             labels=["1", "2", "3"],
@@ -130,7 +130,7 @@ class TestLineChart:
         assert chart["options"]["scales"]["x"]["title"]["text"] == "Time"
         assert chart["options"]["scales"]["y"]["title"]["text"] == "Value"
 
-    def test_line_chart_colors(self):
+    def test_line_chart_colors(self) -> None:
         """Test line chart with custom colors."""
         chart = create_line_chart(
             labels=["A"],
@@ -149,7 +149,7 @@ class TestLineChart:
 class TestScatterChart:
     """Tests for scatter chart creation."""
 
-    def test_create_scatter_chart(self):
+    def test_create_scatter_chart(self) -> None:
         """Test creating a scatter chart."""
         chart = create_scatter_chart(
             datasets=[
@@ -165,7 +165,7 @@ class TestScatterChart:
         assert len(chart["data"]["datasets"]) == 1
         assert len(chart["data"]["datasets"][0]["data"]) == 2
 
-    def test_scatter_chart_with_labels(self):
+    def test_scatter_chart_with_labels(self) -> None:
         """Test scatter chart with axis labels."""
         chart = create_scatter_chart(
             datasets=[{"label": "Points", "data": [{"x": 1, "y": 1}]}],
@@ -181,7 +181,7 @@ class TestScatterChart:
 class TestStackedBarChart:
     """Tests for stacked bar chart creation."""
 
-    def test_create_stacked_bar_chart(self):
+    def test_create_stacked_bar_chart(self) -> None:
         """Test creating a stacked bar chart."""
         chart = create_stacked_bar_chart(
             labels=["Q1", "Q2", "Q3"],
@@ -197,7 +197,7 @@ class TestStackedBarChart:
         assert chart["options"]["scales"]["y"]["stacked"] is True
         assert len(chart["data"]["datasets"]) == 2
 
-    def test_horizontal_stacked_bar_chart(self):
+    def test_horizontal_stacked_bar_chart(self) -> None:
         """Test horizontal stacked bar chart."""
         chart = create_stacked_bar_chart(
             labels=["A"],
@@ -212,7 +212,7 @@ class TestStackedBarChart:
 class TestRadarChart:
     """Tests for radar chart creation."""
 
-    def test_create_radar_chart(self):
+    def test_create_radar_chart(self) -> None:
         """Test creating a radar chart."""
         chart = create_radar_chart(
             labels=["Speed", "Strength", "Intelligence", "Agility"],
@@ -231,7 +231,7 @@ class TestRadarChart:
 class TestMultiAxisChart:
     """Tests for multi-axis chart creation."""
 
-    def test_create_multi_axis_chart(self):
+    def test_create_multi_axis_chart(self) -> None:
         """Test creating a multi-axis chart."""
         chart = create_multi_axis_chart(
             labels=["Jan", "Feb", "Mar"],
@@ -252,7 +252,7 @@ class TestMultiAxisChart:
 class TestChartOptions:
     """Tests for chart options and configuration."""
 
-    def test_chart_responsive(self):
+    def test_chart_responsive(self) -> None:
         """Test that charts are responsive."""
         chart = create_bar_chart(
             labels=["A"],
@@ -263,7 +263,7 @@ class TestChartOptions:
         assert chart["options"]["responsive"] is True
         assert chart["options"]["maintainAspectRatio"] is False
 
-    def test_chart_title_display(self):
+    def test_chart_title_display(self) -> None:
         """Test chart title display."""
         chart = create_pie_chart(
             labels=["A"],
@@ -274,7 +274,7 @@ class TestChartOptions:
         assert chart["options"]["plugins"]["title"]["display"] is True
         assert chart["options"]["plugins"]["title"]["text"] == "Test Title"
 
-    def test_chart_legend_position(self):
+    def test_chart_legend_position(self) -> None:
         """Test chart legend positioning."""
         chart = create_line_chart(
             labels=["A"],
@@ -285,7 +285,7 @@ class TestChartOptions:
         assert "legend" in chart["options"]["plugins"]
         assert chart["options"]["plugins"]["legend"]["position"] == "top"
 
-    def test_bar_chart_scales(self):
+    def test_bar_chart_scales(self) -> None:
         """Test bar chart scale configuration."""
         chart = create_bar_chart(
             labels=["A"],

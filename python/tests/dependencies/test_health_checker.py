@@ -33,7 +33,7 @@ from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
 class TestPyPIClient:
     """Test PyPI client functionality."""
 
-    def test_client_initialization(self):
+    def test_client_initialization(self) -> None:
         """Test client initializes with correct defaults."""
         client = PyPIClient()
 
@@ -43,7 +43,7 @@ class TestPyPIClient:
         assert not client.offline_mode
         assert client.timeout == 10
 
-    def test_client_offline_mode(self):
+    def test_client_offline_mode(self) -> None:
         """Test client respects offline mode."""
         client = PyPIClient(offline_mode=True)
 
@@ -52,7 +52,7 @@ class TestPyPIClient:
         # Should return None in offline mode without cache
         assert result is None
 
-    def test_normalize_package_name(self):
+    def test_normalize_package_name(self) -> None:
         """Test package name normalization."""
         client = PyPIClient()
 
@@ -60,7 +60,7 @@ class TestPyPIClient:
         assert client._normalize_package_name("django-rest-framework") == "django-rest-framework"
         assert client._normalize_package_name("Flask_SQLAlchemy") == "flask-sqlalchemy"
 
-    def test_cache_file_generation(self):
+    def test_cache_file_generation(self) -> None:
         """Test cache file path generation."""
         client = PyPIClient()
 
@@ -70,7 +70,7 @@ class TestPyPIClient:
         assert "requests" in cache_file.name
         assert cache_file.suffix == ".json"
 
-    def test_parse_package_data(self):
+    def test_parse_package_data(self) -> None:
         """Test parsing PyPI API response."""
         client = PyPIClient()
 
@@ -115,7 +115,7 @@ class TestPyPIClient:
         assert len(package_info.dependencies) == 3
         assert "charset-normalizer" in package_info.dependencies
 
-    def test_get_latest_version_cached(self):
+    def test_get_latest_version_cached(self) -> None:
         """Test getting latest version from cache."""
         with tempfile.TemporaryDirectory() as tmpdir:
             cache_dir = Path(tmpdir)
@@ -134,7 +134,7 @@ class TestPyPIClient:
             version = client.get_latest_version("requests")
             assert version == "2.31.0"
 
-    def test_clear_cache_specific_package(self):
+    def test_clear_cache_specific_package(self) -> None:
         """Test clearing cache for specific package."""
         with tempfile.TemporaryDirectory() as tmpdir:
             cache_dir = Path(tmpdir)
@@ -155,7 +155,7 @@ class TestPyPIClient:
             assert not cache_file1.exists()
             assert cache_file2.exists()
 
-    def test_clear_cache_all(self):
+    def test_clear_cache_all(self) -> None:
         """Test clearing all cache."""
         with tempfile.TemporaryDirectory() as tmpdir:
             cache_dir = Path(tmpdir)
@@ -173,7 +173,7 @@ class TestPyPIClient:
             assert not cache_file1.exists()
             assert not cache_file2.exists()
 
-    def test_get_statistics(self):
+    def test_get_statistics(self) -> None:
         """Test getting client statistics."""
         with tempfile.TemporaryDirectory() as tmpdir:
             cache_dir = Path(tmpdir)
@@ -190,33 +190,33 @@ class TestPyPIClient:
 class TestDependencyModels:
     """Test dependency data models."""
 
-    def test_health_status_enum(self):
+    def test_health_status_enum(self) -> None:
         """Test HealthStatus enum."""
         assert HealthStatus.HEALTHY.value == "healthy"
         assert HealthStatus.OUTDATED.value == "outdated"
         assert HealthStatus.VULNERABLE.value == "vulnerable"
         assert HealthStatus.DEPRECATED.value == "deprecated"
 
-    def test_health_status_severity(self):
+    def test_health_status_severity(self) -> None:
         """Test health status severity scores."""
         assert HealthStatus.VULNERABLE.severity == 4
         assert HealthStatus.DEPRECATED.severity == 3
         assert HealthStatus.OUTDATED.severity == 2
         assert HealthStatus.HEALTHY.severity == 0
 
-    def test_update_type_enum(self):
+    def test_update_type_enum(self) -> None:
         """Test UpdateType enum."""
         assert UpdateType.MAJOR.value == "major"
         assert UpdateType.MINOR.value == "minor"
         assert UpdateType.PATCH.value == "patch"
 
-    def test_update_type_risk_level(self):
+    def test_update_type_risk_level(self) -> None:
         """Test update type risk levels."""
         assert UpdateType.MAJOR.risk_level == "high"
         assert UpdateType.MINOR.risk_level == "medium"
         assert UpdateType.PATCH.risk_level == "low"
 
-    def test_vulnerability_info_creation(self):
+    def test_vulnerability_info_creation(self) -> None:
         """Test VulnerabilityInfo creation."""
         vuln = VulnerabilityInfo(
             id="CVE-2023-12345",
@@ -231,7 +231,7 @@ class TestDependencyModels:
         assert vuln.severity_score == 3
         assert "CVE-2023-12345" in str(vuln)
 
-    def test_vulnerability_severity_score(self):
+    def test_vulnerability_severity_score(self) -> None:
         """Test vulnerability severity scoring."""
         critical = VulnerabilityInfo(
             id="CVE-1", severity="critical", description="Test", affected_versions="*"
@@ -251,7 +251,7 @@ class TestDependencyModels:
         assert medium.severity_score == 2
         assert low.severity_score == 1
 
-    def test_dependency_info_creation(self):
+    def test_dependency_info_creation(self) -> None:
         """Test DependencyInfo creation."""
         dep = DependencyInfo(
             name="requests",
@@ -268,7 +268,7 @@ class TestDependencyModels:
         assert not dep.has_vulnerabilities
         assert not dep.is_deprecated
 
-    def test_dependency_info_health_score_healthy(self):
+    def test_dependency_info_health_score_healthy(self) -> None:
         """Test health score for healthy dependency."""
         dep = DependencyInfo(
             name="requests",
@@ -279,7 +279,7 @@ class TestDependencyModels:
 
         assert dep.health_score == 100.0
 
-    def test_dependency_info_health_score_outdated(self):
+    def test_dependency_info_health_score_outdated(self) -> None:
         """Test health score for outdated dependency."""
         dep = DependencyInfo(
             name="requests",
@@ -291,7 +291,7 @@ class TestDependencyModels:
 
         assert dep.health_score == 85.0  # 100 - 15 for major update
 
-    def test_dependency_info_health_score_vulnerable(self):
+    def test_dependency_info_health_score_vulnerable(self) -> None:
         """Test health score for vulnerable dependency."""
         vuln = VulnerabilityInfo(
             id="CVE-2023-12345",
@@ -309,7 +309,7 @@ class TestDependencyModels:
 
         assert dep.health_score == 70.0  # 100 - 30 for critical vuln
 
-    def test_dependency_info_health_score_deprecated(self):
+    def test_dependency_info_health_score_deprecated(self) -> None:
         """Test health score for deprecated dependency."""
         dep = DependencyInfo(
             name="nose",
@@ -320,7 +320,7 @@ class TestDependencyModels:
 
         assert dep.health_score == 75.0  # 100 - 25 for deprecation
 
-    def test_circular_dependency(self):
+    def test_circular_dependency(self) -> None:
         """Test CircularDependency model."""
         circular = CircularDependency(
             chain=["package-a", "package-b", "package-c"],
@@ -331,7 +331,7 @@ class TestDependencyModels:
         assert "package-b" in str(circular)
         assert "package-c" in str(circular)
 
-    def test_license_conflict(self):
+    def test_license_conflict(self) -> None:
         """Test LicenseConflict model."""
         conflict = LicenseConflict(
             package1="package-a",
@@ -344,7 +344,7 @@ class TestDependencyModels:
         assert "package-a" in str(conflict)
         assert "GPL-3.0" in str(conflict)
 
-    def test_dependency_health_report(self):
+    def test_dependency_health_report(self) -> None:
         """Test DependencyHealthReport creation."""
         report = DependencyHealthReport(
             total_dependencies=10,
@@ -360,7 +360,7 @@ class TestDependencyModels:
         assert not report.has_critical_issues
         assert report.needs_updates
 
-    def test_dependency_health_report_str(self):
+    def test_dependency_health_report_str(self) -> None:
         """Test report string representation."""
         report = DependencyHealthReport(
             total_dependencies=5,
@@ -402,7 +402,7 @@ class TestDependencyHealthChecker:
         with tempfile.TemporaryDirectory() as tmpdir:
             yield Path(tmpdir)
 
-    def test_checker_initialization(self):
+    def test_checker_initialization(self) -> None:
         """Test checker initializes correctly."""
         checker = DependencyHealthChecker()
 

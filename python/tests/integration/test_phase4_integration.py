@@ -554,7 +554,7 @@ class TestPhase4ErrorHandling:
 class TestPhase4Imports:
     """Tests for Phase 4 module imports."""
 
-    def test_import_security_analyzer(self):
+    def test_import_security_analyzer(self) -> None:
         """Test importing SecurityAnalyzer."""
         try:
             from qontinui_devtools.security import SecurityAnalyzer
@@ -563,7 +563,7 @@ class TestPhase4Imports:
         except ImportError:
             pytest.skip("SecurityAnalyzer not yet implemented")
 
-    def test_import_documentation_generator(self):
+    def test_import_documentation_generator(self) -> None:
         """Test importing DocumentationGenerator."""
         try:
             from qontinui_devtools.documentation import DocumentationGenerator
@@ -572,7 +572,7 @@ class TestPhase4Imports:
         except ImportError:
             pytest.skip("DocumentationGenerator not yet implemented")
 
-    def test_import_regression_detector(self):
+    def test_import_regression_detector(self) -> None:
         """Test importing RegressionDetector."""
         try:
             from qontinui_devtools.regression import RegressionDetector
@@ -581,7 +581,7 @@ class TestPhase4Imports:
         except ImportError:
             pytest.skip("RegressionDetector not yet implemented")
 
-    def test_import_type_analyzer(self):
+    def test_import_type_analyzer(self) -> None:
         """Test importing TypeAnalyzer."""
         try:
             from qontinui_devtools.type_analysis import TypeAnalyzer
@@ -590,7 +590,7 @@ class TestPhase4Imports:
         except ImportError:
             pytest.skip("TypeAnalyzer not yet implemented")
 
-    def test_import_dependency_health_checker(self):
+    def test_import_dependency_health_checker(self) -> None:
         """Test importing DependencyHealthChecker."""
         try:
             from qontinui_devtools.dependencies import DependencyHealthChecker
@@ -599,7 +599,7 @@ class TestPhase4Imports:
         except ImportError:
             pytest.skip("DependencyHealthChecker not yet implemented")
 
-    def test_import_from_main_package(self):
+    def test_import_from_main_package(self) -> None:
         """Test importing Phase 4 tools from main package."""
         try:
             from qontinui_devtools import (

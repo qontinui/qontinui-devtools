@@ -4,27 +4,27 @@
 class LowCohesionClass:
     """A class where methods don't share attributes (poor cohesion)."""
 
-    def method_a(self):
+    def method_a(self) -> None:
         """Uses only attr_a."""
         self.attr_a = 1
         return self.attr_a * 2
 
-    def method_b(self):
+    def method_b(self) -> None:
         """Uses only attr_b."""
         self.attr_b = 2
         return self.attr_b + 5
 
-    def method_c(self):
+    def method_c(self) -> None:
         """Uses only attr_c."""
         self.attr_c = 3
         return self.attr_c - 1
 
-    def method_d(self):
+    def method_d(self) -> None:
         """Uses only attr_d."""
         self.attr_d = 4
         return self.attr_d / 2
 
-    def method_e(self):
+    def method_e(self) -> None:
         """Uses only attr_e."""
         self.attr_e = 5
         return self.attr_e**2
@@ -33,30 +33,30 @@ class LowCohesionClass:
 class HighCohesionClass:
     """A class where methods share attributes (good cohesion)."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.data = []
         self.count = 0
 
-    def add_item(self, item):
+    def add_item(self, item) -> None:
         """Uses data and count."""
         self.data.append(item)
         self.count += 1
 
-    def remove_item(self, item):
+    def remove_item(self, item) -> None:
         """Uses data and count."""
         if item in self.data:
             self.data.remove(item)
             self.count -= 1
 
-    def get_total(self):
+    def get_total(self) -> None:
         """Uses count."""
         return self.count
 
-    def get_items(self):
+    def get_items(self) -> None:
         """Uses data."""
         return list(self.data)
 
-    def clear(self):
+    def clear(self) -> None:
         """Uses data and count."""
         self.data.clear()
         self.count = 0
@@ -65,33 +65,33 @@ class HighCohesionClass:
 class MediumCohesionClass:
     """A class with moderate cohesion (some groups of related methods)."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.name = ""
         self.age = 0
         self.address = ""
         self.phone = ""
 
-    def set_name(self, name):
+    def set_name(self, name) -> None:
         """Uses name."""
         self.name = name
 
-    def get_name(self):
+    def get_name(self) -> None:
         """Uses name."""
         return self.name
 
-    def set_age(self, age):
+    def set_age(self, age) -> None:
         """Uses age."""
         self.age = age
 
-    def get_age(self):
+    def get_age(self) -> None:
         """Uses age."""
         return self.age
 
-    def set_contact(self, address, phone):
+    def set_contact(self, address, phone) -> None:
         """Uses address and phone."""
         self.address = address
         self.phone = phone
 
-    def get_contact(self):
+    def get_contact(self) -> None:
         """Uses address and phone."""
         return f"{self.address}, {self.phone}"

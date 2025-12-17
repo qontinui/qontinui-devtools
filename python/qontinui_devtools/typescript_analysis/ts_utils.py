@@ -42,7 +42,7 @@ def find_ts_js_files(root_path: Path) -> list[Path]:
         List of paths to TS/JS files
     """
     patterns = ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
-    files = []
+    files: list[Path] = []
 
     for pattern in patterns:
         files.extend(root_path.glob(pattern))
@@ -224,8 +224,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
             )
 
         # export function/class/const/interface/type
-        elif re.search(r"export\s+(?:async\s+)?function\s+(\w+)", line):
-            match = re.search(r"export\s+(?:async\s+)?function\s+(\w+)", line)
+        elif (match := re.search(r"export\s+(?:async\s+)?function\s+(\w+)", line)) is not None:
             exports.append(
                 ExportStatement(
                     name=match.group(1),
@@ -235,8 +234,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
                 )
             )
 
-        elif re.search(r"export\s+class\s+(\w+)", line):
-            match = re.search(r"export\s+class\s+(\w+)", line)
+        elif (match := re.search(r"export\s+class\s+(\w+)", line)) is not None:
             exports.append(
                 ExportStatement(
                     name=match.group(1),
@@ -246,8 +244,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
                 )
             )
 
-        elif re.search(r"export\s+(?:const|let|var)\s+(\w+)", line):
-            match = re.search(r"export\s+(?:const|let|var)\s+(\w+)", line)
+        elif (match := re.search(r"export\s+(?:const|let|var)\s+(\w+)", line)) is not None:
             exports.append(
                 ExportStatement(
                     name=match.group(1),
@@ -257,8 +254,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
                 )
             )
 
-        elif re.search(r"export\s+interface\s+(\w+)", line):
-            match = re.search(r"export\s+interface\s+(\w+)", line)
+        elif (match := re.search(r"export\s+interface\s+(\w+)", line)) is not None:
             exports.append(
                 ExportStatement(
                     name=match.group(1),
@@ -268,8 +264,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
                 )
             )
 
-        elif re.search(r"export\s+type\s+(\w+)", line):
-            match = re.search(r"export\s+type\s+(\w+)", line)
+        elif (match := re.search(r"export\s+type\s+(\w+)", line)) is not None:
             exports.append(
                 ExportStatement(
                     name=match.group(1), export_type="type", line_number=line_num, is_type_only=True
@@ -277,8 +272,7 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
             )
 
         # export { foo, bar }
-        elif re.search(r"export\s+\{([^}]+)\}", line):
-            match = re.search(r"export\s+\{([^}]+)\}", line)
+        elif (match := re.search(r"export\s+\{([^}]+)\}", line)) is not None:
             names_str = match.group(1)
             for name in names_str.split(","):
                 name = name.strip()

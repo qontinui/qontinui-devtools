@@ -7,10 +7,10 @@ from .utils import utility_function
 class MainClass:
     """Main class that uses helpers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.helper = HelperClass()
 
-    def do_work(self):
+    def do_work(self) -> None:
         """Perform work using utilities."""
         result = utility_function()
         self.helper.assist()

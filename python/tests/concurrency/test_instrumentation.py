@@ -215,7 +215,7 @@ def test_instrumented_object_getattr():
     tracker = SharedStateTracker()
 
     class TestClass:
-        def __init__(self):
+        def __init__(self) -> None:
             self.value = 42
 
     obj = TestClass()
@@ -234,7 +234,7 @@ def test_instrumented_object_setattr():
     tracker = SharedStateTracker()
 
     class TestClass:
-        def __init__(self):
+        def __init__(self) -> None:
             self.value = 42
 
     obj = TestClass()

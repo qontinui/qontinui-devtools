@@ -3,6 +3,8 @@
 This module provides pytest fixtures for easy use of mock HAL components in tests.
 """
 
+from collections.abc import Generator
+
 import pytest
 from PIL import Image
 
@@ -206,7 +208,7 @@ def test_images_dir(tmp_path_factory) -> str:  # type: ignore
 
 
 @pytest.fixture(autouse=True)
-def reset_mock_hal_between_tests(request: pytest.FixtureRequest) -> None:
+def reset_mock_hal_between_tests(request: pytest.FixtureRequest) -> Generator[None, None, None]:
     """Automatically reset mock HAL components between tests.
 
     This fixture runs automatically for every test and ensures

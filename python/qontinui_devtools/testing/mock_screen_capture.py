@@ -9,6 +9,7 @@ import time
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
+from PIL.ImageFont import FreeTypeFont, ImageFont as DefaultImageFont
 from qontinui.hal.interfaces import IScreenCapture
 from qontinui.hal.interfaces.screen_capture import Monitor
 
@@ -169,7 +170,7 @@ class MockScreenCapture(IScreenCapture):
         if isinstance(pixel, int):
             # Grayscale image
             return (pixel, pixel, pixel)
-        elif len(pixel) == 4:
+        elif isinstance(pixel, tuple) and len(pixel) == 4:
             # RGBA image
             return (pixel[0], pixel[1], pixel[2])
         else:
@@ -292,7 +293,7 @@ class MockScreenCapture(IScreenCapture):
             # Add text marker
             try:
                 # Try to use a truetype font
-                font = ImageFont.truetype("arial.ttf", 36)
+                font: FreeTypeFont | DefaultImageFont = ImageFont.truetype("arial.ttf", 36)
             except OSError:
                 # Fall back to default font
                 font = ImageFont.load_default()
@@ -355,7 +356,7 @@ class MockScreenCapture(IScreenCapture):
         draw = ImageDraw.Draw(img)
 
         try:
-            font = ImageFont.truetype("arial.ttf", text_size)
+            font: FreeTypeFont | DefaultImageFont = ImageFont.truetype("arial.ttf", text_size)
         except OSError:
             font = ImageFont.load_default()
 

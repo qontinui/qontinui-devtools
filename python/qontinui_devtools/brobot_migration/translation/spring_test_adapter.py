@@ -192,7 +192,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Process a single Spring annotation."""
         annotation_name = annotation.split("(")[0].strip()
 
@@ -200,7 +200,7 @@ class SpringTestAdapter:
             handler = self._spring_annotation_mappings[annotation_name]
             handler(annotation, config, scope, method)
 
-    def _process_field_annotation(self, annotation: str, field_name: str, config: dict[str, Any]):
+    def _process_field_annotation(self, annotation: str, field_name: str, config: dict[str, Any]) -> None:
         """Process field-level annotations like @Autowired, @MockBean."""
         annotation_name = annotation.split("(")[0].strip()
 
@@ -228,7 +228,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @SpringBootTest annotation."""
         config["imports"].add("import pytest")
         config["imports"].add("from unittest.mock import Mock, patch")
@@ -261,7 +261,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @TestConfiguration annotation."""
         config["imports"].add("import pytest")
         config["setup_code"].append("# Test configuration setup")
@@ -272,7 +272,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @MockBean annotation."""
         config["imports"].add("from unittest.mock import Mock, patch")
 
@@ -290,7 +290,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @SpyBean annotation."""
         config["imports"].add("from unittest.mock import Mock, patch")
         config["setup_code"].append("# Spy bean setup")
@@ -301,7 +301,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @Autowired annotation."""
         config["imports"].add("import pytest")
         # Autowired fields will be handled in dependency injection setup
@@ -312,7 +312,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @Value annotation for property injection."""
         config["imports"].add("import os")
 
@@ -330,7 +330,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @TestPropertySource annotation."""
         config["imports"].add("import os")
 
@@ -346,7 +346,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @ActiveProfiles annotation."""
         config["imports"].add("import os")
 
@@ -363,7 +363,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @DirtiesContext annotation."""
         config["imports"].add("import pytest")
 
@@ -387,7 +387,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @Transactional annotation."""
         config["imports"].add("import pytest")
 
@@ -405,7 +405,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @Rollback annotation."""
         config["imports"].add("import pytest")
         config["setup_code"].append("# Rollback configuration")
@@ -416,7 +416,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @Sql annotation."""
         config["imports"].add("import pytest")
 
@@ -433,7 +433,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @DataJpaTest annotation."""
         config["imports"].add("import pytest")
         config["imports"].add("from unittest.mock import Mock")
@@ -445,7 +445,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @WebMvcTest annotation."""
         config["imports"].add("import pytest")
         config["imports"].add("from unittest.mock import Mock")
@@ -457,7 +457,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @JsonTest annotation."""
         config["imports"].add("import pytest")
         config["imports"].add("import json")
@@ -469,7 +469,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @TestMethodOrder annotation."""
         config["imports"].add("import pytest")
 
@@ -483,7 +483,7 @@ class SpringTestAdapter:
         config: dict[str, Any],
         scope: str,
         method: TestMethod | None = None,
-    ):
+    ) -> None:
         """Handle @TestInstance annotation."""
         config["imports"].add("import pytest")
 
@@ -591,7 +591,7 @@ class DependencyContainer:
 
     def register_component(
         self, component_type: str, component_instance: Any, singleton: bool = True
-    ):
+    ) -> None:
         """
         Register a component in the container.
 

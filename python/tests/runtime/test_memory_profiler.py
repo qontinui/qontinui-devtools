@@ -10,7 +10,7 @@ from qontinui_devtools.runtime import MemoryLeak, MemoryProfiler, MemorySnapshot
 class TestMemorySnapshot:
     """Test MemorySnapshot dataclass."""
 
-    def test_snapshot_creation(self):
+    def test_snapshot_creation(self) -> None:
         """Test creating a snapshot."""
         snapshot = MemorySnapshot(
             timestamp=time.time(),
@@ -27,7 +27,7 @@ class TestMemorySnapshot:
         assert snapshot.objects_by_type["dict"] == 100
         assert len(snapshot.top_objects) == 2
 
-    def test_snapshot_string_representation(self):
+    def test_snapshot_string_representation(self) -> None:
         """Test snapshot string representation."""
         snapshot = MemorySnapshot(
             timestamp=1234567.89,
@@ -47,7 +47,7 @@ class TestMemorySnapshot:
 class TestMemoryLeak:
     """Test MemoryLeak dataclass."""
 
-    def test_leak_creation(self):
+    def test_leak_creation(self) -> None:
         """Test creating a leak report."""
         leak = MemoryLeak(
             object_type="dict",
@@ -62,7 +62,7 @@ class TestMemoryLeak:
         assert leak.count_increase == 1000
         assert leak.confidence == 0.95
 
-    def test_leak_string_representation(self):
+    def test_leak_string_representation(self) -> None:
         """Test leak string representation."""
         leak = MemoryLeak(
             object_type="list",
@@ -83,7 +83,7 @@ class TestMemoryLeak:
 class TestMemoryProfiler:
     """Test MemoryProfiler class."""
 
-    def test_profiler_creation(self):
+    def test_profiler_creation(self) -> None:
         """Test creating a profiler."""
         profiler = MemoryProfiler(
             enable_tracemalloc=False,
@@ -94,7 +94,7 @@ class TestMemoryProfiler:
         assert not profiler._running
         assert len(profiler._snapshots) == 0
 
-    def test_start_stop(self):
+    def test_start_stop(self) -> None:
         """Test starting and stopping profiler."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
 
@@ -105,7 +105,7 @@ class TestMemoryProfiler:
         profiler.stop()
         assert not profiler._running
 
-    def test_cannot_start_twice(self):
+    def test_cannot_start_twice(self) -> None:
         """Test that starting twice raises error."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -115,7 +115,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_take_snapshot(self):
+    def test_take_snapshot(self) -> None:
         """Test taking a snapshot."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -131,7 +131,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_multiple_snapshots(self):
+    def test_multiple_snapshots(self) -> None:
         """Test taking multiple snapshots."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -145,7 +145,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_detect_leak_insufficient_samples(self):
+    def test_detect_leak_insufficient_samples(self) -> None:
         """Test leak detection with insufficient samples."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -157,7 +157,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_detect_leak_with_intentional_leak(self):
+    def test_detect_leak_with_intentional_leak(self) -> None:
         """Test detecting an intentional memory leak."""
         profiler = MemoryProfiler(enable_tracemalloc=False, snapshot_interval=0.2)
         profiler.start()
@@ -188,7 +188,7 @@ class TestMemoryProfiler:
         assert dict_leak.growth_rate > 0
         assert dict_leak.confidence > 0
 
-    def test_compare_snapshots(self):
+    def test_compare_snapshots(self) -> None:
         """Test comparing two snapshots."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -218,7 +218,7 @@ class TestMemoryProfiler:
         del data
         gc.collect()
 
-    def test_generate_report(self):
+    def test_generate_report(self) -> None:
         """Test generating a report."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -238,7 +238,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_baseline_property(self):
+    def test_baseline_property(self) -> None:
         """Test baseline property."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
 
@@ -250,7 +250,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_snapshots_property(self):
+    def test_snapshots_property(self) -> None:
         """Test snapshots property."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -268,7 +268,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_clear_snapshots(self):
+    def test_clear_snapshots(self) -> None:
         """Test clearing snapshots."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -286,7 +286,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_gc_stats_collection(self):
+    def test_gc_stats_collection(self) -> None:
         """Test GC statistics collection."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -301,7 +301,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_analyze_growth_linear(self):
+    def test_analyze_growth_linear(self) -> None:
         """Test growth analysis with linear growth."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
 
@@ -314,7 +314,7 @@ class TestMemoryProfiler:
         assert rate > 5.0
         assert confidence > 0.9  # Should be very confident about linear growth
 
-    def test_analyze_growth_no_growth(self):
+    def test_analyze_growth_no_growth(self) -> None:
         """Test growth analysis with no growth."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
 
@@ -326,7 +326,7 @@ class TestMemoryProfiler:
         assert not is_growing
         assert abs(rate) < 1.0
 
-    def test_analyze_growth_noisy_data(self):
+    def test_analyze_growth_noisy_data(self) -> None:
         """Test growth analysis with noisy data."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
 
@@ -340,7 +340,7 @@ class TestMemoryProfiler:
         # Should not detect growth with random noise
         assert not is_growing or confidence < 0.7
 
-    def test_estimate_size_increase(self):
+    def test_estimate_size_increase(self) -> None:
         """Test size increase estimation."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
 
@@ -354,7 +354,7 @@ class TestMemoryProfiler:
         # Dict should be larger than list
         assert dict_size > list_size
 
-    def test_profiler_with_tracemalloc(self):
+    def test_profiler_with_tracemalloc(self) -> None:
         """Test profiler with tracemalloc enabled."""
         import importlib.util
 
@@ -372,7 +372,7 @@ class TestMemoryProfiler:
 
         profiler.stop()
 
-    def test_empty_snapshots_report(self):
+    def test_empty_snapshots_report(self) -> None:
         """Test generating report with no snapshots."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
 
@@ -384,7 +384,7 @@ class TestMemoryProfiler:
 class TestMemoryProfilerIntegration:
     """Integration tests for memory profiler."""
 
-    def test_full_profiling_session(self):
+    def test_full_profiling_session(self) -> None:
         """Test a complete profiling session."""
         profiler = MemoryProfiler(enable_tracemalloc=False, snapshot_interval=0.2)
         profiler.start()
@@ -424,7 +424,7 @@ class TestMemoryProfilerIntegration:
         del cache
         gc.collect()
 
-    def test_memory_growth_detection(self):
+    def test_memory_growth_detection(self) -> None:
         """Test detecting memory growth over time."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()
@@ -455,7 +455,7 @@ class TestMemoryProfilerIntegration:
         del cache
         gc.collect()
 
-    def test_stable_memory_no_leaks(self):
+    def test_stable_memory_no_leaks(self) -> None:
         """Test that stable memory usage doesn't trigger leak detection."""
         profiler = MemoryProfiler(enable_tracemalloc=False)
         profiler.start()

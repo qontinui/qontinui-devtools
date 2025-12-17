@@ -178,7 +178,7 @@ def analyze_object_retention(obj: Any) -> dict[str, Any]:
     # Analyze referrers
     try:
         referrers = gc.get_referrers(obj)
-        referrer_types = {}
+        referrer_types: dict[str, int] = {}
         for ref in referrers:
             ref_type = type(ref).__name__
             referrer_types[ref_type] = referrer_types.get(ref_type, 0) + 1

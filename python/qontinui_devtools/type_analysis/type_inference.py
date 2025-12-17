@@ -103,14 +103,14 @@ class TypeInferenceEngine:
             if not default_value.elts:
                 return ("tuple[()]", 0.9)
             # Infer tuple element types
-            elem_types = []
+            tuple_elem_types: list[str] = []
             for elem in default_value.elts:
                 elem_type, _ = self.infer_from_default(elem)
                 if elem_type:
-                    elem_types.append(elem_type)
+                    tuple_elem_types.append(elem_type)
                 else:
-                    elem_types.append("Any")
-            return (f"tuple[{', '.join(elem_types)}]", 0.7)
+                    tuple_elem_types.append("Any")
+            return (f"tuple[{', '.join(tuple_elem_types)}]", 0.7)
 
         elif isinstance(default_value, ast.Call):
             if isinstance(default_value.func, ast.Name):

@@ -23,19 +23,19 @@ try:
 except ImportError:
 
     class ActionProfiler:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.profiles = []
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
-        def profile(self, func):
-            def wrapper(*args, **kwargs):
+        def profile(self, func) -> Any:
+            def wrapper(*args, **kwargs) -> Any:
                 start = time.perf_counter()
                 result = func(*args, **kwargs)
                 duration = time.perf_counter() - start
@@ -44,7 +44,7 @@ except ImportError:
 
             return wrapper
 
-        def get_profile_data(self):
+        def get_profile_data(self) -> None:
             return {
                 "profiles": self.profiles,
                 "total_calls": len(self.profiles),
@@ -52,39 +52,39 @@ except ImportError:
             }
 
     class EventTracer:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.events = []
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
-        def trace_event(self, event_type, data):
+        def trace_event(self, event_type, data) -> None:
             if self.is_running:
                 self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
 
-        def get_events(self):
+        def get_events(self) -> None:
             return self.events
 
     class MemoryProfiler:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.snapshots = []
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
             self._take_snapshot()
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
             self._take_snapshot()
 
-        def _take_snapshot(self):
+        def _take_snapshot(self) -> None:
             import sys
 
             self.snapshots.append(
@@ -94,7 +94,7 @@ except ImportError:
                 }
             )
 
-        def get_memory_usage(self):
+        def get_memory_usage(self) -> None:
             if not self.snapshots:
                 return {"current_mb": 0, "peak_mb": 0}
             current = self.snapshots[-1]["memory_mb"]
@@ -102,15 +102,15 @@ except ImportError:
             return {"current_mb": current, "peak_mb": peak}
 
     class PerformanceDashboard:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.metrics = {}
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
         def update_metrics(self, metrics):
@@ -331,7 +331,7 @@ class TestEventTracerPerformance:
             memory_mb < performance_thresholds["max_memory_mb"]
         ), f"Event tracer memory {memory_mb:.2f}MB exceeds threshold"
 
-    def test_event_tracer_concurrent_writes(self, event_tracer_config):
+    def test_event_tracer_concurrent_writes(self, event_tracer_config) -> None:
         """Test event tracer performance with concurrent writes."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -412,7 +412,7 @@ class TestMemoryProfilerPerformance:
             overhead_percent < performance_thresholds["max_overhead_percent"]
         ), f"Memory profiler overhead {overhead_percent:.2f}% exceeds threshold"
 
-    def test_memory_profiler_sampling_performance(self, memory_profiler_config):
+    def test_memory_profiler_sampling_performance(self, memory_profiler_config) -> None:
         """Test memory profiler sampling performance."""
         # Test with different sampling intervals
         intervals = [0.001, 0.01, 0.1]
@@ -677,7 +677,7 @@ class TestMemoryLeakDetection:
 
         assert growth_percent < 10, f"Memory leak detected: {growth_percent:.2f}% growth"
 
-    def test_event_tracer_no_memory_leak(self, event_tracer_config):
+    def test_event_tracer_no_memory_leak(self, event_tracer_config) -> None:
         """Test that event tracer doesn't leak memory."""
         import sys
 

@@ -12,7 +12,7 @@ from qontinui_devtools.reporting import ReportAggregator
 class TestReportAggregator:
     """Tests for ReportAggregator."""
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test aggregator initialization."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -20,12 +20,12 @@ class TestReportAggregator:
             assert aggregator.verbose is False
             assert aggregator.results == {}
 
-    def test_initialization_invalid_path(self):
+    def test_initialization_invalid_path(self) -> None:
         """Test initialization with invalid path."""
         with pytest.raises(ValueError, match="does not exist"):
             ReportAggregator("/nonexistent/path")
 
-    def test_run_all_analyses_empty_project(self):
+    def test_run_all_analyses_empty_project(self) -> None:
         """Test running analyses on an empty project."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -35,7 +35,7 @@ class TestReportAggregator:
             assert len(report_data.sections) > 0
             assert "files_analyzed" in report_data.summary_metrics
 
-    def test_run_all_analyses_with_python_files(self):
+    def test_run_all_analyses_with_python_files(self) -> None:
         """Test running analyses on a project with Python files."""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create some Python files (NOT test files, as those are excluded)
@@ -78,7 +78,7 @@ def world():
             assert "concurrency" in section_ids
             assert "recommendations" in section_ids
 
-    def test_count_critical_issues(self):
+    def test_count_critical_issues(self) -> None:
         """Test counting critical issues."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -95,7 +95,7 @@ def world():
             # Should count circular deps (2) + race conditions (1) + excess god classes (2)
             assert critical_count >= 3
 
-    def test_create_import_section_no_issues(self):
+    def test_create_import_section_no_issues(self) -> None:
         """Test creating import section with no issues."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -107,7 +107,7 @@ def world():
             assert section.severity == "success"
             assert "No circular dependencies" in section.content
 
-    def test_create_import_section_with_issues(self):
+    def test_create_import_section_with_issues(self) -> None:
         """Test creating import section with circular dependencies."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -128,7 +128,7 @@ def world():
             assert section.severity == "error"
             assert "3" in section.content
 
-    def test_create_architecture_section_clean(self):
+    def test_create_architecture_section_clean(self) -> None:
         """Test creating architecture section with no issues."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -146,7 +146,7 @@ def world():
             assert section.severity == "success"
             assert "clean" in section.content.lower()
 
-    def test_create_architecture_section_with_issues(self):
+    def test_create_architecture_section_with_issues(self) -> None:
         """Test creating architecture section with god classes."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -174,7 +174,7 @@ def world():
             assert section.severity == "warning"
             assert "2" in section.content
 
-    def test_create_quality_section(self):
+    def test_create_quality_section(self) -> None:
         """Test creating code quality section."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -204,7 +204,7 @@ def world():
             assert "5,000" in section.content or "5000" in section.content
             assert section.metrics["total_files"] == 50
 
-    def test_create_concurrency_section_no_issues(self):
+    def test_create_concurrency_section_no_issues(self) -> None:
         """Test creating concurrency section with no race conditions."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -216,7 +216,7 @@ def world():
             assert section.severity == "success"
             assert "No race conditions" in section.content
 
-    def test_create_concurrency_section_with_issues(self):
+    def test_create_concurrency_section_with_issues(self) -> None:
         """Test creating concurrency section with race conditions."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -243,7 +243,7 @@ def world():
             assert section.severity == "error"
             assert "3" in section.content
 
-    def test_create_recommendations_section_no_issues(self):
+    def test_create_recommendations_section_no_issues(self) -> None:
         """Test recommendations with no issues."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -259,7 +259,7 @@ def world():
             assert section.severity == "success"
             assert "Excellent" in section.content or "good work" in section.content.lower()
 
-    def test_create_recommendations_section_with_issues(self):
+    def test_create_recommendations_section_with_issues(self) -> None:
         """Test recommendations with issues."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
@@ -281,7 +281,7 @@ def world():
 class TestReportAggregatorIntegration:
     """Integration tests for report aggregator."""
 
-    def test_full_analysis_workflow(self):
+    def test_full_analysis_workflow(self) -> None:
         """Test complete analysis workflow."""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create a realistic project structure

@@ -124,7 +124,7 @@ class TypeHintVisitor(ast.NodeVisitor):
         self.total_returns += 1
         has_return_hint = node.returns is not None
 
-        if has_return_hint:
+        if has_return_hint and node.returns is not None:
             self.typed_returns += 1
 
             # Check for Any usage

@@ -6,12 +6,12 @@ import time
 from qontinui_devtools.concurrency import RaceConditionTester, RaceTestResult, concurrent_test
 
 
-def test_detect_race_in_dictionary():
+def test_detect_race_in_dictionary() -> None:
     """Test that race condition is detected in concurrent dictionary access."""
     shared: dict[str, int] = {}
     race_detected = False
 
-    def worker():
+    def worker() -> None:
         nonlocal race_detected
         try:
             for _i in range(100):
@@ -32,12 +32,12 @@ def test_detect_race_in_dictionary():
     assert result.total_iterations == 100
 
 
-def test_thread_safe_code():
+def test_thread_safe_code() -> None:
     """Test that properly locked code passes."""
     shared: dict[str, int] = {}
     lock = threading.Lock()
 
-    def worker():
+    def worker() -> None:
         with lock:
             for _i in range(100):
                 if "key" not in shared:
@@ -53,12 +53,12 @@ def test_thread_safe_code():
     assert shared["key"] == 10000  # 10 threads * 10 iterations * 100
 
 
-def test_race_tester_basic():
+def test_race_tester_basic() -> None:
     """Test basic race tester functionality."""
     call_count = {"value": 0}
     lock = threading.Lock()
 
-    def simple_function():
+    def simple_function() -> None:
         with lock:
             call_count["value"] += 1
 
@@ -70,10 +70,10 @@ def test_race_tester_basic():
     assert call_count["value"] == 50
 
 
-def test_race_tester_with_exceptions():
+def test_race_tester_with_exceptions() -> None:
     """Test race tester handles exceptions properly."""
 
-    def failing_function():
+    def failing_function() -> None:
         raise ValueError("Test error")
 
     tester = RaceConditionTester(threads=3, iterations=5)
@@ -85,10 +85,10 @@ def test_race_tester_with_exceptions():
     assert "ValueError" in result.exceptions
 
 
-def test_race_tester_timing_variance():
+def test_race_tester_timing_variance() -> None:
     """Test that timing variance is calculated."""
 
-    def variable_time():
+    def variable_time() -> None:
         # Simulate variable execution time
         import random
 
@@ -102,13 +102,13 @@ def test_race_tester_timing_variance():
     assert result.avg_execution_time > 0
 
 
-def test_concurrent_test_decorator():
+def test_concurrent_test_decorator() -> None:
     """Test concurrent_test decorator."""
     call_count = {"value": 0}
     lock = threading.Lock()
 
     @concurrent_test(threads=5, iterations=10)
-    def decorated_function():
+    def decorated_function() -> None:
         with lock:
             call_count["value"] += 1
 
@@ -119,7 +119,7 @@ def test_concurrent_test_decorator():
     assert call_count["value"] == 50
 
 
-def test_stress_test_scenarios():
+def test_stress_test_scenarios() -> None:
     """Test stress test with multiple scenarios."""
     call_counts = {"scenario1": 0, "scenario2": 0}
     lock = threading.Lock()
@@ -141,7 +141,7 @@ def test_stress_test_scenarios():
     assert call_counts["scenario2"] == 20  # 2 * 10
 
 
-def test_race_test_result_properties():
+def test_race_test_result_properties() -> None:
     """Test RaceTestResult computed properties."""
     result = RaceTestResult(
         test_name="test",
@@ -158,7 +158,7 @@ def test_race_test_result_properties():
     assert result.min_execution_time == 0.001
 
 
-def test_race_test_result_string():
+def test_race_test_result_string() -> None:
     """Test RaceTestResult string representation."""
     result = RaceTestResult(
         test_name="test_function",
@@ -177,11 +177,11 @@ def test_race_test_result_string():
     assert "True" in result_str
 
 
-def test_counter_race_condition():
+def test_counter_race_condition() -> None:
     """Test classic counter race condition."""
     counter = {"value": 0}
 
-    def worker():
+    def worker() -> None:
         for _ in range(10):
             # Race condition: read-modify-write not atomic
             counter["value"] += 1
@@ -195,13 +195,13 @@ def test_counter_race_condition():
     assert result.total_iterations == 100
 
 
-def test_counter_safe():
+def test_counter_safe() -> None:
     """Test thread-safe counter."""
     counter = {"value": 0}
     lock = threading.Lock()
     expected = 1000  # 10 threads * 10 iterations * 10
 
-    def worker():
+    def worker() -> None:
         for _ in range(10):
             with lock:
                 counter["value"] += 1
@@ -214,12 +214,12 @@ def test_counter_safe():
     assert counter["value"] == expected
 
 
-def test_check_then_act_race():
+def test_check_then_act_race() -> None:
     """Test check-then-act race condition."""
     cache: dict[str, str] = {}
     creation_count = {"value": 0}
 
-    def worker():
+    def worker() -> None:
         key = "shared_key"
         # Race condition: check and act not atomic
         if key not in cache:
@@ -233,12 +233,12 @@ def test_check_then_act_race():
     assert result.total_iterations == 100
 
 
-def test_lazy_initialization_race():
+def test_lazy_initialization_race() -> None:
     """Test lazy initialization race condition."""
     instance: dict[str, str] | None = None
     creation_count = {"value": 0}
 
-    def get_instance():
+    def get_instance() -> None:
         nonlocal instance
         if instance is None:
             creation_count["value"] += 1
@@ -246,7 +246,7 @@ def test_lazy_initialization_race():
             instance = {"created": True}
         return instance
 
-    def worker():
+    def worker() -> None:
         get_instance()
 
     tester = RaceConditionTester(threads=10, iterations=10)
@@ -257,10 +257,10 @@ def test_lazy_initialization_race():
     assert result.total_iterations == 100
 
 
-def test_race_tester_timeout():
+def test_race_tester_timeout() -> None:
     """Test that race tester respects timeout."""
 
-    def slow_function():
+    def slow_function() -> None:
         time.sleep(1.0)
 
     tester = RaceConditionTester(threads=5, iterations=10, timeout=0.5)
@@ -273,7 +273,7 @@ def test_race_tester_timeout():
     assert elapsed < 60.0  # Just verify it completes
 
 
-def test_function_with_arguments():
+def test_function_with_arguments() -> None:
     """Test race tester with function arguments."""
     results = []
     lock = threading.Lock()
@@ -290,11 +290,11 @@ def test_function_with_arguments():
     assert all(r == 60 for r in results)  # (10 + 20) * 2
 
 
-def test_race_detection_heuristics():
+def test_race_detection_heuristics() -> None:
     """Test race detection heuristics."""
 
     # Test 1: Failures trigger race detection
-    def failing():
+    def failing() -> None:
         raise RuntimeError("Test failure")
 
     tester = RaceConditionTester(threads=2, iterations=2)
@@ -304,7 +304,7 @@ def test_race_detection_heuristics():
     # Test 2: No failures = no race (with safe code)
     lock = threading.Lock()
 
-    def safe():
+    def safe() -> None:
         with lock:
             pass
 
@@ -312,7 +312,7 @@ def test_race_detection_heuristics():
     assert not result.race_detected
 
 
-def test_compare_results():
+def test_compare_results() -> None:
     """Test comparing multiple test results."""
     from qontinui_devtools.concurrency import compare_results
 
@@ -335,7 +335,7 @@ def test_compare_results():
     assert comparison["failure_rate"] == 5.0
 
 
-def test_empty_results_comparison():
+def test_empty_results_comparison() -> None:
     """Test comparing empty results list."""
     from qontinui_devtools.concurrency import compare_results
 

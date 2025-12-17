@@ -13,7 +13,7 @@ from qontinui_devtools.concurrency.scenarios import (
 )
 
 
-def test_dictionary_concurrent_access_scenario():
+def test_dictionary_concurrent_access_scenario() -> None:
     """Test dictionary concurrent access scenario."""
     result = test_dictionary_concurrent_access(threads=5, iterations=5)
 
@@ -21,7 +21,7 @@ def test_dictionary_concurrent_access_scenario():
     assert result.total_iterations == 25
 
 
-def test_check_then_act_scenario():
+def test_check_then_act_scenario() -> None:
     """Test check-then-act scenario."""
     result = test_check_then_act(threads=5, iterations=10)
 
@@ -30,7 +30,7 @@ def test_check_then_act_scenario():
     # Pattern is inherently racy, but may not always fail due to GIL
 
 
-def test_check_then_act_safe_scenario():
+def test_check_then_act_safe_scenario() -> None:
     """Test thread-safe check-then-act scenario."""
     result = test_check_then_act_safe(threads=5, iterations=10)
 
@@ -40,7 +40,7 @@ def test_check_then_act_safe_scenario():
     assert not result.race_detected
 
 
-def test_counter_increment_scenario():
+def test_counter_increment_scenario() -> None:
     """Test counter increment scenario."""
     result = test_counter_increment(threads=5, iterations=5)
 
@@ -49,7 +49,7 @@ def test_counter_increment_scenario():
     # May detect race through counter mismatch
 
 
-def test_counter_increment_safe_scenario():
+def test_counter_increment_safe_scenario() -> None:
     """Test thread-safe counter increment scenario."""
     result = test_counter_increment_safe(threads=5, iterations=5)
 
@@ -59,7 +59,7 @@ def test_counter_increment_safe_scenario():
     # Counter should be exactly correct
 
 
-def test_lazy_initialization_scenario():
+def test_lazy_initialization_scenario() -> None:
     """Test lazy initialization scenario."""
     result = test_lazy_initialization(threads=10, iterations=10)
 
@@ -68,7 +68,7 @@ def test_lazy_initialization_scenario():
     # May detect multiple initializations
 
 
-def test_lazy_initialization_safe_scenario():
+def test_lazy_initialization_safe_scenario() -> None:
     """Test thread-safe lazy initialization scenario."""
     result = test_lazy_initialization_safe(threads=10, iterations=10)
 
@@ -78,7 +78,7 @@ def test_lazy_initialization_safe_scenario():
     # Should initialize exactly once
 
 
-def test_list_append_scenario():
+def test_list_append_scenario() -> None:
     """Test list append scenario."""
     result = test_list_append(threads=5, iterations=5)
 
@@ -86,7 +86,7 @@ def test_list_append_scenario():
     assert result.total_iterations == 25
 
 
-def test_run_all_scenarios_function():
+def test_run_all_scenarios_function() -> None:
     """Test running all scenarios at once."""
     results = run_all_scenarios()
 
@@ -110,7 +110,7 @@ def test_run_all_scenarios_function():
         assert results[scenario].total_iterations > 0
 
 
-def test_counter_with_custom_expected():
+def test_counter_with_custom_expected() -> None:
     """Test counter scenario with custom expected value."""
     threads = 3
     iterations = 4
@@ -124,7 +124,7 @@ def test_counter_with_custom_expected():
     assert result.failed == 0
 
 
-def test_scenarios_complete_successfully():
+def test_scenarios_complete_successfully() -> None:
     """Test that all safe scenarios complete without failures."""
     safe_scenarios = [
         test_check_then_act_safe,

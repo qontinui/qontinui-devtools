@@ -4,7 +4,7 @@
 class HugeClass:
     """Example god class with 50+ methods handling multiple responsibilities."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize with many attributes."""
         self.data = {}
         self.cache = {}

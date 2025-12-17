@@ -13,7 +13,7 @@ from qontinui_devtools.reporting import HTMLReportGenerator, ReportData, ReportS
 class TestReportSection:
     """Tests for ReportSection dataclass."""
 
-    def test_valid_section(self):
+    def test_valid_section(self) -> None:
         """Test creating a valid report section."""
         section = ReportSection(
             id="test",
@@ -28,7 +28,7 @@ class TestReportSection:
         assert section.severity == "success"
         assert section.metrics["count"] == 5
 
-    def test_invalid_severity(self):
+    def test_invalid_severity(self) -> None:
         """Test that invalid severity raises error."""
         with pytest.raises(ValueError, match="Invalid severity"):
             ReportSection(
@@ -38,7 +38,7 @@ class TestReportSection:
                 severity="invalid",
             )
 
-    def test_default_metrics(self):
+    def test_default_metrics(self) -> None:
         """Test default empty metrics."""
         section = ReportSection(
             id="test",
@@ -54,7 +54,7 @@ class TestReportSection:
 class TestReportData:
     """Tests for ReportData dataclass."""
 
-    def test_create_report_data(self):
+    def test_create_report_data(self) -> None:
         """Test creating report data."""
         data = ReportData(
             project_name="TestProject",
@@ -66,7 +66,7 @@ class TestReportData:
         assert data.sections == []
         assert data.summary_metrics == {}
 
-    def test_add_section(self):
+    def test_add_section(self) -> None:
         """Test adding sections to report."""
         data = ReportData(
             project_name="Test",
@@ -94,7 +94,7 @@ class TestReportData:
         assert data.sections[0].id == "sec1"
         assert data.sections[1].id == "sec2"
 
-    def test_get_section(self):
+    def test_get_section(self) -> None:
         """Test getting section by ID."""
         data = ReportData(
             project_name="Test",
@@ -117,7 +117,7 @@ class TestReportData:
         not_found = data.get_section("nonexistent")
         assert not_found is None
 
-    def test_get_overall_status_all_success(self):
+    def test_get_overall_status_all_success(self) -> None:
         """Test overall status with all success sections."""
         data = ReportData(
             project_name="Test",
@@ -146,7 +146,7 @@ class TestReportData:
         assert color == "green"
         assert "Passed" in message or "Excellent" in message
 
-    def test_get_overall_status_with_errors(self):
+    def test_get_overall_status_with_errors(self) -> None:
         """Test overall status with errors."""
         data = ReportData(
             project_name="Test",
@@ -166,7 +166,7 @@ class TestReportData:
         assert color == "red"
         assert "error" in message.lower()
 
-    def test_get_overall_status_with_warnings(self):
+    def test_get_overall_status_with_warnings(self) -> None:
         """Test overall status with warnings."""
         data = ReportData(
             project_name="Test",
@@ -192,13 +192,13 @@ class TestReportData:
 class TestHTMLReportGenerator:
     """Tests for HTMLReportGenerator."""
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test generator initialization."""
         generator = HTMLReportGenerator(verbose=False)
         assert generator.verbose is False
         assert generator.env is not None
 
-    def test_generate_report(self):
+    def test_generate_report(self) -> None:
         """Test generating HTML report."""
         generator = HTMLReportGenerator()
 
@@ -270,7 +270,7 @@ class TestHTMLReportGenerator:
             # Cleanup
             Path(output_path).unlink(missing_ok=True)
 
-    def test_calculate_quality_score(self):
+    def test_calculate_quality_score(self) -> None:
         """Test quality score calculation."""
         generator = HTMLReportGenerator()
 
@@ -309,7 +309,7 @@ class TestHTMLReportGenerator:
         score = generator._calculate_quality_score()
         assert score < 90.0
 
-    def test_prepare_key_metrics(self):
+    def test_prepare_key_metrics(self) -> None:
         """Test preparing key metrics for display."""
         generator = HTMLReportGenerator()
 
@@ -342,7 +342,7 @@ class TestHTMLReportGenerator:
         assert any(m["name"] == "Files Analyzed" for m in metrics)
         assert any(m["name"] == "Quality Score" for m in metrics)
 
-    def test_create_summary_section(self):
+    def test_create_summary_section(self) -> None:
         """Test creating summary section from metrics."""
         generator = HTMLReportGenerator()
 
@@ -360,7 +360,7 @@ class TestHTMLReportGenerator:
         assert "files_analyzed" in section.content.lower() or "42" in section.content
         assert section.metrics == metrics
 
-    def test_generate_with_invalid_data(self):
+    def test_generate_with_invalid_data(self) -> None:
         """Test generating report with no data."""
         generator = HTMLReportGenerator()
 
@@ -370,7 +370,7 @@ class TestHTMLReportGenerator:
                 output_path="test.html",
             )
 
-    def test_add_section_without_data(self):
+    def test_add_section_without_data(self) -> None:
         """Test adding section without setting report data first."""
         generator = HTMLReportGenerator()
 
@@ -384,7 +384,7 @@ class TestHTMLReportGenerator:
         with pytest.raises(ValueError, match="No report data"):
             generator.add_section(section)
 
-    def test_format_datetime(self):
+    def test_format_datetime(self) -> None:
         """Test datetime formatting."""
         dt = datetime(2024, 1, 15, 14, 30, 45)
         formatted = HTMLReportGenerator._format_datetime(dt)
@@ -393,7 +393,7 @@ class TestHTMLReportGenerator:
         assert "01" in formatted or "1" in formatted
         assert "15" in formatted
 
-    def test_format_number(self):
+    def test_format_number(self) -> None:
         """Test number formatting."""
         assert HTMLReportGenerator._format_number(1000) == "1,000"
         assert HTMLReportGenerator._format_number(1000000) == "1,000,000"
@@ -403,7 +403,7 @@ class TestHTMLReportGenerator:
 class TestReportGeneration:
     """Integration tests for report generation."""
 
-    def test_full_report_generation(self):
+    def test_full_report_generation(self) -> None:
         """Test generating a complete report with all sections."""
         generator = HTMLReportGenerator(verbose=False)
 
@@ -500,7 +500,7 @@ class TestReportGeneration:
         finally:
             Path(output_path).unlink(missing_ok=True)
 
-    def test_report_with_empty_sections(self):
+    def test_report_with_empty_sections(self) -> None:
         """Test report with minimal data."""
         generator = HTMLReportGenerator()
 

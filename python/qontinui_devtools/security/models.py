@@ -31,7 +31,7 @@ class Severity(Enum):
     LOW = "low"
     INFO = "info"
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
         """Allow severity comparison for sorting."""
         if not isinstance(other, Severity):
             return NotImplemented
@@ -44,13 +44,13 @@ class Severity(Enum):
         }
         return severity_order[self] < severity_order[other]
 
-    def __le__(self, other):
+    def __le__(self, other: object) -> bool:
         """Allow severity comparison for filtering."""
         if not isinstance(other, Severity):
             return NotImplemented
         return self == other or self < other
 
-    def __gt__(self, other):
+    def __gt__(self, other: object) -> bool:
         """Allow severity comparison for sorting."""
         if not isinstance(other, Severity):
             return NotImplemented
@@ -63,7 +63,7 @@ class Severity(Enum):
         }
         return severity_order[self] > severity_order[other]
 
-    def __ge__(self, other):
+    def __ge__(self, other: object) -> bool:
         """Allow severity comparison for filtering."""
         if not isinstance(other, Severity):
             return NotImplemented

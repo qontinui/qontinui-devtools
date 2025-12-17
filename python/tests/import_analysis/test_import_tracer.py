@@ -31,7 +31,7 @@ from qontinui_devtools.import_analysis import ImportEvent, ImportGraph, ImportTr
 class TestImportEvent(unittest.TestCase):
     """Test the ImportEvent dataclass."""
 
-    def test_create_import_event(self):
+    def test_create_import_event(self) -> None:
         """Test creating an ImportEvent."""
         event = ImportEvent(
             module_name="test_module",
@@ -47,7 +47,7 @@ class TestImportEvent(unittest.TestCase):
         self.assertIsInstance(event.thread_id, int)
         self.assertEqual(len(event.stack_trace), 2)
 
-    def test_to_dict(self):
+    def test_to_dict(self) -> None:
         """Test converting ImportEvent to dictionary."""
         event = ImportEvent(
             module_name="test_module",
@@ -73,13 +73,13 @@ class TestImportGraph(unittest.TestCase):
         """Set up test fixtures."""
         self.graph = ImportGraph()
 
-    def test_add_import(self):
+    def test_add_import(self) -> None:
         """Test adding imports to the graph."""
         self.graph.add_import("module_a", "module_b")
         deps = self.graph.get_dependencies("module_a")
         self.assertIn("module_b", deps)
 
-    def test_get_dependencies(self):
+    def test_get_dependencies(self) -> None:
         """Test retrieving module dependencies."""
         self.graph.add_import("A", "B")
         self.graph.add_import("A", "C")
@@ -89,12 +89,12 @@ class TestImportGraph(unittest.TestCase):
         self.assertIn("B", deps)
         self.assertIn("C", deps)
 
-    def test_get_dependencies_nonexistent(self):
+    def test_get_dependencies_nonexistent(self) -> None:
         """Test getting dependencies of non-existent module."""
         deps = self.graph.get_dependencies("nonexistent")
         self.assertEqual(len(deps), 0)
 
-    def test_simple_circular_dependency(self):
+    def test_simple_circular_dependency(self) -> None:
         """Test detecting simple A -> B -> A cycle."""
         self.graph.add_import("A", "B")
         self.graph.add_import("B", "A")
@@ -112,7 +112,7 @@ class TestImportGraph(unittest.TestCase):
 
         self.assertTrue(found_cycle, "Cycle should contain A and B")
 
-    def test_three_node_cycle(self):
+    def test_three_node_cycle(self) -> None:
         """Test detecting A -> B -> C -> A cycle."""
         self.graph.add_import("A", "B")
         self.graph.add_import("B", "C")
@@ -131,7 +131,7 @@ class TestImportGraph(unittest.TestCase):
 
         self.assertTrue(found_cycle, "Cycle should contain A, B, and C")
 
-    def test_no_circular_dependency(self):
+    def test_no_circular_dependency(self) -> None:
         """Test that linear imports don't create false positives."""
         self.graph.add_import("A", "B")
         self.graph.add_import("B", "C")
@@ -141,7 +141,7 @@ class TestImportGraph(unittest.TestCase):
 
         self.assertEqual(len(cycles), 0, "Should not detect cycles in linear graph")
 
-    def test_to_dict(self):
+    def test_to_dict(self) -> None:
         """Test converting graph to dictionary."""
         self.graph.add_import("A", "B")
         self.graph.add_import("B", "C")
@@ -153,7 +153,7 @@ class TestImportGraph(unittest.TestCase):
         self.assertGreater(len(graph_dict["nodes"]), 0)
         self.assertGreater(len(graph_dict["edges"]), 0)
 
-    def test_get_all_modules(self):
+    def test_get_all_modules(self) -> None:
         """Test getting all modules in the graph."""
         self.graph.add_import("A", "B")
         self.graph.add_import("B", "C")
@@ -165,7 +165,7 @@ class TestImportGraph(unittest.TestCase):
         self.assertIn("B", modules)
         self.assertIn("C", modules)
 
-    def test_thread_safety(self):
+    def test_thread_safety(self) -> None:
         """Test that graph is thread-safe."""
 
         def add_imports(start_idx):
@@ -189,7 +189,7 @@ class TestImportGraph(unittest.TestCase):
 class TestImportTracer(unittest.TestCase):
     """Test the ImportTracer context manager."""
 
-    def test_context_manager(self):
+    def test_context_manager(self) -> None:
         """Test that ImportTracer works as a context manager."""
         with ImportTracer() as tracer:
             self.assertIsInstance(tracer, ImportTracer)
@@ -197,7 +197,7 @@ class TestImportTracer(unittest.TestCase):
         # Hook should be removed after exiting context
         self.assertFalse(tracer._installed)
 
-    def test_track_simple_import(self):
+    def test_track_simple_import(self) -> None:
         """Test tracking a simple module import."""
         # Remove module from sys.modules if it exists
         if "fixtures.simple_module" in sys.modules:
@@ -215,7 +215,7 @@ class TestImportTracer(unittest.TestCase):
             f"simple_module not found in: {module_names}",
         )
 
-    def test_detect_circular_import_simple(self):
+    def test_detect_circular_import_simple(self) -> None:
         """Test detecting simple circular dependency A <-> B."""
         # Remove modules if they exist
         for mod in ["fixtures.circular_a", "fixtures.circular_b"]:
@@ -244,7 +244,7 @@ class TestImportTracer(unittest.TestCase):
                 found_ab_cycle, f"Should detect circular_a <-> circular_b cycle. Found: {cycles}"
             )
 
-    def test_detect_circular_import_complex(self):
+    def test_detect_circular_import_complex(self) -> None:
         """Test detecting complex three-way circular dependency C -> D -> E -> C."""
         # Remove modules if they exist
         for mod in ["fixtures.circular_c", "fixtures.circular_d", "fixtures.circular_e"]:
@@ -273,7 +273,7 @@ class TestImportTracer(unittest.TestCase):
                 found_cde_cycle, f"Should detect C -> D -> E -> C cycle. Found: {cycles}"
             )
 
-    def test_generate_report(self):
+    def test_generate_report(self) -> None:
         """Test generating a text report."""
         # Remove module if it exists
         if "fixtures.simple_module" in sys.modules:
@@ -288,7 +288,7 @@ class TestImportTracer(unittest.TestCase):
         self.assertIn("IMPORT TRACER REPORT", report)
         self.assertIn("Total imports tracked", report)
 
-    def test_to_dict(self):
+    def test_to_dict(self) -> None:
         """Test exporting tracer data to dictionary."""
         with ImportTracer() as tracer:
             pass  # Track some imports
@@ -301,7 +301,7 @@ class TestImportTracer(unittest.TestCase):
         self.assertIn("circular_dependencies", data)
         self.assertIn("start_time", data)
 
-    def test_get_graph(self):
+    def test_get_graph(self) -> None:
         """Test getting the import graph."""
         with ImportTracer() as tracer:
             pass
@@ -310,7 +310,7 @@ class TestImportTracer(unittest.TestCase):
 
         self.assertIsInstance(graph, ImportGraph)
 
-    def test_multiple_threads(self):
+    def test_multiple_threads(self) -> None:
         """Test that import tracking works across multiple threads."""
         # Remove module if it exists
         if "fixtures.simple_module" in sys.modules:
@@ -340,7 +340,7 @@ class TestImportTracer(unittest.TestCase):
         # We expect at least the main thread
         self.assertGreater(len(events), 0)
 
-    def test_no_false_positives(self):
+    def test_no_false_positives(self) -> None:
         """Test that linear imports don't trigger false circular dependency warnings."""
         # Remove module if it exists
         if "fixtures.simple_module" in sys.modules:
@@ -366,7 +366,7 @@ class TestImportTracer(unittest.TestCase):
 class TestIntegration(unittest.TestCase):
     """Integration tests for the complete import analysis workflow."""
 
-    def test_full_workflow(self):
+    def test_full_workflow(self) -> None:
         """Test the complete workflow: trace -> analyze -> report."""
         # Remove modules if they exist
         for mod in ["fixtures.circular_a", "fixtures.circular_b"]:
@@ -395,7 +395,7 @@ class TestIntegration(unittest.TestCase):
         self.assertIsInstance(report, str)
         self.assertIsInstance(data, dict)
 
-    def test_report_shows_circular_dependencies(self):
+    def test_report_shows_circular_dependencies(self) -> None:
         """Test that report clearly shows circular dependencies."""
         # Remove modules if they exist
         for mod in ["fixtures.circular_a", "fixtures.circular_b"]:

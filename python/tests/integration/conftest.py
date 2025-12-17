@@ -30,7 +30,7 @@ from typing import Optional
 class SampleAction:
     '''Sample action for testing runtime monitoring.'''
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.hal = None
         self.state = {}
         self.counter = 0
@@ -106,7 +106,7 @@ class SampleAction:
 class MemoryIntensiveAction:
     '''Action that allocates memory for testing memory profiler.'''
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.data = []
 
     def execute(self, size_mb: int = 10) -> int:
@@ -124,7 +124,7 @@ class MemoryIntensiveAction:
 class ConcurrentAction:
     '''Action for testing concurrent execution.'''
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.lock = threading.Lock()
         self.shared_counter = 0
         self.thread_results = []
@@ -168,7 +168,7 @@ from actions import action_a, action_b
 from utils import helper
 
 
-def main():
+def main() -> Any:
     '''Main entry point.'''
     helper.setup()
     result_a = action_a.execute()
@@ -191,7 +191,7 @@ if __name__ == '__main__':
 import time
 
 
-def execute():
+def execute() -> Any:
     '''Execute action A.'''
     time.sleep(0.01)
     return {'status': 'success', 'action': 'A'}
@@ -203,7 +203,7 @@ def execute():
 import time
 
 
-def execute():
+def execute() -> Any:
     '''Execute action B.'''
     time.sleep(0.02)
     return {'status': 'success', 'action': 'B'}
@@ -217,7 +217,7 @@ def execute():
 
     (utils_dir / "helper.py").write_text(
         """
-def setup():
+def setup() -> Any:
     '''Setup helper.'''
     print("Setup complete")
 """
@@ -364,6 +364,6 @@ def measure_overhead(func: Callable, *args, **kwargs) -> dict[str, float]:
 
 
 @pytest.fixture
-def overhead_measurer():
+def overhead_measurer() -> Any:
     """Fixture that provides overhead measurement utility."""
     return measure_overhead

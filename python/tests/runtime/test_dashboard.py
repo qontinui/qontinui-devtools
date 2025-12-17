@@ -472,11 +472,11 @@ class TestDashboardIntegration:
 
         collector = MetricsCollector()
 
-        def record_actions():
+        def record_actions() -> None:
             for i in range(50):
                 collector.record_action(f"action_{i}", 0.01, success=True)
 
-        def record_events():
+        def record_events() -> None:
             for _i in range(50):
                 collector.record_event(0.01, success=True)
 

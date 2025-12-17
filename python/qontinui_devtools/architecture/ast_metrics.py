@@ -146,7 +146,7 @@ def calculate_complexity(node: ast.AST) -> int:
         source = ast.unparse(node)
         results = cc_visit(source)
 
-        total_complexity = sum(item.complexity for item in results)
+        total_complexity: int = sum(item.complexity for item in results)
         return total_complexity
     except Exception:
         return _estimate_complexity(node)
@@ -291,7 +291,7 @@ def analyze_method_calls(class_node: ast.ClassDef) -> dict[str, set[str]]:
 
     for node in class_node.body:
         if isinstance(node, ast.FunctionDef):
-            called_methods = set()
+            called_methods: set[str] = set()
             visitor = _create_visitor(called_methods)
             visitor.visit(node)
             call_graph[node.name] = called_methods

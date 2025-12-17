@@ -23,20 +23,20 @@ try:
 except ImportError:
 
     class ActionProfiler:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.profiles = []
             self._lock = threading.Lock()
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
-        def profile(self, func):
-            def wrapper(*args, **kwargs):
+        def profile(self, func) -> Any:
+            def wrapper(*args, **kwargs) -> Any:
                 start = time.perf_counter()
                 result = func(*args, **kwargs)
                 duration = time.perf_counter() - start
@@ -52,7 +52,7 @@ except ImportError:
 
             return wrapper
 
-        def get_profile_data(self):
+        def get_profile_data(self) -> None:
             with self._lock:
                 return {
                     "profiles": self.profiles.copy(),
@@ -61,19 +61,19 @@ except ImportError:
                 }
 
     class EventTracer:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.events = []
             self._lock = threading.Lock()
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
-        def trace_event(self, event_type, data):
+        def trace_event(self, event_type, data) -> None:
             if self.is_running:
                 with self._lock:
                     self.events.append(
@@ -94,21 +94,21 @@ except ImportError:
             return events
 
     class MemoryProfiler:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.snapshots = []
             self._lock = threading.Lock()
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
             self._take_snapshot()
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
             self._take_snapshot()
 
-        def _take_snapshot(self):
+        def _take_snapshot(self) -> None:
             import sys
 
             with self._lock:
@@ -120,7 +120,7 @@ except ImportError:
                     }
                 )
 
-        def get_memory_usage(self):
+        def get_memory_usage(self) -> None:
             with self._lock:
                 if not self.snapshots:
                     return {"current_mb": 0, "peak_mb": 0}
@@ -129,23 +129,23 @@ except ImportError:
                 return {"current_mb": current, "peak_mb": peak}
 
     class PerformanceDashboard:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.metrics = {}
             self._lock = threading.Lock()
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
         def update_metrics(self, metrics):
             with self._lock:
                 self.metrics.update(metrics)
 
-        def get_metrics(self):
+        def get_metrics(self) -> None:
             with self._lock:
                 return self.metrics.copy()
 
@@ -191,7 +191,7 @@ class TestConcurrentToolAccess:
         thread_ids = {p["thread_id"] for p in profile_data["profiles"]}
         assert len(thread_ids) == num_threads
 
-    def test_event_tracer_thread_safety(self, event_tracer_config):
+    def test_event_tracer_thread_safety(self, event_tracer_config) -> None:
         """Test that event tracer is thread-safe."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -229,7 +229,7 @@ class TestConcurrentToolAccess:
         assert len(thread_event_counts) == num_threads
         assert all(count == events_per_thread for count in thread_event_counts.values())
 
-    def test_memory_profiler_thread_safety(self, memory_profiler_config):
+    def test_memory_profiler_thread_safety(self, memory_profiler_config) -> None:
         """Test that memory profiler is thread-safe."""
         mem_profiler = MemoryProfiler(memory_profiler_config)
         mem_profiler.start()
@@ -260,7 +260,7 @@ class TestConcurrentToolAccess:
         min_snapshots = 1 + (num_threads * snapshots_per_thread) + 1
         assert len(mem_profiler.snapshots) >= min_snapshots
 
-    def test_dashboard_concurrent_updates(self, dashboard_config):
+    def test_dashboard_concurrent_updates(self, dashboard_config) -> None:
         """Test dashboard with concurrent metric updates."""
         dashboard = PerformanceDashboard(dashboard_config)
         dashboard.start()
@@ -415,7 +415,7 @@ class TestConcurrentToolLifecycle:
         assert not tracer.is_running
         assert not mem_profiler.is_running
 
-    def test_rapid_start_stop_cycles(self, profiler_config):
+    def test_rapid_start_stop_cycles(self, profiler_config) -> None:
         """Test rapid start/stop cycles don't cause issues."""
         errors = []
 
@@ -570,7 +570,7 @@ class TestConcurrentDataCollection:
 class TestRaceConditions:
     """Test for race conditions in tool interactions."""
 
-    def test_no_race_in_event_ordering(self, event_tracer_config):
+    def test_no_race_in_event_ordering(self, event_tracer_config) -> None:
         """Test that event ordering is preserved despite concurrent writes."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -770,7 +770,7 @@ class TestAsyncConcurrency:
         profile_data = profiler.get_profile_data()
         assert profile_data["total_calls"] == 5 * 10  # 5 workers, 10 iterations each
 
-    def test_event_tracer_with_async_await(self, event_tracer_config):
+    def test_event_tracer_with_async_await(self, event_tracer_config) -> None:
         """Test event tracer with async functions."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()

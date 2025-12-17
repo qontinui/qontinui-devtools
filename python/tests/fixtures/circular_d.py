@@ -6,7 +6,7 @@ dependency for testing the ImportTracer's ability to detect multi-hop cycles.
 """
 
 
-def function_d():
+def function_d() -> None:
     """Function in module D."""
     return "function_d"
 
@@ -15,6 +15,6 @@ def function_d():
 from fixtures import circular_e  # noqa: E402, F401
 
 
-def use_e():
+def use_e() -> None:
     """Use something from module E."""
     return circular_e.function_e()

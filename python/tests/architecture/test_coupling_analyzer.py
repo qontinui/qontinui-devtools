@@ -20,7 +20,7 @@ from qontinui_devtools.architecture import (
 class TestCohesionMetrics:
     """Test cohesion metric calculations."""
 
-    def test_calculate_lcom_low_cohesion(self):
+    def test_calculate_lcom_low_cohesion(self) -> None:
         """Test LCOM calculation for low cohesion class."""
         code = """
 class LowCohesion:
@@ -41,7 +41,7 @@ class LowCohesion:
         # All methods are disconnected, LCOM should be high
         assert lcom > 0.5
 
-    def test_calculate_lcom_high_cohesion(self):
+    def test_calculate_lcom_high_cohesion(self) -> None:
         """Test LCOM calculation for high cohesion class."""
         code = """
 class HighCohesion:
@@ -68,7 +68,7 @@ class HighCohesion:
         # All methods share attributes, LCOM should be low
         assert lcom < 0.3
 
-    def test_calculate_lcom4_perfect_cohesion(self):
+    def test_calculate_lcom4_perfect_cohesion(self) -> None:
         """Test LCOM4 for perfect cohesion (all methods connected)."""
         code = """
 class PerfectCohesion:
@@ -89,7 +89,7 @@ class PerfectCohesion:
         # All methods connected = 1 component
         assert lcom4 == 1.0
 
-    def test_calculate_lcom4_disconnected(self):
+    def test_calculate_lcom4_disconnected(self) -> None:
         """Test LCOM4 for completely disconnected methods."""
         code = """
 class Disconnected:
@@ -110,7 +110,7 @@ class Disconnected:
         # Each method is a separate component
         assert lcom4 == 3.0
 
-    def test_calculate_tcc_perfect(self):
+    def test_calculate_tcc_perfect(self) -> None:
         """Test TCC for perfect tight cohesion."""
         code = """
 class TightlyCoupled:
@@ -132,7 +132,7 @@ class TightlyCoupled:
         # All pairs directly connected
         assert tcc == 1.0
 
-    def test_calculate_tcc_no_connections(self):
+    def test_calculate_tcc_no_connections(self) -> None:
         """Test TCC for no connections."""
         code = """
 class NoConnections:
@@ -150,7 +150,7 @@ class NoConnections:
         # No shared attributes
         assert tcc == 0.0
 
-    def test_calculate_lcc_with_indirect(self):
+    def test_calculate_lcc_with_indirect(self) -> None:
         """Test LCC includes indirect connections."""
         code = """
 class IndirectConnections:
@@ -172,7 +172,7 @@ class IndirectConnections:
         # a-b direct, b-c direct, a-c indirect -> all connected
         assert lcc == 1.0
 
-    def test_single_method_class(self):
+    def test_single_method_class(self) -> None:
         """Test metrics for class with single method."""
         code = """
 class SingleMethod:
@@ -192,7 +192,7 @@ class SingleMethod:
 class TestCouplingMetrics:
     """Test coupling metric calculations."""
 
-    def test_calculate_instability_maximally_stable(self):
+    def test_calculate_instability_maximally_stable(self) -> None:
         """Test instability calculation for maximally stable module."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -200,7 +200,7 @@ class TestCouplingMetrics:
         instability = analyzer.calculate_instability(ca=10, ce=0)
         assert instability == 0.0
 
-    def test_calculate_instability_maximally_unstable(self):
+    def test_calculate_instability_maximally_unstable(self) -> None:
         """Test instability calculation for maximally unstable module."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -208,7 +208,7 @@ class TestCouplingMetrics:
         instability = analyzer.calculate_instability(ca=0, ce=10)
         assert instability == 1.0
 
-    def test_calculate_instability_balanced(self):
+    def test_calculate_instability_balanced(self) -> None:
         """Test instability calculation for balanced module."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -216,7 +216,7 @@ class TestCouplingMetrics:
         instability = analyzer.calculate_instability(ca=5, ce=5)
         assert instability == 0.5
 
-    def test_calculate_instability_isolated(self):
+    def test_calculate_instability_isolated(self) -> None:
         """Test instability calculation for isolated module."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -224,7 +224,7 @@ class TestCouplingMetrics:
         instability = analyzer.calculate_instability(ca=0, ce=0)
         assert instability == 0.0
 
-    def test_calculate_distance_from_main_perfect(self):
+    def test_calculate_distance_from_main_perfect(self) -> None:
         """Test distance from main sequence for perfect balance."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -232,7 +232,7 @@ class TestCouplingMetrics:
         distance = analyzer.calculate_distance_from_main(instability=0.5, abstractness=0.5)
         assert distance == 0.0
 
-    def test_calculate_distance_from_main_zone_of_pain(self):
+    def test_calculate_distance_from_main_zone_of_pain(self) -> None:
         """Test distance for zone of pain (concrete and stable)."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -240,7 +240,7 @@ class TestCouplingMetrics:
         distance = analyzer.calculate_distance_from_main(instability=0.0, abstractness=0.0)
         assert distance == 1.0
 
-    def test_calculate_distance_from_main_zone_of_uselessness(self):
+    def test_calculate_distance_from_main_zone_of_uselessness(self) -> None:
         """Test distance for zone of uselessness (abstract and unstable)."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -252,7 +252,7 @@ class TestCouplingMetrics:
 class TestAbstractnessCalculation:
     """Test abstractness metric calculation."""
 
-    def test_count_abstract_classes_abc(self):
+    def test_count_abstract_classes_abc(self) -> None:
         """Test counting abstract classes using ABC."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(
@@ -278,7 +278,7 @@ class ConcreteClass:
             finally:
                 os.unlink(f.name)
 
-    def test_count_abstract_classes_decorator_only(self):
+    def test_count_abstract_classes_decorator_only(self) -> None:
         """Test counting abstract classes using only decorator."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(
@@ -303,7 +303,7 @@ class SemiAbstract:
             finally:
                 os.unlink(f.name)
 
-    def test_count_abstract_classes_no_abstract(self):
+    def test_count_abstract_classes_no_abstract(self) -> None:
         """Test counting when there are no abstract classes."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(
@@ -330,7 +330,7 @@ class ConcreteB:
 class TestDependencyGraphBuilder:
     """Test dependency graph construction."""
 
-    def test_build_simple_graph(self):
+    def test_build_simple_graph(self) -> None:
         """Test building graph for simple module structure."""
         # Create temporary module structure
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -348,7 +348,7 @@ class TestDependencyGraphBuilder:
             assert str(main_path) in graph
             assert str(helper_path) in graph[str(main_path)]
 
-    def test_calculate_afferent_coupling(self):
+    def test_calculate_afferent_coupling(self) -> None:
         """Test afferent coupling calculation."""
         graph = {
             "/a.py": {"/c.py"},
@@ -362,7 +362,7 @@ class TestDependencyGraphBuilder:
         ca = builder.calculate_afferent_coupling("/c.py", graph)
         assert ca == 2
 
-    def test_calculate_efferent_coupling(self):
+    def test_calculate_efferent_coupling(self) -> None:
         """Test efferent coupling calculation."""
         graph = {
             "/a.py": {"/b.py", "/c.py", "/d.py"},
@@ -377,7 +377,7 @@ class TestDependencyGraphBuilder:
         ce = builder.calculate_efferent_coupling("/a.py", graph)
         assert ce == 3
 
-    def test_find_cycles(self):
+    def test_find_cycles(self) -> None:
         """Test cycle detection in dependency graph."""
         graph = {
             "/a.py": {"/b.py"},
@@ -401,7 +401,7 @@ class TestDependencyGraphBuilder:
 class TestCouplingCohesionAnalyzer:
     """Test the main analyzer class."""
 
-    def test_analyze_directory_basic(self):
+    def test_analyze_directory_basic(self) -> None:
         """Test analyzing a basic directory."""
         # Use test fixtures
         fixtures_dir = Path(__file__).parent.parent / "fixtures"
@@ -413,7 +413,7 @@ class TestCouplingCohesionAnalyzer:
         assert len(coupling) >= 1
         assert len(cohesion) >= 1
 
-    def test_analyze_low_cohesion_class(self):
+    def test_analyze_low_cohesion_class(self) -> None:
         """Test analyzing the low cohesion fixture."""
         fixtures_dir = Path(__file__).parent.parent / "fixtures"
         low_cohesion_file = fixtures_dir / "low_cohesion.py"
@@ -430,7 +430,7 @@ class TestCouplingCohesionAnalyzer:
         assert low_cohesion_class.lcom4 > 1.0
         assert low_cohesion_class.cohesion_score in ("poor", "fair")
 
-    def test_analyze_high_cohesion_class(self):
+    def test_analyze_high_cohesion_class(self) -> None:
         """Test analyzing the high cohesion fixture."""
         fixtures_dir = Path(__file__).parent.parent / "fixtures"
         low_cohesion_file = fixtures_dir / "low_cohesion.py"
@@ -447,7 +447,7 @@ class TestCouplingCohesionAnalyzer:
         assert high_cohesion_class.lcom4 == 1.0
         assert high_cohesion_class.cohesion_score in ("excellent", "good")
 
-    def test_generate_report(self):
+    def test_generate_report(self) -> None:
         """Test report generation."""
         fixtures_dir = Path(__file__).parent.parent / "fixtures"
 
@@ -461,7 +461,7 @@ class TestCouplingCohesionAnalyzer:
         assert "COHESION" in report
         assert "SUMMARY" in report
 
-    def test_coupling_score_classification(self):
+    def test_coupling_score_classification(self) -> None:
         """Test coupling score classification."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -473,7 +473,7 @@ class TestCouplingCohesionAnalyzer:
         score = analyzer._classify_coupling(ca=1, ce=20, instability=0.95, distance=0.8)
         assert score == "poor"
 
-    def test_cohesion_score_classification(self):
+    def test_cohesion_score_classification(self) -> None:
         """Test cohesion score classification."""
         analyzer = CouplingCohesionAnalyzer()
 
@@ -489,7 +489,7 @@ class TestCouplingCohesionAnalyzer:
 class TestIntegration:
     """Integration tests with real file structures."""
 
-    def test_analyze_module_with_deps(self):
+    def test_analyze_module_with_deps(self) -> None:
         """Test analyzing a module with dependencies."""
         fixtures_dir = Path(__file__).parent.parent / "fixtures" / "module_with_deps"
 
@@ -507,7 +507,7 @@ class TestIntegration:
         if main_module:
             assert main_module.efferent_coupling >= 2
 
-    def test_high_coupling_fixture(self):
+    def test_high_coupling_fixture(self) -> None:
         """Test analyzing the high coupling fixture."""
         fixtures_dir = Path(__file__).parent.parent / "fixtures"
         high_coupling_file = fixtures_dir / "high_coupling.py"

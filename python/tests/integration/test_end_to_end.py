@@ -25,19 +25,19 @@ try:
 except ImportError:
     # Mock implementations
     class ActionProfiler:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.profiles = []
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
-        def profile(self, func):
-            def wrapper(*args, **kwargs):
+        def profile(self, func) -> Any:
+            def wrapper(*args, **kwargs) -> Any:
                 start = time.perf_counter()
                 result = func(*args, **kwargs)
                 duration = time.perf_counter() - start
@@ -48,7 +48,7 @@ except ImportError:
 
             return wrapper
 
-        def get_profile_data(self):
+        def get_profile_data(self) -> None:
             return {
                 "profiles": self.profiles,
                 "total_calls": len(self.profiles),
@@ -60,18 +60,18 @@ except ImportError:
                 json.dump(self.get_profile_data(), f, indent=2)
 
     class EventTracer:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.events = []
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
-        def trace_event(self, event_type, data):
+        def trace_event(self, event_type, data) -> None:
             if self.is_running:
                 self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
 
@@ -85,20 +85,20 @@ except ImportError:
                 json.dump(self.events, f, indent=2)
 
     class MemoryProfiler:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.snapshots = []
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
             self._take_snapshot()
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
             self._take_snapshot()
 
-        def _take_snapshot(self):
+        def _take_snapshot(self) -> None:
             import sys
 
             self.snapshots.append(
@@ -108,7 +108,7 @@ except ImportError:
                 }
             )
 
-        def get_memory_usage(self):
+        def get_memory_usage(self) -> None:
             if not self.snapshots:
                 return {"current_mb": 0, "peak_mb": 0}
             current = self.snapshots[-1]["memory_mb"]
@@ -120,27 +120,27 @@ except ImportError:
                 json.dump(self.snapshots, f, indent=2)
 
     class PerformanceDashboard:
-        def __init__(self, config=None):
+        def __init__(self, config=None) -> None:
             self.config = config or {}
             self.is_running = False
             self.metrics = {}
 
-        def start(self):
+        def start(self) -> None:
             self.is_running = True
 
-        def stop(self):
+        def stop(self) -> None:
             self.is_running = False
 
         def update_metrics(self, metrics):
             self.metrics.update(metrics)
 
-        def get_metrics(self):
+        def get_metrics(self) -> None:
             return self.metrics
 
     class RuntimeReportGenerator:
         """Mock Runtime Report Generator."""
 
-        def __init__(self):
+        def __init__(self) -> None:
             pass
 
         def generate_report(
@@ -654,7 +654,7 @@ class TestReportGeneration:
         assert "Total Events" in html
         assert "Peak Memory" in html
 
-    def test_report_with_empty_data(self, temp_test_dir):
+    def test_report_with_empty_data(self, temp_test_dir) -> None:
         """Test report generation with minimal/empty data."""
         report_generator = RuntimeReportGenerator()
         report_path = temp_test_dir / "empty_report.json"

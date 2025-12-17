@@ -23,7 +23,7 @@ from qontinui_devtools.documentation import (
 class TestParameter:
     """Test Parameter model."""
 
-    def test_parameter_creation(self):
+    def test_parameter_creation(self) -> None:
         """Test creating a parameter."""
         param = Parameter(
             name="value",
@@ -37,7 +37,7 @@ class TestParameter:
         assert param.default_value == "10"
         assert param.description == "A number"
 
-    def test_parameter_is_optional(self):
+    def test_parameter_is_optional(self) -> None:
         """Test parameter optional detection."""
         # Has default value
         param1 = Parameter(name="x", default_value="10")
@@ -55,7 +55,7 @@ class TestParameter:
 class TestExample:
     """Test Example model."""
 
-    def test_example_creation(self):
+    def test_example_creation(self) -> None:
         """Test creating an example."""
         example = Example(
             code="print('hello')",
@@ -71,7 +71,7 @@ class TestExample:
 class TestDocItem:
     """Test DocItem model."""
 
-    def test_doc_item_creation(self):
+    def test_doc_item_creation(self) -> None:
         """Test creating a doc item."""
         item = DocItem(
             type=DocItemType.FUNCTION,
@@ -87,7 +87,7 @@ class TestDocItem:
         assert item.qualified_name == "module.foo"
         assert item.docstring == "A function"
 
-    def test_doc_item_visibility(self):
+    def test_doc_item_visibility(self) -> None:
         """Test visibility checks."""
         # Public
         public_item = DocItem(
@@ -130,7 +130,7 @@ class TestDocItem:
         assert not dunder_item.is_protected
         assert dunder_item.is_dunder
 
-    def test_function_signature(self):
+    def test_function_signature(self) -> None:
         """Test function signature generation."""
         item = DocItem(
             type=DocItemType.FUNCTION,
@@ -149,7 +149,7 @@ class TestDocItem:
         assert "y: int = 10" in sig
         assert "-> int" in sig
 
-    def test_async_function_signature(self):
+    def test_async_function_signature(self) -> None:
         """Test async function signature."""
         item = DocItem(
             type=DocItemType.FUNCTION,
@@ -167,7 +167,7 @@ class TestDocItem:
 class TestDocumentationTree:
     """Test DocumentationTree model."""
 
-    def test_tree_creation(self):
+    def test_tree_creation(self) -> None:
         """Test creating a documentation tree."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -185,7 +185,7 @@ class TestDocumentationTree:
         assert tree.package_name == "mypackage"
         assert tree.version == "1.0.0"
 
-    def test_get_item(self):
+    def test_get_item(self) -> None:
         """Test getting an item by qualified name."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -208,7 +208,7 @@ class TestDocumentationTree:
         assert tree.get_item("mymodule.MyClass") == item1
         assert tree.get_item("nonexistent") is None
 
-    def test_get_public_items(self):
+    def test_get_public_items(self) -> None:
         """Test filtering public items."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -240,7 +240,7 @@ class TestDocumentationTree:
         assert public_func in public_items
         assert private_func not in public_items
 
-    def test_get_public_items_by_type(self):
+    def test_get_public_items_by_type(self) -> None:
         """Test filtering public items by type."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -275,7 +275,7 @@ class TestDocumentationTree:
         assert len(classes) == 1
         assert cls in classes
 
-    def test_search(self):
+    def test_search(self) -> None:
         """Test search functionality."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -309,7 +309,7 @@ class TestDocumentationTree:
 class TestDocstringParser:
     """Test DocstringParser."""
 
-    def test_parse_empty_docstring(self):
+    def test_parse_empty_docstring(self) -> None:
         """Test parsing empty docstring."""
         parser = DocstringParser()
         result = parser.parse(None)
@@ -318,7 +318,7 @@ class TestDocstringParser:
         assert result["description"] == ""
         assert result["parameters"] == []
 
-    def test_detect_google_style(self):
+    def test_detect_google_style(self) -> None:
         """Test detecting Google-style docstrings."""
         parser = DocstringParser(DocstringStyle.AUTO)
 
@@ -332,7 +332,7 @@ class TestDocstringParser:
         style = parser._detect_style(docstring)
         assert style == DocstringStyle.GOOGLE
 
-    def test_detect_numpy_style(self):
+    def test_detect_numpy_style(self) -> None:
         """Test detecting NumPy-style docstrings."""
         parser = DocstringParser(DocstringStyle.AUTO)
 
@@ -348,7 +348,7 @@ class TestDocstringParser:
         style = parser._detect_style(docstring)
         assert style == DocstringStyle.NUMPY
 
-    def test_parse_google_args(self):
+    def test_parse_google_args(self) -> None:
         """Test parsing Google-style arguments."""
         parser = DocstringParser(DocstringStyle.GOOGLE)
 
@@ -368,7 +368,7 @@ class TestDocstringParser:
         assert result["parameters"][0]["type_hint"] == "int"
         assert "First value" in result["parameters"][0]["description"]
 
-    def test_parse_google_returns(self):
+    def test_parse_google_returns(self) -> None:
         """Test parsing Google-style returns."""
         parser = DocstringParser(DocstringStyle.GOOGLE)
 
@@ -385,7 +385,7 @@ class TestDocstringParser:
         assert result["returns"]["type"] == "int"
         assert "result" in result["returns"]["description"]
 
-    def test_parse_google_raises(self):
+    def test_parse_google_raises(self) -> None:
         """Test parsing Google-style raises."""
         parser = DocstringParser(DocstringStyle.GOOGLE)
 
@@ -403,7 +403,7 @@ class TestDocstringParser:
         assert result["raises"][0][0] == "ValueError"
         assert "invalid" in result["raises"][0][1]
 
-    def test_parse_google_examples(self):
+    def test_parse_google_examples(self) -> None:
         """Test parsing Google-style examples."""
         parser = DocstringParser(DocstringStyle.GOOGLE)
 
@@ -421,7 +421,7 @@ class TestDocstringParser:
 
         assert len(result["examples"]) > 0
 
-    def test_parse_numpy_parameters(self):
+    def test_parse_numpy_parameters(self) -> None:
         """Test parsing NumPy-style parameters."""
         parser = DocstringParser(DocstringStyle.NUMPY)
 
@@ -442,7 +442,7 @@ class TestDocstringParser:
         assert result["parameters"][0]["name"] == "x"
         assert result["parameters"][0]["type_hint"] == "int"
 
-    def test_parse_numpy_returns(self):
+    def test_parse_numpy_returns(self) -> None:
         """Test parsing NumPy-style returns."""
         parser = DocstringParser(DocstringStyle.NUMPY)
 
@@ -460,7 +460,7 @@ class TestDocstringParser:
         assert result["returns"] is not None
         assert result["returns"]["type"] == "int"
 
-    def test_parse_basic_docstring(self):
+    def test_parse_basic_docstring(self) -> None:
         """Test parsing basic docstring."""
         parser = DocstringParser()
 
@@ -475,7 +475,7 @@ class TestDocstringParser:
 class TestASTDocExtractor:
     """Test ASTDocExtractor."""
 
-    def test_extract_module_docstring(self):
+    def test_extract_module_docstring(self) -> None:
         """Test extracting module docstring."""
         source = '''"""Module docstring."""
 
@@ -490,7 +490,7 @@ def foo():
         assert len(module_items) == 1
         assert "Module docstring" in module_items[0].docstring
 
-    def test_extract_function(self):
+    def test_extract_function(self) -> None:
         """Test extracting function."""
         source = '''
 def calculate(x: int, y: int = 10) -> int:
@@ -520,7 +520,7 @@ def calculate(x: int, y: int = 10) -> int:
         assert func.parameters[1].default_value == "10"
         assert func.return_type == "int"
 
-    def test_extract_async_function(self):
+    def test_extract_async_function(self) -> None:
         """Test extracting async function."""
         source = '''
 async def fetch_data() -> dict:
@@ -535,7 +535,7 @@ async def fetch_data() -> dict:
         assert len(func_items) == 1
         assert func_items[0].is_async
 
-    def test_extract_class(self):
+    def test_extract_class(self) -> None:
         """Test extracting class."""
         source = '''
 class Calculator:
@@ -557,7 +557,7 @@ class Calculator:
         assert len(method_items) == 1
         assert method_items[0].name == "add"
 
-    def test_extract_decorators(self):
+    def test_extract_decorators(self) -> None:
         """Test extracting decorators."""
         source = '''
 class MyClass:
@@ -593,7 +593,7 @@ class MyClass:
         classm = next(item for item in method_items if item.name == "class_method")
         assert classm.is_classmethod
 
-    def test_extract_with_syntax_error(self):
+    def test_extract_with_syntax_error(self) -> None:
         """Test extraction with syntax error."""
         source = "def foo("  # Invalid syntax
 
@@ -607,7 +607,7 @@ class MyClass:
 class TestDocumentationGenerator:
     """Test DocumentationGenerator."""
 
-    def test_generator_creation(self):
+    def test_generator_creation(self) -> None:
         """Test creating generator."""
         gen = DocumentationGenerator()
         assert gen.docstring_style == DocstringStyle.AUTO
@@ -615,7 +615,7 @@ class TestDocumentationGenerator:
         gen2 = DocumentationGenerator(DocstringStyle.GOOGLE)
         assert gen2.docstring_style == DocstringStyle.GOOGLE
 
-    def test_generate_docs_from_file(self):
+    def test_generate_docs_from_file(self) -> None:
         """Test generating docs from a file."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(
@@ -646,7 +646,7 @@ def foo(x: int) -> int:
             # Cleanup
             Path(f.name).unlink()
 
-    def test_generate_docs_from_directory(self):
+    def test_generate_docs_from_directory(self) -> None:
         """Test generating docs from a directory."""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create test files
@@ -675,7 +675,7 @@ class MyClass:
             assert len(tree.classes) == 1
             assert len(tree.functions) == 1
 
-    def test_exclude_private_members(self):
+    def test_exclude_private_members(self) -> None:
         """Test excluding private members."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(
@@ -702,7 +702,7 @@ def _private_func():
 
             Path(f.name).unlink()
 
-    def test_include_private_members(self):
+    def test_include_private_members(self) -> None:
         """Test including private members."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(
@@ -729,7 +729,7 @@ def _private_func():
 
             Path(f.name).unlink()
 
-    def test_build_search_index(self):
+    def test_build_search_index(self) -> None:
         """Test building search index."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -750,7 +750,7 @@ def _private_func():
         # Should index by words in docstring
         assert "testing" in index or "search" in index
 
-    def test_write_html_docs(self):
+    def test_write_html_docs(self) -> None:
         """Test writing HTML documentation."""
         with tempfile.TemporaryDirectory() as tmpdir:
             root = DocItem(
@@ -775,7 +775,7 @@ def _private_func():
             content = (Path(tmpdir) / "index.html").read_text()
             assert "test" in content or "mymodule" in content
 
-    def test_write_markdown_docs(self):
+    def test_write_markdown_docs(self) -> None:
         """Test writing Markdown documentation."""
         with tempfile.TemporaryDirectory() as tmpdir:
             root = DocItem(
@@ -802,7 +802,7 @@ def _private_func():
             content = (Path(tmpdir) / "index.md").read_text()
             assert "test" in content or "Documentation" in content
 
-    def test_write_json_docs(self):
+    def test_write_json_docs(self) -> None:
         """Test writing JSON documentation."""
         with tempfile.TemporaryDirectory() as tmpdir:
             root = DocItem(
@@ -839,7 +839,7 @@ def _private_func():
             assert "mymodule" in data["modules"]
             assert "mymodule.foo" in data["functions"]
 
-    def test_generate_markdown_index(self):
+    def test_generate_markdown_index(self) -> None:
         """Test generating markdown index."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -862,7 +862,7 @@ def _private_func():
         assert "1.0.0" in md
         assert "mymodule" in md
 
-    def test_generate_module_markdown(self):
+    def test_generate_module_markdown(self) -> None:
         """Test generating module markdown."""
         module = DocItem(
             type=DocItemType.MODULE,
@@ -892,7 +892,7 @@ def _private_func():
         assert "A test module" in md
         assert "foo" in md
 
-    def test_generate_basic_html(self):
+    def test_generate_basic_html(self) -> None:
         """Test generating basic HTML."""
         root = DocItem(
             type=DocItemType.MODULE,
@@ -915,7 +915,7 @@ def _private_func():
 class TestEndToEnd:
     """End-to-end integration tests."""
 
-    def test_complete_workflow(self):
+    def test_complete_workflow(self) -> None:
         """Test complete documentation generation workflow."""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create a test module
@@ -1023,7 +1023,7 @@ def multiply(x: int, y: int) -> int:
             gen.write_docs(tree, json_dir, OutputFormat.JSON)
             assert (json_dir / "documentation.json").exists()
 
-    def test_numpy_style_docstrings(self):
+    def test_numpy_style_docstrings(self) -> None:
         """Test with NumPy-style docstrings."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(

@@ -369,13 +369,13 @@ def unused_function():
         """Test that special methods are handled correctly."""
         code = """
 class MyClass:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def __str__(self):
+    def __str__(self) -> None:
         return "MyClass"
 
-    def public_method(self):
+    def public_method(self) -> None:
         pass
 """
         (temp_project / "module.py").write_text(code)
@@ -494,10 +494,10 @@ result = func1()
         """Test that methods called via instances are detected."""
         code = """
 class MyClass:
-    def used_method(self):
+    def used_method(self) -> None:
         pass
 
-    def unused_method(self):
+    def unused_method(self) -> None:
         pass
 
 obj = MyClass()
@@ -531,13 +531,13 @@ USED_CONSTANT = 42
 UNUSED_CONSTANT = "dead"
 
 class UsedClass:
-    def __init__(self):
+    def __init__(self) -> None:
         self.value = USED_CONSTANT
 
-    def used_method(self):
+    def used_method(self) -> None:
         return self.value
 
-    def unused_method(self):
+    def unused_method(self) -> None:
         return "never called"
 
 class UnusedClass:

@@ -121,17 +121,17 @@ class TestAstMetrics:
         """Test finding shared attributes between methods."""
         source = """
 class TestClass:
-    def __init__(self):
+    def __init__(self) -> None:
         self.x = 0
         self.y = 0
 
-    def method1(self):
+    def method1(self) -> None:
         return self.x + self.y
 
-    def method2(self):
+    def method2(self) -> None:
         return self.x * 2
 
-    def method3(self):
+    def method3(self) -> None:
         return 42
 """
         tree = ast.parse(source)
@@ -348,7 +348,7 @@ class TestGodClassDetector:
         # Class with only one method
         source_one_method = """
 class OneMethod:
-    def method1(self):
+    def method1(self) -> None:
         return 42
 """
         tree = ast.parse(source_one_method)
@@ -359,16 +359,16 @@ class OneMethod:
         # Class with highly cohesive methods
         source_cohesive = """
 class Cohesive:
-    def __init__(self):
+    def __init__(self) -> None:
         self.x = 0
 
-    def method1(self):
+    def method1(self) -> None:
         return self.x + 1
 
-    def method2(self):
+    def method2(self) -> None:
         return self.x * 2
 
-    def method3(self):
+    def method3(self) -> None:
         self.x += 1
 """
         tree = ast.parse(source_cohesive)
@@ -380,7 +380,7 @@ class Cohesive:
         """Test counting different method types."""
         source = """
 class MixedMethods:
-    def instance_method(self):
+    def instance_method(self) -> None:
         pass
 
     @classmethod
@@ -391,7 +391,7 @@ class MixedMethods:
     def static_method():
         pass
 
-    def _private_method(self):
+    def _private_method(self) -> None:
         pass
 """
         tree = ast.parse(source)

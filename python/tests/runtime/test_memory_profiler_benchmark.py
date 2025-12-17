@@ -14,7 +14,7 @@ def test_snapshot_overhead(benchmark):
     profiler = MemoryProfiler(enable_tracemalloc=False)
     profiler.start()
 
-    def take_snapshot():
+    def take_snapshot() -> None:
         return profiler.take_snapshot()
 
     result = benchmark(take_snapshot)
@@ -34,7 +34,7 @@ def test_snapshot_with_tracemalloc_overhead(benchmark):
     profiler = MemoryProfiler(enable_tracemalloc=True)
     profiler.start()
 
-    def take_snapshot():
+    def take_snapshot() -> None:
         return profiler.take_snapshot()
 
     result = benchmark(take_snapshot)
@@ -55,14 +55,14 @@ def test_leak_detection_overhead(benchmark):
 
     profiler.stop()
 
-    def detect_leaks():
+    def detect_leaks() -> None:
         return profiler.detect_leaks()
 
     leaks = benchmark(detect_leaks)
     assert isinstance(leaks, list)
 
 
-def test_profiler_memory_overhead():
+def test_profiler_memory_overhead() -> None:
     """Test memory overhead of the profiler itself."""
     import gc
 
