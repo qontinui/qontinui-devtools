@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Coverage analysis module.
 
@@ -11,6 +11,7 @@ from datetime import datetime
 
 from .coverage_models import MigrationStatus, MigrationSummary, TestMapping
 from .coverage_stats import CoverageStats
+from typing import Any
 
 
 class CoverageAnalyzer:

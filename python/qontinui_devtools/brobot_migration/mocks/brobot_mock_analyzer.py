@@ -107,7 +107,7 @@ class BrobotMockAnalyzer(MockAnalyzer):
             model_name=mock_usage.mock_class,
             elements={},
             actions=[],
-            state_properties={}
+            state_properties={},
         )
 
         # Extract elements from configuration

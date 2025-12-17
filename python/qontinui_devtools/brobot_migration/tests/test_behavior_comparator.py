@@ -1,20 +1,9 @@
 """
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
 Integration tests for the BehaviorComparator class.
 """
 
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock, patch
 
 from qontinui.test_migration.core.models import TestFile, TestResult, TestType
@@ -353,11 +342,11 @@ class TestBehaviorComparator:
         ):
 
             # Set up mock results - matching outputs
-            def java_side_effect(component, test_input) -> Any:
+            def java_side_effect(component: Any, test_input: Any) -> Any:
                 a, b = test_input
                 return str(a + b)
 
-            def python_side_effect(component, test_input) -> Any:
+            def python_side_effect(component: Any, test_input: Any) -> Any:
                 a, b = test_input
                 return str(a + b)
 
@@ -388,11 +377,11 @@ class TestBehaviorComparator:
         ):
 
             # Set up mock results - different outputs
-            def java_side_effect(component, test_input) -> Any:
+            def java_side_effect(component: Any, test_input: Any) -> Any:
                 a, b = test_input
                 return str(a * b)  # Correct multiplication
 
-            def python_side_effect(component, test_input) -> Any:
+            def python_side_effect(component: Any, test_input: Any) -> Any:
                 a, b = test_input
                 return str(a + b)  # Wrong - addition instead
 

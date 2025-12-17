@@ -341,7 +341,7 @@ def stress_test_config() -> dict[str, int]:
     }
 
 
-def measure_overhead(func: Callable, *args, **kwargs) -> dict[str, float]:
+def measure_overhead(func: Callable, *args: Any, **kwargs: Any) -> dict[str, float]:
     """Measure execution overhead of a function.
 
     Returns:

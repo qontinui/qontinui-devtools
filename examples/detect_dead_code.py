@@ -1,6 +1,6 @@
 """Example: Detect dead code in a Python project.
 
-from typing import Any
+from typing import Any, Any
 
 This example demonstrates how to use the DeadCodeDetector to find
 unused functions, classes, imports, and variables in a codebase.
@@ -9,6 +9,7 @@ unused functions, classes, imports, and variables in a codebase.
 from pathlib import Path
 
 from qontinui_devtools.code_quality import DeadCodeDetector
+from typing import Any
 
 
 def main() -> None:

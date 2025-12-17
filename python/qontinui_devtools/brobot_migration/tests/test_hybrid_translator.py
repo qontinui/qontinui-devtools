@@ -3,6 +3,7 @@ Unit tests for HybridTestTranslator.
 """
 
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock, patch
 
 from qontinui.test_migration.core.models import MockUsage, TestFile, TestMethod, TestType

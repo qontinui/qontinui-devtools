@@ -250,7 +250,7 @@ class TestSRPAnalyzer:
         """Get path to test fixtures."""
         return Path(__file__).parent.parent / "fixtures" / "srp"
 
-    def test_analyze_multi_responsibility_class(self, analyzer, fixtures_path) -> None:
+    def test_analyze_multi_responsibility_class(self, analyzer: Any, fixtures_path: Any) -> None:
         """Test analyzing class with multiple responsibilities."""
         file_path = fixtures_path / "multi_responsibility.py"
 
@@ -263,7 +263,7 @@ class TestSRPAnalyzer:
         assert len(violation.clusters) >= 2  # Should detect multiple responsibilities
         assert violation.severity in ("critical", "high", "medium")
 
-    def test_analyze_single_responsibility_class(self, analyzer, fixtures_path) -> None:
+    def test_analyze_single_responsibility_class(self, analyzer: Any, fixtures_path: Any) -> None:
         """Test analyzing class with single responsibility."""
         file_path = fixtures_path / "single_responsibility.py"
 
@@ -274,7 +274,7 @@ class TestSRPAnalyzer:
         user_repo_violations = [v for v in violations if v.class_name == "UserRepository"]
         assert len(user_repo_violations) == 0
 
-    def test_severity_calculation(self, analyzer) -> None:
+    def test_severity_calculation(self, analyzer: Any) -> None:
         """Test severity calculation based on cluster count."""
         assert analyzer._calculate_severity(2) == "medium"
         assert analyzer._calculate_severity(3) == "high"
@@ -282,7 +282,7 @@ class TestSRPAnalyzer:
         assert analyzer._calculate_severity(5) == "critical"
         assert analyzer._calculate_severity(10) == "critical"
 
-    def test_generate_recommendation(self, analyzer) -> None:
+    def test_generate_recommendation(self, analyzer: Any) -> None:
         """Test recommendation generation."""
         clusters = [
             MethodCluster("Data Access", ["get", "fetch"], {"get", "fetch"}, 0.8),
@@ -294,13 +294,13 @@ class TestSRPAnalyzer:
         assert "UserManager" in recommendation
         assert "2" in recommendation or "two" in recommendation.lower()
 
-    def test_suggest_class_name(self, analyzer) -> None:
+    def test_suggest_class_name(self, analyzer: Any) -> None:
         """Test class name suggestions for extracted responsibilities."""
         assert analyzer._suggest_class_name("UserManager", "Data Access") == "UserRepository"
         assert analyzer._suggest_class_name("UserManager", "Validation") == "UserValidator"
         assert analyzer._suggest_class_name("UserService", "Persistence") == "UserPersister"
 
-    def test_generate_refactoring_suggestions(self, analyzer) -> None:
+    def test_generate_refactoring_suggestions(self, analyzer: Any) -> None:
         """Test refactoring suggestion generation."""
         clusters = [
             MethodCluster("Data Access", ["get", "fetch"], {"get", "fetch"}, 0.8),
@@ -313,14 +313,14 @@ class TestSRPAnalyzer:
         assert any("Data Access" in s for s in suggestions)
         assert any("Validation" in s for s in suggestions)
 
-    def test_analyze_directory_stats(self, analyzer, fixtures_path) -> None:
+    def test_analyze_directory_stats(self, analyzer: Any, fixtures_path: Any) -> None:
         """Test that analyzer collects statistics."""
         analyzer.analyze_directory(str(fixtures_path), min_methods=5)
 
         assert analyzer.stats["files_analyzed"] > 0
         assert analyzer.stats["classes_analyzed"] > 0
 
-    def test_generate_report(self, analyzer, fixtures_path) -> None:
+    def test_generate_report(self, analyzer: Any, fixtures_path: Any) -> None:
         """Test report generation."""
         violations = analyzer.analyze_directory(str(fixtures_path), min_methods=5)
         report = analyzer.generate_report(violations)
@@ -328,12 +328,12 @@ class TestSRPAnalyzer:
         assert "SRP VIOLATION REPORT" in report
         assert "Total violations:" in report
 
-    def test_generate_report_no_violations(self, analyzer) -> None:
+    def test_generate_report_no_violations(self, analyzer: Any) -> None:
         """Test report generation with no violations."""
         report = analyzer.generate_report([])
         assert "No SRP violations detected" in report
 
-    def test_analyze_with_timing(self, analyzer, fixtures_path) -> None:
+    def test_analyze_with_timing(self, analyzer: Any, fixtures_path: Any) -> None:
         """Test analysis with timing measurement."""
         violations, execution_time = analyzer.analyze_with_timing(str(fixtures_path), min_methods=5)
 

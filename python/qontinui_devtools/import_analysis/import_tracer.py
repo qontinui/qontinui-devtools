@@ -165,7 +165,7 @@ class ImportHook:
         """
         self.tracer = tracer
 
-    def find_module(self, fullname: str, path: list[str] | None = None) -> None:
+    def find_module(self, fullname: str, path: Any = None) -> None:
         """Called for every import attempt.
 
         Args:
@@ -212,7 +212,7 @@ class ImportHook:
         # Return None so other import hooks/finders handle the actual import
         return None
 
-    def find_spec(self, fullname: str, path: list[str] | None = None, target=None) -> None:
+    def find_spec(self, fullname: str, path: Any = None, target: Any = None) -> None:
         """Modern import hook interface (Python 3.4+).
 
         Args:
@@ -263,7 +263,7 @@ class ImportTracer:
         self._installed = True
         return self
 
-    def __exit__(self, *args) -> None:
+    def __exit__(self, *args: Any) -> None:
         """Remove the import hook when exiting context.
 
         Args:

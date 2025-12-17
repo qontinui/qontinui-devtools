@@ -168,7 +168,7 @@ class BrobotConverter:
         segments = self.segmenter.segment_screen(img)
 
         # Convert segments to Elements
-        elements=[],
+        elements = []
         for i, segment in enumerate(segments):
             element = self._segment_to_element(segment, state_name, i)
             elements.append(element)

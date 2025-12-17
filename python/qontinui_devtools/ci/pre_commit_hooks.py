@@ -1,6 +1,6 @@
 """Pre-commit hooks for qontinui-devtools.
 
-from typing import Any
+from typing import Any, Any
 
 This module provides pre-commit hooks for local development to catch
 code quality issues before they are committed.
@@ -13,6 +13,7 @@ from pathlib import Path
 
 import click
 from rich.console import Console
+from typing import Any
 
 console = Console()
 

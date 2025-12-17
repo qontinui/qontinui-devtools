@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Confidence scoring logic for fix suggestions.
 """
@@ -7,6 +7,7 @@ Confidence scoring logic for fix suggestions.
 import re
 
 from ..fix_models import FixSuggestion, MigrationIssuePattern
+from typing import Any
 
 
 class SuggestionScorer:

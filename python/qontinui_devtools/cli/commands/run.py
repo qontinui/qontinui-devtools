@@ -74,7 +74,7 @@ def run(
     cloud_url: str | None,
     api_token: str | None,
     project_id: str | None,
-):
+) -> None:
     """Run a workflow from a JSON configuration file.
 
     This command loads a Qontinui configuration and executes a specific workflow.

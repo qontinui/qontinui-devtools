@@ -182,7 +182,7 @@ class Counter:
         """Test detection of read-write conflicts."""
         test_code = """
 class SharedBuffer:
-    _buffer=[],
+    _buffer = []
 
     def add(self, item) -> None:
         self._buffer.append(item)  # Write
@@ -440,7 +440,7 @@ class Cache1:
         file2.write_text(
             """
 class Cache2:
-    _data=[],
+    _data = []
 
     def append(self, item) -> None:
         self._data.append(item)
@@ -544,7 +544,7 @@ class MultiWrite:
         """Test that single unprotected write is high severity."""
         test_code = """
 class SingleWrite:
-    _data=[],
+    _data = []
 
     def append(self, item) -> None:
         self._data.append(item)

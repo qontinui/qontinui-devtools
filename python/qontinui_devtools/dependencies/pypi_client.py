@@ -278,7 +278,7 @@ class PyPIClient:
                         pass
 
         # Extract dependencies from requires_dist
-        dependencies=[],
+        dependencies = []
         requires_dist = info_data.get("requires_dist") or []
         for req in requires_dist:
             if isinstance(req, str):

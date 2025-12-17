@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Comprehensive security analyzer for Python code.
 
@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 
 from .models import SecurityReport, Severity, Vulnerability, VulnerabilityType
+from typing import Any
 
 
 class SecurityAnalyzer:

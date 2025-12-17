@@ -1,22 +1,11 @@
 """
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
 Demonstration of the complete end-to-end migration workflow.
 """
 
 import sys
 import tempfile
 from pathlib import Path
+from typing import Any
 
 # Add the current directory to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent))
@@ -104,7 +93,7 @@ public class DatabaseIntegrationTest {
     )
 
 
-def demonstrate_discovery_phase(orchestrator, source_dir: Path) -> Any:
+def demonstrate_discovery_phase(orchestrator: Any, source_dir: Path) -> Any:
     """Demonstrate the test discovery phase."""
     print("Phase 1: Test Discovery")
     print("-" * 30)
@@ -126,7 +115,7 @@ def demonstrate_discovery_phase(orchestrator, source_dir: Path) -> Any:
     return discovered_tests
 
 
-def demonstrate_validation_phase(orchestrator, target_dir: Path) -> None:
+def demonstrate_validation_phase(orchestrator: Any, target_dir: Path) -> Any:
     """Demonstrate the validation phase."""
     print("Phase 2: Test Validation")
     print("-" * 30)

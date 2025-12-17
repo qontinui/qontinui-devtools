@@ -1,13 +1,10 @@
 """
-from typing import Any
-
-from typing import Any
-
 Integration tests for the migration orchestrator.
 """
 
 import tempfile
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
@@ -20,7 +17,7 @@ class TestMigrationOrchestratorTests:
     """Test cases for the TestMigrationOrchestrator class."""
 
     @pytest.fixture
-    def temp_directories(self) -> None:
+    def temp_directories(self) -> Any:
         """Create temporary directories for testing."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -32,7 +29,7 @@ class TestMigrationOrchestratorTests:
             yield source_dir, target_dir
 
     @pytest.fixture
-    def sample_config(self, temp_directories) -> Any:
+    def sample_config(self, temp_directories: Any) -> Any:
         """Create a sample migration configuration."""
         source_dir, target_dir = temp_directories
         return MigrationConfig(
@@ -46,12 +43,12 @@ class TestMigrationOrchestratorTests:
         )
 
     @pytest.fixture
-    def orchestrator(self, sample_config) -> Any:
+    def orchestrator(self, sample_config: Any) -> Any:
         """Create a migration orchestrator instance."""
         return TestMigrationOrchestrator(sample_config)
 
     @pytest.fixture
-    def sample_java_test(self, temp_directories) -> None:
+    def sample_java_test(self, temp_directories: Any) -> Any:
         """Create a sample Java test file."""
         source_dir, _ = temp_directories
         test_file = source_dir / "SampleTest.java"
@@ -72,7 +69,7 @@ public class SampleTest {
         test_file.write_text(test_content)
         return test_file
 
-    def test_orchestrator_initialization(self, sample_config) -> None:
+    def test_orchestrator_initialization(self, sample_config: Any) -> None:
         """Test that the orchestrator initializes correctly."""
         orchestrator = TestMigrationOrchestrator(sample_config)
 
@@ -107,14 +104,14 @@ public class SampleTest {
     @patch("qontinui.src.qontinui.test_migration.orchestrator.PytestRunner")
     def test_migrate_test_suite_success(
         self,
-        mock_runner,
-        mock_translator,
-        mock_classifier,
-        mock_scanner,
-        orchestrator,
-        temp_directories,
-        sample_java_test,
-    ):
+        mock_runner: Any,
+        mock_translator: Any,
+        mock_classifier: Any,
+        mock_scanner: Any,
+        orchestrator: Any,
+        temp_directories: Any,
+        sample_java_test: Any,
+    ) -> None:
         """Test successful test suite migration."""
         source_dir, target_dir = temp_directories
 
@@ -166,7 +163,7 @@ public class SampleTest {
         assert len(orchestrator.migration_state["failed_migrations"]) == 0
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.BrobotTestScanner")
-    def test_migrate_test_suite_no_tests_found(self, mock_scanner, orchestrator, temp_directories) -> None:
+    def test_migrate_test_suite_no_tests_found(self, mock_scanner: Any, orchestrator: Any, temp_directories: Any) -> None:
         """Test migration when no tests are found."""
         source_dir, target_dir = temp_directories
 
@@ -186,13 +183,13 @@ public class SampleTest {
     @patch("qontinui.src.qontinui.test_migration.orchestrator.HybridTestTranslator")
     def test_migrate_test_suite_translation_failure(
         self,
-        mock_translator,
-        mock_classifier,
-        mock_scanner,
-        orchestrator,
-        temp_directories,
-        sample_java_test,
-    ):
+        mock_translator: Any,
+        mock_classifier: Any,
+        mock_scanner: Any,
+        orchestrator: Any,
+        temp_directories: Any,
+        sample_java_test: Any,
+    ) -> None:
         """Test migration with translation failures."""
         source_dir, target_dir = temp_directories
 
@@ -228,7 +225,7 @@ public class SampleTest {
         assert "Translation failed" in failed_migration["error"]
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.PytestRunner")
-    def test_validate_migration(self, mock_runner, orchestrator, temp_directories) -> None:
+    def test_validate_migration(self, mock_runner: Any, orchestrator: Any, temp_directories: Any) -> None:
         """Test migration validation."""
         _, target_dir = temp_directories
 
@@ -255,7 +252,7 @@ public class SampleTest {
         assert results.passed_tests == 1
         assert results.failed_tests == 0
 
-    def test_get_migration_progress(self, orchestrator) -> None:
+    def test_get_migration_progress(self, orchestrator: Any) -> None:
         """Test migration progress tracking."""
         # Initial progress
         progress = orchestrator.get_migration_progress()
@@ -282,7 +279,7 @@ public class SampleTest {
         assert progress["validation_status"] == "pending"
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.TestFailureAnalyzer")
-    def test_recover_from_failure(self, mock_analyzer, orchestrator) -> None:
+    def test_recover_from_failure(self, mock_analyzer: Any, orchestrator: Any) -> None:
         """Test failure recovery mechanism."""
         # Mock failure analysis
         mock_analysis = Mock()
@@ -306,7 +303,7 @@ public class SampleTest {
         # Current implementation should return False
         assert result is False
 
-    def test_generate_target_path_preserve_structure(self, orchestrator, temp_directories) -> None:
+    def test_generate_target_path_preserve_structure(self, orchestrator: Any, temp_directories: Any) -> None:
         """Test target path generation with structure preservation."""
         source_dir, target_dir = temp_directories
 
@@ -331,7 +328,7 @@ public class SampleTest {
         assert "com" in str(target_path)
         assert "example" in str(target_path)
 
-    def test_generate_target_path_flat_structure(self, temp_directories) -> None:
+    def test_generate_target_path_flat_structure(self, temp_directories: Any) -> None:
         """Test target path generation without structure preservation."""
         source_dir, target_dir = temp_directories
 
@@ -361,7 +358,7 @@ public class SampleTest {
         assert target_path.parent == target_dir
         assert target_path.name == "Sample_test.py"
 
-    def test_error_handling_in_migration(self, orchestrator, temp_directories) -> None:
+    def test_error_handling_in_migration(self, orchestrator: Any, temp_directories: Any) -> None:
         """Test error handling during migration process."""
         source_dir, target_dir = temp_directories
 
@@ -373,7 +370,7 @@ public class SampleTest {
         # Should handle gracefully and return empty results
         assert results.total_tests == 0
 
-    def test_logging_configuration(self, sample_config) -> None:
+    def test_logging_configuration(self, sample_config: Any) -> None:
         """Test logging configuration based on diagnostic level."""
         # Test detailed logging
         config_detailed = sample_config
@@ -398,7 +395,7 @@ class TestMigrationOrchestratorIntegration:
     """Integration tests for the migration orchestrator with real components."""
 
     @pytest.fixture
-    def integration_setup(self) -> None:
+    def integration_setup(self) -> Any:
         """Set up integration test environment."""
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
@@ -441,7 +438,7 @@ public class SimpleTest {
 
             yield source_dir, target_dir, config
 
-    def test_end_to_end_migration_workflow(self, integration_setup) -> None:
+    def test_end_to_end_migration_workflow(self, integration_setup: Any) -> None:
         """Test complete end-to-end migration workflow."""
         source_dir, target_dir, config = integration_setup
 
@@ -463,7 +460,7 @@ public class SimpleTest {
         assert progress["discovered_tests"] > 0
 
     @pytest.mark.slow
-    def test_migration_with_real_pytest_execution(self, integration_setup) -> None:
+    def test_migration_with_real_pytest_execution(self, integration_setup: Any) -> None:
         """Test migration with actual pytest execution (marked as slow)."""
         source_dir, target_dir, config = integration_setup
 

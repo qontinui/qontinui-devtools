@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock, patch
 
 from qontinui.test_migration.core.models import TestResult, TestResults
@@ -92,7 +93,7 @@ class TestPytestRunner:
         assert result.test_name == "test.py"
 
     @patch("subprocess.run")
-    def test_run_single_test_success(self, mock_subprocess) -> None:
+    def test_run_single_test_success(self, mock_subprocess: Any) -> None:
         """Test successful single test execution."""
         # Mock successful subprocess result
         mock_result = Mock()
@@ -124,7 +125,7 @@ class TestPytestRunner:
                 test_file.unlink()
 
     @patch("subprocess.run")
-    def test_run_single_test_failure(self, mock_subprocess) -> None:
+    def test_run_single_test_failure(self, mock_subprocess: Any) -> None:
         """Test single test execution with failure."""
         # Mock failed subprocess result
         mock_result = Mock()
@@ -148,7 +149,7 @@ class TestPytestRunner:
                 test_file.unlink()
 
     @patch("subprocess.run")
-    def test_run_single_test_timeout(self, mock_subprocess) -> None:
+    def test_run_single_test_timeout(self, mock_subprocess: Any) -> None:
         """Test single test execution with timeout."""
         # Mock timeout exception
         mock_subprocess.side_effect = subprocess.TimeoutExpired("pytest", 300)
@@ -190,7 +191,7 @@ class TestPytestRunner:
         assert result.execution_time >= 0
 
     @patch("subprocess.run")
-    def test_run_test_suite_success(self, mock_subprocess) -> None:
+    def test_run_test_suite_success(self, mock_subprocess: Any) -> None:
         """Test successful test suite execution."""
         # Mock successful subprocess result
         mock_result = Mock()
@@ -218,7 +219,7 @@ test_example.py::test_function2 PASSED
             mock_subprocess.assert_called_once()
 
     @patch("subprocess.run")
-    def test_run_test_suite_timeout(self, mock_subprocess) -> None:
+    def test_run_test_suite_timeout(self, mock_subprocess: Any) -> None:
         """Test test suite execution with timeout."""
         # Mock timeout exception
         mock_subprocess.side_effect = subprocess.TimeoutExpired("pytest", 1800)
@@ -287,7 +288,7 @@ AssertionError
         assert "AssertionError" in stack_trace
 
     @patch("subprocess.run")
-    def test_get_test_environment_info(self, mock_subprocess) -> None:
+    def test_get_test_environment_info(self, mock_subprocess: Any) -> None:
         """Test getting test environment information."""
         # Mock subprocess calls for version info
         mock_subprocess.side_effect = [
@@ -304,7 +305,7 @@ AssertionError
         assert "pytest 7.0.0" in env_info["pytest_version"]
 
     @patch("subprocess.run")
-    def test_get_test_environment_info_error(self, mock_subprocess) -> None:
+    def test_get_test_environment_info_error(self, mock_subprocess: Any) -> None:
         """Test getting test environment info when commands fail."""
         mock_subprocess.side_effect = Exception("Command failed")
 
@@ -314,7 +315,7 @@ AssertionError
         assert "Failed to get environment info" in env_info["error"]
 
     @patch("subprocess.run")
-    def test_validate_test_environment_success(self, mock_subprocess) -> None:
+    def test_validate_test_environment_success(self, mock_subprocess: Any) -> None:
         """Test successful test environment validation."""
         # Mock successful subprocess calls
         mock_subprocess.return_value = Mock(returncode=0, stdout="", stderr="")
@@ -325,7 +326,7 @@ AssertionError
         assert mock_subprocess.call_count == 2  # Python version + pytest version
 
     @patch("subprocess.run")
-    def test_validate_test_environment_python_error(self, mock_subprocess) -> None:
+    def test_validate_test_environment_python_error(self, mock_subprocess: Any) -> None:
         """Test test environment validation with Python error."""
         # Mock failed Python call
         mock_subprocess.side_effect = [
@@ -339,7 +340,7 @@ AssertionError
         assert any("Python executable not working" in error for error in errors)
 
     @patch("subprocess.run")
-    def test_validate_test_environment_pytest_error(self, mock_subprocess) -> None:
+    def test_validate_test_environment_pytest_error(self, mock_subprocess: Any) -> None:
         """Test test environment validation with pytest error."""
         # Mock successful Python but failed pytest
         mock_subprocess.side_effect = [
@@ -353,7 +354,7 @@ AssertionError
         assert any("pytest is not available" in error for error in errors)
 
     @patch("subprocess.run")
-    def test_validate_test_environment_exception(self, mock_subprocess) -> None:
+    def test_validate_test_environment_exception(self, mock_subprocess: Any) -> None:
         """Test test environment validation with exception."""
         mock_subprocess.side_effect = Exception("Command not found")
 
@@ -363,7 +364,7 @@ AssertionError
         assert any("Cannot execute Python" in error for error in errors)
 
     @patch("subprocess.run")
-    def test_run_specific_tests(self, mock_subprocess) -> None:
+    def test_run_specific_tests(self, mock_subprocess: Any) -> None:
         """Test running specific tests with patterns."""
         # Mock successful subprocess result
         mock_result = Mock()

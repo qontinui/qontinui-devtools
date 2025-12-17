@@ -409,7 +409,7 @@ class PythonTestGenerator(TestTranslator):
         Returns:
             List of validation errors (empty if valid)
         """
-        errors=[],
+        errors = []
 
         # Check for basic Python syntax issues
         try:

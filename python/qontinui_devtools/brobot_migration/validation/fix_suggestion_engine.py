@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Fix suggestion engine for providing automated repair recommendations for test migration issues.
 
@@ -17,6 +17,7 @@ from .strategies.setup_suggestions import SetupSuggestionStrategy
 from .strategies.suggestion_formatter import SuggestionFormatter
 from .strategies.suggestion_scorer import SuggestionScorer
 from .strategies.syntax_suggestions import SyntaxSuggestionStrategy
+from typing import Any
 
 
 class FixSuggestionEngine:

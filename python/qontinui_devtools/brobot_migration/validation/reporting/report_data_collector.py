@@ -1,11 +1,12 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Report data collection and aggregation for diagnostic reporting.
 """
 
 import re
 from pathlib import Path
+from typing import Any
 
 
 class ReportDataCollector:

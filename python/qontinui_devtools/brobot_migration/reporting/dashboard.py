@@ -84,7 +84,7 @@ class MigrationReportingDashboard:
         output_file: Path,
         format_type: str = "html",
         template_file: Path | None = None,
-    ):
+    ) -> None:
         """
         Save report in the specified format.
 
@@ -248,7 +248,7 @@ class MigrationReportingDashboard:
 
     def _save_html_report(
         self, report_data: dict[str, Any], output_file: Path, template_file: Path | None
-    ):
+    ) -> None:
         """Save HTML report."""
         if template_file and template_file.exists():
             template_content = template_file.read_text()

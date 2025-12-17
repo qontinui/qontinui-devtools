@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Assertion fix suggestion strategies for JUnit to pytest migration.
 """
@@ -9,6 +9,7 @@ from pathlib import Path
 
 from ...core.models import TestFile
 from ..fix_models import FixComplexity, FixSuggestion, FixType
+from typing import Any
 
 
 class AssertionSuggestionStrategy:

@@ -72,7 +72,7 @@ class HybridTestTranslator(TestTranslator):
 
     def __init__(
         self,
-        llm_client=None,
+        llm_client: Any = None,
         default_strategy: TranslationStrategy = TranslationStrategy.HYBRID_UTILITY_FIRST,
         enable_caching: bool = True,
     ) -> None:
@@ -171,7 +171,7 @@ class HybridTestTranslator(TestTranslator):
                 translation_time=time.time() - start_time,
                 errors=[str(e)],
                 warnings=[],
-                improvement_suggestions=[]
+                improvement_suggestions=[],
             )
 
     def translate_test_method(self, method_code: str) -> str:
@@ -328,7 +328,7 @@ class HybridTestTranslator(TestTranslator):
                 translation_time=0.0,  # Will be set by caller
                 errors=validation_errors,
                 warnings=[],
-                improvement_suggestions=[]
+                improvement_suggestions=[],
             )
         except Exception as e:
             raise TranslationException(f"Utility translation failed: {str(e)}") from e
@@ -357,8 +357,8 @@ class HybridTestTranslator(TestTranslator):
 
     def _translate_hybrid_utility_first(self, test_file: TestFile) -> TranslationResult:
         """Translate using utility first, fall back to LLM if needed."""
-        errors=[],
-        warnings=[],
+        errors = []
+        warnings = []
 
         # Try utility translation first
         try:
@@ -391,8 +391,8 @@ class HybridTestTranslator(TestTranslator):
 
     def _translate_hybrid_llm_first(self, test_file: TestFile) -> TranslationResult:
         """Translate using LLM first, fall back to utility if needed."""
-        errors=[],
-        warnings=[],
+        errors = []
+        warnings = []
 
         # Try LLM translation first
         if self.llm_translator:

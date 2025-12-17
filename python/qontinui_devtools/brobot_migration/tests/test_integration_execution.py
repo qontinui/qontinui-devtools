@@ -4,6 +4,7 @@ Integration tests for test generation and execution workflow.
 
 import tempfile
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
@@ -79,7 +80,7 @@ class TestExecutionIntegration:
             assert "assert true" in saved_content
 
     @patch("subprocess.run")
-    def test_generate_and_run_test_file(self, mock_subprocess) -> None:
+    def test_generate_and_run_test_file(self, mock_subprocess: Any) -> None:
         """Test generating a test file and running it with pytest."""
         # Mock successful pytest execution
         mock_result = Mock()
@@ -122,7 +123,7 @@ class TestExecutionIntegration:
             assert str(target_path) in call_args
 
     @patch("subprocess.run")
-    def test_generate_and_run_test_suite(self, mock_subprocess) -> None:
+    def test_generate_and_run_test_suite(self, mock_subprocess: Any) -> None:
         """Test generating multiple test files and running as a suite."""
         # Mock successful pytest execution
         mock_result = Mock()

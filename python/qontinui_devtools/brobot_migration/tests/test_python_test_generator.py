@@ -99,7 +99,7 @@ class TestPythonTestGenerator:
             test_type=TestType.UNIT,
             class_name="UserServiceTest",
             dependencies=[],
-            mock_usage=[]
+            mock_usage=[],
         )
 
         imports = self.generator._generate_imports(test_file)
@@ -134,7 +134,7 @@ class TestPythonTestGenerator:
             test_type=TestType.INTEGRATION,
             class_name="UserServiceIntegrationTest",
             dependencies=[],
-            mock_usage=[]
+            mock_usage=[],
         )
 
         imports = self.generator._generate_imports(test_file)

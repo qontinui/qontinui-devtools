@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 from typing import Any
 
@@ -14,6 +14,7 @@ from qontinui.test_migration.translation.spring_test_adapter import (
     DependencyContainer,
     SpringTestAdapter,
 )
+from typing import Any
 
 
 class TestSpringTestAdapter:

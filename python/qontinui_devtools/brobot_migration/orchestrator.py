@@ -457,7 +457,7 @@ class TestMigrationOrchestrator(MigrationOrchestrator):
             "execution_time": execution_results.execution_time,
         }
 
-    def _apply_automated_fixes(self, failed_test: str, analysis) -> bool:
+    def _apply_automated_fixes(self, failed_test: str, analysis: Any) -> bool:
         """Apply automated fixes based on failure analysis."""
         # This is a placeholder for automated fix application
         # In practice, this would implement specific fix strategies

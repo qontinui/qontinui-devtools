@@ -25,7 +25,7 @@ try:
 except ImportError:
     # Mock implementations
     class ActionProfiler:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.profiles: list[Any] = []
@@ -36,8 +36,8 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def profile(self, func) -> Any:
-            def wrapper(*args, **kwargs) -> Any:
+        def profile(self, func: Any) -> Any:
+            def wrapper(*args: Any, **kwargs: Any) -> Any:
                 start = time.perf_counter()
                 result = func(*args, **kwargs)
                 duration = time.perf_counter() - start
@@ -55,12 +55,12 @@ except ImportError:
                 "total_time": sum(p["duration"] for p in self.profiles),
             }
 
-        def export(self, output_path, format="json") -> None:
+        def export(self, output_path: Any, format: Any = "json") -> None:
             with open(output_path, "w") as f:
                 json.dump(self.get_profile_data(), f, indent=2)
 
     class EventTracer:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.events: list[Any] = []
@@ -71,21 +71,21 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def trace_event(self, event_type, data) -> None:
+        def trace_event(self, event_type: Any, data: Any) -> None:
             if self.is_running:
                 self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
 
-        def get_events(self, event_type=None) -> Any:
+        def get_events(self, event_type: Any = None) -> Any:
             if event_type:
                 return [e for e in self.events if e["type"] == event_type]
             return self.events
 
-        def export(self, output_path, format="json") -> None:
+        def export(self, output_path: Any, format: Any = "json") -> None:
             with open(output_path, "w") as f:
                 json.dump(self.events, f, indent=2)
 
     class MemoryProfiler:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.snapshots: list[Any] = []
@@ -115,12 +115,12 @@ except ImportError:
             peak = max(s["memory_mb"] for s in self.snapshots)
             return {"current_mb": current, "peak_mb": peak}
 
-        def export(self, output_path, format="json") -> None:
+        def export(self, output_path: Any, format: Any = "json") -> None:
             with open(output_path, "w") as f:
                 json.dump(self.snapshots, f, indent=2)
 
     class PerformanceDashboard:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.metrics: dict[Any, Any] = {}
@@ -131,7 +131,7 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def update_metrics(self, metrics) -> None:
+        def update_metrics(self, metrics: Any) -> None:
             self.metrics.update(metrics)
 
         def get_metrics(self) -> Any:
@@ -143,13 +143,7 @@ except ImportError:
         def __init__(self) -> None:
             pass
 
-        def generate_report(
-            self,
-            profiler_data: dict[str, Any],
-            event_data: list[dict[str, Any]],
-            memory_data: dict[str, Any],
-            output_path: Path,
-        ):
+        def generate_report(self, profiler_data: dict[str, Any], event_data: list[dict[str, Any]], memory_data: dict[str, Any], output_path: Path) -> None:
             """Generate comprehensive runtime monitoring report."""
             report = {
                 "timestamp": time.time(),
@@ -213,14 +207,7 @@ except ImportError:
 class TestFullMonitoringWorkflow:
     """Test complete monitoring workflow from start to finish."""
 
-    def test_analyze_profile_report_workflow(
-        self,
-        sample_qontinui_project,
-        temp_test_dir,
-        profiler_config,
-        event_tracer_config,
-        memory_profiler_config,
-    ) -> None:
+    def test_analyze_profile_report_workflow(self, sample_qontinui_project: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
         """Test full workflow: analyze + profile + generate report."""
         # Step 1: Initialize monitoring tools
         profiler = ActionProfiler(profiler_config)
@@ -281,9 +268,7 @@ class TestFullMonitoringWorkflow:
             assert "Total Function Calls" in content
             assert "Total Events" in content
 
-    def test_incremental_monitoring_workflow(
-        self, sample_action_instance, temp_test_dir, profiler_config, event_tracer_config
-    ) -> None:
+    def test_incremental_monitoring_workflow(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any) -> None:
         """Test workflow with incremental monitoring and checkpoints."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -346,16 +331,7 @@ class TestFullMonitoringWorkflow:
         checkpoint_events = tracer.get_events("checkpoint")
         assert len(checkpoint_events) == 3
 
-    def test_multi_action_monitoring_workflow(
-        self,
-        sample_action_instance,
-        memory_intensive_action,
-        concurrent_action,
-        temp_test_dir,
-        profiler_config,
-        event_tracer_config,
-        memory_profiler_config,
-    ) -> None:
+    def test_multi_action_monitoring_workflow(self, sample_action_instance: Any, memory_intensive_action: Any, concurrent_action: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
         """Test monitoring workflow with multiple different actions."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -432,7 +408,7 @@ class TestFullMonitoringWorkflow:
 class TestCLIEndToEnd:
     """Test CLI commands end-to-end."""
 
-    def test_runtime_profile_command(self, sample_qontinui_project, temp_test_dir) -> None:
+    def test_runtime_profile_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
         """Test 'qontinui-devtools runtime profile' CLI command."""
         # This test would run the actual CLI command
         # For now, we'll simulate it
@@ -454,7 +430,7 @@ class TestCLIEndToEnd:
             data = json.load(f)
         assert "total_calls" in data
 
-    def test_runtime_trace_command(self, sample_qontinui_project, temp_test_dir) -> None:
+    def test_runtime_trace_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
         """Test 'qontinui-devtools runtime trace' CLI command."""
         output_file = temp_test_dir / "trace_output.json"
 
@@ -475,7 +451,7 @@ class TestCLIEndToEnd:
             events = json.load(f)
         assert len(events) > 0
 
-    def test_runtime_monitor_command(self, sample_qontinui_project, temp_test_dir) -> None:
+    def test_runtime_monitor_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
         """Test 'qontinui-devtools runtime monitor' CLI command."""
         # This would start all monitoring tools
         profiler = ActionProfiler()
@@ -503,7 +479,7 @@ class TestCLIEndToEnd:
         assert (temp_test_dir / "events.json").exists()
         assert (temp_test_dir / "memory.json").exists()
 
-    def test_runtime_report_command(self, sample_qontinui_project, temp_test_dir) -> None:
+    def test_runtime_report_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
         """Test 'qontinui-devtools runtime report' CLI command."""
         # Generate sample data
         profiler = ActionProfiler()
@@ -542,14 +518,7 @@ class TestCLIEndToEnd:
 class TestReportGeneration:
     """Test comprehensive report generation with all data."""
 
-    def test_generate_json_report(
-        self,
-        sample_action_instance,
-        temp_test_dir,
-        profiler_config,
-        event_tracer_config,
-        memory_profiler_config,
-    ) -> None:
+    def test_generate_json_report(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
         """Test JSON report generation with all monitoring data."""
         # Collect data
         profiler = ActionProfiler(profiler_config)
@@ -601,14 +570,7 @@ class TestReportGeneration:
         assert summary["total_events"] > 0
         assert summary["peak_memory_mb"] >= 0
 
-    def test_generate_html_report(
-        self,
-        sample_action_instance,
-        temp_test_dir,
-        profiler_config,
-        event_tracer_config,
-        memory_profiler_config,
-    ) -> None:
+    def test_generate_html_report(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
         """Test HTML report generation with all monitoring data."""
         # Collect data
         profiler = ActionProfiler(profiler_config)
@@ -654,7 +616,7 @@ class TestReportGeneration:
         assert "Total Events" in html
         assert "Peak Memory" in html
 
-    def test_report_with_empty_data(self, temp_test_dir) -> None:
+    def test_report_with_empty_data(self, temp_test_dir: Any) -> None:
         """Test report generation with minimal/empty data."""
         report_generator = RuntimeReportGenerator()
         report_path = temp_test_dir / "empty_report.json"
@@ -674,9 +636,7 @@ class TestReportGeneration:
         assert report["summary"]["total_calls"] == 0
         assert report["summary"]["total_events"] == 0
 
-    def test_report_with_large_dataset(
-        self, sample_action_instance, temp_test_dir, profiler_config, event_tracer_config
-    ) -> None:
+    def test_report_with_large_dataset(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any) -> None:
         """Test report generation with large amounts of data."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)

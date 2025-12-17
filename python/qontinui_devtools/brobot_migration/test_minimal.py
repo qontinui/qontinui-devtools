@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Test the minimal orchestrator functionality.
 """
@@ -7,6 +7,7 @@ Test the minimal orchestrator functionality.
 import sys
 import tempfile
 from pathlib import Path
+from typing import Any
 
 # Add the current directory to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent))

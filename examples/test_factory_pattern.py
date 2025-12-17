@@ -1,6 +1,6 @@
 """Example: Testing HAL Factory pattern for race conditions.
 
-from typing import Any
+from typing import Any, Any
 
 from typing import Any
 
@@ -12,6 +12,7 @@ import threading
 import time
 
 from qontinui_devtools.concurrency import RaceConditionTester
+from typing import Any
 
 
 # Simulated HAL Factory (similar to qontinui.hal.factory)

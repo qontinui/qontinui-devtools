@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Example demonstrating inline workflow validation.
 
@@ -10,6 +10,7 @@ embedded within action configurations.
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))

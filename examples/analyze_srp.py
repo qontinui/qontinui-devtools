@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Example script demonstrating SRP Analyzer usage.
 
-from typing import Any
+from typing import Any, Any
 
 This script shows how to use the SRP Analyzer programmatically
 to detect Single Responsibility Principle violations in Python code.
@@ -9,6 +9,7 @@ to detect Single Responsibility Principle violations in Python code.
 
 import sys
 from pathlib import Path
+from typing import Any
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))

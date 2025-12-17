@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-from typing import Any
+from typing import Any, Any
 
 Test the complete migration system functionality.
 """
 
 import sys
 from pathlib import Path
+from typing import Any
 
 # Setup Python path
 current_dir = Path(__file__).parent

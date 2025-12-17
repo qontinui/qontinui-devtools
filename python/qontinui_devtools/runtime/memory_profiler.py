@@ -468,3 +468,62 @@ class MemoryProfiler:
         """Clear all collected snapshots."""
         self._snapshots.clear()
         self._baseline = None
+
+    def get_memory_usage(self) -> dict[str, float]:
+        """Get current memory usage (for compatibility with tests).
+        
+        Returns:
+            Dictionary with current_mb, peak_mb, and snapshots count
+        """
+        if not self._snapshots:
+            return {"current_mb": 0.0, "peak_mb": 0.0, "snapshots": 0}
+        
+        current_mb = self._snapshots[-1].total_mb
+        peak_mb = max(s.total_mb for s in self._snapshots)
+        
+        return {
+            "current_mb": current_mb,
+            "peak_mb": peak_mb,
+            "snapshots": len(self._snapshots),
+        }
+
+    def export(self, output_path: str, format: str = "json") -> None:
+        """Export memory profiling data (for compatibility with tests).
+        
+        Args:
+            output_path: Output file path
+            format: Export format (json or text)
+        """
+        import json
+        from pathlib import Path
+        
+        if format == "json":
+            data = {
+                "snapshots": [
+                    {
+                        "timestamp": s.timestamp,
+                        "total_mb": s.total_mb,
+                        "rss_mb": s.rss_mb,
+                        "vms_mb": s.vms_mb,
+                        "objects_by_type": s.objects_by_type,
+                        "gc_stats": s.gc_stats,
+                    }
+                    for s in self._snapshots
+                ],
+                "leaks": [
+                    {
+                        "object_type": leak.object_type,
+                        "count_increase": leak.count_increase,
+                        "size_increase_mb": leak.size_increase_mb,
+                        "growth_rate": leak.growth_rate,
+                        "confidence": leak.confidence,
+                    }
+                    for leak in self.detect_leaks()
+                ],
+                "summary": self.get_memory_usage(),
+            }
+            
+            Path(output_path).write_text(json.dumps(data, indent=2))
+        else:
+            # Text format
+            Path(output_path).write_text(self.generate_report())

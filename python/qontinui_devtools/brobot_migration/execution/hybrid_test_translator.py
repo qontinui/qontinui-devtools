@@ -59,7 +59,7 @@ class HybridTestTranslator(TestTranslator):
 
     def __init__(
         self,
-        llm_client=None,
+        llm_client: Any = None,
         utility_confidence_threshold: float = 0.8,
         llm_confidence_threshold: float = 0.7,
         enable_llm_validation: bool = True,
@@ -440,7 +440,7 @@ class {class_name}:
 
     def configure_thresholds(
         self, utility_threshold: float | None = None, llm_threshold: float | None = None
-    ):
+    ) -> None:
         """Configure confidence thresholds."""
         if utility_threshold is not None:
             self.utility_confidence_threshold = utility_threshold

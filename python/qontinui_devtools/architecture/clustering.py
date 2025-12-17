@@ -1,6 +1,6 @@
 """Clustering algorithm for grouping methods by semantic similarity.
 
-from typing import Any
+from typing import Any, Any
 
 This module implements a keyword-based clustering algorithm that groups methods
 with similar responsibilities together based on their naming patterns.
@@ -16,6 +16,7 @@ from .semantic_utils import (
     classify_method,
     extract_keywords,
 )
+from typing import Any
 
 
 @dataclass

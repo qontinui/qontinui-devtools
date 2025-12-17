@@ -131,7 +131,7 @@ class BrobotTestScanner(TestScanner):
         if not test_file.path.exists():
             return []
 
-        dependencies=[],
+        dependencies = []
 
         try:
             content = test_file.path.read_text(encoding="utf-8")

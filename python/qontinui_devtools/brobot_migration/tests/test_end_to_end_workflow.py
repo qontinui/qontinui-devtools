@@ -1,6 +1,4 @@
 """
-from typing import Any
-
 End-to-end tests for the complete migration workflow.
 """
 
@@ -9,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -23,7 +22,7 @@ class TestEndToEndMigrationWorkflow:
     """End-to-end tests for the complete migration workflow."""
 
     @pytest.fixture
-    def temp_workspace(self) -> None:
+    def temp_workspace(self) -> Any:
         """Create a temporary workspace for testing."""
         with tempfile.TemporaryDirectory() as temp_dir:
             workspace = Path(temp_dir)
@@ -124,7 +123,7 @@ public class BrobotMockTest {
 """
         )
 
-    def test_complete_migration_workflow_with_orchestrator(self, temp_workspace) -> None:
+    def test_complete_migration_workflow_with_orchestrator(self, temp_workspace: Any) -> None:
         """Test complete migration workflow using the orchestrator directly."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -164,8 +163,8 @@ public class BrobotMockTest {
     @patch("qontinui.src.qontinui.test_migration.orchestrator.HybridTestTranslator")
     @patch("qontinui.src.qontinui.test_migration.orchestrator.PytestRunner")
     def test_migration_workflow_with_mocked_components(
-        self, mock_runner, mock_translator, mock_scanner, temp_workspace
-    ):
+        self, mock_runner: Any, mock_translator: Any, mock_scanner: Any, temp_workspace: Any
+    ) -> None:
         """Test migration workflow with mocked components for controlled testing."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -237,7 +236,7 @@ def test_subtraction() -> None:
         assert len(orchestrator.migration_state["migrated_tests"]) == 1
         assert len(orchestrator.migration_state["failed_migrations"]) == 0
 
-    def test_cli_migrate_command(self, temp_workspace) -> None:
+    def test_cli_migrate_command(self, temp_workspace: Any) -> None:
         """Test CLI migrate command."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -257,7 +256,7 @@ def test_subtraction() -> None:
         # Dry run should succeed
         assert exit_code == 0
 
-    def test_cli_config_creation(self, temp_workspace) -> None:
+    def test_cli_config_creation(self, temp_workspace: Any) -> None:
         """Test CLI configuration file creation."""
         workspace, _, _ = temp_workspace
 
@@ -290,7 +289,7 @@ def test_subtraction() -> None:
         for field in required_fields:
             assert field in config_data
 
-    def test_cli_config_validation(self, temp_workspace) -> None:
+    def test_cli_config_validation(self, temp_workspace: Any) -> None:
         """Test CLI configuration file validation."""
         workspace, _, _ = temp_workspace
 
@@ -317,7 +316,7 @@ def test_subtraction() -> None:
         # Validation should succeed
         assert exit_code == 0
 
-    def test_cli_config_validation_invalid_file(self, temp_workspace) -> None:
+    def test_cli_config_validation_invalid_file(self, temp_workspace: Any) -> None:
         """Test CLI configuration validation with invalid file."""
         workspace, _, _ = temp_workspace
 
@@ -340,7 +339,7 @@ def test_subtraction() -> None:
         # Validation should fail
         assert exit_code == 1
 
-    def test_reporting_dashboard_comprehensive_report(self, temp_workspace) -> None:
+    def test_reporting_dashboard_comprehensive_report(self, temp_workspace: Any) -> None:
         """Test reporting dashboard comprehensive report generation."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -390,7 +389,7 @@ def test_with_fixture(sample_data) -> None:
         assert patterns["pytest_fixtures"] == 1
         assert patterns["assert_statements"] >= 2
 
-    def test_reporting_dashboard_multiple_formats(self, temp_workspace) -> None:
+    def test_reporting_dashboard_multiple_formats(self, temp_workspace: Any) -> None:
         """Test reporting dashboard with multiple output formats."""
         workspace, _, target_dir = temp_workspace
 
@@ -421,7 +420,7 @@ def test_with_fixture(sample_data) -> None:
         assert "<html>" in html_content
         assert "Test Migration Report" in html_content
 
-    def test_cli_report_generation(self, temp_workspace) -> None:
+    def test_cli_report_generation(self, temp_workspace: Any) -> None:
         """Test CLI report generation command."""
         workspace, _, target_dir = temp_workspace
 
@@ -449,7 +448,7 @@ def test_with_fixture(sample_data) -> None:
         assert exit_code == 0
         assert report_file.exists()
 
-    def test_error_handling_in_workflow(self, temp_workspace) -> None:
+    def test_error_handling_in_workflow(self, temp_workspace: Any) -> None:
         """Test error handling throughout the workflow."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -471,7 +470,7 @@ def test_with_fixture(sample_data) -> None:
         # Should handle gracefully
         assert results.total_tests == 0
 
-    def test_cli_error_handling(self, temp_workspace) -> None:
+    def test_cli_error_handling(self, temp_workspace: Any) -> None:
         """Test CLI error handling."""
         workspace, _, _ = temp_workspace
 
@@ -489,7 +488,7 @@ def test_with_fixture(sample_data) -> None:
         assert exit_code == 1
 
     @pytest.mark.slow
-    def test_integration_with_real_pytest(self, temp_workspace) -> None:
+    def test_integration_with_real_pytest(self, temp_workspace: Any) -> None:
         """Integration test with real pytest execution (marked as slow)."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -530,7 +529,7 @@ class TestWorkflowRecovery:
     """Test workflow recovery and error handling scenarios."""
 
     @pytest.fixture
-    def recovery_workspace(self) -> None:
+    def recovery_workspace(self) -> Any:
         """Create workspace for recovery testing."""
         with tempfile.TemporaryDirectory() as temp_dir:
             workspace = Path(temp_dir)
@@ -561,7 +560,7 @@ public class ProblematicTest {
 
             yield workspace, source_dir, target_dir
 
-    def test_recovery_from_translation_failure(self, recovery_workspace) -> None:
+    def test_recovery_from_translation_failure(self, recovery_workspace: Any) -> None:
         """Test recovery from translation failures."""
         workspace, source_dir, target_dir = recovery_workspace
 
@@ -596,7 +595,7 @@ public class ProblematicTest {
             # Current implementation returns False, but the mechanism is tested
             assert isinstance(recovery_result, bool)
 
-    def test_partial_migration_success(self, recovery_workspace) -> None:
+    def test_partial_migration_success(self, recovery_workspace: Any) -> None:
         """Test handling of partial migration success."""
         workspace, source_dir, target_dir = recovery_workspace
 

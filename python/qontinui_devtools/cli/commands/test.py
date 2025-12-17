@@ -104,7 +104,7 @@ def test(
     verbose: bool,
     headless: bool,
     continue_on_failure: bool,
-):
+) -> None:
     """Run workflows in test mode with detailed result reporting.
 
     This command executes workflows and generates test reports in various formats

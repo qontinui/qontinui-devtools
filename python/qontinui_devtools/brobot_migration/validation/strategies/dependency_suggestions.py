@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Dependency fix suggestion strategies for Spring Boot and Mockito migration.
 """
@@ -8,6 +8,7 @@ from pathlib import Path
 
 from ...core.models import TestFile
 from ..fix_models import FixComplexity, FixSuggestion, FixType
+from typing import Any
 
 
 class DependencySuggestionStrategy:

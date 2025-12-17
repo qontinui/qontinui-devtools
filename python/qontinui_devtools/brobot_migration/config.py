@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Configuration management for the test migration system.
 """
@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 
 from core.models import MigrationConfig
+from typing import Any
 
 
 class TestMigrationConfig:

@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 from typing import Any
 
@@ -17,6 +17,7 @@ def function_c() -> Any:
 
 # Import from D, which imports E, which imports C
 from fixtures import circular_d  # noqa: E402, F401
+from typing import Any
 
 
 def use_d() -> Any:

@@ -1,27 +1,17 @@
 """Performance benchmarks for memory profiler.
 
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
 Tests profiler overhead and performance characteristics.
 """
 
 import time
+from typing import Any
 
 import pytest
+
 from qontinui_devtools.runtime import MemoryProfiler
 
 
-def test_snapshot_overhead(benchmark) -> Any:
+def test_snapshot_overhead(benchmark: Any) -> Any:
     """Benchmark snapshot creation overhead."""
     profiler = MemoryProfiler(enable_tracemalloc=False)
     profiler.start()
@@ -36,7 +26,7 @@ def test_snapshot_overhead(benchmark) -> Any:
     assert result.timestamp > 0
 
 
-def test_snapshot_with_tracemalloc_overhead(benchmark) -> Any:
+def test_snapshot_with_tracemalloc_overhead(benchmark: Any) -> Any:
     """Benchmark snapshot creation with tracemalloc."""
     import importlib.util
 
@@ -55,7 +45,7 @@ def test_snapshot_with_tracemalloc_overhead(benchmark) -> Any:
     assert result.timestamp > 0
 
 
-def test_leak_detection_overhead(benchmark) -> Any:
+def test_leak_detection_overhead(benchmark: Any) -> Any:
     """Benchmark leak detection overhead."""
     profiler = MemoryProfiler(enable_tracemalloc=False)
     profiler.start()

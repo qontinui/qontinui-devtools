@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Comprehensive tests for the ImportTracer module.
 
@@ -16,6 +16,7 @@ import threading
 import time
 import unittest
 from pathlib import Path
+from typing import Any
 
 # Add tests directory to path to allow imports of fixtures
 test_dir = Path(__file__).parent.parent
@@ -170,7 +171,7 @@ class TestImportGraph(unittest.TestCase):
     def test_thread_safety(self) -> None:
         """Test that graph is thread-safe."""
 
-        def add_imports(start_idx) -> None:
+        def add_imports(start_idx: int) -> None:
             for i in range(start_idx, start_idx + 100):
                 self.graph.add_import(f"module_{i}", f"module_{i+1}")
 
@@ -320,7 +321,7 @@ class TestImportTracer(unittest.TestCase):
 
         events_collected: list[Any] = []
 
-        def import_in_thread(tracer) -> None:
+        def import_in_thread(tracer: Any) -> None:
             import fixtures.simple_module  # noqa: F401
 
             events_collected.extend(tracer.get_events())

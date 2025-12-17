@@ -197,7 +197,7 @@ class DeadCodeDetector:
 
         return dead_code
 
-    def _calculate_confidence(self, export, file_path: Path, used_in_files: set[Path]) -> float:
+    def _calculate_confidence(self, export: Any, file_path: Path, used_in_files: set[Path]) -> float:
         """Calculate confidence that this is truly dead code.
 
         Args:

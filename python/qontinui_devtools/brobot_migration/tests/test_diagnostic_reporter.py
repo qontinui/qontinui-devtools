@@ -1,12 +1,11 @@
 """
-from typing import Any
-
 Unit tests for the DiagnosticReporter class.
 """
 
 from datetime import datetime
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from typing import Any
 from unittest.mock import patch
 
 from qontinui.test_migration.core.models import (

@@ -515,7 +515,7 @@ class PytestRunner(TestRunner):
         Returns:
             List of validation errors (empty if valid)
         """
-        errors=[],
+        errors = []
 
         # Check Python executable
         try:

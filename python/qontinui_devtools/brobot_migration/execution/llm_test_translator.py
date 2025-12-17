@@ -30,7 +30,7 @@ class LLMTestTranslator(TestTranslator):
     - Framework-specific patterns not covered by utility translator
     """
 
-    def __init__(self, llm_client=None, model_name: str = "gpt-4") -> None:
+    def __init__(self, llm_client: Any = None, model_name: str = "gpt-4") -> None:
         """
         Initialize the LLM test translator.
 
@@ -506,7 +506,7 @@ class {python_class_name}:
         Returns:
             List of validation errors
         """
-        errors=[],
+        errors = []
 
         # Check for basic Python syntax
         try:

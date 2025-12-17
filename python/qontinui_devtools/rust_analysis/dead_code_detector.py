@@ -1,6 +1,6 @@
 """Dead code detector for Rust codebases.
 
-from typing import Any
+from typing import Any, Any
 
 This module provides functionality to detect unused code including:
 - Unused functions
@@ -16,6 +16,7 @@ definitions and usages across the codebase.
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 
 @dataclass

@@ -1,6 +1,6 @@
 """CLI entry point for config validator.
 
-from typing import Any
+from typing import Any, Any
 
 Usage:
     python -m qontinui_devtools.config_validator [OPTIONS] <config_file.json> [<config_file2.json> ...]
@@ -24,6 +24,7 @@ import sys
 from pathlib import Path
 
 from .validator import ConfigValidator
+from typing import Any
 
 
 def main() -> int:

@@ -1,5 +1,5 @@
 """
-from typing import Any
+from typing import Any, Any
 
 Quick fix for import issues in the test migration system.
 This script patches the import problems to make the full CLI work.
@@ -7,6 +7,7 @@ This script patches the import problems to make the full CLI work.
 
 import logging
 from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

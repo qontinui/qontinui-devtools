@@ -3,6 +3,7 @@ Core Java-to-Python syntax translator for test migration.
 """
 
 import re
+from typing import Any
 
 from ..core.interfaces import TestTranslator
 from ..core.models import TestFile, TestMethod
@@ -392,7 +393,7 @@ class JavaToPythonTranslator(TestTranslator):
         # Convert camelCase method names to snake_case
         method_pattern = r"(\w+)\.(\w+)\("
 
-        def replace_method_call(match) -> Any:
+        def replace_method_call(match: Any) -> Any:
             object_name = match.group(1)
             method_name = match.group(2)
             python_object = self._camel_to_snake(object_name)

@@ -1,5 +1,6 @@
 """Tests for event tracer functionality."""
 
+from pathlib import Path
 from typing import Any
 
 import json
@@ -204,7 +205,7 @@ class TestEventTracer:
     def test_concurrent_tracing(self) -> None:
         """Test thread-safe concurrent tracing."""
         tracer = EventTracer()
-        errors=[],
+        errors = []
 
         def trace_event(event_id: str) -> None:
             try:

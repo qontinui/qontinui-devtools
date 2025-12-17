@@ -24,7 +24,7 @@ try:
 except ImportError:
 
     class ActionProfiler:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.profiles: list[Any] = []
@@ -36,8 +36,8 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def profile(self, func) -> Any:
-            def wrapper(*args, **kwargs) -> Any:
+        def profile(self, func: Any) -> Any:
+            def wrapper(*args: Any, **kwargs: Any) -> Any:
                 start = time.perf_counter()
                 result = func(*args, **kwargs)
                 duration = time.perf_counter() - start
@@ -62,7 +62,7 @@ except ImportError:
                 }
 
     class EventTracer:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.events: list[Any] = []
@@ -74,7 +74,7 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def trace_event(self, event_type, data) -> None:
+        def trace_event(self, event_type: Any, data: Any) -> None:
             if self.is_running:
                 with self._lock:
                     self.events.append(
@@ -86,7 +86,7 @@ except ImportError:
                         }
                     )
 
-        def get_events(self, event_type=None) -> Any:
+        def get_events(self, event_type: Any = None) -> Any:
             with self._lock:
                 events = self.events.copy()
 
@@ -95,7 +95,7 @@ except ImportError:
             return events
 
     class MemoryProfiler:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.snapshots: list[Any] = []
@@ -130,7 +130,7 @@ except ImportError:
                 return {"current_mb": current, "peak_mb": peak}
 
     class PerformanceDashboard:
-        def __init__(self, config=None) -> None:
+        def __init__(self, config: Any = None) -> None:
             self.config = config or {}
             self.is_running = False
             self.metrics: dict[Any, Any] = {}
@@ -142,7 +142,7 @@ except ImportError:
         def stop(self) -> None:
             self.is_running = False
 
-        def update_metrics(self, metrics) -> None:
+        def update_metrics(self, metrics: Any) -> None:
             with self._lock:
                 self.metrics.update(metrics)
 
@@ -156,7 +156,7 @@ except ImportError:
 class TestConcurrentToolAccess:
     """Test concurrent access to monitoring tools."""
 
-    def test_profiler_thread_safety(self, sample_action_instance, profiler_config) -> Any:
+    def test_profiler_thread_safety(self, sample_action_instance: Any, profiler_config: Any) -> Any:
         """Test that profiler is thread-safe."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
@@ -192,7 +192,7 @@ class TestConcurrentToolAccess:
         thread_ids = {p["thread_id"] for p in profile_data["profiles"]}
         assert len(thread_ids) == num_threads
 
-    def test_event_tracer_thread_safety(self, event_tracer_config) -> None:
+    def test_event_tracer_thread_safety(self, event_tracer_config: Any) -> None:
         """Test that event tracer is thread-safe."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -230,7 +230,7 @@ class TestConcurrentToolAccess:
         assert len(thread_event_counts) == num_threads
         assert all(count == events_per_thread for count in thread_event_counts.values())
 
-    def test_memory_profiler_thread_safety(self, memory_profiler_config) -> None:
+    def test_memory_profiler_thread_safety(self, memory_profiler_config: Any) -> None:
         """Test that memory profiler is thread-safe."""
         mem_profiler = MemoryProfiler(memory_profiler_config)
         mem_profiler.start()
@@ -261,7 +261,7 @@ class TestConcurrentToolAccess:
         min_snapshots = 1 + (num_threads * snapshots_per_thread) + 1
         assert len(mem_profiler.snapshots) >= min_snapshots
 
-    def test_dashboard_concurrent_updates(self, dashboard_config) -> None:
+    def test_dashboard_concurrent_updates(self, dashboard_config: Any) -> None:
         """Test dashboard with concurrent metric updates."""
         dashboard = PerformanceDashboard(dashboard_config)
         dashboard.start()
@@ -299,12 +299,10 @@ class TestConcurrentToolAccess:
 class TestConcurrentToolLifecycle:
     """Test concurrent initialization and shutdown of tools."""
 
-    def test_concurrent_tool_initialization(
-        self, profiler_config, event_tracer_config, memory_profiler_config, dashboard_config
-    ) -> None:
+    def test_concurrent_tool_initialization(self, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any, dashboard_config: Any) -> None:
         """Test initializing all tools concurrently."""
         tools: dict[Any, Any] = {}
-        errors=[],
+        errors = []
 
         def init_profiler() -> None:
             try:
@@ -359,9 +357,7 @@ class TestConcurrentToolLifecycle:
         for tool in tools.values():
             tool.stop()
 
-    def test_concurrent_tool_shutdown(
-        self, profiler_config, event_tracer_config, memory_profiler_config
-    ) -> None:
+    def test_concurrent_tool_shutdown(self, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
         """Test shutting down all tools concurrently."""
         # Initialize tools
         profiler = ActionProfiler(profiler_config)
@@ -375,7 +371,7 @@ class TestConcurrentToolLifecycle:
         # Use tools briefly
         time.sleep(0.1)
 
-        errors=[],
+        errors = []
 
         def stop_profiler() -> None:
             try:
@@ -416,9 +412,9 @@ class TestConcurrentToolLifecycle:
         assert not tracer.is_running
         assert not mem_profiler.is_running
 
-    def test_rapid_start_stop_cycles(self, profiler_config) -> None:
+    def test_rapid_start_stop_cycles(self, profiler_config: Any) -> None:
         """Test rapid start/stop cycles don't cause issues."""
-        errors=[],
+        errors = []
 
         def cycle_tool(cycle_id: int) -> None:
             try:
@@ -449,9 +445,7 @@ class TestConcurrentToolLifecycle:
 class TestConcurrentDataCollection:
     """Test data collection during concurrent operations."""
 
-    def test_concurrent_profiling_and_tracing(
-        self, sample_action_instance, profiler_config, event_tracer_config
-    ) -> None:
+    def test_concurrent_profiling_and_tracing(self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any) -> None:
         """Test profiling and tracing during concurrent execution."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -501,14 +495,7 @@ class TestConcurrentDataCollection:
         assert len(end_events) == num_threads
         assert len(iteration_events) == num_threads * iterations
 
-    def test_dashboard_with_concurrent_data_sources(
-        self,
-        sample_action_instance,
-        profiler_config,
-        event_tracer_config,
-        memory_profiler_config,
-        dashboard_config,
-    ) -> None:
+    def test_dashboard_with_concurrent_data_sources(self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any, dashboard_config: Any) -> None:
         """Test dashboard receiving data from multiple concurrent sources."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -571,7 +558,7 @@ class TestConcurrentDataCollection:
 class TestRaceConditions:
     """Test for race conditions in tool interactions."""
 
-    def test_no_race_in_event_ordering(self, event_tracer_config) -> None:
+    def test_no_race_in_event_ordering(self, event_tracer_config: Any) -> None:
         """Test that event ordering is preserved despite concurrent writes."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -612,7 +599,7 @@ class TestRaceConditions:
                 range(events_per_thread)
             ), f"Thread {thread_id} events out of order: {sequences}"
 
-    def test_no_race_in_profile_data(self, sample_action_instance, profiler_config) -> Any:
+    def test_no_race_in_profile_data(self, sample_action_instance: Any, profiler_config: Any) -> Any:
         """Test that profile data remains consistent under concurrent access."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
@@ -623,7 +610,7 @@ class TestRaceConditions:
             return value * 2
 
         results: list[Any] = []
-        errors=[],
+        errors = []
 
         def worker(thread_id: int) -> None:
             try:
@@ -662,14 +649,7 @@ class TestRaceConditions:
         profile_data = profiler.get_profile_data()
         assert profile_data["total_calls"] == num_threads * 50
 
-    def test_no_deadlock_with_all_tools(
-        self,
-        sample_action_instance,
-        profiler_config,
-        event_tracer_config,
-        memory_profiler_config,
-        dashboard_config,
-    ) -> None:
+    def test_no_deadlock_with_all_tools(self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any, dashboard_config: Any) -> None:
         """Test that no deadlocks occur with all tools running."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -737,12 +717,12 @@ class TestRaceConditions:
 class TestAsyncConcurrency:
     """Test tools with async/await patterns."""
 
-    def test_profiler_with_async_await(self, sample_action_instance, profiler_config) -> Any:
+    def test_profiler_with_async_await(self, sample_action_instance: Any, profiler_config: Any) -> Any:
         """Test profiler with async functions."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
 
-        async def async_worker(worker_id: int):
+        async def async_worker(worker_id: int) -> Any:
             @profiler.profile
             def sync_work() -> Any:
                 return sample_action_instance._process_iteration(worker_id)
@@ -755,7 +735,7 @@ class TestAsyncConcurrency:
 
             return results
 
-        async def run_async_workers():
+        async def run_async_workers() -> Any:
             tasks = [async_worker(i) for i in range(5)]
             return await asyncio.gather(*tasks)
 
@@ -771,17 +751,17 @@ class TestAsyncConcurrency:
         profile_data = profiler.get_profile_data()
         assert profile_data["total_calls"] == 5 * 10  # 5 workers, 10 iterations each
 
-    def test_event_tracer_with_async_await(self, event_tracer_config) -> None:
+    def test_event_tracer_with_async_await(self, event_tracer_config: Any) -> None:
         """Test event tracer with async functions."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
 
-        async def async_tracer(tracer_id: int):
+        async def async_tracer(tracer_id: int) -> None:
             for i in range(10):
                 tracer.trace_event("async_event", {"tracer_id": tracer_id, "index": i})
                 await asyncio.sleep(0.01)
 
-        async def run_async_tracers():
+        async def run_async_tracers() -> None:
             tasks = [async_tracer(i) for i in range(5)]
             await asyncio.gather(*tasks)
 

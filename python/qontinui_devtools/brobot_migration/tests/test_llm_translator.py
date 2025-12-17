@@ -4,6 +4,7 @@ Unit tests for LLMTestTranslator.
 
 import json
 from pathlib import Path
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -344,7 +345,7 @@ This translation preserves the test intent.
         assert result.translated_code is not None
 
     @patch("qontinui.test_migration.translation.llm_test_translator.json.loads")
-    def test_parse_invalid_json_response(self, mock_json_loads) -> None:
+    def test_parse_invalid_json_response(self, mock_json_loads: Any) -> None:
         """Test handling of invalid JSON response."""
         mock_json_loads.side_effect = json.JSONDecodeError("Invalid JSON", "", 0)
 

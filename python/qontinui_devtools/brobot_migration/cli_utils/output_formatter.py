@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 
 
 class OutputFormatter:
@@ -15,7 +16,7 @@ class OutputFormatter:
     """
 
     @staticmethod
-    def display_discovery_results(discovered_tests, output_format: str) -> None:
+    def display_discovery_results(discovered_tests: Any, output_format: str) -> None:
         """Display discovery results in the specified format."""
         if output_format == "json":
             OutputFormatter._display_discovery_json(discovered_tests)
@@ -25,7 +26,7 @@ class OutputFormatter:
             OutputFormatter._display_discovery_text(discovered_tests)
 
     @staticmethod
-    def _display_discovery_text(discovered_tests) -> None:
+    def _display_discovery_text(discovered_tests: Any) -> None:
         """Display discovery results in text format."""
         print(f"\nDiscovered {len(discovered_tests)} test files:")
         print("=" * 50)
@@ -46,7 +47,7 @@ class OutputFormatter:
             print()
 
     @staticmethod
-    def _display_discovery_json(discovered_tests) -> None:
+    def _display_discovery_json(discovered_tests: Any) -> None:
         """Display discovery results in JSON format."""
         result_dict = {
             "total_files": len(discovered_tests),
@@ -64,7 +65,7 @@ class OutputFormatter:
         print(json.dumps(result_dict, indent=2))
 
     @staticmethod
-    def _display_discovery_yaml(discovered_tests) -> None:
+    def _display_discovery_yaml(discovered_tests: Any) -> None:
         """Display discovery results in YAML format."""
         try:
             import yaml
@@ -88,7 +89,7 @@ class OutputFormatter:
             OutputFormatter._display_discovery_text(discovered_tests)
 
     @staticmethod
-    def display_validation_results(results, output_format: str) -> None:
+    def display_validation_results(results: Any, output_format: str) -> None:
         """Display validation results in the specified format."""
         if output_format == "json":
             OutputFormatter._display_validation_json(results)
@@ -98,7 +99,7 @@ class OutputFormatter:
             OutputFormatter._display_validation_text(results)
 
     @staticmethod
-    def _display_validation_text(results) -> None:
+    def _display_validation_text(results: Any) -> None:
         """Display validation results in text format."""
         print("\nValidation Results:")
         print("=" * 50)
@@ -115,7 +116,7 @@ class OutputFormatter:
                     print(f"  - {result.test_name}: {result.error_message}")
 
     @staticmethod
-    def _display_validation_json(results) -> None:
+    def _display_validation_json(results: Any) -> None:
         """Display validation results in JSON format."""
         result_dict = {
             "total_tests": results.total_tests,
@@ -137,7 +138,7 @@ class OutputFormatter:
         print(json.dumps(result_dict, indent=2))
 
     @staticmethod
-    def _display_validation_yaml(results) -> None:
+    def _display_validation_yaml(results: Any) -> None:
         """Display validation results in YAML format."""
         try:
             import yaml
@@ -155,7 +156,7 @@ class OutputFormatter:
             OutputFormatter._display_validation_text(results)
 
     @staticmethod
-    def save_discovery_results(discovered_tests, output_file: Path) -> None:
+    def save_discovery_results(discovered_tests: Any, output_file: Path) -> None:
         """Save discovery results to file."""
         result_dict = {
             "total_files": len(discovered_tests),
@@ -176,7 +177,7 @@ class OutputFormatter:
             json.dump(result_dict, f, indent=2)
 
     @staticmethod
-    def save_validation_report(results, report_file: Path) -> None:
+    def save_validation_report(results: Any, report_file: Path) -> None:
         """Save validation report to file."""
         report_data = {
             "validation_results": {
@@ -202,7 +203,7 @@ class OutputFormatter:
             json.dump(report_data, f, indent=2, default=str)
 
     @staticmethod
-    def display_migration_results(results, output_format: str) -> None:
+    def display_migration_results(results: Any, output_format: str) -> None:
         """Display migration results in the specified format."""
         if output_format == "json":
             OutputFormatter._display_migration_json(results)
@@ -212,7 +213,7 @@ class OutputFormatter:
             OutputFormatter._display_migration_text(results)
 
     @staticmethod
-    def _display_migration_text(results) -> None:
+    def _display_migration_text(results: Any) -> None:
         """Display migration results in text format."""
         print("\nMigration Results:")
         print("=" * 50)
@@ -229,7 +230,7 @@ class OutputFormatter:
                     print(f"  - {result.test_name}: {result.error_message}")
 
     @staticmethod
-    def _display_migration_json(results) -> None:
+    def _display_migration_json(results: Any) -> None:
         """Display migration results in JSON format."""
         result_dict = {
             "total_tests": results.total_tests,
@@ -251,7 +252,7 @@ class OutputFormatter:
         print(json.dumps(result_dict, indent=2))
 
     @staticmethod
-    def _display_migration_yaml(results) -> None:
+    def _display_migration_yaml(results: Any) -> None:
         """Display migration results in YAML format."""
         try:
             import yaml
@@ -269,7 +270,7 @@ class OutputFormatter:
             OutputFormatter._display_migration_text(results)
 
     @staticmethod
-    def save_migration_report(results, report_file: Path, orchestrator) -> None:
+    def save_migration_report(results: Any, report_file: Path, orchestrator: Any) -> None:
         """Save migration report to file."""
         report_data = {
             "migration_results": {

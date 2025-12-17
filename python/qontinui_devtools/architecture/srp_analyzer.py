@@ -1,6 +1,6 @@
 """Single Responsibility Principle (SRP) Analyzer.
 
-from typing import Any
+from typing import Any, Any
 
 This module analyzes Python classes to detect SRP violations by identifying
 classes with multiple distinct responsibilities through semantic analysis
@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .clustering import MethodCluster, cluster_methods_by_keywords
+from typing import Any
 
 
 @dataclass

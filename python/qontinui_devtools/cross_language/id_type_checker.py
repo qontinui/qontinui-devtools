@@ -1,6 +1,6 @@
 """Cross-language ID type consistency checker.
 
-from typing import Any
+from typing import Any, Any
 
 Detects type mismatches for ID fields across TypeScript, Rust, and Python codebases.
 Common issues detected:
@@ -19,6 +19,7 @@ from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+from typing import Any
 
 
 class IssueSeverity(Enum):

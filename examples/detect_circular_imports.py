@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-from typing import Any
+from typing import Any, Any
 
 Example script demonstrating how to use the ImportTracer to detect
 circular dependencies in real-time.
@@ -15,6 +15,7 @@ Usage:
 
 import sys
 from pathlib import Path
+from typing import Any
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))

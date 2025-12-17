@@ -1,6 +1,6 @@
 """Utilities for parsing TypeScript/JavaScript files.
 
-from typing import Any
+from typing import Any, Any
 
 This module provides functions to parse and analyze TS/JS files without
 requiring Node.js or external dependencies.
@@ -9,6 +9,7 @@ requiring Node.js or external dependencies.
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 
 @dataclass
@@ -105,7 +106,7 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
                     imports.append(
                         ImportStatement(
                             source=source_match.group(1),
-                            names=[],
+                            names = [],
                             default_import=None,
                             namespace_import=None,
                             is_type_only=is_type_only,
@@ -169,7 +170,7 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
                 imports.append(
                     ImportStatement(
                         source=source,
-                        names=[],
+                        names = [],
                         default_import=default_import,
                         namespace_import=None,
                         is_type_only=False,

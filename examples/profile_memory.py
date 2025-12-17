@@ -1,6 +1,6 @@
 """Example: Memory profiling and leak detection.
 
-from typing import Any
+from typing import Any, Any
 
 from typing import Any
 
@@ -19,6 +19,7 @@ from qontinui_devtools.runtime import (
     detect_common_leak_patterns,
     suggest_fixes,
 )
+from typing import Any
 
 
 def simulate_memory_leak() -> Any:

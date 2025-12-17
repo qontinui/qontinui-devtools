@@ -1,9 +1,5 @@
 """Demonstration of the Dependency Health Checker with sample output.
 
-from typing import Any
-
-from typing import Any
-
 This script creates a sample project and demonstrates the dependency health checker
 with realistic output.
 """
@@ -11,13 +7,14 @@ with realistic output.
 import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock
 
 from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus, UpdateType
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
 
 
-def create_sample_project() -> None:
+def create_sample_project() -> Path:
     """Create a sample project with various dependency scenarios."""
     tmpdir = tempfile.mkdtemp()
     project_path = Path(tmpdir)
@@ -247,7 +244,7 @@ def create_mock_pypi_client() -> Any:
         ),
     }
 
-    def get_package_info(name) -> Any:
+    def get_package_info(name: str) -> Any:
         return package_data.get(name)
 
     mock_client.get_package_info.side_effect = get_package_info

@@ -5,6 +5,7 @@ untyped functions, parameters, and return values.
 """
 
 import ast
+from typing import Any
 
 
 class TypeInferenceEngine:
