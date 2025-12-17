@@ -1,13 +1,10 @@
-"""
-from typing import Any, Any
-
-from typing import Any
-
-Test module A that creates a circular import with module B.
+"""Test module A that creates a circular import with module B.
 
 This module is intentionally designed to have a circular dependency
 for testing the ImportTracer's ability to detect such issues.
 """
+
+from typing import Any
 
 
 def function_a() -> Any:
@@ -16,8 +13,7 @@ def function_a() -> Any:
 
 
 # Import from B creates circular dependency
-from fixtures import circular_b  # noqa: E402, F401
-from typing import Any
+from . import circular_b  # noqa: E402, F401
 
 
 def use_b() -> Any:

@@ -1,13 +1,10 @@
-"""
-from typing import Any, Any
-
-from typing import Any
-
-Test module C that creates a three-way circular import: C -> D -> E -> C.
+"""Test module C that creates a three-way circular import: C -> D -> E -> C.
 
 This module is intentionally designed to have a more complex circular
 dependency for testing the ImportTracer's ability to detect multi-hop cycles.
 """
+
+from typing import Any
 
 
 def function_c() -> Any:
@@ -16,8 +13,7 @@ def function_c() -> Any:
 
 
 # Import from D, which imports E, which imports C
-from fixtures import circular_d  # noqa: E402, F401
-from typing import Any
+from . import circular_d  # noqa: E402, F401
 
 
 def use_d() -> Any:

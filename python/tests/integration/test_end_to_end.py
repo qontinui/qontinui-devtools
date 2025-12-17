@@ -225,7 +225,7 @@ class TestFullMonitoringWorkflow:
         # Step 3: Execute project code
         sys.path.insert(0, str(sample_qontinui_project))
         try:
-            import main
+            import main  # type: ignore[import-not-found]
 
             @profiler.profile
             def execute_main() -> Any:
