@@ -1,8 +1,8 @@
 """Syntax fix suggestion strategies for Java to Python migration."""
 
 import re
-from typing import Any
 from pathlib import Path
+from typing import Any
 
 from ...core.models import TestFile
 from ..fix_models import FixComplexity, FixSuggestion, FixType

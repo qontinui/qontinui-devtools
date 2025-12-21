@@ -163,7 +163,9 @@ public class SampleTest {
         assert len(orchestrator.migration_state["failed_migrations"]) == 0
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.BrobotTestScanner")
-    def test_migrate_test_suite_no_tests_found(self, mock_scanner: Any, orchestrator: Any, temp_directories: Any) -> None:
+    def test_migrate_test_suite_no_tests_found(
+        self, mock_scanner: Any, orchestrator: Any, temp_directories: Any
+    ) -> None:
         """Test migration when no tests are found."""
         source_dir, target_dir = temp_directories
 
@@ -225,7 +227,9 @@ public class SampleTest {
         assert "Translation failed" in failed_migration["error"]
 
     @patch("qontinui.src.qontinui.test_migration.orchestrator.PytestRunner")
-    def test_validate_migration(self, mock_runner: Any, orchestrator: Any, temp_directories: Any) -> None:
+    def test_validate_migration(
+        self, mock_runner: Any, orchestrator: Any, temp_directories: Any
+    ) -> None:
         """Test migration validation."""
         _, target_dir = temp_directories
 
@@ -240,7 +244,7 @@ public class SampleTest {
             failed_tests=0,
             skipped_tests=0,
             execution_time=0.1,
-            individual_results=[]
+            individual_results=[],
         )
         mock_runner.return_value.run_test_suite.return_value = mock_results
 
@@ -303,7 +307,9 @@ public class SampleTest {
         # Current implementation should return False
         assert result is False
 
-    def test_generate_target_path_preserve_structure(self, orchestrator: Any, temp_directories: Any) -> None:
+    def test_generate_target_path_preserve_structure(
+        self, orchestrator: Any, temp_directories: Any
+    ) -> None:
         """Test target path generation with structure preservation."""
         source_dir, target_dir = temp_directories
 

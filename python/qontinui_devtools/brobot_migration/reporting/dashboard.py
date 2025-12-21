@@ -291,7 +291,11 @@ class MigrationReportingDashboard:
         try:
             from reportlab.lib.pagesizes import letter  # type: ignore[import-untyped]
             from reportlab.lib.styles import getSampleStyleSheet  # type: ignore[import-untyped]
-            from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer  # type: ignore[import-untyped]
+            from reportlab.platypus import (  # type: ignore[import-untyped]
+                Paragraph,
+                SimpleDocTemplate,
+                Spacer,
+            )
 
             doc = SimpleDocTemplate(str(output_file), pagesize=letter)
             styles = getSampleStyleSheet()

@@ -1,11 +1,8 @@
 """Tests for race condition tester."""
 
-from typing import Any
-
-from typing import Any
-
 import threading
 import time
+from typing import Any
 
 from qontinui_devtools.concurrency import RaceConditionTester, RaceTestResult, concurrent_test
 

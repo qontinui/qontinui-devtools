@@ -7,7 +7,6 @@ import time
 from typing import Any
 
 import pytest
-
 from qontinui_devtools.runtime import MemoryProfiler
 
 

@@ -5,8 +5,8 @@ import time
 from pathlib import Path
 
 import click
-
 from qontinui.json_executor import JSONRunner
+
 from ..exit_codes import ExitCode
 from ..result_streamer import ResultStreamer
 from ..utils import configure_logging, print_error, print_success, print_warning

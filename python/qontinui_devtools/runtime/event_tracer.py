@@ -363,21 +363,21 @@ class EventTracer:
 
     def start(self) -> None:
         """Start the tracer (for compatibility with tests).
-        
+
         This is a no-op as the tracer is always active once instantiated.
         """
         pass
 
     def stop(self) -> None:
         """Stop the tracer (for compatibility with tests).
-        
+
         This is a no-op as the tracer doesn't need explicit stopping.
         """
         pass
 
     def trace_event(self, event_name: str, metadata: dict[str, Any] | None = None) -> None:
         """Trace an event (for compatibility with tests).
-        
+
         Args:
             event_name: Name of the event
             metadata: Optional metadata dictionary
@@ -387,7 +387,7 @@ class EventTracer:
 
     def get_events(self) -> list[EventTrace]:
         """Get all events (for compatibility with tests).
-        
+
         Returns:
             List of all EventTrace instances
         """
@@ -395,7 +395,7 @@ class EventTracer:
 
     def export(self, output_path: str) -> None:
         """Export trace data (for compatibility with tests).
-        
+
         Args:
             output_path: Output file path
         """

@@ -1,9 +1,8 @@
 """Tests for memory profiler."""
 
-from typing import Any
-
 import gc
 import time
+from typing import Any
 
 import pytest
 from qontinui_devtools.runtime import MemoryLeak, MemoryProfiler, MemorySnapshot
@@ -37,7 +36,7 @@ class TestMemorySnapshot:
             rss_mb=95.0,
             vms_mb=120.0,
             objects_by_type={"dict": 100, "list": 50},
-            top_objects=[]
+            top_objects=[],
         )
 
         str_repr = str(snapshot)

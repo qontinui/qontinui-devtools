@@ -28,7 +28,6 @@ class TestFixSuggestionEngine:
         """Set up test fixtures."""
         self.engine = FixSuggestionEngine()
 
-
     def test_suggest_fixes_brobot_import_error(self) -> None:
         """Test fix suggestions for Brobot import errors."""
         failure_analysis = FailureAnalysis(
@@ -369,11 +368,6 @@ def testMethod() -> None:
         assert suggestion.additional_context["key"] == "value"
         assert "prerequisite1" in suggestion.prerequisites
         assert "step1" in suggestion.validation_steps
-
-
-
-
-
 
     def test_suggest_fixes_with_test_file_context(self) -> None:
         """Test fix suggestions with Java test file context."""

@@ -1,14 +1,13 @@
 """Test command - Run workflows in test mode with result reporting."""
 
-from typing import Any
-
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 import click
-
 from qontinui.json_executor import JSONRunner
+
 from ..exit_codes import ExitCode
 from ..formatters import format_results
 from ..result_streamer import ResultStreamer

@@ -3,7 +3,7 @@ Brobot mock analyzer for identifying and extracting Brobot mock usage patterns.
 """
 
 import re
-from typing import Any, cast
+from typing import Any
 
 from ..core.interfaces import MockAnalyzer
 from ..core.models import GuiModel, MockUsage, TestFile

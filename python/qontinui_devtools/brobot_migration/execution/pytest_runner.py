@@ -170,7 +170,7 @@ class PytestRunner(TestRunner):
                 failed_tests=0,
                 skipped_tests=0,
                 execution_time=0.0,
-                individual_results=[]
+                individual_results=[],
             )
 
         start_time = time.time()
@@ -185,7 +185,7 @@ class PytestRunner(TestRunner):
                 failed_tests=0,
                 skipped_tests=0,
                 execution_time=time.time() - start_time,
-                individual_results=[]
+                individual_results=[],
             )
 
         # Build pytest command for the entire suite
@@ -305,7 +305,7 @@ class PytestRunner(TestRunner):
                 failed_tests=0,
                 skipped_tests=0,
                 execution_time=execution_time,
-                individual_results=[]
+                individual_results=[],
             )
 
     def _discover_test_files(self, directory: Path) -> list[Path]:

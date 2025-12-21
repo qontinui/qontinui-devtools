@@ -7,6 +7,7 @@ This module serves as a facade that delegates to specialized strategy modules.
 """
 
 from pathlib import Path
+from typing import Any
 
 from ..core.models import FailureAnalysis, TestFile
 from .fix_models import FixSuggestion
@@ -17,7 +18,6 @@ from .strategies.setup_suggestions import SetupSuggestionStrategy
 from .strategies.suggestion_formatter import SuggestionFormatter
 from .strategies.suggestion_scorer import SuggestionScorer
 from .strategies.syntax_suggestions import SyntaxSuggestionStrategy
-from typing import Any
 
 
 class FixSuggestionEngine:

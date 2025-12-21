@@ -9,7 +9,8 @@ import time
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
-from PIL.ImageFont import FreeTypeFont, ImageFont as DefaultImageFont
+from PIL.ImageFont import FreeTypeFont
+from PIL.ImageFont import ImageFont as DefaultImageFont
 from qontinui.hal.interfaces import IScreenCapture
 from qontinui.hal.interfaces.screen_capture import Monitor
 

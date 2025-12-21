@@ -6,11 +6,10 @@ false positive handling, severity classification, and remediation suggestions.
 """
 
 import tempfile
+from collections.abc import Generator
 from pathlib import Path
-from typing import Any, Generator
 
 import pytest
-
 from qontinui_devtools.security import SecurityAnalyzer, Severity, VulnerabilityType
 
 
@@ -160,7 +159,9 @@ def backup_file(filename) -> None:
     assert cmd_vulns[0].cwe_id == "CWE-78"
 
 
-def test_command_injection_subprocess_shell_true(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_command_injection_subprocess_shell_true(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of command injection with shell=True."""
     code = """
 import subprocess
@@ -179,7 +180,9 @@ def ping_host(host) -> None:
     assert "shell=True" in cmd_vulns[0].description
 
 
-def test_command_injection_subprocess_list_dynamic(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_command_injection_subprocess_list_dynamic(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of command injection with dynamic list arguments."""
     code = """
 import subprocess
@@ -342,7 +345,9 @@ AWS_ACCESS_KEY = "AKIAIOSFODNN7EXAMPLE"
     assert len(secret_vulns) == 1
 
 
-def test_hardcoded_secret_false_positive_example(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_hardcoded_secret_false_positive_example(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test that example/placeholder secrets are not flagged."""
     code = """
 # Example configuration - replace with your actual values
@@ -981,7 +986,9 @@ def test_analyze_empty_file(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     assert len(vulns) == 0
 
 
-def test_analyze_file_with_multiple_vulnerabilities(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_analyze_file_with_multiple_vulnerabilities(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test file with multiple different vulnerabilities."""
     code = """
 import os

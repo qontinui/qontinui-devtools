@@ -10,9 +10,9 @@ for thread safety issues.
 
 import threading
 import time
+from typing import Any
 
 from qontinui_devtools.concurrency import RaceConditionTester
-from typing import Any
 
 
 # Simulated HAL Factory (similar to qontinui.hal.factory)

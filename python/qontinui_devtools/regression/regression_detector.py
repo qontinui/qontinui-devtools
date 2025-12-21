@@ -1,13 +1,12 @@
 """Regression detection for identifying behavioral changes between code versions."""
 
-from typing import Any
-
 import json
 import logging
 import subprocess
 import tempfile
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from .models import (
     ChangeType,

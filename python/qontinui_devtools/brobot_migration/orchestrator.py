@@ -472,7 +472,7 @@ class TestMigrationOrchestrator(MigrationOrchestrator):
             failed_tests=0,
             skipped_tests=0,
             execution_time=0.0,
-            individual_results=[]
+            individual_results=[],
         )
 
     def _create_error_results(self, error_message: str) -> TestResults:

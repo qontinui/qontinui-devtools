@@ -190,7 +190,8 @@ class PyPIClient:
 
         try:
             with open(cache_file) as f:
-                data = json.load(f); return cast(dict[str, Any], data) if isinstance(data, dict) else None
+                data = json.load(f)
+                return cast(dict[str, Any], data) if isinstance(data, dict) else None
         except (OSError, json.JSONDecodeError):
             return None
 

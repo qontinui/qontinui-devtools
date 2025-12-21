@@ -5,9 +5,9 @@ Confidence scoring logic for fix suggestions.
 """
 
 import re
+from typing import Any
 
 from ..fix_models import FixSuggestion, MigrationIssuePattern
-from typing import Any
 
 
 class SuggestionScorer:

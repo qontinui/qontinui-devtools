@@ -273,7 +273,10 @@ class TestSimple:
     def test_create_hybrid_translation_utility_better(self) -> None:
         """Test hybrid translation when utility result is better."""
         utility_result = TranslationResult(
-            content="good utility result", method="utility", confidence=0.9, errors=[],
+            content="good utility result",
+            method="utility",
+            confidence=0.9,
+            errors=[],
         )
 
         llm_result = TranslationResult(
@@ -300,7 +303,10 @@ class TestSimple:
         )
 
         llm_result = TranslationResult(
-            content="good llm result", method="llm", confidence=0.8, errors=[],
+            content="good llm result",
+            method="llm",
+            confidence=0.8,
+            errors=[],
         )
 
         test_file = TestFile(path=Path("test.java"), test_type=TestType.UNIT, class_name="Test")

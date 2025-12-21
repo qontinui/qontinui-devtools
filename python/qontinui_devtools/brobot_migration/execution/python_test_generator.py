@@ -4,7 +4,7 @@ Python test file generator for creating pytest-compatible test files from migrat
 
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..core.interfaces import TestTranslator

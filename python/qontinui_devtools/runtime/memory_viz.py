@@ -180,7 +180,7 @@ def plot_top_objects(
 
     # Horizontal bar chart
     y_pos = range(len(types))
-    cmap = plt.get_cmap('viridis')
+    cmap = plt.get_cmap("viridis")
     colors = cmap([(i / len(types)) for i in range(len(types))])
 
     ax.barh(y_pos, counts, color=colors)

@@ -7,18 +7,21 @@ This module includes:
 - Memory leak detection
 - Long-running monitoring tests
 """
+
 # mypy: disable-error-code="call-arg,index,attr-defined"
 
-from typing import Any
 import gc
 import threading
 import time
+from typing import Any
 
 import pytest
 
 # Mock implementations
 try:
-    from qontinui_devtools.runtime.dashboard import PerformanceDashboard  # type: ignore[import-untyped]
+    from qontinui_devtools.runtime.dashboard import (
+        PerformanceDashboard,  # type: ignore[import-untyped]
+    )
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
     from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-untyped]
@@ -124,7 +127,9 @@ except ImportError:
 class TestProfilerPerformance:
     """Performance tests for ActionProfiler."""
 
-    def test_profiler_overhead(self, sample_action_instance: Any, profiler_config: Any, performance_thresholds: Any) -> None:
+    def test_profiler_overhead(
+        self, sample_action_instance: Any, profiler_config: Any, performance_thresholds: Any
+    ) -> None:
         """Test that profiler overhead is below threshold."""
         # Baseline: measure without profiler
         baseline_times: list[Any] = []
@@ -203,7 +208,9 @@ class TestProfilerPerformance:
             max(overhead_percentages) - min(overhead_percentages) < 3.0
         ), "Overhead increases too much with scale"
 
-    def test_profiler_memory_usage(self, sample_action_instance: Any, profiler_config: Any, performance_thresholds: Any) -> None:
+    def test_profiler_memory_usage(
+        self, sample_action_instance: Any, profiler_config: Any, performance_thresholds: Any
+    ) -> None:
         """Test profiler memory usage."""
         import sys
 
@@ -245,7 +252,9 @@ class TestProfilerPerformance:
 class TestEventTracerPerformance:
     """Performance tests for EventTracer."""
 
-    def test_event_tracer_overhead(self, sample_action_instance: Any, event_tracer_config: Any, performance_thresholds: Any) -> None:
+    def test_event_tracer_overhead(
+        self, sample_action_instance: Any, event_tracer_config: Any, performance_thresholds: Any
+    ) -> None:
         """Test that event tracer overhead is below threshold."""
         iterations = 100
 
@@ -277,7 +286,9 @@ class TestEventTracerPerformance:
             overhead_percent < performance_thresholds["max_overhead_percent"]
         ), f"Event tracer overhead {overhead_percent:.2f}% exceeds threshold"
 
-    def test_event_tracer_latency(self, event_tracer_config: Any, performance_thresholds: Any) -> None:
+    def test_event_tracer_latency(
+        self, event_tracer_config: Any, performance_thresholds: Any
+    ) -> None:
         """Test event tracing latency."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -304,7 +315,9 @@ class TestEventTracerPerformance:
             avg_latency < performance_thresholds["max_event_latency_ms"]
         ), f"Average event latency {avg_latency:.4f}ms exceeds threshold"
 
-    def test_event_tracer_memory_growth(self, event_tracer_config: Any, performance_thresholds: Any) -> None:
+    def test_event_tracer_memory_growth(
+        self, event_tracer_config: Any, performance_thresholds: Any
+    ) -> None:
         """Test event tracer memory growth over time."""
         import sys
 
@@ -379,7 +392,9 @@ class TestEventTracerPerformance:
 class TestMemoryProfilerPerformance:
     """Performance tests for MemoryProfiler."""
 
-    def test_memory_profiler_overhead(self, memory_intensive_action: Any, memory_profiler_config: Any, performance_thresholds: Any) -> None:
+    def test_memory_profiler_overhead(
+        self, memory_intensive_action: Any, memory_profiler_config: Any, performance_thresholds: Any
+    ) -> None:
         """Test memory profiler overhead."""
         # Baseline
         start = time.perf_counter()
@@ -451,7 +466,9 @@ class TestMemoryProfilerPerformance:
 class TestStressTests:
     """Stress tests for runtime monitoring tools."""
 
-    def test_profiler_stress_many_calls(self, sample_action_instance: Any, profiler_config: Any, stress_test_config: Any) -> None:
+    def test_profiler_stress_many_calls(
+        self, sample_action_instance: Any, profiler_config: Any, stress_test_config: Any
+    ) -> None:
         """Stress test profiler with many function calls."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
@@ -481,7 +498,9 @@ class TestStressTests:
         # Verify all calls were captured
         assert profile_data["total_calls"] == iterations
 
-    def test_event_tracer_stress_high_volume(self, event_tracer_config: Any, stress_test_config: Any) -> None:
+    def test_event_tracer_stress_high_volume(
+        self, event_tracer_config: Any, stress_test_config: Any
+    ) -> None:
         """Stress test event tracer with high event volume."""
         tracer = EventTracer(event_tracer_config)
         tracer.start()
@@ -509,7 +528,14 @@ class TestStressTests:
         # Verify all events were captured
         assert len(events) == num_events
 
-    def test_concurrent_stress_all_tools(self, concurrent_action: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any, stress_test_config: Any) -> None:
+    def test_concurrent_stress_all_tools(
+        self,
+        concurrent_action: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        memory_profiler_config: Any,
+        stress_test_config: Any,
+    ) -> None:
         """Stress test all tools running concurrently."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -567,7 +593,9 @@ class TestStressTests:
         assert profile_data["total_calls"] >= stress_test_config["num_threads"]
         assert len(events) > 0
 
-    def test_long_running_monitoring(self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any) -> None:
+    def test_long_running_monitoring(
+        self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any
+    ) -> None:
         """Test tools can handle long-running monitoring sessions."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -613,7 +641,9 @@ class TestStressTests:
 class TestMemoryLeakDetection:
     """Tests to detect memory leaks in monitoring tools."""
 
-    def test_profiler_no_memory_leak(self, sample_action_instance: Any, profiler_config: Any) -> None:
+    def test_profiler_no_memory_leak(
+        self, sample_action_instance: Any, profiler_config: Any
+    ) -> None:
         """Test that profiler doesn't leak memory over time."""
         import sys
 
@@ -701,7 +731,14 @@ class TestMemoryLeakDetection:
 class TestOverallPerformanceMetrics:
     """Test overall performance metrics for the monitoring suite."""
 
-    def test_combined_overhead_threshold(self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any, performance_thresholds: Any) -> None:
+    def test_combined_overhead_threshold(
+        self,
+        sample_action_instance: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        memory_profiler_config: Any,
+        performance_thresholds: Any,
+    ) -> None:
         """Test that combined overhead of all tools meets threshold."""
         # Baseline
         baseline_times: list[Any] = []

@@ -795,10 +795,19 @@ def maybe_value(exists) -> Any:
 
         # get_value should suggest union of int and str
         assert get_value_return
-        assert get_value_return.suggested_type is not None and "|" in get_value_return.suggested_type
-        assert get_value_return.suggested_type is not None and "int" in get_value_return.suggested_type
-        assert get_value_return.suggested_type is not None and "str" in get_value_return.suggested_type
+        assert (
+            get_value_return.suggested_type is not None and "|" in get_value_return.suggested_type
+        )
+        assert (
+            get_value_return.suggested_type is not None and "int" in get_value_return.suggested_type
+        )
+        assert (
+            get_value_return.suggested_type is not None and "str" in get_value_return.suggested_type
+        )
 
         # maybe_value should suggest list with None
         assert maybe_value_return
-        assert maybe_value_return.suggested_type is not None and "None" in maybe_value_return.suggested_type
+        assert (
+            maybe_value_return.suggested_type is not None
+            and "None" in maybe_value_return.suggested_type
+        )

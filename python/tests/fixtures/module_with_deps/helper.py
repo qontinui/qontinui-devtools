@@ -1,7 +1,7 @@
 """Helper module."""
 
-
 from typing import Any
+
 
 class HelperClass:
     """Helper class."""

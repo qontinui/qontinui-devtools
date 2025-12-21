@@ -1,5 +1,7 @@
 """Tests for Mock HAL components."""
 
+from pathlib import Path
+
 import pytest
 from PIL import Image
 from qontinui.hal.interfaces import Key, MouseButton

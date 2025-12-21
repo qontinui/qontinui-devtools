@@ -141,7 +141,7 @@ class TestDiagnosticReporter:
             failed_tests=0,
             skipped_tests=0,
             execution_time=8.2,
-            individual_results=[]
+            individual_results=[],
         )
 
         summary = self.reporter.generate_migration_summary(results)
@@ -649,7 +649,7 @@ def test_example() -> None:
             path=Path("test.java"),
             test_type=TestType.UNIT,
             class_name="EmptyTestClass",
-            test_methods=[]
+            test_methods=[],
         )
 
         python_content = "# Empty Python file"

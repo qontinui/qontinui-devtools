@@ -2,8 +2,9 @@
 Unit tests for QontinuiMockGenerator.
 """
 
-from qontinui.test_migration.core.models import GuiModel, MockUsage
 from typing import cast
+
+from qontinui.test_migration.core.models import GuiModel, MockUsage
 from qontinui.test_migration.mocks.qontinui_mock_generator import QontinuiMockGenerator
 
 

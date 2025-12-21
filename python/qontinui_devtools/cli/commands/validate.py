@@ -4,8 +4,8 @@ import sys
 from pathlib import Path
 
 import click
-
 from qontinui.json_executor import JSONRunner
+
 from ..exit_codes import ExitCode
 from ..utils import configure_logging, print_error, print_success
 

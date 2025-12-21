@@ -1,7 +1,8 @@
 """Example god class with multiple responsibilities for testing."""
 
+from collections.abc import Callable
+from typing import Any
 
-from typing import Any, Callable
 
 class HugeClass:
     """Example god class with 50+ methods handling multiple responsibilities."""

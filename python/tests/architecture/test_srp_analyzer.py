@@ -1,10 +1,7 @@
 """Tests for Single Responsibility Principle (SRP) Analyzer."""
 
-from typing import Any
-
-from typing import Any
-
 from pathlib import Path
+from typing import Any
 
 import pytest
 from qontinui_devtools.architecture import MethodCluster, SRPAnalyzer

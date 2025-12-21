@@ -176,7 +176,7 @@ class ActionProfiler:
             memory_delta=0,  # Will be calculated
             peak_memory=peak_memory,
             phases={},
-            stack_samples = []
+            stack_samples=[],
         )
 
         # Stack sampling setup (if enabled)

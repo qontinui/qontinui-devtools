@@ -11,9 +11,9 @@ import ast
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from .clustering import MethodCluster, cluster_methods_by_keywords
-from typing import Any
 
 
 @dataclass

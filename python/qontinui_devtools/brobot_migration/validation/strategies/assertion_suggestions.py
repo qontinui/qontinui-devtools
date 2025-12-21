@@ -6,10 +6,10 @@ Assertion fix suggestion strategies for JUnit to pytest migration.
 
 import re
 from pathlib import Path
+from typing import Any
 
 from ...core.models import TestFile
 from ..fix_models import FixComplexity, FixSuggestion, FixType
-from typing import Any
 
 
 class AssertionSuggestionStrategy:

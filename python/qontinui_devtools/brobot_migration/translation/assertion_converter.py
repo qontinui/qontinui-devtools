@@ -3,7 +3,7 @@ Assertion converter for mapping JUnit assertions to pytest assertions.
 """
 
 import re
-from typing import cast, Any
+from typing import Any
 
 
 class AssertionConverter:

@@ -22,9 +22,9 @@ Examples:
 import argparse
 import sys
 from pathlib import Path
+from typing import Any
 
 from .validator import ConfigValidator
-from typing import Any
 
 
 def main() -> int:
@@ -92,7 +92,8 @@ Exit codes:
                         "total_inline_workflows": report.total_inline_workflows,
                         "valid_inline_workflows": report.valid_inline_workflows,
                         "invalid_inline_workflows": report.invalid_inline_workflows,
-                        "error_count": len(report.errors) + len(report.inline_workflow_errors or []),
+                        "error_count": len(report.errors)
+                        + len(report.inline_workflow_errors or []),
                         "warning_count": len(report.warnings),
                     }
                 )

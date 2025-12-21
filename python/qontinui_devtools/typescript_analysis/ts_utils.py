@@ -106,7 +106,7 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
                     imports.append(
                         ImportStatement(
                             source=source_match.group(1),
-                            names = [],
+                            names=[],
                             default_import=None,
                             namespace_import=None,
                             is_type_only=is_type_only,
@@ -170,7 +170,7 @@ def extract_imports(file_path: Path) -> list[ImportStatement]:
                 imports.append(
                     ImportStatement(
                         source=source,
-                        names = [],
+                        names=[],
                         default_import=default_import,
                         namespace_import=None,
                         is_type_only=False,

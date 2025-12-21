@@ -8,6 +8,7 @@ with similar responsibilities together based on their naming patterns.
 
 from collections import Counter, defaultdict
 from dataclasses import dataclass
+from typing import Any
 
 from .semantic_utils import (
     RESPONSIBILITY_PATTERNS,
@@ -16,7 +17,6 @@ from .semantic_utils import (
     classify_method,
     extract_keywords,
 )
-from typing import Any
 
 
 @dataclass

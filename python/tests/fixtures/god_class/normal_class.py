@@ -1,8 +1,6 @@
 """Example well-designed class with single responsibility for testing."""
 
 
-from typing import Any
-
 class NormalClass:
     """Well-designed class with single responsibility (counter)."""
 

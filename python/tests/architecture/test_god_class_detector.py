@@ -1,17 +1,5 @@
 """Tests for God Class Detector."""
 
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
 import ast
 from pathlib import Path
 

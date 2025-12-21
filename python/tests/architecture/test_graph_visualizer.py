@@ -3,7 +3,6 @@
 import json
 import tempfile
 from pathlib import Path
-from typing import Any, Generator, Iterator
 
 import pytest
 from qontinui_devtools.architecture import DependencyGraphVisualizer, GraphEdge, GraphNode
@@ -141,7 +140,9 @@ class TestDependencyGraphVisualizer:
         visualizer = DependencyGraphVisualizer(verbose=True)
         assert visualizer.verbose is True
 
-    def test_build_module_graph(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_build_module_graph(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test building a module-level dependency graph."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -161,7 +162,9 @@ class TestDependencyGraphVisualizer:
         for edge in edges:
             assert edge.edge_type == "imports"
 
-    def test_build_class_graph(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_build_class_graph(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test building a class-level dependency graph."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="class")
 
@@ -178,7 +181,9 @@ class TestDependencyGraphVisualizer:
             inheritance_edges = [e for e in edges if e.edge_type == "inherits"]
             assert len(inheritance_edges) >= 0  # At least ClassB inherits from ClassA
 
-    def test_build_function_graph(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_build_function_graph(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test building a function-level dependency graph."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="function")
 
@@ -191,7 +196,9 @@ class TestDependencyGraphVisualizer:
             assert "lines" in node.metrics
             assert "calls" in node.metrics
 
-    def test_invalid_level(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_invalid_level(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test with invalid level parameter."""
         with pytest.raises(ValueError, match="Invalid level"):
             visualizer.build_graph(str(sample_python_code), level="invalid")
@@ -236,7 +243,9 @@ class TestDependencyGraphVisualizer:
         cycles = visualizer.detect_cycles(nodes, edges)
         assert len(cycles) == 0
 
-    def test_generate_html_interactive(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_generate_html_interactive(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test generating interactive HTML visualization."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -259,7 +268,9 @@ class TestDependencyGraphVisualizer:
         finally:
             Path(output_path).unlink()
 
-    def test_visualize_html(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_visualize_html(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test visualize method with HTML format."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -273,7 +284,9 @@ class TestDependencyGraphVisualizer:
         finally:
             Path(output_path).unlink()
 
-    def test_export_json(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_export_json(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test exporting graph to JSON."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -322,7 +335,9 @@ class TestDependencyGraphVisualizer:
         positions = visualizer.apply_layout(nodes, edges, "circular")
         assert len(positions) == 3
 
-    def test_calculate_node_metrics(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_calculate_node_metrics(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test that node metrics are calculated correctly."""
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")
 
@@ -536,7 +551,9 @@ class TestIntegration:
         finally:
             Path(output_path).unlink()
 
-    def test_full_workflow(self, visualizer: DependencyGraphVisualizer, sample_python_code: Path) -> None:
+    def test_full_workflow(
+        self, visualizer: DependencyGraphVisualizer, sample_python_code: Path
+    ) -> None:
         """Test complete workflow from parsing to visualization."""
         # Build graph
         nodes, edges = visualizer.build_graph(str(sample_python_code), level="module")

@@ -6,8 +6,9 @@ against Pydantic schemas, catching schema mismatches before execution.
 """
 
 import json
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -254,7 +255,9 @@ class TestConfigValidatorInitialization:
 class TestValidateValidConfig:
     """Tests for validating valid configuration files."""
 
-    def test_validate_valid_config(self, valid_config_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_valid_config(
+        self, valid_config_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation of a completely valid config file."""
         # Mock successful validation
         mock_validator.Workflow.model_validate.return_value = MagicMock()
@@ -269,7 +272,9 @@ class TestValidateValidConfig:
         assert len(report.errors) == 0
         assert report.config_path == valid_config_file
 
-    def test_validate_multiple_valid_workflows(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_multiple_valid_workflows(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation of config with multiple valid workflows."""
         config = {
             "name": "Multi Workflow",
@@ -304,7 +309,9 @@ class TestValidateValidConfig:
 class TestValidateInvalidConfigs:
     """Tests for detecting invalid configuration files."""
 
-    def test_validate_invalid_connections_format(self, invalid_connections_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_invalid_connections_format(
+        self, invalid_connections_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test detection of invalid connections format (schema mismatch)."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -328,7 +335,9 @@ class TestValidateInvalidConfigs:
         # Check that error is related to connections
         assert any("connections" in error.field for error in report.errors)
 
-    def test_validate_missing_required_fields(self, missing_required_fields_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_missing_required_fields(
+        self, missing_required_fields_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test detection of missing required fields."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -351,7 +360,9 @@ class TestValidateInvalidConfigs:
         # Check for missing field error
         assert any(error.error_type == "missing" for error in report.errors)
 
-    def test_validate_multiple_workflows_mixed_validity(self, multiple_workflows_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_multiple_workflows_mixed_validity(
+        self, multiple_workflows_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation with some valid and some invalid workflows."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -396,7 +407,9 @@ class TestValidateNonexistentFile:
         assert len(report.warnings) > 0
         assert "not found" in report.warnings[0].lower()
 
-    def test_validate_invalid_json(self, invalid_json_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_invalid_json(
+        self, invalid_json_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of invalid JSON syntax."""
         report = mock_validator.validate_file(invalid_json_file)
 
@@ -405,7 +418,9 @@ class TestValidateNonexistentFile:
         assert len(report.warnings) > 0
         assert "json" in report.warnings[0].lower()
 
-    def test_validate_empty_workflows(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_validate_empty_workflows(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of config with no workflows."""
         config = {"name": "Empty Config", "default_workflow": "none", "workflows": []}
 
@@ -423,7 +438,9 @@ class TestValidateNonexistentFile:
 class TestValidationReportFormat:
     """Tests for ValidationReport structure and formatting."""
 
-    def test_validation_report_structure(self, valid_config_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validation_report_structure(
+        self, valid_config_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test that ValidationReport has correct structure."""
         mock_validator.Workflow.model_validate.return_value = MagicMock()
 
@@ -447,7 +464,9 @@ class TestValidationReportFormat:
         assert isinstance(report.errors, list)
         assert isinstance(report.warnings, list)
 
-    def test_validation_error_structure(self, invalid_connections_file: Path, mock_validator: ConfigValidator) -> None:
+    def test_validation_error_structure(
+        self, invalid_connections_file: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test that ValidationError has correct structure."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -482,7 +501,9 @@ class TestValidationReportFormat:
         assert isinstance(error.location, list)
         assert error.workflow_id == "test_workflow"
 
-    def test_print_report_valid_config(self, valid_config_file: Path, mock_validator: ConfigValidator, capsys: Any) -> None:
+    def test_print_report_valid_config(
+        self, valid_config_file: Path, mock_validator: ConfigValidator, capsys: Any
+    ) -> None:
         """Test print_report output for valid config."""
         mock_validator.Workflow.model_validate.return_value = MagicMock()
 
@@ -493,7 +514,9 @@ class TestValidationReportFormat:
         assert "PASSED" in captured.out
         assert str(report.total_workflows) in captured.out
 
-    def test_print_report_invalid_config(self, invalid_connections_file: Path, mock_validator: ConfigValidator, capsys: Any) -> None:
+    def test_print_report_invalid_config(
+        self, invalid_connections_file: Path, mock_validator: ConfigValidator, capsys: Any
+    ) -> None:
         """Test print_report output for invalid config."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -514,7 +537,9 @@ class TestValidationReportFormat:
         assert "FAILED" in captured.out
         assert "connections" in captured.out.lower()
 
-    def test_print_report_verbose_mode(self, invalid_connections_file: Path, mock_validator: ConfigValidator, capsys: Any) -> None:
+    def test_print_report_verbose_mode(
+        self, invalid_connections_file: Path, mock_validator: ConfigValidator, capsys: Any
+    ) -> None:
         """Test print_report verbose output includes detailed info."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -664,7 +689,9 @@ class TestEdgeCases:
 class TestIntegrationWithFixtures:
     """Integration tests using pre-created fixture files."""
 
-    def test_fixture_valid_config(self, fixtures_dir: Path, mock_validator: ConfigValidator) -> None:
+    def test_fixture_valid_config(
+        self, fixtures_dir: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation using fixture valid config file."""
         fixture_file = fixtures_dir / "valid_config.json"
 
@@ -678,7 +705,9 @@ class TestIntegrationWithFixtures:
         assert isinstance(report, ValidationReport)
         assert report.config_path == fixture_file
 
-    def test_fixture_invalid_connections(self, fixtures_dir: Path, mock_validator: ConfigValidator) -> None:
+    def test_fixture_invalid_connections(
+        self, fixtures_dir: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test validation using fixture invalid connections file."""
         from pydantic import ValidationError as PydanticValidationError
 

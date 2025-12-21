@@ -7,9 +7,9 @@ unused functions, classes, imports, and variables in a codebase.
 """
 
 from pathlib import Path
+from typing import Any
 
 from qontinui_devtools.code_quality import DeadCodeDetector
-from typing import Any
 
 
 def main() -> None:

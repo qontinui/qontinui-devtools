@@ -6,10 +6,10 @@ Import fix suggestion strategies for Java/Brobot to Python/Qontinui migration.
 
 import re
 from pathlib import Path
+from typing import Any
 
 from ...core.models import TestFile
 from ..fix_models import FixComplexity, FixSuggestion, FixType
-from typing import Any
 
 
 class ImportSuggestionStrategy:

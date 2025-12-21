@@ -200,7 +200,9 @@ class SpringTestAdapter:
             handler = self._spring_annotation_mappings[annotation_name]
             handler(annotation, config, scope, method)
 
-    def _process_field_annotation(self, annotation: str, field_name: str, config: dict[str, Any]) -> None:
+    def _process_field_annotation(
+        self, annotation: str, field_name: str, config: dict[str, Any]
+    ) -> None:
         """Process field-level annotations like @Autowired, @MockBean."""
         annotation_name = annotation.split("(")[0].strip()
 

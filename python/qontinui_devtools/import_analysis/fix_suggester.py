@@ -44,7 +44,7 @@ def analyze_cycle(cycle: list[str], import_map: dict[str, list[ImportStatement]]
             fix_type="restructure",
             description="Unable to analyze cycle imports. Consider restructuring the modules.",
             code_example=None,
-            affected_files=[]
+            affected_files=[],
         )
 
     # Analyze the usage patterns of the imports

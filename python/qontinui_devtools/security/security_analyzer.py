@@ -14,7 +14,6 @@ import time
 from pathlib import Path
 
 from .models import SecurityReport, Severity, Vulnerability, VulnerabilityType
-from typing import Any
 
 
 class SecurityAnalyzer:

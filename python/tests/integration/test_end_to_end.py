@@ -6,6 +6,7 @@ This module tests complete workflows from start to finish:
 - Full monitoring lifecycle
 - Report generation with all data
 """
+
 # mypy: disable-error-code="call-arg,index,attr-defined"
 
 import json
@@ -18,11 +19,15 @@ import pytest
 
 # Mock implementations for CLI testing
 try:
-    from qontinui_devtools.runtime.dashboard import PerformanceDashboard  # type: ignore[import-untyped]
+    from qontinui_devtools.runtime.dashboard import (
+        PerformanceDashboard,  # type: ignore[import-untyped]
+    )
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
     from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-untyped]
-    from qontinui_devtools.runtime.report_generator import RuntimeReportGenerator  # type: ignore[import-untyped]
+    from qontinui_devtools.runtime.report_generator import (
+        RuntimeReportGenerator,  # type: ignore[import-untyped]
+    )
 except ImportError:
     # Mock implementations
     class ActionProfiler:  # type: ignore[no-redef]
@@ -144,7 +149,13 @@ except ImportError:
         def __init__(self) -> None:
             pass
 
-        def generate_report(self, profiler_data: dict[str, Any], event_data: list[dict[str, Any]], memory_data: dict[str, Any], output_path: Path) -> None:
+        def generate_report(
+            self,
+            profiler_data: dict[str, Any],
+            event_data: list[dict[str, Any]],
+            memory_data: dict[str, Any],
+            output_path: Path,
+        ) -> None:
             """Generate comprehensive runtime monitoring report."""
             report = {
                 "timestamp": time.time(),
@@ -208,7 +219,14 @@ except ImportError:
 class TestFullMonitoringWorkflow:
     """Test complete monitoring workflow from start to finish."""
 
-    def test_analyze_profile_report_workflow(self, sample_qontinui_project: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
+    def test_analyze_profile_report_workflow(
+        self,
+        sample_qontinui_project: Any,
+        temp_test_dir: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        memory_profiler_config: Any,
+    ) -> None:
         """Test full workflow: analyze + profile + generate report."""
         # Step 1: Initialize monitoring tools
         profiler = ActionProfiler(profiler_config)
@@ -269,7 +287,13 @@ class TestFullMonitoringWorkflow:
             assert "Total Function Calls" in content
             assert "Total Events" in content
 
-    def test_incremental_monitoring_workflow(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any) -> None:
+    def test_incremental_monitoring_workflow(
+        self,
+        sample_action_instance: Any,
+        temp_test_dir: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+    ) -> None:
         """Test workflow with incremental monitoring and checkpoints."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -332,7 +356,16 @@ class TestFullMonitoringWorkflow:
         checkpoint_events = tracer.get_events("checkpoint")
         assert len(checkpoint_events) == 3
 
-    def test_multi_action_monitoring_workflow(self, sample_action_instance: Any, memory_intensive_action: Any, concurrent_action: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
+    def test_multi_action_monitoring_workflow(
+        self,
+        sample_action_instance: Any,
+        memory_intensive_action: Any,
+        concurrent_action: Any,
+        temp_test_dir: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        memory_profiler_config: Any,
+    ) -> None:
         """Test monitoring workflow with multiple different actions."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)
@@ -409,7 +442,9 @@ class TestFullMonitoringWorkflow:
 class TestCLIEndToEnd:
     """Test CLI commands end-to-end."""
 
-    def test_runtime_profile_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
+    def test_runtime_profile_command(
+        self, sample_qontinui_project: Any, temp_test_dir: Any
+    ) -> None:
         """Test 'qontinui-devtools runtime profile' CLI command."""
         # This test would run the actual CLI command
         # For now, we'll simulate it
@@ -452,7 +487,9 @@ class TestCLIEndToEnd:
             events = json.load(f)
         assert len(events) > 0
 
-    def test_runtime_monitor_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
+    def test_runtime_monitor_command(
+        self, sample_qontinui_project: Any, temp_test_dir: Any
+    ) -> None:
         """Test 'qontinui-devtools runtime monitor' CLI command."""
         # This would start all monitoring tools
         profiler = ActionProfiler()
@@ -519,7 +556,14 @@ class TestCLIEndToEnd:
 class TestReportGeneration:
     """Test comprehensive report generation with all data."""
 
-    def test_generate_json_report(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
+    def test_generate_json_report(
+        self,
+        sample_action_instance: Any,
+        temp_test_dir: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        memory_profiler_config: Any,
+    ) -> None:
         """Test JSON report generation with all monitoring data."""
         # Collect data
         profiler = ActionProfiler(profiler_config)
@@ -571,7 +615,14 @@ class TestReportGeneration:
         assert summary["total_events"] > 0
         assert summary["peak_memory_mb"] >= 0
 
-    def test_generate_html_report(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any) -> None:
+    def test_generate_html_report(
+        self,
+        sample_action_instance: Any,
+        temp_test_dir: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        memory_profiler_config: Any,
+    ) -> None:
         """Test HTML report generation with all monitoring data."""
         # Collect data
         profiler = ActionProfiler(profiler_config)
@@ -637,7 +688,13 @@ class TestReportGeneration:
         assert report["summary"]["total_calls"] == 0
         assert report["summary"]["total_events"] == 0
 
-    def test_report_with_large_dataset(self, sample_action_instance: Any, temp_test_dir: Any, profiler_config: Any, event_tracer_config: Any) -> None:
+    def test_report_with_large_dataset(
+        self,
+        sample_action_instance: Any,
+        temp_test_dir: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
+    ) -> None:
         """Test report generation with large amounts of data."""
         profiler = ActionProfiler(profiler_config)
         tracer = EventTracer(event_tracer_config)

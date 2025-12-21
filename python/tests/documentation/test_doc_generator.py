@@ -492,7 +492,10 @@ def foo() -> None:
 
         module_items = [item for item in items if item.type == DocItemType.MODULE]
         assert len(module_items) == 1
-        assert module_items[0].docstring is not None and "Module docstring" in module_items[0].docstring
+        assert (
+            module_items[0].docstring is not None
+            and "Module docstring" in module_items[0].docstring
+        )
 
     def test_extract_function(self) -> None:
         """Test extracting function."""

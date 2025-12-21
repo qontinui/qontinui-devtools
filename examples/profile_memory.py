@@ -12,6 +12,7 @@ This example demonstrates how to use the MemoryProfiler to:
 """
 
 import time
+from typing import Any
 
 from qontinui_devtools.runtime import (
     MemoryProfiler,
@@ -19,7 +20,6 @@ from qontinui_devtools.runtime import (
     detect_common_leak_patterns,
     suggest_fixes,
 )
-from typing import Any
 
 
 def simulate_memory_leak() -> Any:

@@ -1,7 +1,5 @@
 """Comprehensive tests for regression detection functionality."""
 
-from typing import Any
-
 import json
 from pathlib import Path
 

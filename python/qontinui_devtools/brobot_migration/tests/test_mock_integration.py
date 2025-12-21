@@ -3,7 +3,6 @@ Integration tests for BrobotMockAnalyzer and QontinuiMockGenerator working toget
 """
 
 from pathlib import Path
-from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -81,7 +80,7 @@ class TestMockIntegration:
                 assert len(mock_usages) > 0, "Should identify mock usages"
 
                 # Step 2: Generate equivalent Qontinui mocks
-                generated_mocks=[]
+                generated_mocks = []
                 for mock_usage in mock_usages:
                     qontinui_mock_code = self.generator.create_equivalent_mock(mock_usage)
                     generated_mocks.append(qontinui_mock_code)
@@ -404,7 +403,7 @@ class TestMockIntegration:
                 assert len(mock_usages) > 0
 
                 # Generate complete Qontinui test
-                qontinui_test_parts=[]
+                qontinui_test_parts = []
 
                 for mock_usage in mock_usages:
                     mock_code = self.generator.create_equivalent_mock(mock_usage)

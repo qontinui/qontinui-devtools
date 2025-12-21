@@ -91,7 +91,7 @@ def generate_dot(
         attrs = [
             f'color="{color}"',
             f"penwidth={penwidth}",
-            f"style={style}",
+            f"style={edge_style}",
         ]
 
         if edge.weight > 1:

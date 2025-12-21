@@ -5,13 +5,13 @@ Suggestion formatting and application utilities.
 """
 
 from pathlib import Path
+from typing import Any
 
 from ...core.models import FailureAnalysis, TestFile
 from ..fix_models import FixComplexity, FixSuggestion, FixType
 from .assertion_suggestions import AssertionSuggestionStrategy
 from .import_suggestions import ImportSuggestionStrategy
 from .syntax_suggestions import SyntaxSuggestionStrategy
-from typing import Any
 
 
 class SuggestionFormatter:

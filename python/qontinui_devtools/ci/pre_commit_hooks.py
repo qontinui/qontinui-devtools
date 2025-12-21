@@ -10,10 +10,10 @@ import subprocess
 import sys
 from collections.abc import Sequence
 from pathlib import Path
+from typing import Any
 
 import click
 from rich.console import Console
-from typing import Any
 
 console = Console()
 

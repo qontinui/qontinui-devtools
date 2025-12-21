@@ -6,10 +6,10 @@ Provides formatters for different test result formats:
 - TAP: Test Anything Protocol for Perl-compatible test runners
 """
 
-from typing import Any
 import json
 import xml.etree.ElementTree as ET
 from datetime import datetime
+from typing import Any
 
 
 def format_results(test_results: list[dict], summary: dict, format_type: str) -> str:

@@ -2,7 +2,7 @@
 Qontinui mock generator for creating equivalent Qontinui mocks from Brobot patterns.
 """
 
-from typing import cast, Any
+from typing import Any
 
 from ..core.interfaces import MockGenerator
 from ..core.models import GuiModel, MockUsage

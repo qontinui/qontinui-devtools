@@ -1,7 +1,5 @@
 """Test fixture: Module with high coupling (many dependencies)."""
 
-from typing import Any
-
 import ast
 import json
 import logging
@@ -10,6 +8,7 @@ import re
 import threading
 import time
 from pathlib import Path
+from typing import Any
 
 
 class HighlyCoupledClass:
@@ -31,7 +30,8 @@ class HighlyCoupledClass:
         with open(input_file) as f:
             data = json.load(f)
 
-        data_list: list[dict[Any, Any]] = data if isinstance(data, list) else [data]; return data_list
+        data_list: list[dict[Any, Any]] = data if isinstance(data, list) else [data]
+        return data_list
 
     def parse_code(self, source: str) -> ast.Module:
         """Parse Python source code."""

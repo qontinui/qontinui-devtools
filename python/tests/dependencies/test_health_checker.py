@@ -11,8 +11,10 @@ This module tests all aspects of the dependency health checker including:
 
 import json
 import tempfile
+from collections.abc import Generator
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -28,7 +30,6 @@ from qontinui_devtools.dependencies import (
     VulnerabilityInfo,
 )
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
-from typing import Any, Generator
 
 
 class TestPyPIClient:
@@ -714,11 +715,7 @@ setup(
                 current_version="1.0.0",
                 dependencies=["package-b"],
             ),
-            DependencyInfo(
-                name="package-b",
-                current_version="1.0.0",
-                dependencies = []
-            ),
+            DependencyInfo(name="package-b", current_version="1.0.0", dependencies=[]),
         ]
 
         circular = checker._detect_circular_dependencies(deps)

@@ -1,11 +1,10 @@
 """Tests for event tracer functionality."""
 
-from pathlib import Path
-from typing import Any
-
 import json
 import threading
 import time
+from pathlib import Path
+from typing import Any
 
 import pytest
 from qontinui_devtools.runtime import (

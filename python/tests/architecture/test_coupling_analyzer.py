@@ -1,13 +1,5 @@
 """Tests for coupling and cohesion analyzer."""
 
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
 import ast
 import os
 import tempfile

@@ -6,9 +6,9 @@ Configuration management for the test migration system.
 
 import os
 from pathlib import Path
+from typing import Any
 
 from core.models import MigrationConfig
-from typing import Any
 
 
 class TestMigrationConfig:

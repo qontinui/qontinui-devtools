@@ -1,14 +1,7 @@
 """AST-based metrics utilities for analyzing Python code structure."""
 
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
-from typing import Any
-
 import ast
+from typing import Any
 
 try:
     from radon.complexity import cc_visit

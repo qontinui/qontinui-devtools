@@ -15,11 +15,11 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from typing import Any
 
 
 class IssueSeverity(Enum):

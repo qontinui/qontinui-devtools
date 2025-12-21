@@ -1,11 +1,10 @@
 """God Class Detector for identifying classes that violate Single Responsibility Principle."""
 
-from typing import Any
-
 import ast
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 from .ast_metrics import (
     calculate_complexity,
