@@ -10,16 +10,9 @@ This module provides comprehensive dependency health checking including:
 """
 
 from .health_checker import DependencyHealthChecker
-from .models import (
-                     CircularDependency,
-                     DependencyHealthReport,
-                     DependencyInfo,
-                     HealthStatus,
-                     LicenseCategory,
-                     LicenseConflict,
-                     UpdateType,
-                     VulnerabilityInfo,
-)
+from .models import (CircularDependency, DependencyHealthReport,
+                     DependencyInfo, HealthStatus, LicenseCategory,
+                     LicenseConflict, UpdateType, VulnerabilityInfo)
 from .pypi_client import PackageInfo, PyPIClient
 
 __all__ = [

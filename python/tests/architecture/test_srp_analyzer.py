@@ -6,17 +6,10 @@ from typing import Any
 import pytest
 from qontinui_devtools.architecture import MethodCluster, SRPAnalyzer
 from qontinui_devtools.architecture.clustering import (
-    cluster_methods_by_keywords,
-    merge_similar_clusters,
-    name_cluster,
-)
+    cluster_methods_by_keywords, merge_similar_clusters, name_cluster)
 from qontinui_devtools.architecture.semantic_utils import (
-    calculate_similarity_score,
-    classify_method,
-    extract_keywords,
-    extract_verb,
-    tokenize_method_name,
-)
+    calculate_similarity_score, classify_method, extract_keywords,
+    extract_verb, tokenize_method_name)
 
 
 class TestMethodTokenization:

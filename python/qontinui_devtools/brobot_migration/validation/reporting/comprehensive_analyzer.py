@@ -16,12 +16,8 @@ else:
 
 from .error_analyzer import ErrorAnalyzer
 from .report_data_collector import ReportDataCollector
-from .report_models import (
-    AssertionDifference,
-    DependencyDifference,
-    DiagnosticReport,
-    SetupDifference,
-)
+from .report_models import (AssertionDifference, DependencyDifference,
+                            DiagnosticReport, SetupDifference)
 
 
 class ComprehensiveAnalyzer:

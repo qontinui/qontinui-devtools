@@ -18,17 +18,12 @@ from typing import Any
 from unittest.mock import Mock
 
 import pytest
-from qontinui_devtools.dependencies import (
-    CircularDependency,
-    DependencyHealthChecker,
-    DependencyHealthReport,
-    DependencyInfo,
-    HealthStatus,
-    LicenseCategory,
-    LicenseConflict,
-    UpdateType,
-    VulnerabilityInfo,
-)
+from qontinui_devtools.dependencies import (CircularDependency,
+                                            DependencyHealthChecker,
+                                            DependencyHealthReport,
+                                            DependencyInfo, HealthStatus,
+                                            LicenseCategory, LicenseConflict,
+                                            UpdateType, VulnerabilityInfo)
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
 
 

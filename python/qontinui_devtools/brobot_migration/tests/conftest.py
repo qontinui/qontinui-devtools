@@ -7,15 +7,10 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from qontinui.test_migration.core.models import (
-    Dependency,
-    GuiModel,
-    MigrationConfig,
-    MockUsage,
-    TestFile,
-    TestMethod,
-    TestType,
-)
+from qontinui.test_migration.core.models import (Dependency, GuiModel,
+                                                 MigrationConfig, MockUsage,
+                                                 TestFile, TestMethod,
+                                                 TestType)
 
 
 @pytest.fixture

@@ -126,7 +126,8 @@ def analyze_custom_path(path: str) -> None:
 
 def demonstrate_clustering() -> None:
     """Demonstrate the clustering algorithm."""
-    from qontinui_devtools.architecture.clustering import cluster_methods_by_keywords
+    from qontinui_devtools.architecture.clustering import \
+        cluster_methods_by_keywords
 
     print("\n" + "=" * 80)
     print("CLUSTERING DEMONSTRATION")

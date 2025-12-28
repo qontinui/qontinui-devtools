@@ -5,16 +5,10 @@ This module provides tools for automatically generating beautiful documentation
 from Python source code, including docstrings, type hints, and code structure.
 """
 
-from .doc_generator import ASTDocExtractor, DocstringParser, DocumentationGenerator
-from .models import (
-                            DocItem,
-                            DocItemType,
-                            DocstringStyle,
-                            DocumentationTree,
-                            Example,
-                            OutputFormat,
-                            Parameter,
-)
+from .doc_generator import (ASTDocExtractor, DocstringParser,
+                            DocumentationGenerator)
+from .models import (DocItem, DocItemType, DocstringStyle, DocumentationTree,
+                     Example, OutputFormat, Parameter)
 
 __all__ = [
     "DocumentationGenerator",

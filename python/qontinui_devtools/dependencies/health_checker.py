@@ -16,16 +16,9 @@ import tomllib
 from pathlib import Path
 from typing import Any
 
-from .models import (
-    CircularDependency,
-    DependencyHealthReport,
-    DependencyInfo,
-    HealthStatus,
-    LicenseCategory,
-    LicenseConflict,
-    UpdateType,
-    VulnerabilityInfo,
-)
+from .models import (CircularDependency, DependencyHealthReport,
+                     DependencyInfo, HealthStatus, LicenseCategory,
+                     LicenseConflict, UpdateType, VulnerabilityInfo)
 from .pypi_client import PyPIClient
 
 

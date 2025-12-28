@@ -6,17 +6,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
-from .models import (
-    Dependency,
-    FailureAnalysis,
-    GuiModel,
-    MockUsage,
-    TestFailure,
-    TestFile,
-    TestResult,
-    TestResults,
-    TestType,
-)
+from .models import (Dependency, FailureAnalysis, GuiModel, MockUsage,
+                     TestFailure, TestFile, TestResult, TestResults, TestType)
 
 
 class TestScanner(ABC):

@@ -8,13 +8,8 @@ and breakdowns by category and status.
 from datetime import datetime
 from typing import Any
 
-from .coverage_models import (
-    CoverageMetrics,
-    MigrationProgress,
-    MigrationStatus,
-    TestCategory,
-    TestMapping,
-)
+from .coverage_models import (CoverageMetrics, MigrationProgress,
+                              MigrationStatus, TestCategory, TestMapping)
 
 
 class CoverageStats:

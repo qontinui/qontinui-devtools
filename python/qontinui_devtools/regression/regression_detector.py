@@ -8,15 +8,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from .models import (
-    ChangeType,
-    FunctionSignature,
-    PerformanceMetric,
-    RegressionIssue,
-    RegressionReport,
-    RiskLevel,
-    SeverityLevel,
-)
+from .models import (ChangeType, FunctionSignature, PerformanceMetric,
+                     RegressionIssue, RegressionReport, RiskLevel,
+                     SeverityLevel)
 from .snapshot import APISnapshot
 
 logger = logging.getLogger(__name__)

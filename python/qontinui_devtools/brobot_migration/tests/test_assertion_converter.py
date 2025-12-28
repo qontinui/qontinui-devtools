@@ -2,7 +2,8 @@
 Unit tests for AssertionConverter.
 """
 
-from qontinui.test_migration.translation.assertion_converter import AssertionConverter
+from qontinui.test_migration.translation.assertion_converter import \
+    AssertionConverter
 
 
 class TestAssertionConverter:

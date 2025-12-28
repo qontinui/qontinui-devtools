@@ -8,12 +8,10 @@ from typing import Any
 from unittest.mock import patch
 
 import pytest
-from qontinui.test_migration.core.models import MockUsage, TestFile, TestMethod, TestType
+from qontinui.test_migration.core.models import (MockUsage, TestFile,
+                                                 TestMethod, TestType)
 from qontinui.test_migration.translation.llm_test_translator import (
-    LLMTestTranslator,
-    LLMTranslationResult,
-    MockLLMClient,
-)
+    LLMTestTranslator, LLMTranslationResult, MockLLMClient)
 
 
 class TestLLMTestTranslator:

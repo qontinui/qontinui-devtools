@@ -8,9 +8,11 @@ from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
-from qontinui.test_migration.core.models import Dependency, TestFile, TestMethod, TestType
+from qontinui.test_migration.core.models import (Dependency, TestFile,
+                                                 TestMethod, TestType)
 from qontinui.test_migration.execution.pytest_runner import PytestRunner
-from qontinui.test_migration.execution.python_test_generator import PythonTestGenerator
+from qontinui.test_migration.execution.python_test_generator import \
+    PythonTestGenerator
 
 
 class TestExecutionIntegration:

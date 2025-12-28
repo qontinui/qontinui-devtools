@@ -289,13 +289,12 @@ class MigrationReportingDashboard:
     def _save_pdf_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save PDF report."""
         try:
-            from reportlab.lib.pagesizes import letter  # type: ignore[import-untyped]
-            from reportlab.lib.styles import getSampleStyleSheet  # type: ignore[import-untyped]
+            from reportlab.lib.pagesizes import \
+                letter  # type: ignore[import-untyped]
+            from reportlab.lib.styles import \
+                getSampleStyleSheet  # type: ignore[import-untyped]
             from reportlab.platypus import (  # type: ignore[import-untyped]
-                Paragraph,
-                SimpleDocTemplate,
-                Spacer,
-            )
+                Paragraph, SimpleDocTemplate, Spacer)
 
             doc = SimpleDocTemplate(str(output_file), pagesize=letter)
             styles = getSampleStyleSheet()

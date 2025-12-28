@@ -5,15 +5,10 @@ from pathlib import Path
 import pytest
 from PIL import Image
 from qontinui.hal.interfaces import Key, MouseButton
-from qontinui_devtools.testing import (
-    MockHAL,
-    MockHALBuilder,
-    MockInputController,
-    MockOCREngine,
-    MockPatternMatcher,
-    MockPlatformSpecific,
-    MockScreenCapture,
-)
+from qontinui_devtools.testing import (MockHAL, MockHALBuilder,
+                                       MockInputController, MockOCREngine,
+                                       MockPatternMatcher,
+                                       MockPlatformSpecific, MockScreenCapture)
 from qontinui_devtools.testing.mock_input_controller import InputControlError
 
 

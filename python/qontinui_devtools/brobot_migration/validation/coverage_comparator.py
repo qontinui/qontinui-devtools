@@ -11,7 +11,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from .coverage_models import MigrationStatus, TestCategory, TestMapping, TestType
+from .coverage_models import (MigrationStatus, TestCategory, TestMapping,
+                              TestType)
 
 if TYPE_CHECKING:
     from ..core.models import TestResult

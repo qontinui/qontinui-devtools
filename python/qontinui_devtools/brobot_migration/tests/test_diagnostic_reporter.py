@@ -8,22 +8,13 @@ from tempfile import NamedTemporaryFile
 from typing import Any
 from unittest.mock import patch
 
-from qontinui.test_migration.core.models import (
-    Dependency,
-    FailureAnalysis,
-    TestFile,
-    TestMethod,
-    TestResult,
-    TestResults,
-    TestType,
-)
+from qontinui.test_migration.core.models import (Dependency, FailureAnalysis,
+                                                 TestFile, TestMethod,
+                                                 TestResult, TestResults,
+                                                 TestType)
 from qontinui.test_migration.validation.diagnostic_reporter import (
-    AssertionDifference,
-    DependencyDifference,
-    DiagnosticReport,
-    DiagnosticReporterImpl,
-    SetupDifference,
-)
+    AssertionDifference, DependencyDifference, DiagnosticReport,
+    DiagnosticReporterImpl, SetupDifference)
 
 
 class TestDiagnosticReporter:

@@ -11,7 +11,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from jinja2 import Environment, PackageLoader, TemplateNotFound, select_autoescape
+from jinja2 import (Environment, PackageLoader, TemplateNotFound,
+                    select_autoescape)
 
 
 @dataclass

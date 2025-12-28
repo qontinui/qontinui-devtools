@@ -4,11 +4,9 @@ from pathlib import Path
 
 import pytest
 from qontinui_devtools.import_analysis import CircularDependencyDetector
-from qontinui_devtools.import_analysis.ast_utils import (
-    extract_imports,
-    find_python_files,
-    module_path_from_file,
-)
+from qontinui_devtools.import_analysis.ast_utils import (extract_imports,
+                                                         find_python_files,
+                                                         module_path_from_file)
 
 
 class TestImportExtraction:

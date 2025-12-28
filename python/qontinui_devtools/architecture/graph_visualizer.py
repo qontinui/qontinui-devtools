@@ -490,7 +490,8 @@ class DependencyGraphVisualizer:
         Returns:
             Dictionary mapping node IDs to (x, y) positions
         """
-        from .layouts import circular_layout, force_directed_layout, hierarchical_layout
+        from .layouts import (circular_layout, force_directed_layout,
+                              hierarchical_layout)
 
         if layout == "force":
             return force_directed_layout(nodes, edges)

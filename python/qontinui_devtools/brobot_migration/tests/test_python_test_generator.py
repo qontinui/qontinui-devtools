@@ -6,14 +6,11 @@ Unit tests for PythonTestGenerator.
 
 from pathlib import Path
 
-from qontinui.test_migration.core.models import (
-    Dependency,
-    MockUsage,
-    TestFile,
-    TestMethod,
-    TestType,
-)
-from qontinui.test_migration.execution.python_test_generator import PythonTestGenerator
+from qontinui.test_migration.core.models import (Dependency, MockUsage,
+                                                 TestFile, TestMethod,
+                                                 TestType)
+from qontinui.test_migration.execution.python_test_generator import \
+    PythonTestGenerator
 
 
 class TestPythonTestGenerator:

@@ -5,20 +5,12 @@ Unit tests for the FixSuggestionEngine class.
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from qontinui.test_migration.core.models import (
-    FailureAnalysis,
-    FailureType,
-    TestFile,
-    TestMethod,
-    TestType,
-)
+from qontinui.test_migration.core.models import (FailureAnalysis, FailureType,
+                                                 TestFile, TestMethod,
+                                                 TestType)
 from qontinui.test_migration.validation.fix_suggestion_engine import (  # type: ignore[attr-defined]
-    FixComplexity,
-    FixSuggestion,
-    FixSuggestionEngine,
-    FixType,
-    MigrationIssuePattern,
-)
+    FixComplexity, FixSuggestion, FixSuggestionEngine, FixType,
+    MigrationIssuePattern)
 
 
 class TestFixSuggestionEngine:

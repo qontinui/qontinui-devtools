@@ -4,17 +4,11 @@ Tests for core data models.
 
 from pathlib import Path
 
-from qontinui.test_migration.core.models import (
-    Dependency,
-    FailureType,
-    GuiModel,
-    MigrationConfig,
-    MockUsage,
-    SuspectedCause,
-    TestFile,
-    TestMethod,
-    TestType,
-)
+from qontinui.test_migration.core.models import (Dependency, FailureType,
+                                                 GuiModel, MigrationConfig,
+                                                 MockUsage, SuspectedCause,
+                                                 TestFile, TestMethod,
+                                                 TestType)
 
 
 class TestDependency:

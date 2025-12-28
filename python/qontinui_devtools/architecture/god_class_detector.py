@@ -6,15 +6,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .ast_metrics import (
-    calculate_complexity,
-    count_attributes,
-    count_lines,
-    count_methods,
-    extract_method_names,
-    find_shared_attributes,
-    get_method_by_name,
-)
+from .ast_metrics import (calculate_complexity, count_attributes, count_lines,
+                          count_methods, extract_method_names,
+                          find_shared_attributes, get_method_by_name)
 
 
 @dataclass

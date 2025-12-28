@@ -4,18 +4,12 @@ import json
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.regression import (
-    APISnapshot,
-    ChangeType,
-    ClassSignature,
-    FunctionSignature,
-    PerformanceMetric,
-    RegressionDetector,
-    RegressionIssue,
-    RegressionReport,
-    RiskLevel,
-    SeverityLevel,
-)
+from qontinui_devtools.regression import (APISnapshot, ChangeType,
+                                          ClassSignature, FunctionSignature,
+                                          PerformanceMetric,
+                                          RegressionDetector, RegressionIssue,
+                                          RegressionReport, RiskLevel,
+                                          SeverityLevel)
 
 
 class TestFunctionSignature:

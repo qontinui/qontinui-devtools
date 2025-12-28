@@ -11,15 +11,8 @@ import re
 from pathlib import Path
 from typing import Any
 
-from .models import (
-    DocItem,
-    DocItemType,
-    DocstringStyle,
-    DocumentationTree,
-    Example,
-    OutputFormat,
-    Parameter,
-)
+from .models import (DocItem, DocItemType, DocstringStyle, DocumentationTree,
+                     Example, OutputFormat, Parameter)
 
 
 class DocstringParser:

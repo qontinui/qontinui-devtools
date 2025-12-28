@@ -6,11 +6,10 @@ from pathlib import Path
 from typing import Any
 from unittest.mock import Mock, patch
 
-from qontinui.test_migration.core.models import MockUsage, TestFile, TestMethod, TestType
+from qontinui.test_migration.core.models import (MockUsage, TestFile,
+                                                 TestMethod, TestType)
 from qontinui.test_migration.execution.hybrid_test_translator import (
-    HybridTestTranslator,
-    TranslationResult,
-)
+    HybridTestTranslator, TranslationResult)
 
 
 class TestTranslationResult:

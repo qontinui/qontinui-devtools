@@ -9,7 +9,8 @@ Modules:
     pre_commit_hooks: Pre-commit hooks for local development
 """
 
-from qontinui_devtools.ci.pr_comment import generate_comment, generate_pr_comment
+from qontinui_devtools.ci.pr_comment import (generate_comment,
+                                             generate_pr_comment)
 from qontinui_devtools.ci.quality_gates import QualityGateChecker, check_gates
 
 __all__ = [

@@ -13,15 +13,10 @@ from tempfile import TemporaryDirectory
 import pytest
 
 from ..core.models import TestFile, TestType
-from ..validation.coverage_tracker import (
-    CoverageMetrics,
-    CoverageTracker,
-    MigrationProgress,
-    MigrationStatus,
-    MigrationSummary,
-    TestCategory,
-    TestMapping,
-)
+from ..validation.coverage_tracker import (CoverageMetrics, CoverageTracker,
+                                           MigrationProgress, MigrationStatus,
+                                           MigrationSummary, TestCategory,
+                                           TestMapping)
 
 
 class TestCoverageTracker:

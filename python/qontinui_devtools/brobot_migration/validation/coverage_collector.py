@@ -9,7 +9,8 @@ from datetime import datetime
 from pathlib import Path
 
 from ..core.models import TestFile
-from .coverage_models import MigrationStatus, TestCategory, TestMapping, TestType
+from .coverage_models import (MigrationStatus, TestCategory, TestMapping,
+                              TestType)
 
 
 class CoverageCollector:

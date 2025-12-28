@@ -5,17 +5,12 @@ import time
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.runtime import (
-    ActionProfile,
-    ActionProfiler,
-    ProfilingSession,
-    calculate_action_type_metrics,
-    calculate_metrics,
-    calculate_percentile,
-    calculate_phase_metrics,
-    format_duration,
-    format_memory,
-)
+from qontinui_devtools.runtime import (ActionProfile, ActionProfiler,
+                                       ProfilingSession,
+                                       calculate_action_type_metrics,
+                                       calculate_metrics, calculate_percentile,
+                                       calculate_phase_metrics,
+                                       format_duration, format_memory)
 
 
 class TestActionProfile:

@@ -9,9 +9,7 @@ from unittest.mock import Mock, patch
 import pytest
 from qontinui.test_migration.core.models import TestFile, TestMethod, TestType
 from qontinui.test_migration.translation.spring_test_adapter import (
-    DependencyContainer,
-    SpringTestAdapter,
-)
+    DependencyContainer, SpringTestAdapter)
 
 
 class TestSpringTestAdapter:

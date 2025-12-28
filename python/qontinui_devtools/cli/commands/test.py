@@ -11,7 +11,8 @@ from qontinui.json_executor import JSONRunner
 from ..exit_codes import ExitCode
 from ..formatters import format_results
 from ..result_streamer import ResultStreamer
-from ..utils import configure_logging, print_error, print_success, print_warning
+from ..utils import (configure_logging, print_error, print_success,
+                     print_warning)
 
 
 @click.command()

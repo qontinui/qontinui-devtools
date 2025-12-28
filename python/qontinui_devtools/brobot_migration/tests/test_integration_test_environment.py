@@ -4,14 +4,12 @@ Unit tests for IntegrationTestEnvironment.
 
 from pathlib import Path
 
-from qontinui.test_migration.core.models import MockUsage, TestFile, TestMethod, TestType
+from qontinui.test_migration.core.models import (MockUsage, TestFile,
+                                                 TestMethod, TestType)
 from qontinui.test_migration.translation.integration_test_environment import (
-    ComponentConfiguration,
-    DatabaseConfiguration,
-    ExternalServiceConfiguration,
-    IntegrationTestEnvironment,
-    IntegrationTestGenerator,
-)
+    ComponentConfiguration, DatabaseConfiguration,
+    ExternalServiceConfiguration, IntegrationTestEnvironment,
+    IntegrationTestGenerator)
 
 
 class TestIntegrationTestEnvironment:

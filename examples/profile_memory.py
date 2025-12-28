@@ -14,12 +14,9 @@ This example demonstrates how to use the MemoryProfiler to:
 import time
 from typing import Any
 
-from qontinui_devtools.runtime import (
-    MemoryProfiler,
-    classify_leak_severity,
-    detect_common_leak_patterns,
-    suggest_fixes,
-)
+from qontinui_devtools.runtime import (MemoryProfiler, classify_leak_severity,
+                                       detect_common_leak_patterns,
+                                       suggest_fixes)
 
 
 def simulate_memory_leak() -> Any:

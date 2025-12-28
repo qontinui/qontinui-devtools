@@ -7,7 +7,8 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.reporting import HTMLReportGenerator, ReportData, ReportSection
+from qontinui_devtools.reporting import (HTMLReportGenerator, ReportData,
+                                         ReportSection)
 
 
 class TestReportSection:

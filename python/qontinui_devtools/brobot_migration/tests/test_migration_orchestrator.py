@@ -9,7 +9,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from ..core.models import MigrationConfig, TestFile, TestResult, TestResults, TestType
+from ..core.models import (MigrationConfig, TestFile, TestResult, TestResults,
+                           TestType)
 from ..orchestrator import TestMigrationOrchestrator
 
 
