@@ -10,10 +10,13 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from typing import Any
 
-from .semantic_utils import (RESPONSIBILITY_PATTERNS,
-                             calculate_cluster_similarity,
-                             calculate_similarity_score, classify_method,
-                             extract_keywords)
+from .semantic_utils import (
+    RESPONSIBILITY_PATTERNS,
+    calculate_cluster_similarity,
+    calculate_similarity_score,
+    classify_method,
+    extract_keywords,
+)
 
 
 @dataclass

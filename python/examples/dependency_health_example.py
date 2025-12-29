@@ -6,8 +6,7 @@ to analyze a Python project's dependencies.
 
 from pathlib import Path
 
-from qontinui_devtools.dependencies import (DependencyHealthChecker,
-                                            HealthStatus, UpdateType)
+from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus, UpdateType
 
 
 def main() -> None:

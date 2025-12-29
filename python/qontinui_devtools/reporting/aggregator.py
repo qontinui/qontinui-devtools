@@ -5,9 +5,10 @@ This module runs all analysis tools and aggregates their results into a single R
 """
 
 import html
-from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from qontinui_schemas.common import utc_now
 
 from .html_reporter import ReportData, ReportSection
 
@@ -43,7 +44,7 @@ class ReportAggregator:
         # Initialize report data
         report_data = ReportData(
             project_name=self.project_path.name,
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
             project_path=str(self.project_path),
             version="1.0.0",
         )

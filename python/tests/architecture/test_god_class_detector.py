@@ -4,14 +4,15 @@ import ast
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.architecture import (ClassMetrics, ExtractionSuggestion,
-                                            GodClassDetector)
-from qontinui_devtools.architecture.ast_metrics import (calculate_complexity,
-                                                        count_attributes,
-                                                        count_lines,
-                                                        count_methods,
-                                                        extract_method_names,
-                                                        find_shared_attributes)
+from qontinui_devtools.architecture import ClassMetrics, ExtractionSuggestion, GodClassDetector
+from qontinui_devtools.architecture.ast_metrics import (
+    calculate_complexity,
+    count_attributes,
+    count_lines,
+    count_methods,
+    extract_method_names,
+    find_shared_attributes,
+)
 
 
 @pytest.fixture

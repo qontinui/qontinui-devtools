@@ -6,12 +6,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from qontinui.test_migration.core.models import (Dependency, TestFile,
-                                                 TestMethod, TestType)
-from qontinui.test_migration.mocks.brobot_mock_analyzer import \
-    BrobotMockAnalyzer
-from qontinui.test_migration.mocks.qontinui_mock_generator import \
-    QontinuiMockGenerator
+from qontinui.test_migration.core.models import Dependency, TestFile, TestMethod, TestType
+from qontinui.test_migration.mocks.brobot_mock_analyzer import BrobotMockAnalyzer
+from qontinui.test_migration.mocks.qontinui_mock_generator import QontinuiMockGenerator
 
 
 class TestMockIntegration:

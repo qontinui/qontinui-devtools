@@ -4,13 +4,20 @@ import json
 import logging
 import subprocess
 import tempfile
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from .models import (ChangeType, FunctionSignature, PerformanceMetric,
-                     RegressionIssue, RegressionReport, RiskLevel,
-                     SeverityLevel)
+from qontinui_schemas.common import utc_now
+
+from .models import (
+    ChangeType,
+    FunctionSignature,
+    PerformanceMetric,
+    RegressionIssue,
+    RegressionReport,
+    RiskLevel,
+    SeverityLevel,
+)
 from .snapshot import APISnapshot
 
 logger = logging.getLogger(__name__)
@@ -128,7 +135,7 @@ class RegressionDetector:
             dependency_count=dependency_count,
             total_functions_compared=len(self.baseline_snapshot.functions),
             total_classes_compared=len(self.baseline_snapshot.classes),
-            timestamp=datetime.now().isoformat(),
+            timestamp=utc_now().isoformat(),
         )
 
         report.summary = self._generate_summary(report)

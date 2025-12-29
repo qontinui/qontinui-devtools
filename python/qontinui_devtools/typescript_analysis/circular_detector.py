@@ -13,8 +13,13 @@ import networkx as nx
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from .ts_utils import (ImportStatement, extract_imports, find_ts_js_files,
-                       module_path_from_file, resolve_import_path)
+from .ts_utils import (
+    ImportStatement,
+    extract_imports,
+    find_ts_js_files,
+    module_path_from_file,
+    resolve_import_path,
+)
 
 
 @dataclass

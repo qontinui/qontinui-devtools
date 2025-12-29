@@ -11,12 +11,18 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
+from qontinui_schemas.common import utc_now
 
 from ..core.models import TestFile, TestType
-from ..validation.coverage_tracker import (CoverageMetrics, CoverageTracker,
-                                           MigrationProgress, MigrationStatus,
-                                           MigrationSummary, TestCategory,
-                                           TestMapping)
+from ..validation.coverage_tracker import (
+    CoverageMetrics,
+    CoverageTracker,
+    MigrationProgress,
+    MigrationStatus,
+    MigrationSummary,
+    TestCategory,
+    TestMapping,
+)
 
 
 class TestCoverageTracker:
@@ -269,7 +275,7 @@ class TestCoverageTracker:
             "metadata": {
                 "java_source_dir": str(self.java_dir),
                 "python_target_dir": str(self.python_dir),
-                "tracking_start_time": datetime.now().isoformat(),
+                "tracking_start_time": utc_now().isoformat(),
                 "total_mappings": 1,
             },
             "mappings": [
@@ -281,7 +287,7 @@ class TestCoverageTracker:
                     "test_type": "unit",
                     "test_category": "unit_simple",
                     "migration_status": "completed",
-                    "migration_date": datetime.now().isoformat(),
+                    "migration_date": utc_now().isoformat(),
                     "migration_notes": "Test migration",
                     "test_methods": {"testAdd": "test_add"},
                     "migration_success_rate": 1.0,

@@ -3,10 +3,12 @@
 import threading
 import time
 
-from qontinui_devtools.concurrency.instrumentation import (Access,
-                                                           InstrumentedObject,
-                                                           RaceConflict,
-                                                           SharedStateTracker)
+from qontinui_devtools.concurrency.instrumentation import (
+    Access,
+    InstrumentedObject,
+    RaceConflict,
+    SharedStateTracker,
+)
 
 
 def test_shared_state_tracker_record_read() -> None:

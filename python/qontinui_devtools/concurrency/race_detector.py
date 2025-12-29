@@ -5,9 +5,14 @@ from pathlib import Path
 from typing import Any
 
 from .ast_analyzer import AnalysisContext, StateAccess, analyze_file
-from .heuristics import (calculate_severity, get_false_positive_indicators,
-                         is_check_then_act_pattern, is_double_checked_locking,
-                         is_likely_thread_safe, suggest_fix)
+from .heuristics import (
+    calculate_severity,
+    get_false_positive_indicators,
+    is_check_then_act_pattern,
+    is_double_checked_locking,
+    is_likely_thread_safe,
+    suggest_fix,
+)
 
 
 @dataclass

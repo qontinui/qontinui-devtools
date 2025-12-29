@@ -10,15 +10,20 @@ Usage:
 """
 
 import sys
-from datetime import datetime
 from pathlib import Path
 
 # Add parent directory to path to import qontinui_devtools
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 
-from qontinui_devtools.reporting import (HTMLReportGenerator, ReportData,
-                                         ReportSection, create_bar_chart,
-                                         create_line_chart, create_pie_chart)
+from qontinui_devtools.reporting import (
+    HTMLReportGenerator,
+    ReportData,
+    ReportSection,
+    create_bar_chart,
+    create_line_chart,
+    create_pie_chart,
+)
+from qontinui_schemas.common import utc_now
 
 
 def create_custom_report() -> None:
@@ -27,7 +32,7 @@ def create_custom_report() -> None:
     # Create report data
     report_data = ReportData(
         project_name="Example Project",
-        analysis_date=datetime.now(),
+        analysis_date=utc_now(),
         project_path="/example/project",
         version="1.0.0",
     )

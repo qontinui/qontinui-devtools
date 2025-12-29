@@ -5,11 +5,15 @@ Unit tests for BrobotMockAnalyzer.
 from pathlib import Path
 from unittest.mock import patch
 
-from qontinui.test_migration.core.models import (Dependency, GuiModel,
-                                                 MockUsage, TestFile,
-                                                 TestMethod, TestType)
-from qontinui.test_migration.mocks.brobot_mock_analyzer import \
-    BrobotMockAnalyzer
+from qontinui.test_migration.core.models import (
+    Dependency,
+    GuiModel,
+    MockUsage,
+    TestFile,
+    TestMethod,
+    TestType,
+)
+from qontinui.test_migration.mocks.brobot_mock_analyzer import BrobotMockAnalyzer
 
 
 class TestBrobotMockAnalyzer:

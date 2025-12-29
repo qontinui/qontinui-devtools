@@ -10,8 +10,15 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from .config import TestMigrationConfig
     from .core.interfaces import MigrationOrchestrator
-    from .core.models import (FailureType, MigrationConfig, SuspectedCause,
-                              TestFailure, TestFile, TestResult, TestResults)
+    from .core.models import (
+        FailureType,
+        MigrationConfig,
+        SuspectedCause,
+        TestFailure,
+        TestFile,
+        TestResult,
+        TestResults,
+    )
     from .discovery.classifier import TestClassifier
     from .discovery.scanner import BrobotTestScanner
     from .execution.hybrid_test_translator import HybridTestTranslator
@@ -24,9 +31,15 @@ else:
     try:
         from .config import TestMigrationConfig
         from .core.interfaces import MigrationOrchestrator
-        from .core.models import (FailureType, MigrationConfig, SuspectedCause,
-                                  TestFailure, TestFile, TestResult,
-                                  TestResults)
+        from .core.models import (
+            FailureType,
+            MigrationConfig,
+            SuspectedCause,
+            TestFailure,
+            TestFile,
+            TestResult,
+            TestResults,
+        )
         from .discovery.classifier import TestClassifier
         from .discovery.scanner import BrobotTestScanner
         from .execution.hybrid_test_translator import HybridTestTranslator
@@ -39,9 +52,15 @@ else:
         # Handle direct execution case
         from config import TestMigrationConfig
         from core.interfaces import MigrationOrchestrator
-        from core.models import (FailureType, MigrationConfig, SuspectedCause,
-                                 TestFailure, TestFile, TestResult,
-                                 TestResults)
+        from core.models import (
+            FailureType,
+            MigrationConfig,
+            SuspectedCause,
+            TestFailure,
+            TestFile,
+            TestResult,
+            TestResults,
+        )
         from discovery.classifier import TestClassifier
         from discovery.scanner import BrobotTestScanner
         from execution.hybrid_test_translator import HybridTestTranslator

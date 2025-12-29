@@ -20,9 +20,11 @@ from typing import Any
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 
-from qontinui_devtools.import_analysis import (ImportTracer,
-                                               generate_html_report,
-                                               visualize_import_graph)
+from qontinui_devtools.import_analysis import (
+    ImportTracer,
+    generate_html_report,
+    visualize_import_graph,
+)
 
 
 def example_trace_imports() -> Any:

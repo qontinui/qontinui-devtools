@@ -12,19 +12,25 @@ This module tests all aspects of the dependency health checker including:
 import json
 import tempfile
 from collections.abc import Generator
-from datetime import datetime, timedelta
+from datetime import timedelta
 from pathlib import Path
 from typing import Any
 from unittest.mock import Mock
 
 import pytest
-from qontinui_devtools.dependencies import (CircularDependency,
-                                            DependencyHealthChecker,
-                                            DependencyHealthReport,
-                                            DependencyInfo, HealthStatus,
-                                            LicenseCategory, LicenseConflict,
-                                            UpdateType, VulnerabilityInfo)
+from qontinui_devtools.dependencies import (
+    CircularDependency,
+    DependencyHealthChecker,
+    DependencyHealthReport,
+    DependencyInfo,
+    HealthStatus,
+    LicenseCategory,
+    LicenseConflict,
+    UpdateType,
+    VulnerabilityInfo,
+)
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
+from qontinui_schemas.common import utc_now
 
 
 class TestPyPIClient:
@@ -840,7 +846,7 @@ setup(
             name="requests",
             latest_version="2.31.0",
             versions=["2.31.0", "2.30.0"],
-            release_dates={"2.31.0": datetime.now()},
+            release_dates={"2.31.0": utc_now()},
             license="Apache-2.0",
             homepage="https://requests.readthedocs.io",
             repository=None,
@@ -873,7 +879,7 @@ setup(
             name="requests",
             latest_version="2.31.0",
             versions=["2.31.0", "2.30.0"],
-            release_dates={"2.31.0": datetime.now()},
+            release_dates={"2.31.0": utc_now()},
             license="Apache-2.0",
             homepage="https://requests.readthedocs.io",
             repository=None,

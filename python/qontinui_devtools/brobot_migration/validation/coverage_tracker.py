@@ -13,9 +13,14 @@ from ..core.models import TestFile
 from .coverage_analyzer import CoverageAnalyzer
 from .coverage_collector import CoverageCollector
 from .coverage_comparator import CoverageComparator
-from .coverage_models import (CoverageMetrics, MigrationProgress,
-                              MigrationStatus, MigrationSummary, TestCategory,
-                              TestMapping)
+from .coverage_models import (
+    CoverageMetrics,
+    MigrationProgress,
+    MigrationStatus,
+    MigrationSummary,
+    TestCategory,
+    TestMapping,
+)
 from .coverage_reporter import CoverageReporter
 from .coverage_stats import CoverageStats
 

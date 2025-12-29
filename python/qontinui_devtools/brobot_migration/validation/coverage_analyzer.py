@@ -7,8 +7,9 @@ Performs issue detection, generates recommendations, and creates
 migration summaries based on coverage data.
 """
 
-from datetime import datetime
 from typing import Any
+
+from qontinui_schemas.common import utc_now
 
 from .coverage_models import MigrationStatus, MigrationSummary, TestMapping
 from .coverage_stats import CoverageStats
@@ -62,7 +63,7 @@ class CoverageAnalyzer:
             if (
                 mapping.migration_status == MigrationStatus.IN_PROGRESS
                 and mapping.migration_date
-                and (datetime.now() - mapping.migration_date).days > 1
+                and (utc_now() - mapping.migration_date).days > 1
             ):
                 issues["long_running_migrations"] += 1
 
@@ -113,7 +114,7 @@ class CoverageAnalyzer:
             MigrationSummary object with complete status information
         """
         return MigrationSummary(
-            timestamp=datetime.now(),
+            timestamp=utc_now(),
             progress=self.stats.calculate_progress(),
             coverage_metrics=self.stats.calculate_coverage_metrics(),
             category_breakdown=self.stats.get_category_breakdown(),

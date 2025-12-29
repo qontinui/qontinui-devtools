@@ -11,8 +11,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from .coverage_models import (MigrationStatus, TestCategory, TestMapping,
-                              TestType)
+from qontinui_schemas.common import utc_now
+
+from .coverage_models import MigrationStatus, TestCategory, TestMapping, TestType
 
 if TYPE_CHECKING:
     from ..core.models import TestResult
@@ -146,7 +147,7 @@ class CoverageComparator:
                 mapping.metadata["coverage"] = {}  # type: ignore
 
             mapping.metadata["coverage"].update(coverage_data)  # type: ignore
-            mapping.metadata["last_coverage_update"] = datetime.now().isoformat()  # type: ignore
+            mapping.metadata["last_coverage_update"] = utc_now().isoformat()  # type: ignore
 
             # Update migration status if coverage indicates completion
             if (
@@ -154,7 +155,7 @@ class CoverageComparator:
                 and mapping.migration_status == MigrationStatus.IN_PROGRESS
             ):
                 mapping.migration_status = MigrationStatus.COMPLETED
-                mapping.migration_date = datetime.now()
+                mapping.migration_date = utc_now()
             elif coverage_data.get("status") == "failed":
                 mapping.migration_status = MigrationStatus.FAILED
 
@@ -170,7 +171,7 @@ class CoverageComparator:
                 mapping.metadata["coverage"] = {}  # type: ignore
 
             mapping.metadata["coverage"]["percentage"] = coverage_percent  # type: ignore
-            mapping.metadata["last_coverage_update"] = datetime.now().isoformat()  # type: ignore
+            mapping.metadata["last_coverage_update"] = utc_now().isoformat()  # type: ignore
 
     def _update_coverage_from_test_result(
         self, test_result: "TestResult", mapping: TestMapping | None
@@ -188,14 +189,14 @@ class CoverageComparator:
                 "passed": test_result.passed,
                 "execution_time": test_result.execution_time,
                 "error_message": test_result.error_message,
-                "timestamp": datetime.now().isoformat(),
+                "timestamp": utc_now().isoformat(),
             }
 
             # Update status based on test result
             if test_result.passed:
                 if mapping.migration_status == MigrationStatus.IN_PROGRESS:
                     mapping.migration_status = MigrationStatus.COMPLETED
-                    mapping.migration_date = datetime.now()
+                    mapping.migration_date = utc_now()
             else:
                 if mapping.migration_status == MigrationStatus.COMPLETED:
                     # Regression - mark as in progress for investigation

@@ -6,9 +6,14 @@ This module contains comprehensive tests for the type hint analysis tools.
 import ast
 from pathlib import Path
 
-from qontinui_devtools.type_analysis import (TypeAnalysisReport, TypeAnalyzer,
-                                             TypeCoverage, TypeHintVisitor,
-                                             TypeInferenceEngine, UntypedItem)
+from qontinui_devtools.type_analysis import (
+    TypeAnalysisReport,
+    TypeAnalyzer,
+    TypeCoverage,
+    TypeHintVisitor,
+    TypeInferenceEngine,
+    UntypedItem,
+)
 
 
 class TestTypeInferenceEngine:

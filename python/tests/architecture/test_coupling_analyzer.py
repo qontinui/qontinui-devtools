@@ -6,11 +6,15 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.architecture import (CouplingCohesionAnalyzer,
-                                            DependencyGraphBuilder,
-                                            calculate_lcc, calculate_lcom,
-                                            calculate_lcom4, calculate_tcc,
-                                            count_abstract_classes)
+from qontinui_devtools.architecture import (
+    CouplingCohesionAnalyzer,
+    DependencyGraphBuilder,
+    calculate_lcc,
+    calculate_lcom,
+    calculate_lcom4,
+    calculate_tcc,
+    count_abstract_classes,
+)
 
 
 class TestCohesionMetrics:

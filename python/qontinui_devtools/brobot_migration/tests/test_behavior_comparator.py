@@ -8,7 +8,10 @@ from unittest.mock import Mock, patch
 
 from qontinui.test_migration.core.models import TestFile, TestResult, TestType
 from qontinui.test_migration.validation.behavior_comparator import (
-    BehaviorComparatorImpl, ComparisonResult, TestIsolationConfig)
+    BehaviorComparatorImpl,
+    ComparisonResult,
+    TestIsolationConfig,
+)
 
 
 class TestBehaviorComparator:

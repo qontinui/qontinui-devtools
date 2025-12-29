@@ -44,6 +44,7 @@ colorama = "^0.4.6"
 pillow = "^11"
 aiohttp = "^3.9.1"
 qontinui = {path = "../qontinui"}
+qontinui-schemas = {path = "../qontinui-schemas"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3"

@@ -3,8 +3,9 @@ Report formatting with Strategy pattern for multiple output formats.
 """
 
 from abc import ABC, abstractmethod
-from datetime import datetime
 from typing import TYPE_CHECKING, Any
+
+from qontinui_schemas.common import utc_now
 
 if TYPE_CHECKING:
     from ...core.models import FailureAnalysis, TestResults
@@ -55,7 +56,7 @@ class TextReportFormatter(ReportFormatter):
         report_lines.append("=" * 80)
         report_lines.append("TEST FAILURE DIAGNOSTIC REPORT")
         report_lines.append("=" * 80)
-        report_lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        report_lines.append(f"Generated: {utc_now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append("")
 
         # Summary
@@ -115,7 +116,7 @@ class TextReportFormatter(ReportFormatter):
         summary_lines.append("=" * 80)
         summary_lines.append("TEST MIGRATION SUMMARY")
         summary_lines.append("=" * 80)
-        summary_lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        summary_lines.append(f"Generated: {utc_now().strftime('%Y-%m-%d %H:%M:%S')}")
         summary_lines.append("")
 
         # Overall statistics

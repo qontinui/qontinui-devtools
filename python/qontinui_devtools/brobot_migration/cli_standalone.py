@@ -14,8 +14,13 @@ from typing import cast
 # Add current directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
 
-from cli_commands import (BaseCommand, ConfigCommand,  # noqa: E402
-                          DiscoverCommand, MigrateCommand, ValidateCommand)
+from cli_commands import (  # noqa: E402
+    BaseCommand,
+    ConfigCommand,
+    DiscoverCommand,
+    MigrateCommand,
+    ValidateCommand,
+)
 
 
 class StandaloneTestMigrationCLI:

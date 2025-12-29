@@ -9,6 +9,8 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+from qontinui_schemas.common import utc_now
+
 from .coverage_models import MigrationSummary, TestMapping
 
 
@@ -48,7 +50,7 @@ class CoverageReporter:
                 "java_source_dir": str(self.java_source_dir),
                 "python_target_dir": str(self.python_target_dir),
                 "tracking_start_time": self.tracking_start_time.isoformat(),
-                "export_time": datetime.now().isoformat(),
+                "export_time": utc_now().isoformat(),
                 "total_mappings": len(self.test_mappings),
             },
             "mappings": [

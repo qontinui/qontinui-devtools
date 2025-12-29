@@ -15,6 +15,8 @@ from typing import Any, cast
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from qontinui_schemas.common import utc_now
+
 
 @dataclass
 class PackageInfo:
@@ -184,7 +186,7 @@ class PyPIClient:
             return None
 
         # Check if cache is expired
-        cache_age = datetime.now() - datetime.fromtimestamp(cache_file.stat().st_mtime)
+        cache_age = utc_now() - datetime.fromtimestamp(cache_file.stat().st_mtime)
         if cache_age > self.cache_ttl:
             return None
 

@@ -13,9 +13,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from pydantic_core import InitErrorDetails
-from qontinui_devtools.config_validator import (ConfigValidator,
-                                                ValidationError,
-                                                ValidationReport)
+from qontinui_devtools.config_validator import ConfigValidator, ValidationError, ValidationReport
 
 
 @pytest.fixture

@@ -8,8 +8,15 @@ and breakdowns by category and status.
 from datetime import datetime
 from typing import Any
 
-from .coverage_models import (CoverageMetrics, MigrationProgress,
-                              MigrationStatus, TestCategory, TestMapping)
+from qontinui_schemas.common import utc_now
+
+from .coverage_models import (
+    CoverageMetrics,
+    MigrationProgress,
+    MigrationStatus,
+    TestCategory,
+    TestMapping,
+)
 
 
 class CoverageStats:
@@ -131,12 +138,12 @@ class CoverageStats:
                 else 0
             ),
             "migration_velocity": self._calculate_recent_migration_count(7),
-            "time_since_start": (datetime.now() - self.tracking_start_time).days,
+            "time_since_start": (utc_now() - self.tracking_start_time).days,
         }
 
     def _calculate_recent_migration_count(self, days: int) -> int:
         """Calculate number of migrations in last N days."""
-        cutoff = datetime.now().timestamp() - (days * 86400)
+        cutoff = utc_now().timestamp() - (days * 86400)
         return sum(
             1
             for m in self.test_mappings.values()

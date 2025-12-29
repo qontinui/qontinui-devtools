@@ -5,12 +5,13 @@ Integration tests for FixSuggestionEngine with DiagnosticReporter.
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from qontinui.test_migration.core.models import (FailureAnalysis, TestFile,
-                                                 TestMethod, TestType)
-from qontinui.test_migration.validation.diagnostic_reporter import \
-    DiagnosticReporterImpl
-from qontinui.test_migration.validation.fix_suggestion_engine import (  # type: ignore[attr-defined]
-    FixComplexity, FixSuggestionEngine, FixType)
+from qontinui.test_migration.core.models import FailureAnalysis, TestFile, TestMethod, TestType
+from qontinui.test_migration.validation.diagnostic_reporter import DiagnosticReporterImpl
+from qontinui.test_migration.validation.fix_suggestion_engine import (
+    FixComplexity,
+    FixSuggestionEngine,
+    FixType,
+)
 
 
 class TestFixSuggestionIntegration:

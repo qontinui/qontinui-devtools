@@ -8,8 +8,7 @@ import threading
 import time
 from typing import Any
 
-from qontinui_devtools.concurrency import (RaceConditionTester,
-                                           concurrent_test, stress_test)
+from qontinui_devtools.concurrency import RaceConditionTester, concurrent_test, stress_test
 
 
 def example_1_basic_usage() -> None:

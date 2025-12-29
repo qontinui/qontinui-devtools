@@ -5,8 +5,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.architecture import (DependencyGraphVisualizer,
-                                            GraphEdge, GraphNode)
+from qontinui_devtools.architecture import DependencyGraphVisualizer, GraphEdge, GraphNode
 
 
 @pytest.fixture
@@ -416,8 +415,7 @@ class TestHTMLGeneration:
 
     def test_generate_html_graph(self) -> None:
         """Test generating HTML graph."""
-        from qontinui_devtools.architecture.html_graph import \
-            generate_html_graph
+        from qontinui_devtools.architecture.html_graph import generate_html_graph
 
         nodes = [
             GraphNode("a", "A", "module", {"complexity": 5}),
@@ -440,8 +438,7 @@ class TestLayouts:
 
     def test_force_directed_layout(self) -> None:
         """Test force-directed layout."""
-        from qontinui_devtools.architecture.layouts import \
-            force_directed_layout
+        from qontinui_devtools.architecture.layouts import force_directed_layout
 
         nodes = [
             GraphNode("a", "A", "module", {}),

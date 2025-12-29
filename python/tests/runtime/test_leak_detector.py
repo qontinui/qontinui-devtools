@@ -4,14 +4,17 @@ import gc
 from typing import Any
 
 import pytest
-from qontinui_devtools.runtime import (analyze_growth_trend,
-                                       analyze_object_retention,
-                                       classify_leak_severity,
-                                       detect_common_leak_patterns,
-                                       find_cycles_containing,
-                                       find_leaked_objects,
-                                       find_reference_chains,
-                                       get_object_size_deep, suggest_fixes)
+from qontinui_devtools.runtime import (
+    analyze_growth_trend,
+    analyze_object_retention,
+    classify_leak_severity,
+    detect_common_leak_patterns,
+    find_cycles_containing,
+    find_leaked_objects,
+    find_reference_chains,
+    get_object_size_deep,
+    suggest_fixes,
+)
 
 
 class TestAnalyzeGrowthTrend:

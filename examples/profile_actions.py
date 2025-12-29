@@ -11,8 +11,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "python"))
 
-from qontinui_devtools.runtime import (ActionProfiler, calculate_metrics,
-                                       format_duration, format_memory)
+from qontinui_devtools.runtime import (
+    ActionProfiler,
+    calculate_metrics,
+    format_duration,
+    format_memory,
+)
 from rich.console import Console
 from rich.table import Table
 

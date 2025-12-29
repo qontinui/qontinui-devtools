@@ -2,10 +2,11 @@
 Unit tests for the TestFailureAnalyzer class.
 """
 
-from qontinui.test_migration.core.models import (FailureType, SuspectedCause,
-                                                 TestFailure)
+from qontinui.test_migration.core.models import FailureType, SuspectedCause, TestFailure
 from qontinui.test_migration.validation.test_failure_analyzer import (
-    FailurePattern, TestFailureAnalyzer)
+    FailurePattern,
+    TestFailureAnalyzer,
+)
 
 
 class TestTestFailureAnalyzer:

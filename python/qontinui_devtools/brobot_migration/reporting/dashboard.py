@@ -2,10 +2,11 @@
 Migration reporting dashboard for generating comprehensive reports.
 """
 
-import datetime
 import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+from qontinui_schemas.common import utc_now
 
 if TYPE_CHECKING:
     from ..validation.coverage_tracker import CoverageTracker
@@ -274,7 +275,7 @@ class MigrationReportingDashboard:
     def _save_yaml_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save YAML report."""
         try:
-            import yaml  # type: ignore[import-untyped]
+            import yaml
 
             with open(output_file, "w") as f:
                 yaml.dump(report_data, f, default_flow_style=False)
@@ -289,12 +290,9 @@ class MigrationReportingDashboard:
     def _save_pdf_report(self, report_data: dict[str, Any], output_file: Path) -> None:
         """Save PDF report."""
         try:
-            from reportlab.lib.pagesizes import \
-                letter  # type: ignore[import-untyped]
-            from reportlab.lib.styles import \
-                getSampleStyleSheet  # type: ignore[import-untyped]
-            from reportlab.platypus import (  # type: ignore[import-untyped]
-                Paragraph, SimpleDocTemplate, Spacer)
+            from reportlab.lib.pagesizes import letter
+            from reportlab.lib.styles import getSampleStyleSheet
+            from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
             doc = SimpleDocTemplate(str(output_file), pagesize=letter)
             styles = getSampleStyleSheet()
@@ -384,7 +382,7 @@ class MigrationReportingDashboard:
 
     def _get_timestamp(self) -> str:
         """Get current timestamp."""
-        return datetime.datetime.now().isoformat()
+        return utc_now().isoformat()
 
 
 class ReportFormatter:

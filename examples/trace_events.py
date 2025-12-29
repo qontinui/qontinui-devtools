@@ -7,10 +7,15 @@ from frontend through Tauri, Python, ActionExecutor, and HAL layers.
 import random
 import time
 
-from qontinui_devtools.runtime import (EventTracer, analyze_latencies,
-                                       detect_anomalies, export_chrome_trace,
-                                       export_timeline_html, find_bottleneck,
-                                       generate_latency_report)
+from qontinui_devtools.runtime import (
+    EventTracer,
+    analyze_latencies,
+    detect_anomalies,
+    export_chrome_trace,
+    export_timeline_html,
+    find_bottleneck,
+    generate_latency_report,
+)
 
 
 def simulate_event_flow(tracer: EventTracer, event_id: str, event_type: str) -> None:

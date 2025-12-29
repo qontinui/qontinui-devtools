@@ -8,13 +8,23 @@ from tempfile import NamedTemporaryFile
 from typing import Any
 from unittest.mock import patch
 
-from qontinui.test_migration.core.models import (Dependency, FailureAnalysis,
-                                                 TestFile, TestMethod,
-                                                 TestResult, TestResults,
-                                                 TestType)
+from qontinui.test_migration.core.models import (
+    Dependency,
+    FailureAnalysis,
+    TestFile,
+    TestMethod,
+    TestResult,
+    TestResults,
+    TestType,
+)
 from qontinui.test_migration.validation.diagnostic_reporter import (
-    AssertionDifference, DependencyDifference, DiagnosticReport,
-    DiagnosticReporterImpl, SetupDifference)
+    AssertionDifference,
+    DependencyDifference,
+    DiagnosticReport,
+    DiagnosticReporterImpl,
+    SetupDifference,
+)
+from qontinui_schemas.common import utc_now
 
 
 class TestDiagnosticReporter:
@@ -586,7 +596,7 @@ def test_example() -> None:
 
     def test_diagnostic_report_dataclass(self) -> None:
         """Test DiagnosticReport dataclass."""
-        timestamp = datetime.now()
+        timestamp = utc_now()
         report = DiagnosticReport(
             report_id="test_123",
             timestamp=timestamp,

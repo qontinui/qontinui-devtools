@@ -7,9 +7,14 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from qontinui_devtools.runtime import (EventTrace, EventTracer,
-                                       analyze_latencies, detect_anomalies,
-                                       export_chrome_trace, find_bottleneck)
+from qontinui_devtools.runtime import (
+    EventTrace,
+    EventTracer,
+    analyze_latencies,
+    detect_anomalies,
+    export_chrome_trace,
+    find_bottleneck,
+)
 
 
 class TestEventTrace:

@@ -11,8 +11,7 @@ import sys
 from pathlib import Path
 from typing import cast
 
-from cli_commands import (BaseCommand, ConfigCommand, MigrateCommand,
-                          ReportCommand, ValidateCommand)
+from cli_commands import BaseCommand, ConfigCommand, MigrateCommand, ReportCommand, ValidateCommand
 
 
 class TestMigrationCLI:

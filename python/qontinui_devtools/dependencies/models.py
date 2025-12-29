@@ -9,6 +9,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+from qontinui_schemas.common import utc_now
+
 
 class HealthStatus(Enum):
     """Health status of a dependency."""
@@ -184,7 +186,7 @@ class DependencyInfo:
         # Deduct for old packages (no release in 2+ years)
         if self.last_release_date:
             # Handle both timezone-aware and naive datetimes
-            now = datetime.now()
+            now = utc_now()
             last_release = self.last_release_date
 
             # If last_release is timezone-aware, make now timezone-aware too
@@ -249,7 +251,7 @@ class DependencyHealthReport:
     max_tree_depth: int = 0
     total_vulnerabilities: int = 0
     critical_vulnerabilities: int = 0
-    timestamp: datetime = field(default_factory=datetime.now)
+    timestamp: datetime = field(default_factory=utc_now)
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __str__(self) -> str:

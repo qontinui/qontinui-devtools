@@ -8,9 +8,10 @@ and maintaining migration history.
 from datetime import datetime
 from pathlib import Path
 
+from qontinui_schemas.common import utc_now
+
 from ..core.models import TestFile
-from .coverage_models import (MigrationStatus, TestCategory, TestMapping,
-                              TestType)
+from .coverage_models import MigrationStatus, TestCategory, TestMapping, TestType
 
 
 class CoverageCollector:
@@ -28,7 +29,7 @@ class CoverageCollector:
         self.python_target_dir = python_target_dir
         self.test_mappings: dict[str, TestMapping] = {}
         self.migration_history: list[TestMapping] = []
-        self.tracking_start_time = datetime.now()
+        self.tracking_start_time = utc_now()
 
     def register_java_test(
         self,
@@ -73,7 +74,7 @@ class CoverageCollector:
             mapping.python_test_path = python_test_path
             mapping.python_class_name = python_class_name
             mapping.migration_status = MigrationStatus.COMPLETED
-            mapping.migration_date = datetime.now()
+            mapping.migration_date = utc_now()
 
             # Add to history
             self.migration_history.append(mapping)
@@ -87,7 +88,7 @@ class CoverageCollector:
                 test_type=TestType.UNKNOWN,
                 test_category=TestCategory.UNIT_SIMPLE,
                 migration_status=MigrationStatus.COMPLETED,
-                migration_date=datetime.now(),
+                migration_date=utc_now(),
             )
 
     def update_migration_status(
@@ -109,7 +110,7 @@ class CoverageCollector:
             mapping.migration_notes = notes
 
             if status == MigrationStatus.COMPLETED:
-                mapping.migration_date = datetime.now()
+                mapping.migration_date = utc_now()
 
     def add_method_mapping(
         self, java_test_path: Path, java_method: str, python_method: str

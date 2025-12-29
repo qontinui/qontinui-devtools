@@ -8,10 +8,12 @@ from typing import Any
 from unittest.mock import patch
 
 import pytest
-from qontinui.test_migration.core.models import (MockUsage, TestFile,
-                                                 TestMethod, TestType)
+from qontinui.test_migration.core.models import MockUsage, TestFile, TestMethod, TestType
 from qontinui.test_migration.translation.llm_test_translator import (
-    LLMTestTranslator, LLMTranslationResult, MockLLMClient)
+    LLMTestTranslator,
+    LLMTranslationResult,
+    MockLLMClient,
+)
 
 
 class TestLLMTestTranslator:
@@ -170,11 +172,11 @@ class TestExample:
         test_file = TestFile(path=Path("Test.java"), test_type=TestType.UNIT, class_name="Test")
 
         # Add original content
-        test_file.original_content = "public class Test { @Test public void test() {} }"  # type: ignore[attr-defined]
+        test_file.original_content = "public class Test { @Test public void test() {} }"
 
         result = self.translator._extract_java_code(test_file)
 
-        assert result == test_file.original_content  # type: ignore[attr-defined]
+        assert result == test_file.original_content
 
     def test_extract_java_code_reconstruction(self) -> None:
         """Test reconstructing Java code from TestFile data."""

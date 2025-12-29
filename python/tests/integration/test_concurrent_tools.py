@@ -19,12 +19,12 @@ import pytest
 
 # Mock implementations
 try:
-    from qontinui_devtools.runtime.dashboard import \
-        PerformanceDashboard  # type: ignore[import-untyped]
+    from qontinui_devtools.runtime.dashboard import (
+        PerformanceDashboard,  # type: ignore[import-untyped]
+    )
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import \
-        ActionProfiler  # type: ignore[import-untyped]
+    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-untyped]
 except ImportError:
 
     class ActionProfiler:  # type: ignore[no-redef]

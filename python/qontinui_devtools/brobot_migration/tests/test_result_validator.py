@@ -13,11 +13,14 @@ from unittest.mock import Mock
 import pytest
 
 from ..core.models import TestResult, TestResults
-from ..validation.result_validator import (BehavioralEquivalenceConfig,
-                                           ComparisonType, PerformanceMetrics,
-                                           ResultValidator,
-                                           ValidationComparison,
-                                           ValidationResult)
+from ..validation.result_validator import (
+    BehavioralEquivalenceConfig,
+    ComparisonType,
+    PerformanceMetrics,
+    ResultValidator,
+    ValidationComparison,
+    ValidationResult,
+)
 
 
 class TestResultValidator:

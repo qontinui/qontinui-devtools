@@ -10,12 +10,18 @@ import json
 import tempfile
 from pathlib import Path
 
-from qontinui_devtools.documentation import (ASTDocExtractor, DocItem,
-                                             DocItemType, DocstringParser,
-                                             DocstringStyle,
-                                             DocumentationGenerator,
-                                             DocumentationTree, Example,
-                                             OutputFormat, Parameter)
+from qontinui_devtools.documentation import (
+    ASTDocExtractor,
+    DocItem,
+    DocItemType,
+    DocstringParser,
+    DocstringStyle,
+    DocumentationGenerator,
+    DocumentationTree,
+    Example,
+    OutputFormat,
+    Parameter,
+)
 
 
 class TestParameter:

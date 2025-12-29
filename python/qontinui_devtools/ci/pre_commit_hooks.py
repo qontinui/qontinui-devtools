@@ -87,8 +87,7 @@ def check_circular_imports(filenames: Sequence[str]) -> None:
 
     # Try to import and run the circular dependency detector
     try:
-        from qontinui_devtools.import_analysis import \
-            CircularDependencyDetector
+        from qontinui_devtools.import_analysis import CircularDependencyDetector
 
         detector = CircularDependencyDetector(str(git_root))
         cycles = detector.analyze()
@@ -147,8 +146,7 @@ def check_new_god_classes(filenames: Sequence[str], min_lines: int, min_methods:
 
     # Try to import and run the god class detector
     try:
-        from qontinui_devtools.architecture.god_class_detector import \
-            GodClassDetector
+        from qontinui_devtools.architecture.god_class_detector import GodClassDetector
 
         detector = GodClassDetector(min_lines=min_lines, min_methods=min_methods)
 
@@ -225,8 +223,7 @@ def check_race_conditions(filenames: Sequence[str], severity: str) -> None:
 
     # Try to import and run the race condition detector
     try:
-        from qontinui_devtools.concurrency.race_detector import \
-            RaceConditionDetector
+        from qontinui_devtools.concurrency.race_detector import RaceConditionDetector
 
         detector = RaceConditionDetector()
 

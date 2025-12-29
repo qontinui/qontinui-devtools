@@ -7,8 +7,8 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.reporting import (HTMLReportGenerator, ReportData,
-                                         ReportSection)
+from qontinui_devtools.reporting import HTMLReportGenerator, ReportData, ReportSection
+from qontinui_schemas.common import utc_now
 
 
 class TestReportSection:
@@ -71,7 +71,7 @@ class TestReportData:
         """Test adding sections to report."""
         data = ReportData(
             project_name="Test",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
 
         section1 = ReportSection(
@@ -99,7 +99,7 @@ class TestReportData:
         """Test getting section by ID."""
         data = ReportData(
             project_name="Test",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
 
         section = ReportSection(
@@ -122,7 +122,7 @@ class TestReportData:
         """Test overall status with all success sections."""
         data = ReportData(
             project_name="Test",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
 
         data.add_section(
@@ -151,7 +151,7 @@ class TestReportData:
         """Test overall status with errors."""
         data = ReportData(
             project_name="Test",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
 
         data.add_section(
@@ -171,7 +171,7 @@ class TestReportData:
         """Test overall status with warnings."""
         data = ReportData(
             project_name="Test",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
 
         # Add multiple warnings to trigger warning status
@@ -278,7 +278,7 @@ class TestHTMLReportGenerator:
         # Perfect score
         report_data = ReportData(
             project_name="Test",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
         report_data.summary_metrics = {}
         generator.report_data = report_data
@@ -316,7 +316,7 @@ class TestHTMLReportGenerator:
 
         report_data = ReportData(
             project_name="Test",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
 
         report_data.summary_metrics = {
@@ -411,7 +411,7 @@ class TestReportGeneration:
         # Create comprehensive test data
         report_data = ReportData(
             project_name="ComprehensiveTest",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
             project_path="/test/project",
             version="1.0.0",
         )
@@ -507,7 +507,7 @@ class TestReportGeneration:
 
         report_data = ReportData(
             project_name="MinimalTest",
-            analysis_date=datetime.now(),
+            analysis_date=utc_now(),
         )
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:

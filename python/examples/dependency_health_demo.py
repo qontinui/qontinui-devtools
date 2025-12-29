@@ -5,14 +5,14 @@ with realistic output.
 """
 
 import tempfile
-from datetime import datetime, timedelta
+from datetime import timedelta
 from pathlib import Path
 from typing import Any
 from unittest.mock import Mock
 
-from qontinui_devtools.dependencies import (DependencyHealthChecker,
-                                            HealthStatus, UpdateType)
+from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus, UpdateType
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
+from qontinui_schemas.common import utc_now
 
 
 def create_sample_project() -> Path:
@@ -61,8 +61,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="3.0.0",
             versions=["3.0.0", "2.3.0", "2.0.0"],
             release_dates={
-                "3.0.0": datetime.now() - timedelta(days=30),
-                "2.3.0": datetime.now() - timedelta(days=120),
+                "3.0.0": utc_now() - timedelta(days=30),
+                "2.3.0": utc_now() - timedelta(days=120),
             },
             license="BSD-3-Clause",
             homepage="https://flask.palletsprojects.com/",
@@ -78,8 +78,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="2.31.0",
             versions=["2.31.0", "2.30.0", "2.25.0"],
             release_dates={
-                "2.31.0": datetime.now() - timedelta(days=180),
-                "2.25.0": datetime.now() - timedelta(days=800),
+                "2.31.0": utc_now() - timedelta(days=180),
+                "2.25.0": utc_now() - timedelta(days=800),
             },
             license="Apache-2.0",
             homepage="https://requests.readthedocs.io",
@@ -95,8 +95,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="4.2.7",
             versions=["4.2.7", "4.2.0", "3.2.0"],
             release_dates={
-                "4.2.7": datetime.now() - timedelta(days=45),
-                "3.2.0": datetime.now() - timedelta(days=900),
+                "4.2.7": utc_now() - timedelta(days=45),
+                "3.2.0": utc_now() - timedelta(days=900),
             },
             license="BSD-3-Clause",
             homepage="https://www.djangoproject.com/",
@@ -112,8 +112,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="2.0.23",
             versions=["2.0.23", "1.4.0"],
             release_dates={
-                "2.0.23": datetime.now() - timedelta(days=20),
-                "1.4.0": datetime.now() - timedelta(days=600),
+                "2.0.23": utc_now() - timedelta(days=20),
+                "1.4.0": utc_now() - timedelta(days=600),
             },
             license="MIT",
             homepage="https://www.sqlalchemy.org",
@@ -129,8 +129,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="5.3.4",
             versions=["5.3.4", "5.0.0"],
             release_dates={
-                "5.3.4": datetime.now() - timedelta(days=60),
-                "5.0.0": datetime.now() - timedelta(days=800),
+                "5.3.4": utc_now() - timedelta(days=60),
+                "5.0.0": utc_now() - timedelta(days=800),
             },
             license="BSD-3-Clause",
             homepage="http://celeryproject.org",
@@ -146,8 +146,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="1.26.2",
             versions=["1.26.2", "1.21.0"],
             release_dates={
-                "1.26.2": datetime.now() - timedelta(days=15),
-                "1.21.0": datetime.now() - timedelta(days=700),
+                "1.26.2": utc_now() - timedelta(days=15),
+                "1.21.0": utc_now() - timedelta(days=700),
             },
             license="BSD-3-Clause",
             homepage="https://numpy.org",
@@ -163,8 +163,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="2.1.4",
             versions=["2.1.4", "1.3.0"],
             release_dates={
-                "2.1.4": datetime.now() - timedelta(days=25),
-                "1.3.0": datetime.now() - timedelta(days=750),
+                "2.1.4": utc_now() - timedelta(days=25),
+                "1.3.0": utc_now() - timedelta(days=750),
             },
             license="BSD-3-Clause",
             homepage="https://pandas.pydata.org",
@@ -180,8 +180,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="7.4.3",
             versions=["7.4.3", "7.0.0"],
             release_dates={
-                "7.4.3": datetime.now() - timedelta(days=40),
-                "7.0.0": datetime.now() - timedelta(days=500),
+                "7.4.3": utc_now() - timedelta(days=40),
+                "7.0.0": utc_now() - timedelta(days=500),
             },
             license="MIT",
             homepage="https://docs.pytest.org/",
@@ -197,8 +197,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="23.12.0",
             versions=["23.12.0", "23.0.0"],
             release_dates={
-                "23.12.0": datetime.now() - timedelta(days=10),
-                "23.0.0": datetime.now() - timedelta(days=300),
+                "23.12.0": utc_now() - timedelta(days=10),
+                "23.0.0": utc_now() - timedelta(days=300),
             },
             license="MIT",
             homepage="https://github.com/psf/black",
@@ -214,8 +214,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="1.7.1",
             versions=["1.7.1", "1.0.0"],
             release_dates={
-                "1.7.1": datetime.now() - timedelta(days=20),
-                "1.0.0": datetime.now() - timedelta(days=350),
+                "1.7.1": utc_now() - timedelta(days=20),
+                "1.0.0": utc_now() - timedelta(days=350),
             },
             license="MIT",
             homepage="http://www.mypy-lang.org/",
@@ -231,8 +231,8 @@ def create_mock_pypi_client() -> Any:
             latest_version="6.1.0",
             versions=["6.1.0", "5.0.0"],
             release_dates={
-                "6.1.0": datetime.now() - timedelta(days=50),
-                "5.0.0": datetime.now() - timedelta(days=400),
+                "6.1.0": utc_now() - timedelta(days=50),
+                "5.0.0": utc_now() - timedelta(days=400),
             },
             license="MIT",
             homepage="https://github.com/PyCQA/flake8",

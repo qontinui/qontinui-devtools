@@ -3,10 +3,17 @@
 from collections.abc import Callable
 
 from qontinui_devtools.concurrency.scenarios import (
-    RaceTestResult, run_all_scenarios, test_check_then_act,
-    test_check_then_act_safe, test_counter_increment,
-    test_counter_increment_safe, test_dictionary_concurrent_access,
-    test_lazy_initialization, test_lazy_initialization_safe, test_list_append)
+    RaceTestResult,
+    run_all_scenarios,
+    test_check_then_act,
+    test_check_then_act_safe,
+    test_counter_increment,
+    test_counter_increment_safe,
+    test_dictionary_concurrent_access,
+    test_lazy_initialization,
+    test_lazy_initialization_safe,
+    test_list_append,
+)
 
 
 def test_dictionary_concurrent_access_scenario() -> None:

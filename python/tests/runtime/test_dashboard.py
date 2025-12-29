@@ -15,9 +15,13 @@ import time
 import pytest
 from aiohttp import WSMsgType
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
-from qontinui_devtools.runtime import (ActionMetrics, DashboardServer,
-                                       EventMetrics, MetricsCollector,
-                                       SystemMetrics)
+from qontinui_devtools.runtime import (
+    ActionMetrics,
+    DashboardServer,
+    EventMetrics,
+    MetricsCollector,
+    SystemMetrics,
+)
 
 
 class TestMetricsCollector:

@@ -8,8 +8,7 @@ This package provides tools for detecting and testing race conditions:
 """
 
 from .decorators import concurrent_test, stress_test, tracked_test
-from .instrumentation import (Access, InstrumentedObject, RaceConflict,
-                              SharedStateTracker)
+from .instrumentation import Access, InstrumentedObject, RaceConflict, SharedStateTracker
 from .race_detector import RaceCondition, RaceConditionDetector, SharedState
 from .race_tester import RaceConditionTester, RaceTestResult, compare_results
 

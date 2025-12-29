@@ -9,8 +9,7 @@ This module provides static analysis tools for Rust codebases:
 These analyzers use regex-based parsing and don't require rustc or cargo.
 """
 
-from .circular_detector import (CircularDependencyDetector,
-                                RustCircularDependency)
+from .circular_detector import CircularDependencyDetector, RustCircularDependency
 from .complexity_analyzer import ComplexityAnalyzer, ComplexityMetrics
 from .dead_code_detector import DeadCodeDetector, RustDeadCode
 from .unsafe_analyzer import UnsafeAnalyzer, UnsafeBlock

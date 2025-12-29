@@ -4,8 +4,7 @@ import threading
 import time
 from typing import Any
 
-from qontinui_devtools.concurrency import (RaceConditionTester, RaceTestResult,
-                                           concurrent_test)
+from qontinui_devtools.concurrency import RaceConditionTester, RaceTestResult, concurrent_test
 
 
 def test_detect_race_in_dictionary() -> None:

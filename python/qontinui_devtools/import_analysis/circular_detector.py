@@ -13,10 +13,8 @@ import networkx as nx
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from .ast_utils import (ImportStatement, extract_imports, find_python_files,
-                        module_path_from_file)
-from .fix_suggester import (FixSuggestion, analyze_cycle,
-                            suggest_best_break_point)
+from .ast_utils import ImportStatement, extract_imports, find_python_files, module_path_from_file
+from .fix_suggester import FixSuggestion, analyze_cycle, suggest_best_break_point
 
 
 @dataclass

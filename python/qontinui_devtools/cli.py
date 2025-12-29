@@ -658,9 +658,14 @@ def profile_actions(
         qontinui-devtools profile action test_workflow.py --enable-stack-sampling --flame-graph profile.svg
     """
     try:
-        from .runtime import (ActionProfiler, calculate_action_type_metrics,
-                              calculate_metrics, calculate_phase_metrics,
-                              format_duration, format_memory)
+        from .runtime import (
+            ActionProfiler,
+            calculate_action_type_metrics,
+            calculate_metrics,
+            calculate_phase_metrics,
+            format_duration,
+            format_memory,
+        )
     except ImportError:
         console.print("[red]Error: Runtime profiling module not available[/red]")
         sys.exit(1)
@@ -1609,7 +1614,7 @@ def _generate_security_report(report, vulnerabilities, output_path: str, format:
 
 def _generate_html_report(report, vulnerabilities) -> str:
     """Generate HTML security report."""
-    from datetime import datetime
+    from qontinui_schemas.common import utc_now
 
     severity_colors = {
         "critical": "#dc2626",
@@ -1648,7 +1653,7 @@ def _generate_html_report(report, vulnerabilities) -> str:
     <body>
         <div class="container">
             <h1>Security Analysis Report</h1>
-            <p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            <p>Generated: {utc_now().strftime('%Y-%m-%d %H:%M:%S')}</p>
 
             <div class="summary">
                 <div class="stat">
@@ -3129,9 +3134,12 @@ def ts_analyze(
         qontinui-devtools ts analyze ./src --output full-report.txt
     """
     try:
-        from .typescript_analysis import (CircularDependencyDetector,
-                                          ComplexityAnalyzer, DeadCodeDetector,
-                                          TypeCoverageAnalyzer)
+        from .typescript_analysis import (
+            CircularDependencyDetector,
+            ComplexityAnalyzer,
+            DeadCodeDetector,
+            TypeCoverageAnalyzer,
+        )
     except ImportError:
         console.print("[red]Error: TypeScript analysis module not available[/red]")
         sys.exit(1)
@@ -3477,9 +3485,12 @@ def rust_analyze(path: str, verbose: bool, output_dir: str | None) -> None:
         qontinui-devtools rust analyze ./src --output-dir ./reports
     """
     try:
-        from .rust_analysis import (CircularDependencyDetector,
-                                    ComplexityAnalyzer, DeadCodeDetector,
-                                    UnsafeAnalyzer)
+        from .rust_analysis import (
+            CircularDependencyDetector,
+            ComplexityAnalyzer,
+            DeadCodeDetector,
+            UnsafeAnalyzer,
+        )
     except ImportError:
         console.print("[red]Error: Rust analysis module not available[/red]")
         sys.exit(1)

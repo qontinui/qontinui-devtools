@@ -4,7 +4,10 @@ from pathlib import Path
 
 import pytest
 from qontinui_devtools.code_quality.dead_code_detector import (
-    DeadCodeDetector, DefinitionCollector, UsageCollector)
+    DeadCodeDetector,
+    DefinitionCollector,
+    UsageCollector,
+)
 
 
 class TestDefinitionCollector:

@@ -5,8 +5,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .dependency_graph import DependencyGraphBuilder
-from .metrics_utils import (calculate_lcc, calculate_lcom, calculate_lcom4,
-                            calculate_tcc, count_abstract_classes)
+from .metrics_utils import (
+    calculate_lcc,
+    calculate_lcom,
+    calculate_lcom4,
+    calculate_tcc,
+    count_abstract_classes,
+)
 
 
 @dataclass

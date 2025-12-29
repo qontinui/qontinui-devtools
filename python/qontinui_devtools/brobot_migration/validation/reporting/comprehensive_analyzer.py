@@ -2,9 +2,10 @@
 Comprehensive analysis for detecting differences and calculating metrics.
 """
 
-from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+from qontinui_schemas.common import utc_now
 
 if TYPE_CHECKING:
     from ...core.models import FailureAnalysis, TestFile
@@ -16,8 +17,12 @@ else:
 
 from .error_analyzer import ErrorAnalyzer
 from .report_data_collector import ReportDataCollector
-from .report_models import (AssertionDifference, DependencyDifference,
-                            DiagnosticReport, SetupDifference)
+from .report_models import (
+    AssertionDifference,
+    DependencyDifference,
+    DiagnosticReport,
+    SetupDifference,
+)
 
 
 class ComprehensiveAnalyzer:
@@ -166,7 +171,7 @@ class ComprehensiveAnalyzer:
         Returns:
             Comprehensive diagnostic report
         """
-        report_id = f"{java_test.class_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        report_id = f"{java_test.class_name}_{utc_now().strftime('%Y%m%d_%H%M%S')}"
 
         # Detect all types of differences
         dependency_diffs = self.detect_dependency_differences(java_test, python_test_path)
@@ -190,7 +195,7 @@ class ComprehensiveAnalyzer:
 
         return DiagnosticReport(
             report_id=report_id,
-            timestamp=datetime.now(),
+            timestamp=utc_now(),
             test_file=str(python_test_path),
             failure_analysis=failure_analysis,
             dependency_differences=dependency_diffs,

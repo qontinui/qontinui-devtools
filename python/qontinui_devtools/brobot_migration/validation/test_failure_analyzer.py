@@ -8,13 +8,11 @@ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..core.interfaces import FailureAnalyzer
-    from ..core.models import (FailureAnalysis, FailureType, SuspectedCause,
-                               TestFailure)
+    from ..core.models import FailureAnalysis, FailureType, SuspectedCause, TestFailure
 else:
     try:
         from ..core.interfaces import FailureAnalyzer
-        from ..core.models import (FailureAnalysis, FailureType,
-                                   SuspectedCause, TestFailure)
+        from ..core.models import FailureAnalysis, FailureType, SuspectedCause, TestFailure
     except ImportError:
         # For standalone execution
         import sys
@@ -22,8 +20,7 @@ else:
 
         sys.path.append(str(Path(__file__).parent.parent))
         from core.interfaces import FailureAnalyzer
-        from core.models import (FailureAnalysis, FailureType, SuspectedCause,
-                                 TestFailure)
+        from core.models import FailureAnalysis, FailureType, SuspectedCause, TestFailure
 
 
 @dataclass

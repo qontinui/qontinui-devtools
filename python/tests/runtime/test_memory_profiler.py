@@ -5,8 +5,7 @@ import time
 from typing import Any
 
 import pytest
-from qontinui_devtools.runtime import (MemoryLeak, MemoryProfiler,
-                                       MemorySnapshot)
+from qontinui_devtools.runtime import MemoryLeak, MemoryProfiler, MemorySnapshot
 
 
 class TestMemorySnapshot:

@@ -3,9 +3,10 @@
 import ast
 import json
 import logging
-from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from qontinui_schemas.common import utc_now
 
 from .models import ClassSignature, FunctionSignature
 
@@ -33,7 +34,7 @@ class APISnapshot:
         self.classes.clear()
         self.metadata = {
             "version": version,
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": utc_now().isoformat(),
             "source_path": str(source_path),
         }
 

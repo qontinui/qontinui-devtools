@@ -4,11 +4,14 @@ Unit tests for JavaToPythonTranslator.
 
 from pathlib import Path
 
-from qontinui.test_migration.core.models import (Dependency, MockUsage,
-                                                 TestFile, TestMethod,
-                                                 TestType)
-from qontinui.test_migration.translation.java_to_python_translator import \
-    JavaToPythonTranslator
+from qontinui.test_migration.core.models import (
+    Dependency,
+    MockUsage,
+    TestFile,
+    TestMethod,
+    TestType,
+)
+from qontinui.test_migration.translation.java_to_python_translator import JavaToPythonTranslator
 
 
 class TestJavaToPythonTranslator:
