@@ -382,7 +382,7 @@ class MigrationReportingDashboard:
 
     def _get_timestamp(self) -> str:
         """Get current timestamp."""
-        return utc_now().isoformat()
+        return str(utc_now().isoformat())
 
 
 class ReportFormatter:
