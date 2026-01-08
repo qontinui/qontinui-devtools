@@ -207,7 +207,7 @@ class TestImportTracer(unittest.TestCase):
             del sys.modules["fixtures.simple_module"]
 
         with ImportTracer() as tracer:
-            import fixtures.simple_module  # type: ignore[import-not-found]  # noqa: F401
+            import fixtures.simple_module  # noqa: F401
 
         events = tracer.get_events()
 
@@ -227,7 +227,7 @@ class TestImportTracer(unittest.TestCase):
 
         with ImportTracer() as tracer:
             try:
-                import fixtures.circular_a  # type: ignore[import-not-found]  # noqa: F401
+                import fixtures.circular_a  # noqa: F401
             except ImportError:
                 # Circular import might fail, that's okay
                 pass
@@ -256,7 +256,7 @@ class TestImportTracer(unittest.TestCase):
 
         with ImportTracer() as tracer:
             try:
-                import fixtures.circular_c  # type: ignore[import-not-found]  # noqa: F401
+                import fixtures.circular_c  # noqa: F401
             except ImportError:
                 # Circular import might fail, that's okay
                 pass

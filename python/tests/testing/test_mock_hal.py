@@ -170,7 +170,7 @@ class TestMockScreenCapture:
         assert isinstance(color, tuple)
         assert len(color) == 3
 
-    def test_save_screenshot(self, tmp_path: Path) -> None:  # type: ignore
+    def test_save_screenshot(self, tmp_path: Path) -> None:
         """Test saving screenshot to file."""
         capture = MockScreenCapture()
         filepath = str(tmp_path / "test_screenshot.png")

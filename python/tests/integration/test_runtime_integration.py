@@ -25,11 +25,11 @@ import pytest
 # For now, we'll use mock implementations to define the API
 try:
     from qontinui_devtools.runtime.dashboard import (
-        PerformanceDashboard,  # type: ignore[import-untyped]
+        PerformanceDashboard,
     )
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-untyped]
+    from qontinui_devtools.runtime.profiler import ActionProfiler
 except ImportError:
     # Mock implementations for testing the API
     class ActionProfiler:  # type: ignore[no-redef]

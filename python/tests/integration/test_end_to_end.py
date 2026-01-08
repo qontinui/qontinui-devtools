@@ -20,13 +20,13 @@ import pytest
 # Mock implementations for CLI testing
 try:
     from qontinui_devtools.runtime.dashboard import (
-        PerformanceDashboard,  # type: ignore[import-untyped]
+        PerformanceDashboard,
     )
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-untyped]
+    from qontinui_devtools.runtime.profiler import ActionProfiler
     from qontinui_devtools.runtime.report_generator import (
-        RuntimeReportGenerator,  # type: ignore[import-untyped]
+        RuntimeReportGenerator,
     )
 except ImportError:
     # Mock implementations
@@ -243,7 +243,7 @@ class TestFullMonitoringWorkflow:
         # Step 3: Execute project code
         sys.path.insert(0, str(sample_qontinui_project))
         try:
-            import main  # type: ignore[import-not-found]
+            import main
 
             @profiler.profile
             def execute_main() -> Any:
