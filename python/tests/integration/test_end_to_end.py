@@ -19,15 +19,11 @@ import pytest
 
 # Mock implementations for CLI testing
 try:
-    from qontinui_devtools.runtime.dashboard import (
-        PerformanceDashboard,
-    )
+    from qontinui_devtools.runtime.dashboard import PerformanceDashboard
     from qontinui_devtools.runtime.event_tracer import EventTracer
     from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
     from qontinui_devtools.runtime.profiler import ActionProfiler
-    from qontinui_devtools.runtime.report_generator import (
-        RuntimeReportGenerator,
-    )
+    from qontinui_devtools.runtime.report_generator import RuntimeReportGenerator
 except ImportError:
     # Mock implementations
     class ActionProfiler:  # type: ignore[no-redef]

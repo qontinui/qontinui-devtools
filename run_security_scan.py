@@ -6,16 +6,16 @@ from pathlib import Path
 from qontinui_devtools.security import SecurityAnalyzer
 
 REPOS = [
-    ("qontinui", "C:/Users/Joshua/Documents/qontinui_parent_directory/qontinui"),
-    ("qontinui-api", "C:/Users/Joshua/Documents/qontinui_parent_directory/qontinui-api"),
+    ("qontinui", "D:/qontinui_parent_directory/qontinui"),
+    ("qontinui-api", "D:/qontinui_parent_directory/qontinui-api"),
     (
         "qontinui-web/backend",
-        "C:/Users/Joshua/Documents/qontinui_parent_directory/qontinui-web/backend",
+        "D:/qontinui_parent_directory/qontinui-web/backend",
     ),
-    ("qontinui-mcp", "C:/Users/Joshua/Documents/qontinui_parent_directory/qontinui-mcp"),
-    ("qontinui-devtools", "C:/Users/Joshua/Documents/qontinui_parent_directory/qontinui-devtools"),
-    ("qontinui-train", "C:/Users/Joshua/Documents/qontinui_parent_directory/qontinui-train"),
-    ("qontinui-finetune", "C:/Users/Joshua/Documents/qontinui_parent_directory/qontinui-finetune"),
+    ("qontinui-mcp", "D:/qontinui_parent_directory/qontinui-mcp"),
+    ("qontinui-devtools", "D:/qontinui_parent_directory/qontinui-devtools"),
+    ("qontinui-train", "D:/qontinui_parent_directory/qontinui-train"),
+    ("qontinui-finetune", "D:/qontinui_parent_directory/qontinui-finetune"),
 ]
 
 
@@ -57,9 +57,7 @@ def main():
                 print(f"   {vuln.description[:100]}...")
 
     # Write summary report
-    summary_path = Path(
-        "C:/Users/Joshua/Documents/qontinui_parent_directory/.dev-logs/improve-all-security-audit.md"
-    )
+    summary_path = Path("D:/qontinui_parent_directory/.dev-logs/improve-all-security-audit.md")
     summary_path.parent.mkdir(exist_ok=True)
 
     with open(summary_path, "w", encoding="utf-8") as f:

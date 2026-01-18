@@ -369,7 +369,7 @@ def _looks_single_threaded(context: AnalysisContext) -> bool:
 
 
 def prioritize_issues(
-    races: list[tuple[str, str, list[StateAccess]]]
+    races: list[tuple[str, str, list[StateAccess]]],
 ) -> list[tuple[str, str, list[StateAccess]]]:
     """
     Prioritize race conditions by severity and likelihood.
