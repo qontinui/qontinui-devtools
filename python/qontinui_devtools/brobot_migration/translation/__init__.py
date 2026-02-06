@@ -4,11 +4,11 @@ Java-to-Python translation and migration engine components.
 
 from .assertion_converter import AssertionConverter
 from .integration_test_environment import (
-                                           ComponentConfiguration,
-                                           DatabaseConfiguration,
-                                           ExternalServiceConfiguration,
-                                           IntegrationTestEnvironment,
-                                           IntegrationTestGenerator,
+    ComponentConfiguration,
+    DatabaseConfiguration,
+    ExternalServiceConfiguration,
+    IntegrationTestEnvironment,
+    IntegrationTestGenerator,
 )
 from .java_to_python_translator import JavaToPythonTranslator
 from .spring_test_adapter import DependencyContainer, SpringTestAdapter
