@@ -20,7 +20,7 @@ repos:
     rev: 23.12.1
     hooks:
       - id: black
-        language_version: python3.11
+        language_version: python3.13
 
   # Import sorting
   - repo: https://github.com/pycqa/isort
@@ -36,13 +36,14 @@ repos:
       - id: flake8
         args: ['--max-line-length=100', '--extend-ignore=E203,W503']
 
-  # Type checking
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
-    hooks:
-      - id: mypy
-        additional_dependencies: [types-all]
-        args: ["--ignore-missing-imports", "--no-strict-optional"]
+  # Note: Mypy disabled in pre-commit - run manually with: poetry run mypy
+  # Pre-commit mypy runs in isolated env which causes dependency issues
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.8.0
+  #   hooks:
+  #     - id: mypy
+  #       additional_dependencies: [types-all]
+  #       args: ["--ignore-missing-imports", "--no-strict-optional"]
 
   # qontinui-devtools specific checks
   - repo: local
@@ -78,9 +79,15 @@ repos:
         pass_filenames: true
         args: ["--max-complexity=15"]
 
+      - id: block-claude-attribution
+        name: Block Claude Attribution
+        entry: .pre-commit-hooks/block-claude-attribution.sh
+        language: script
+        stages: [commit-msg]
+
 # Global settings
 default_language_version:
-  python: python3.11
+  python: python3.13
 
 # Skip certain files
 exclude: |
@@ -108,11 +115,3 @@ ci:
   autoupdate_schedule: weekly
   skip: []
   submodules: false
-
-  - repo: local
-    hooks:
-      - id: block-claude-attribution
-        name: Block Claude Attribution
-        entry: .pre-commit-hooks/block-claude-attribution.sh
-        language: script
-        stages: [commit-msg]
