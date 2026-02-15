@@ -260,7 +260,7 @@ class TestValidateValidConfig:
     ) -> None:
         """Test validation of a completely valid config file."""
         # Mock successful validation
-        mock_validator.Workflow.model_validate.return_value = MagicMock()
+        mock_validator.Workflow.model_validate.return_value = MagicMock()  # type: ignore[attr-defined]
 
         report = mock_validator.validate_file(valid_config_file)
 
@@ -296,7 +296,7 @@ class TestValidateValidConfig:
             json.dump(config, f)
 
         # Mock successful validation for all workflows
-        mock_validator.Workflow.model_validate.return_value = MagicMock()
+        mock_validator.Workflow.model_validate.return_value = MagicMock()  # type: ignore[attr-defined]
 
         report = mock_validator.validate_file(config_file)
 
@@ -322,7 +322,7 @@ class TestValidateInvalidConfigs:
             "input": ["action2:false"],
         }
 
-        mock_validator.Workflow.model_validate.side_effect = (
+        mock_validator.Workflow.model_validate.side_effect = (  # type: ignore[attr-defined]
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
@@ -348,7 +348,7 @@ class TestValidateInvalidConfigs:
             "input": {},
         }
 
-        mock_validator.Workflow.model_validate.side_effect = (
+        mock_validator.Workflow.model_validate.side_effect = (  # type: ignore[attr-defined]
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
@@ -381,7 +381,7 @@ class TestValidateInvalidConfigs:
                 }
                 raise PydanticValidationError.from_exception_data("ValidationError", [error_dict])
 
-        mock_validator.Workflow.model_validate.side_effect = mock_validate
+        mock_validator.Workflow.model_validate.side_effect = mock_validate  # type: ignore[attr-defined]
 
         report = mock_validator.validate_file(multiple_workflows_file)
 
@@ -442,7 +442,7 @@ class TestValidationReportFormat:
         self, valid_config_file: Path, mock_validator: ConfigValidator
     ) -> None:
         """Test that ValidationReport has correct structure."""
-        mock_validator.Workflow.model_validate.return_value = MagicMock()
+        mock_validator.Workflow.model_validate.return_value = MagicMock()  # type: ignore[attr-defined]
 
         report = mock_validator.validate_file(valid_config_file)
 
@@ -476,7 +476,7 @@ class TestValidationReportFormat:
             "input": ["wrong"],
         }
 
-        mock_validator.Workflow.model_validate.side_effect = (
+        mock_validator.Workflow.model_validate.side_effect = (  # type: ignore[attr-defined]
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
@@ -505,7 +505,7 @@ class TestValidationReportFormat:
         self, valid_config_file: Path, mock_validator: ConfigValidator, capsys: Any
     ) -> None:
         """Test print_report output for valid config."""
-        mock_validator.Workflow.model_validate.return_value = MagicMock()
+        mock_validator.Workflow.model_validate.return_value = MagicMock()  # type: ignore[attr-defined]
 
         report = mock_validator.validate_file(valid_config_file)
         report.print_report()
@@ -526,7 +526,7 @@ class TestValidationReportFormat:
             "input": ["wrong"],
         }
 
-        mock_validator.Workflow.model_validate.side_effect = (
+        mock_validator.Workflow.model_validate.side_effect = (  # type: ignore[attr-defined]
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
@@ -549,7 +549,7 @@ class TestValidationReportFormat:
             "input": ["wrong"],
         }
 
-        mock_validator.Workflow.model_validate.side_effect = (
+        mock_validator.Workflow.model_validate.side_effect = (  # type: ignore[attr-defined]
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
@@ -644,7 +644,7 @@ class TestEdgeCases:
 
         error_dict: InitErrorDetails = {"type": "missing", "loc": ("id",), "input": {}}
 
-        mock_validator.Workflow.model_validate.side_effect = (
+        mock_validator.Workflow.model_validate.side_effect = (  # type: ignore[attr-defined]
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 
@@ -679,7 +679,7 @@ class TestEdgeCases:
             json.dump(config, f)
 
         # Mock validation success for all workflows
-        mock_validator.Workflow.model_validate.return_value = MagicMock()
+        mock_validator.Workflow.model_validate.return_value = MagicMock()  # type: ignore[attr-defined]
 
         report = mock_validator.validate_file(config_file)
 
@@ -698,7 +698,7 @@ class TestIntegrationWithFixtures:
         if not fixture_file.exists():
             pytest.skip("Fixture file not found")
 
-        mock_validator.Workflow.model_validate.return_value = MagicMock()
+        mock_validator.Workflow.model_validate.return_value = MagicMock()  # type: ignore[attr-defined]
 
         report = mock_validator.validate_file(fixture_file)
 
@@ -722,7 +722,7 @@ class TestIntegrationWithFixtures:
             "input": {},
         }
 
-        mock_validator.Workflow.model_validate.side_effect = (
+        mock_validator.Workflow.model_validate.side_effect = (  # type: ignore[attr-defined]
             PydanticValidationError.from_exception_data("ValidationError", [error_dict])
         )
 

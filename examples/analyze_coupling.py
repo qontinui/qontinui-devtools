@@ -53,17 +53,17 @@ def main() -> None:
     print("LOW COHESION CLASSES (LCOM > 0.7)")
     print("=" * 80 + "\n")
 
-    low_cohesion = [c for c in cohesion if c.lcom > 0.7]
+    low_cohesion = [m for m in cohesion if m.lcom > 0.7]
 
     if low_cohesion:
-        for c in sorted(low_cohesion, key=lambda x: x.lcom, reverse=True)[:10]:
-            print(f"Class: {c.name}")
-            print(f"  File: {c.file_path}")
-            print(f"  LCOM: {c.lcom:.3f} (higher is worse)")
-            print(f"  LCOM4: {c.lcom4:.1f} (1 is ideal)")
-            print(f"  TCC: {c.tcc:.3f} (higher is better)")
-            print(f"  LCC: {c.lcc:.3f} (higher is better)")
-            print(f"  Score: {c.cohesion_score.upper()}")
+        for m in sorted(low_cohesion, key=lambda x: x.lcom, reverse=True)[:10]:
+            print(f"Class: {m.name}")
+            print(f"  File: {m.file_path}")
+            print(f"  LCOM: {m.lcom:.3f} (higher is worse)")
+            print(f"  LCOM4: {m.lcom4:.1f} (1 is ideal)")
+            print(f"  TCC: {m.tcc:.3f} (higher is better)")
+            print(f"  LCC: {m.lcc:.3f} (higher is better)")
+            print(f"  Score: {m.cohesion_score.upper()}")
             print()
     else:
         print("No classes with low cohesion (LCOM > 0.7)")
@@ -96,8 +96,8 @@ def main() -> None:
         print(f"Poor coupling: {poor_coupling} modules")
 
     if cohesion:
-        avg_lcom = sum(c.lcom for c in cohesion) / len(cohesion)
-        poor_cohesion = len([c for c in cohesion if c.cohesion_score == "poor"])
+        avg_lcom = sum(m.lcom for m in cohesion) / len(cohesion)
+        poor_cohesion = len([m for m in cohesion if m.cohesion_score == "poor"])
 
         print(f"\nClasses analyzed: {len(cohesion)}")
         print(f"Average LCOM: {avg_lcom:.3f}")

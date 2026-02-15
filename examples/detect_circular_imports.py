@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-"""
-from typing import Any, Any
-
-Example script demonstrating how to use the ImportTracer to detect
+"""Example script demonstrating how to use the ImportTracer to detect
 circular dependencies in real-time.
 
 This example shows how the ImportTracer would have caught the circular
 dependency issue that caused the freeze with pynput_controller:
-    pynput_controller → wrappers → keyboard → factory → pynput_controller
+    pynput_controller -> wrappers -> keyboard -> factory -> pynput_controller
 
 Usage:
     python examples/detect_circular_imports.py
@@ -42,7 +39,7 @@ def example_trace_imports() -> Any:
     with ImportTracer() as tracer:
         try:
             # This will create a circular dependency
-            import fixtures.circular_a  # noqa: F401
+            import fixtures.circular_a  # type: ignore[import-not-found]  # noqa: F401
         except ImportError as e:
             print(f"Note: Circular import may cause ImportError: {e}")
 
@@ -70,7 +67,7 @@ def example_trace_imports() -> Any:
     return tracer
 
 
-def example_visualize_graph(tracer) -> None:
+def example_visualize_graph(tracer: ImportTracer) -> None:
     """Example 2: Generate visualization of import graph."""
     print("=" * 80)
     print("Example 2: Generate import graph visualization")
@@ -131,7 +128,7 @@ def example_visualize_graph(tracer) -> None:
     print()
 
 
-def example_export_data(tracer) -> None:
+def example_export_data(tracer: ImportTracer) -> None:
     """Example 3: Export import data to JSON."""
     print("=" * 80)
     print("Example 3: Export import data")
@@ -177,7 +174,7 @@ def example_simulated_qontinui_issue() -> None:
 
     with ImportTracer() as tracer:
         try:
-            import fixtures.circular_c  # noqa: F401
+            import fixtures.circular_c  # type: ignore[import-not-found]  # noqa: F401
         except ImportError as e:
             print(f"Note: Circular import detected and prevented: {e}")
             print()
@@ -219,7 +216,7 @@ def example_practical_usage() -> None:
             del sys.modules[mod]
 
     with ImportTracer() as tracer:
-        import fixtures.simple_module  # noqa: F401
+        import fixtures.simple_module  # type: ignore[import-not-found]  # noqa: F401
 
     circular = tracer.find_circular_dependencies()
     simple_cycles = [c for c in circular if any("simple_module" in n for n in c)]
