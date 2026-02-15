@@ -18,141 +18,137 @@ from typing import Any
 import pytest
 
 # Mock implementations
-try:
-    from qontinui_devtools.runtime.dashboard import (
-        PerformanceDashboard,  # type: ignore[import-not-found]
-    )
-    from qontinui_devtools.runtime.event_tracer import EventTracer
-    from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-not-found]
-except ImportError:
 
-    class ActionProfiler:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.profiles: list[Any] = []
-            self._lock = threading.Lock()
 
-        def start(self) -> None:
-            self.is_running = True
+class ActionProfiler:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.profiles: list[Any] = []
+        self._lock = threading.Lock()
 
-        def stop(self) -> None:
-            self.is_running = False
+    def start(self) -> None:
+        self.is_running = True
 
-        def profile(self, func: Any) -> Any:
-            def wrapper(*args: Any, **kwargs: Any) -> Any:
-                start = time.perf_counter()
-                result = func(*args, **kwargs)
-                duration = time.perf_counter() - start
-                with self._lock:
-                    self.profiles.append(
-                        {
-                            "function": func.__name__,
-                            "duration": duration,
-                            "thread_id": threading.get_ident(),
-                        }
-                    )
-                return result
+    def stop(self) -> None:
+        self.is_running = False
 
-            return wrapper
-
-        def get_profile_data(self) -> Any:
+    def profile(self, func: Any) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            start = time.perf_counter()
+            result = func(*args, **kwargs)
+            duration = time.perf_counter() - start
             with self._lock:
-                return {
-                    "profiles": self.profiles.copy(),
-                    "total_calls": len(self.profiles),
-                    "total_time": sum(p["duration"] for p in self.profiles),
-                }
-
-    class EventTracer:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.events: list[Any] = []
-            self._lock = threading.Lock()
-
-        def start(self) -> None:
-            self.is_running = True
-
-        def stop(self) -> None:
-            self.is_running = False
-
-        def trace_event(self, event_type: Any, data: Any) -> None:
-            if self.is_running:
-                with self._lock:
-                    self.events.append(
-                        {
-                            "type": event_type,
-                            "data": data,
-                            "timestamp": time.time(),
-                            "thread_id": threading.get_ident(),
-                        }
-                    )
-
-        def get_events(self, event_type: Any = None) -> Any:
-            with self._lock:
-                events = self.events.copy()
-
-            if event_type:
-                return [e for e in events if e["type"] == event_type]
-            return events
-
-    class MemoryProfiler:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.snapshots: list[Any] = []
-            self._lock = threading.Lock()
-
-        def start(self) -> None:
-            self.is_running = True
-            self._take_snapshot()
-
-        def stop(self) -> None:
-            self.is_running = False
-            self._take_snapshot()
-
-        def _take_snapshot(self) -> None:
-            import sys
-
-            with self._lock:
-                self.snapshots.append(
+                self.profiles.append(
                     {
+                        "function": func.__name__,
+                        "duration": duration,
+                        "thread_id": threading.get_ident(),
+                    }
+                )
+            return result
+
+        return wrapper
+
+    def get_profile_data(self) -> Any:
+        with self._lock:
+            return {
+                "profiles": self.profiles.copy(),
+                "total_calls": len(self.profiles),
+                "total_time": sum(p["duration"] for p in self.profiles),
+            }
+
+
+class EventTracer:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.events: list[Any] = []
+        self._lock = threading.Lock()
+
+    def start(self) -> None:
+        self.is_running = True
+
+    def stop(self) -> None:
+        self.is_running = False
+
+    def trace_event(self, event_type: Any, data: Any) -> None:
+        if self.is_running:
+            with self._lock:
+                self.events.append(
+                    {
+                        "type": event_type,
+                        "data": data,
                         "timestamp": time.time(),
-                        "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
                         "thread_id": threading.get_ident(),
                     }
                 )
 
-        def get_memory_usage(self) -> Any:
-            with self._lock:
-                if not self.snapshots:
-                    return {"current_mb": 0, "peak_mb": 0}
-                current = self.snapshots[-1]["memory_mb"]
-                peak = max(s["memory_mb"] for s in self.snapshots)
-                return {"current_mb": current, "peak_mb": peak}
+    def get_events(self, event_type: Any = None) -> Any:
+        with self._lock:
+            events = self.events.copy()
 
-    class PerformanceDashboard:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.metrics: dict[Any, Any] = {}
-            self._lock = threading.Lock()
+        if event_type:
+            return [e for e in events if e["type"] == event_type]
+        return events
 
-        def start(self) -> None:
-            self.is_running = True
 
-        def stop(self) -> None:
-            self.is_running = False
+class MemoryProfiler:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.snapshots: list[Any] = []
+        self._lock = threading.Lock()
 
-        def update_metrics(self, metrics: Any) -> None:
-            with self._lock:
-                self.metrics.update(metrics)
+    def start(self) -> None:
+        self.is_running = True
+        self._take_snapshot()
 
-        def get_metrics(self) -> Any:
-            with self._lock:
-                return self.metrics.copy()
+    def stop(self) -> None:
+        self.is_running = False
+        self._take_snapshot()
+
+    def _take_snapshot(self) -> None:
+        import sys
+
+        with self._lock:
+            self.snapshots.append(
+                {
+                    "timestamp": time.time(),
+                    "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
+                    "thread_id": threading.get_ident(),
+                }
+            )
+
+    def get_memory_usage(self) -> Any:
+        with self._lock:
+            if not self.snapshots:
+                return {"current_mb": 0, "peak_mb": 0}
+            current = self.snapshots[-1]["memory_mb"]
+            peak = max(s["memory_mb"] for s in self.snapshots)
+            return {"current_mb": current, "peak_mb": peak}
+
+
+class PerformanceDashboard:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.metrics: dict[Any, Any] = {}
+        self._lock = threading.Lock()
+
+    def start(self) -> None:
+        self.is_running = True
+
+    def stop(self) -> None:
+        self.is_running = False
+
+    def update_metrics(self, metrics: Any) -> None:
+        with self._lock:
+            self.metrics.update(metrics)
+
+    def get_metrics(self) -> Any:
+        with self._lock:
+            return self.metrics.copy()
 
 
 @pytest.mark.integration

@@ -21,168 +21,163 @@ from typing import Any
 
 import pytest
 
-# These imports will be available once Phase 3 tools are implemented
-# For now, we'll use mock implementations to define the API
-try:
-    from qontinui_devtools.runtime.dashboard import (
-        PerformanceDashboard,  # type: ignore[import-not-found]
-    )
-    from qontinui_devtools.runtime.event_tracer import EventTracer
-    from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-not-found]
-except ImportError:
-    # Mock implementations for testing the API
-    class ActionProfiler:  # type: ignore[no-redef]
-        """Mock Action Profiler for testing."""
+# Mock implementations for testing the API
 
-        def __init__(self, config: dict[str, Any] | None = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.profiles: list[Any] = []
 
-        def start(self) -> None:
-            """Start profiling."""
-            self.is_running = True
+class ActionProfiler:
+    """Mock Action Profiler for testing."""
 
-        def stop(self) -> None:
-            """Stop profiling."""
-            self.is_running = False
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.profiles: list[Any] = []
 
-        def profile(self, func: Any) -> Any:
-            """Decorator to profile a function."""
+    def start(self) -> None:
+        """Start profiling."""
+        self.is_running = True
 
-            def wrapper(*args: Any, **kwargs: Any) -> Any:
-                start = time.perf_counter()
-                result = func(*args, **kwargs)
-                duration = time.perf_counter() - start
-                self.profiles.append(
-                    {"function": func.__name__, "duration": duration, "timestamp": time.time()}
-                )
-                return result
+    def stop(self) -> None:
+        """Stop profiling."""
+        self.is_running = False
 
-            return wrapper
+    def profile(self, func: Any) -> Any:
+        """Decorator to profile a function."""
 
-        def get_profile_data(self) -> dict[str, Any]:
-            """Get collected profile data."""
-            return {
-                "profiles": self.profiles,
-                "total_calls": len(self.profiles),
-                "total_time": sum(p["duration"] for p in self.profiles),
-            }
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            start = time.perf_counter()
+            result = func(*args, **kwargs)
+            duration = time.perf_counter() - start
+            self.profiles.append(
+                {"function": func.__name__, "duration": duration, "timestamp": time.time()}
+            )
+            return result
 
-        def export(self, output_path: Path, format: str = "json") -> None:
-            """Export profile data."""
-            data = self.get_profile_data()
-            with open(output_path, "w") as f:
-                json.dump(data, f, indent=2)
+        return wrapper
 
-    class EventTracer:  # type: ignore[no-redef]
-        """Mock Event Tracer for testing."""
+    def get_profile_data(self) -> dict[str, Any]:
+        """Get collected profile data."""
+        return {
+            "profiles": self.profiles,
+            "total_calls": len(self.profiles),
+            "total_time": sum(p["duration"] for p in self.profiles),
+        }
 
-        def __init__(self, config: dict[str, Any] | None = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.events: list[Any] = []
+    def export(self, output_path: Path, format: str = "json") -> None:
+        """Export profile data."""
+        data = self.get_profile_data()
+        with open(output_path, "w") as f:
+            json.dump(data, f, indent=2)
 
-        def start(self) -> None:
-            """Start tracing."""
-            self.is_running = True
 
-        def stop(self) -> None:
-            """Stop tracing."""
-            self.is_running = False
+class EventTracer:
+    """Mock Event Tracer for testing."""
 
-        def trace_event(self, event_type: str, data: dict[str, Any]) -> None:
-            """Trace an event."""
-            if self.is_running:
-                self.events.append(
-                    {
-                        "type": event_type,
-                        "data": data,
-                        "timestamp": time.time(),
-                        "thread_id": threading.get_ident(),
-                    }
-                )
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.events: list[Any] = []
 
-        def get_events(self, event_type: str | None = None) -> list[dict[str, Any]]:
-            """Get traced events."""
-            if event_type:
-                return [e for e in self.events if e["type"] == event_type]
-            return self.events
+    def start(self) -> None:
+        """Start tracing."""
+        self.is_running = True
 
-        def export(self, output_path: Path, format: str = "json") -> None:
-            """Export event data."""
-            with open(output_path, "w") as f:
-                json.dump(self.events, f, indent=2)
+    def stop(self) -> None:
+        """Stop tracing."""
+        self.is_running = False
 
-    class MemoryProfiler:  # type: ignore[no-redef]
-        """Mock Memory Profiler for testing."""
-
-        def __init__(self, config: dict[str, Any] | None = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.snapshots: list[Any] = []
-
-        def start(self) -> None:
-            """Start memory profiling."""
-            self.is_running = True
-            self._take_snapshot()
-
-        def stop(self) -> None:
-            """Stop memory profiling."""
-            self.is_running = False
-            self._take_snapshot()
-
-        def _take_snapshot(self) -> None:
-            """Take a memory snapshot."""
-            import sys
-
-            self.snapshots.append(
+    def trace_event(self, event_type: str, data: dict[str, Any]) -> None:
+        """Trace an event."""
+        if self.is_running:
+            self.events.append(
                 {
+                    "type": event_type,
+                    "data": data,
                     "timestamp": time.time(),
-                    "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
-                    "objects": len(self.snapshots),
+                    "thread_id": threading.get_ident(),
                 }
             )
 
-        def get_memory_usage(self) -> dict[str, float]:
-            """Get current memory usage."""
-            if not self.snapshots:
-                return {"current_mb": 0, "peak_mb": 0}
+    def get_events(self, event_type: str | None = None) -> list[dict[str, Any]]:
+        """Get traced events."""
+        if event_type:
+            return [e for e in self.events if e["type"] == event_type]
+        return self.events
 
-            current = self.snapshots[-1]["memory_mb"]
-            peak = max(s["memory_mb"] for s in self.snapshots)
+    def export(self, output_path: Path, format: str = "json") -> None:
+        """Export event data."""
+        with open(output_path, "w") as f:
+            json.dump(self.events, f, indent=2)
 
-            return {"current_mb": current, "peak_mb": peak, "snapshots": len(self.snapshots)}
 
-        def export(self, output_path: Path, format: str = "json") -> None:
-            """Export memory profile data."""
-            with open(output_path, "w") as f:
-                json.dump(self.snapshots, f, indent=2)
+class MemoryProfiler:
+    """Mock Memory Profiler for testing."""
 
-    class PerformanceDashboard:  # type: ignore[no-redef]
-        """Mock Performance Dashboard for testing."""
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.snapshots: list[Any] = []
 
-        def __init__(self, config: dict[str, Any] | None = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.metrics: dict[Any, Any] = {}
+    def start(self) -> None:
+        """Start memory profiling."""
+        self.is_running = True
+        self._take_snapshot()
 
-        def start(self) -> None:
-            """Start dashboard."""
-            self.is_running = True
+    def stop(self) -> None:
+        """Stop memory profiling."""
+        self.is_running = False
+        self._take_snapshot()
 
-        def stop(self) -> None:
-            """Stop dashboard."""
-            self.is_running = False
+    def _take_snapshot(self) -> None:
+        """Take a memory snapshot."""
+        import sys
 
-        def update_metrics(self, metrics: dict[str, Any]) -> None:
-            """Update dashboard metrics."""
-            self.metrics.update(metrics)
+        self.snapshots.append(
+            {
+                "timestamp": time.time(),
+                "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
+                "objects": len(self.snapshots),
+            }
+        )
 
-        def get_metrics(self) -> dict[str, Any]:
-            """Get current metrics."""
-            return self.metrics
+    def get_memory_usage(self) -> dict[str, float]:
+        """Get current memory usage."""
+        if not self.snapshots:
+            return {"current_mb": 0, "peak_mb": 0}
+
+        current = self.snapshots[-1]["memory_mb"]
+        peak = max(s["memory_mb"] for s in self.snapshots)
+
+        return {"current_mb": current, "peak_mb": peak, "snapshots": len(self.snapshots)}
+
+    def export(self, output_path: Path, format: str = "json") -> None:
+        """Export memory profile data."""
+        with open(output_path, "w") as f:
+            json.dump(self.snapshots, f, indent=2)
+
+
+class PerformanceDashboard:
+    """Mock Performance Dashboard for testing."""
+
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.metrics: dict[Any, Any] = {}
+
+    def start(self) -> None:
+        """Start dashboard."""
+        self.is_running = True
+
+    def stop(self) -> None:
+        """Stop dashboard."""
+        self.is_running = False
+
+    def update_metrics(self, metrics: dict[str, Any]) -> None:
+        """Update dashboard metrics."""
+        self.metrics.update(metrics)
+
+    def get_metrics(self) -> dict[str, Any]:
+        """Get current metrics."""
+        return self.metrics
 
 
 @pytest.mark.integration

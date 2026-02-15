@@ -18,108 +18,104 @@ from typing import Any
 import pytest
 
 # Mock implementations
-try:
-    from qontinui_devtools.runtime.dashboard import (
-        PerformanceDashboard,  # type: ignore[import-not-found]
-    )
-    from qontinui_devtools.runtime.event_tracer import EventTracer
-    from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-not-found]
-except ImportError:
 
-    class ActionProfiler:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.profiles: list[Any] = []
 
-        def start(self) -> None:
-            self.is_running = True
+class ActionProfiler:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.profiles: list[Any] = []
 
-        def stop(self) -> None:
-            self.is_running = False
+    def start(self) -> None:
+        self.is_running = True
 
-        def profile(self, func: Any) -> Any:
-            def wrapper(*args: Any, **kwargs: Any) -> Any:
-                start = time.perf_counter()
-                result = func(*args, **kwargs)
-                duration = time.perf_counter() - start
-                self.profiles.append({"function": func.__name__, "duration": duration})
-                return result
+    def stop(self) -> None:
+        self.is_running = False
 
-            return wrapper
+    def profile(self, func: Any) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            start = time.perf_counter()
+            result = func(*args, **kwargs)
+            duration = time.perf_counter() - start
+            self.profiles.append({"function": func.__name__, "duration": duration})
+            return result
 
-        def get_profile_data(self) -> Any:
-            return {
-                "profiles": self.profiles,
-                "total_calls": len(self.profiles),
-                "total_time": sum(p["duration"] for p in self.profiles),
+        return wrapper
+
+    def get_profile_data(self) -> Any:
+        return {
+            "profiles": self.profiles,
+            "total_calls": len(self.profiles),
+            "total_time": sum(p["duration"] for p in self.profiles),
+        }
+
+
+class EventTracer:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.events: list[Any] = []
+
+    def start(self) -> None:
+        self.is_running = True
+
+    def stop(self) -> None:
+        self.is_running = False
+
+    def trace_event(self, event_type: Any, data: Any) -> None:
+        if self.is_running:
+            self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
+
+    def get_events(self) -> Any:
+        return self.events
+
+
+class MemoryProfiler:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.snapshots: list[Any] = []
+
+    def start(self) -> None:
+        self.is_running = True
+        self._take_snapshot()
+
+    def stop(self) -> None:
+        self.is_running = False
+        self._take_snapshot()
+
+    def _take_snapshot(self) -> None:
+        import sys
+
+        self.snapshots.append(
+            {
+                "timestamp": time.time(),
+                "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
             }
+        )
 
-    class EventTracer:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.events: list[Any] = []
+    def get_memory_usage(self) -> Any:
+        if not self.snapshots:
+            return {"current_mb": 0, "peak_mb": 0}
+        current = self.snapshots[-1]["memory_mb"]
+        peak = max(s["memory_mb"] for s in self.snapshots)
+        return {"current_mb": current, "peak_mb": peak}
 
-        def start(self) -> None:
-            self.is_running = True
 
-        def stop(self) -> None:
-            self.is_running = False
+class PerformanceDashboard:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.metrics: dict[Any, Any] = {}
 
-        def trace_event(self, event_type: Any, data: Any) -> None:
-            if self.is_running:
-                self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
+    def start(self) -> None:
+        self.is_running = True
 
-        def get_events(self) -> Any:
-            return self.events
+    def stop(self) -> None:
+        self.is_running = False
 
-    class MemoryProfiler:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.snapshots: list[Any] = []
-
-        def start(self) -> None:
-            self.is_running = True
-            self._take_snapshot()
-
-        def stop(self) -> None:
-            self.is_running = False
-            self._take_snapshot()
-
-        def _take_snapshot(self) -> None:
-            import sys
-
-            self.snapshots.append(
-                {
-                    "timestamp": time.time(),
-                    "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
-                }
-            )
-
-        def get_memory_usage(self) -> Any:
-            if not self.snapshots:
-                return {"current_mb": 0, "peak_mb": 0}
-            current = self.snapshots[-1]["memory_mb"]
-            peak = max(s["memory_mb"] for s in self.snapshots)
-            return {"current_mb": current, "peak_mb": peak}
-
-    class PerformanceDashboard:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.metrics: dict[Any, Any] = {}
-
-        def start(self) -> None:
-            self.is_running = True
-
-        def stop(self) -> None:
-            self.is_running = False
-
-        def update_metrics(self, metrics: Any) -> None:
-            self.metrics.update(metrics)
+    def update_metrics(self, metrics: Any) -> None:
+        self.metrics.update(metrics)
 
 
 @pytest.mark.integration

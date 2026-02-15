@@ -18,166 +18,160 @@ from typing import Any
 import pytest
 
 # Mock implementations for CLI testing
-try:
-    from qontinui_devtools.runtime.dashboard import (
-        PerformanceDashboard,  # type: ignore[import-not-found]
-    )
-    from qontinui_devtools.runtime.event_tracer import EventTracer
-    from qontinui_devtools.runtime.memory_profiler import MemoryProfiler
-    from qontinui_devtools.runtime.profiler import ActionProfiler  # type: ignore[import-not-found]
-    from qontinui_devtools.runtime.report_generator import (
-        RuntimeReportGenerator,  # type: ignore[import-not-found]
-    )
-except ImportError:
-    # Mock implementations
-    class ActionProfiler:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.profiles: list[Any] = []
 
-        def start(self) -> None:
-            self.is_running = True
 
-        def stop(self) -> None:
-            self.is_running = False
+class ActionProfiler:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.profiles: list[Any] = []
 
-        def profile(self, func: Any) -> Any:
-            def wrapper(*args: Any, **kwargs: Any) -> Any:
-                start = time.perf_counter()
-                result = func(*args, **kwargs)
-                duration = time.perf_counter() - start
-                self.profiles.append(
-                    {"function": func.__name__, "duration": duration, "timestamp": time.time()}
-                )
-                return result
+    def start(self) -> None:
+        self.is_running = True
 
-            return wrapper
+    def stop(self) -> None:
+        self.is_running = False
 
-        def get_profile_data(self) -> Any:
-            return {
-                "profiles": self.profiles,
-                "total_calls": len(self.profiles),
-                "total_time": sum(p["duration"] for p in self.profiles),
-            }
-
-        def export(self, output_path: Any, format: Any = "json") -> None:
-            with open(output_path, "w") as f:
-                json.dump(self.get_profile_data(), f, indent=2)
-
-    class EventTracer:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.events: list[Any] = []
-
-        def start(self) -> None:
-            self.is_running = True
-
-        def stop(self) -> None:
-            self.is_running = False
-
-        def trace_event(self, event_type: Any, data: Any) -> None:
-            if self.is_running:
-                self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
-
-        def get_events(self, event_type: Any = None) -> Any:
-            if event_type:
-                return [e for e in self.events if e["type"] == event_type]
-            return self.events
-
-        def export(self, output_path: Any, format: Any = "json") -> None:
-            with open(output_path, "w") as f:
-                json.dump(self.events, f, indent=2)
-
-    class MemoryProfiler:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.snapshots: list[Any] = []
-
-        def start(self) -> None:
-            self.is_running = True
-            self._take_snapshot()
-
-        def stop(self) -> None:
-            self.is_running = False
-            self._take_snapshot()
-
-        def _take_snapshot(self) -> None:
-            import sys
-
-            self.snapshots.append(
-                {
-                    "timestamp": time.time(),
-                    "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
-                }
+    def profile(self, func: Any) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            start = time.perf_counter()
+            result = func(*args, **kwargs)
+            duration = time.perf_counter() - start
+            self.profiles.append(
+                {"function": func.__name__, "duration": duration, "timestamp": time.time()}
             )
+            return result
 
-        def get_memory_usage(self) -> Any:
-            if not self.snapshots:
-                return {"current_mb": 0, "peak_mb": 0}
-            current = self.snapshots[-1]["memory_mb"]
-            peak = max(s["memory_mb"] for s in self.snapshots)
-            return {"current_mb": current, "peak_mb": peak}
+        return wrapper
 
-        def export(self, output_path: Any, format: Any = "json") -> None:
-            with open(output_path, "w") as f:
-                json.dump(self.snapshots, f, indent=2)
+    def get_profile_data(self) -> Any:
+        return {
+            "profiles": self.profiles,
+            "total_calls": len(self.profiles),
+            "total_time": sum(p["duration"] for p in self.profiles),
+        }
 
-    class PerformanceDashboard:  # type: ignore[no-redef]
-        def __init__(self, config: Any = None) -> None:
-            self.config = config or {}
-            self.is_running = False
-            self.metrics: dict[Any, Any] = {}
+    def export(self, output_path: Any, format: Any = "json") -> None:
+        with open(output_path, "w") as f:
+            json.dump(self.get_profile_data(), f, indent=2)
 
-        def start(self) -> None:
-            self.is_running = True
 
-        def stop(self) -> None:
-            self.is_running = False
+class EventTracer:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.events: list[Any] = []
 
-        def update_metrics(self, metrics: Any) -> None:
-            self.metrics.update(metrics)
+    def start(self) -> None:
+        self.is_running = True
 
-        def get_metrics(self) -> Any:
-            return self.metrics
+    def stop(self) -> None:
+        self.is_running = False
 
-    class RuntimeReportGenerator:  # type: ignore[no-redef]
-        """Mock Runtime Report Generator."""
+    def trace_event(self, event_type: Any, data: Any) -> None:
+        if self.is_running:
+            self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
 
-        def __init__(self) -> None:
-            pass
+    def get_events(self, event_type: Any = None) -> Any:
+        if event_type:
+            return [e for e in self.events if e["type"] == event_type]
+        return self.events
 
-        def generate_report(
-            self,
-            profiler_data: dict[str, Any],
-            event_data: list[dict[str, Any]],
-            memory_data: dict[str, Any],
-            output_path: Path,
-        ) -> None:
-            """Generate comprehensive runtime monitoring report."""
-            report = {
+    def export(self, output_path: Any, format: Any = "json") -> None:
+        with open(output_path, "w") as f:
+            json.dump(self.events, f, indent=2)
+
+
+class MemoryProfiler:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.snapshots: list[Any] = []
+
+    def start(self) -> None:
+        self.is_running = True
+        self._take_snapshot()
+
+    def stop(self) -> None:
+        self.is_running = False
+        self._take_snapshot()
+
+    def _take_snapshot(self) -> None:
+        import sys
+
+        self.snapshots.append(
+            {
                 "timestamp": time.time(),
-                "profiler": profiler_data,
-                "events": event_data,
-                "memory": memory_data,
-                "summary": {
-                    "total_calls": profiler_data.get("total_calls", 0),
-                    "total_events": len(event_data),
-                    "peak_memory_mb": memory_data.get("peak_mb", 0),
-                },
+                "memory_mb": sys.getsizeof(self.snapshots) / (1024 * 1024),
             }
+        )
 
-            if output_path.suffix == ".json":
-                with open(output_path, "w") as f:
-                    json.dump(report, f, indent=2)
-            elif output_path.suffix == ".html":
-                self._generate_html_report(report, output_path)
+    def get_memory_usage(self) -> Any:
+        if not self.snapshots:
+            return {"current_mb": 0, "peak_mb": 0}
+        current = self.snapshots[-1]["memory_mb"]
+        peak = max(s["memory_mb"] for s in self.snapshots)
+        return {"current_mb": current, "peak_mb": peak}
 
-        def _generate_html_report(self, report: dict[str, Any], output_path: Path) -> None:
-            """Generate HTML report."""
-            html_content = f"""
+    def export(self, output_path: Any, format: Any = "json") -> None:
+        with open(output_path, "w") as f:
+            json.dump(self.snapshots, f, indent=2)
+
+
+class PerformanceDashboard:
+    def __init__(self, config: Any = None) -> None:
+        self.config = config or {}
+        self.is_running = False
+        self.metrics: dict[Any, Any] = {}
+
+    def start(self) -> None:
+        self.is_running = True
+
+    def stop(self) -> None:
+        self.is_running = False
+
+    def update_metrics(self, metrics: Any) -> None:
+        self.metrics.update(metrics)
+
+    def get_metrics(self) -> Any:
+        return self.metrics
+
+
+class RuntimeReportGenerator:
+    """Mock Runtime Report Generator."""
+
+    def __init__(self) -> None:
+        pass
+
+    def generate_report(
+        self,
+        profiler_data: dict[str, Any],
+        event_data: list[dict[str, Any]],
+        memory_data: dict[str, Any],
+        output_path: Path,
+    ) -> None:
+        """Generate comprehensive runtime monitoring report."""
+        report = {
+            "timestamp": time.time(),
+            "profiler": profiler_data,
+            "events": event_data,
+            "memory": memory_data,
+            "summary": {
+                "total_calls": profiler_data.get("total_calls", 0),
+                "total_events": len(event_data),
+                "peak_memory_mb": memory_data.get("peak_mb", 0),
+            },
+        }
+
+        if output_path.suffix == ".json":
+            with open(output_path, "w") as f:
+                json.dump(report, f, indent=2)
+        elif output_path.suffix == ".html":
+            self._generate_html_report(report, output_path)
+
+    def _generate_html_report(self, report: dict[str, Any], output_path: Path) -> None:
+        """Generate HTML report."""
+        html_content = f"""
 <!DOCTYPE html>
 <html>
 <head>
@@ -210,8 +204,8 @@ except ImportError:
 </body>
 </html>
 """
-            with open(output_path, "w") as f:
-                f.write(html_content)
+        with open(output_path, "w") as f:
+            f.write(html_content)
 
 
 @pytest.mark.integration
