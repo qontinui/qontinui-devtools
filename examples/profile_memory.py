@@ -59,6 +59,7 @@ def main() -> None:
 
     profiler.start()
     baseline = profiler.baseline
+    assert baseline is not None, "Baseline snapshot should not be None after start"
     print(f"Baseline: {baseline.total_mb:.1f} MB")
     print(f"Objects: {sum(baseline.objects_by_type.values()):,}")
     print()
@@ -82,6 +83,7 @@ def main() -> None:
     profiler.start()
 
     baseline = profiler.baseline
+    assert baseline is not None, "Baseline snapshot should not be None after start"
     print("Starting leak simulation...")
     print(f"Baseline memory: {baseline.total_mb:.1f} MB")
     print()

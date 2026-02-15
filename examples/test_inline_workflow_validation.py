@@ -105,7 +105,7 @@ def main() -> None:
         print(f"Inline workflows detected: {report.total_inline_workflows}")
         print(f"Valid inline workflows: {report.valid_inline_workflows}")
         print(f"Invalid inline workflows: {report.invalid_inline_workflows}")
-        print(f"Total errors: {len(report.errors) + len(report.inline_workflow_errors)}")
+        print(f"Total errors: {len(report.errors) + len(report.inline_workflow_errors or [])}")
         print()
 
         if report.is_valid:

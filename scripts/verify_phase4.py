@@ -200,7 +200,7 @@ def verify_version() -> tuple[bool, list[str]]:
         result = subprocess.run(
             ["qontinui-devtools", "--version"], capture_output=True, text=True, timeout=5
         )
-        if target_version in result.output:
+        if target_version in result.stdout:
             print_success(f"CLI version: {target_version}")
         else:
             error_msg = "CLI version mismatch"
