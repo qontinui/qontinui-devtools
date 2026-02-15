@@ -126,6 +126,9 @@ module = [
     "yaml.*",
     "requests.*",
     "reportlab.*",
+    "rich.*",
+    "psutil",
+    "psutil.*",
 ]
 ignore_missing_imports = true
 

@@ -2,6 +2,7 @@
 """Run security scans on all Qontinui Python repositories."""
 
 from pathlib import Path
+from typing import Any
 
 from qontinui_devtools.security import SecurityAnalyzer
 
@@ -19,7 +20,7 @@ REPOS = [
 ]
 
 
-def main():
+def main() -> None:
     results = {}
 
     for repo_name, repo_path in REPOS:
@@ -97,7 +98,7 @@ def main():
                 f.write(f"Total: {len(report.vulnerabilities)} vulnerabilities\n\n")
 
                 # Group by type
-                by_type = {}
+                by_type: dict[str, list[Any]] = {}
                 for vuln in report.vulnerabilities:
                     vtype = vuln.type.value
                     if vtype not in by_type:
