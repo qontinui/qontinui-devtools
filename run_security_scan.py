@@ -6,17 +6,16 @@ from typing import Any
 
 from qontinui_devtools.security import SecurityAnalyzer
 
+_PARENT_DIR = Path(__file__).resolve().parent.parent
+
 REPOS = [
-    ("qontinui", "D:/qontinui_parent_directory/qontinui"),
-    ("qontinui-api", "D:/qontinui_parent_directory/qontinui-api"),
-    (
-        "qontinui-web/backend",
-        "D:/qontinui_parent_directory/qontinui-web/backend",
-    ),
-    ("qontinui-mcp", "D:/qontinui_parent_directory/qontinui-mcp"),
-    ("qontinui-devtools", "D:/qontinui_parent_directory/qontinui-devtools"),
-    ("qontinui-train", "D:/qontinui_parent_directory/qontinui-train"),
-    ("qontinui-finetune", "D:/qontinui_parent_directory/qontinui-finetune"),
+    ("qontinui", str(_PARENT_DIR / "qontinui")),
+    ("qontinui-api", str(_PARENT_DIR / "qontinui-api")),
+    ("qontinui-web/backend", str(_PARENT_DIR / "qontinui-web" / "backend")),
+    ("qontinui-mcp", str(_PARENT_DIR / "qontinui-mcp")),
+    ("qontinui-devtools", str(_PARENT_DIR / "qontinui-devtools")),
+    ("qontinui-train", str(_PARENT_DIR / "qontinui-train")),
+    ("qontinui-finetune", str(_PARENT_DIR / "qontinui-finetune")),
 ]
 
 
@@ -58,7 +57,7 @@ def main() -> None:
                 print(f"   {vuln.description[:100]}...")
 
     # Write summary report
-    summary_path = Path("D:/qontinui_parent_directory/.dev-logs/improve-all-security-audit.md")
+    summary_path = _PARENT_DIR / ".dev-logs" / "improve-all-security-audit.md"
     summary_path.parent.mkdir(exist_ok=True)
 
     with open(summary_path, "w", encoding="utf-8") as f:
