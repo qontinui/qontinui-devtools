@@ -64,3 +64,4 @@ Thumbs.db
 # Claude development guidelines (local only)
 CLAUDE.md
 .claude/
+.worktrees/
