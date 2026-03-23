@@ -42,13 +42,7 @@ cd ~/Documents/qontinui/qontinui-web/frontend
 ./start-frontend.sh
 ```
 
-**Terminal 3 - API Service (Optional):**
-```bash
-cd ~/Documents/qontinui/qontinui-api
-./start-api.sh
-```
-
-**Terminal 4 - Runner (Optional):**
+**Terminal 3 - Runner (Optional):**
 ```bash
 cd ~/Documents/qontinui/qontinui-runner
 npm run tauri dev
@@ -223,19 +217,16 @@ cd ~/Documents/qontinui/qontinui-web && docker compose down
 - Backend API Docs: http://localhost:8000/docs (when running)
 - Frontend: Check `qontinui-web/frontend/README.md`
 - Runner: Check `qontinui-runner/README.md`
-- API: Check `qontinui-api/README.md`
 
 ## 🎯 Quick Reference
 
 **Python Version:**
 - Web Backend: Python 3.12.12 (`/usr/local/bin/python3.12`)
-- API Service: Python 3.11+ (uses system python3)
 - Runner: Python 3.10+ (uses Poetry environments)
 
 **Environment Files:**
 - Backend: `qontinui-web/backend/.env`
 - Frontend: `qontinui-web/frontend/.env.local`
-- API: `qontinui-api/.env`
 
 **Database:**
 - Host: `localhost`

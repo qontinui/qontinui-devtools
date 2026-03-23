@@ -17,10 +17,10 @@
 ⏺ Read(qontinui/src/qontinui/semantic/processors/sam3_processor.py)
   ⎿  Read 451 lines
 
-⏺ Read(qontinui-api/semantic_api.py)
+⏺ Read(semantic_api.py) [previously in qontinui-api, now deprecated]
   ⎿  Read 100 lines
 
-⏺ Read(qontinui-api/semantic_api.py)
+⏺ Read(semantic_api.py) [previously in qontinui-api, now deprecated]
   ⎿  Read 80 lines
 
 ⏺ Analysis Complete

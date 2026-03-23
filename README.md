@@ -387,10 +387,10 @@ poetry run pytest --cov --cov-report=html
 
 ## Compatibility
 
-| qontinui-devtools | qontinui | qontinui-runner | qontinui-api | qontinui-web |
-|-------------------|----------|-----------------|--------------|--------------|
-| v1.1.x (Phase 4)  | v1.x     | v1.x            | v1.x         | v1.x         |
-| v1.0.x            | v1.x     | v1.x            | v1.x         | v1.x         |
+| qontinui-devtools | qontinui | qontinui-runner | qontinui-web |
+|-------------------|----------|-----------------|--------------|
+| v1.1.x (Phase 4)  | v1.x     | v1.x            | v1.x         |
+| v1.0.x            | v1.x     | v1.x            | v1.x         |
 
 DevTools supports the current and previous major version of Qontinui.
 

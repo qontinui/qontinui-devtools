@@ -34,7 +34,7 @@ All 8 phases of the migration have been successfully implemented:
 - ElementIdentifier (1,114 lines)
 
 #### Phase 4: API Updates ✅
-- 4 new endpoints in qontinui-api
+- 4 new endpoints in the runner
 - Full integration with library
 
 #### Phase 5: Runner Integration ✅

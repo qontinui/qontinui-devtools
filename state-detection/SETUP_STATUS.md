@@ -17,7 +17,6 @@ To stop: `cd qontinui-web && docker compose down`
 
 ### 2. Environment Files Created
 - ✅ `qontinui-web/backend/.env` (from .env.example)
-- ✅ `qontinui-api/.env` (from .env.example)
 
 ## ⚠️ Python Version Issue
 
@@ -61,16 +60,7 @@ brew install python@3.12
 
 You can run these immediately since they support Python 3.10+:
 
-### 1. qontinui-api (Image Recognition Service)
-```bash
-cd ~/Documents/qontinui/qontinui-api
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8001
-```
-
-### 2. qontinui-runner (Desktop App)
+### 1. qontinui-runner (Desktop App)
 First install Python dependencies:
 ```bash
 cd ~/Documents/qontinui/multistate

@@ -64,7 +64,7 @@ model = build_sam3_image_model()
 
 ```bash
 # Navigate to your project
-cd /Users/jspinak/Documents/qontinui/qontinui-api
+cd /Users/jspinak/Documents/qontinui/qontinui-runner
 
 # Start the API server
 uvicorn semantic_api:app --reload

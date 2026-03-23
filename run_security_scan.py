@@ -10,7 +10,6 @@ _PARENT_DIR = Path(__file__).resolve().parent.parent
 
 REPOS = [
     ("qontinui", str(_PARENT_DIR / "qontinui")),
-    ("qontinui-api", str(_PARENT_DIR / "qontinui-api")),
     ("qontinui-web/backend", str(_PARENT_DIR / "qontinui-web" / "backend")),
     ("qontinui-mcp", str(_PARENT_DIR / "qontinui-mcp")),
     ("qontinui-devtools", str(_PARENT_DIR / "qontinui-devtools")),
