@@ -65,7 +65,7 @@ memory = ["memray"]
 all = ["memray"]
 
 [tool.poetry.scripts]
-qontinui-devtools = "qontinui_devtools.cli:main"
+qontinui-devtools = "qontinui_devtools.devtools_cli:main"
 qontinui = "qontinui_devtools.cli.main:main"
 
 [build-system]
