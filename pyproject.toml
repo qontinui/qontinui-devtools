@@ -179,6 +179,10 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
     "unit: marks tests as unit tests",
+    "concurrent: marks tests that exercise concurrent/threaded behavior",
+    "e2e: marks tests as end-to-end tests",
+    "performance: marks tests that measure performance",
+    "stress: marks tests that exercise stress/load scenarios",
 ]
 
 [tool.coverage.run]
