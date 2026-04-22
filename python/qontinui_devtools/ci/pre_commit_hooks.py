@@ -1,7 +1,5 @@
 """Pre-commit hooks for qontinui-devtools.
 
-from typing import Any, Any
-
 This module provides pre-commit hooks for local development to catch
 code quality issues before they are committed.
 """
@@ -14,6 +12,14 @@ from typing import Any
 
 import click
 from rich.console import Console
+
+# On Windows the default console encoder is cp1252 and rich prints unicode
+# status icons (✅, ❌). Reconfigure to UTF-8 so the hook never crashes with
+# UnicodeEncodeError when Python writes through the stdlib encoder.
+for _stream in (sys.stdout, sys.stderr):
+    _reconfigure = getattr(_stream, "reconfigure", None)
+    if _reconfigure is not None:
+        _reconfigure(encoding="utf-8", errors="replace")
 
 console = Console()
 
@@ -306,7 +312,7 @@ def check_complexity(filenames: Sequence[str], max_complexity: int) -> None:
             if not file_path.exists():
                 continue
 
-            with open(file_path) as f:
+            with open(file_path, encoding="utf-8") as f:
                 code = f.read()
 
             results = radon_complexity.cc_visit(code)
