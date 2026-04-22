@@ -55,11 +55,11 @@ jobs:
 
       - name: Check formatting
         run: |
-          poetry run black --check python/
+          poetry run ruff format --check python/
 
       - name: Lint with Ruff
         run: |
-          poetry run ruff python/
+          poetry run ruff check python/
 
   analyze:
     runs-on: ubuntu-latest

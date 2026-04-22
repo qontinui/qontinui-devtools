@@ -105,16 +105,16 @@ pre-commit install
 poetry run pytest
 
 # Check code style
-poetry run black --check python/
-poetry run ruff python/
+poetry run ruff format --check python/
+poetry run ruff check python/
 
 # Type checking
 poetry run mypy python/
 
 # All checks at once
 poetry run pytest && \
-poetry run black --check python/ && \
-poetry run ruff python/ && \
+poetry run ruff format --check python/ && \
+poetry run ruff check python/ && \
 poetry run mypy python/
 ```
 
@@ -125,7 +125,6 @@ poetry run mypy python/
 Install recommended extensions:
 - Python (Microsoft)
 - Pylance
-- Black Formatter
 - Ruff
 
 Create `.vscode/settings.json`:
@@ -135,13 +134,11 @@ Create `.vscode/settings.json`:
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
-  "python.formatting.provider": "black",
-  "python.linting.ruffEnabled": true,
   "editor.formatOnSave": true,
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+      "source.organizeImports.ruff": "explicit"
     }
   }
 }
@@ -153,7 +150,6 @@ Create `.vscode/settings.json`:
 2. Select: Poetry Environment
 3. Enable: Settings → Tools → Python Integrated Tools → Pytest
 4. Configure: Settings → Editor → Code Style → Python
-   - Scheme: Black
    - Line length: 100
 
 ---
@@ -191,8 +187,8 @@ vim python/qontinui_devtools/your_module.py
 pytest python/tests/test_your_module.py
 
 # Check code style
-black python/qontinui_devtools/your_module.py
-ruff python/qontinui_devtools/your_module.py
+ruff format python/qontinui_devtools/your_module.py
+ruff check python/qontinui_devtools/your_module.py
 
 # Type check
 mypy python/qontinui_devtools/your_module.py
@@ -246,21 +242,18 @@ git push origin feature/your-feature-name
 We follow PEP 8 with some modifications:
 
 - **Line length:** 100 characters (not 80)
-- **Formatter:** Black (automatic)
-- **Import sorting:** isort (automatic)
-- **Linter:** Ruff
+- **Formatter:** `ruff format`
+- **Import sorting:** `ruff check --select I --fix`
+- **Linter:** `ruff check`
 
 ### Code Formatting
 
 ```bash
 # Format code
-black python/
+ruff format python/
 
-# Sort imports
-isort python/
-
-# Lint
-ruff python/
+# Lint (includes import sorting via the `I` rule)
+ruff check python/
 
 # Or use pre-commit
 pre-commit run --all-files

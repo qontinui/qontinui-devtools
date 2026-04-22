@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Tests](https://img.shields.io/badge/tests-162%20passed-brightgreen.svg)](python/tests/)
 
 ## Overview
@@ -339,16 +339,16 @@ poetry run pytest -n auto
 
 ```bash
 # Format code
-poetry run black python/
+poetry run ruff format python/
 
 # Lint
-poetry run ruff python/
+poetry run ruff check python/
 
 # Type check
 poetry run mypy python/
 
 # Run all checks
-poetry run black python/ && poetry run ruff python/ && poetry run mypy python/
+poetry run ruff format --check python/ && poetry run ruff check python/ && poetry run mypy python/
 ```
 
 ### Contributing

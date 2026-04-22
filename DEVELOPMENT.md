@@ -123,17 +123,17 @@ poetry run pytest --cov --cov-report=html
 
 ### Code Quality
 
-#### Formatting with Black
+#### Formatting with Ruff
 
 ```bash
 # Format all Python files
-poetry run black python/
+poetry run ruff format python/
 
 # Check formatting without modifying
-poetry run black --check python/
+poetry run ruff format --check python/
 
 # Format specific file
-poetry run black python/qontinui_devtools/import_analysis/import_tracer.py
+poetry run ruff format python/qontinui_devtools/import_analysis/import_tracer.py
 ```
 
 #### Linting with Ruff
@@ -166,13 +166,13 @@ poetry run mypy python/ --html-report mypy-report
 
 ```bash
 # Run all checks in sequence
-poetry run black python/ && \
+poetry run ruff format --check python/ && \
 poetry run ruff check python/ && \
 poetry run mypy python/ && \
 poetry run pytest
 
 # Or create an alias
-alias qa="poetry run black python/ && poetry run ruff check python/ && poetry run mypy python/ && poetry run pytest"
+alias qa="poetry run ruff format --check python/ && poetry run ruff check python/ && poetry run mypy python/ && poetry run pytest"
 ```
 
 ### Pre-commit Hooks (Optional)
@@ -311,7 +311,7 @@ class TestYourClass:
 
 ```bash
 # Format code
-poetry run black python/
+poetry run ruff format python/
 
 # Lint
 poetry run ruff check --fix python/
@@ -513,7 +513,7 @@ Add new release section with all changes
 
 ```bash
 poetry run pytest --cov
-poetry run black --check python/
+poetry run ruff format --check python/
 poetry run ruff check python/
 poetry run mypy python/
 ```

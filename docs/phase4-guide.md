@@ -574,11 +574,11 @@ Vulnerabilities:
 Outdated packages:
   • click 8.0.0 → 8.1.7
   • pytest 7.0.0 → 7.4.4
-  • black 23.0.0 → 24.1.1
+  • ruff 0.5.0 → 0.14.0
 
 Update commands:
   pip install --upgrade pillow requests
-  pip install --upgrade click pytest black
+  pip install --upgrade click pytest ruff
 ```
 
 ### Configuration
