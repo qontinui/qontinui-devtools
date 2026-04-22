@@ -387,6 +387,50 @@ class MockPatternMatcher(IPatternMatcher):
         # Return grayscale version as mock edge detection
         return image.convert("L")
 
+    def find_template_invariant(
+        self,
+        haystack: Image.Image,
+        needle: Image.Image,
+        scales: list[float] | None = None,
+        rotations: list[float] | None = None,
+        confidence: float = 0.9,
+        grayscale: bool = True,
+    ) -> Match | None:
+        """Find pattern with scale and rotation invariance (mock implementation)."""
+        self._simulate_latency()
+        self._record_attempt(
+            "find_template_invariant",
+            haystack_size=haystack.size,
+            needle_size=needle.size,
+            scales=scales,
+            rotations=rotations,
+            confidence=confidence,
+        )
+        return self.find_pattern(haystack, needle, confidence, grayscale)
+
+    def find_all_template_invariant(
+        self,
+        haystack: Image.Image,
+        needle: Image.Image,
+        scales: list[float] | None = None,
+        rotations: list[float] | None = None,
+        confidence: float = 0.9,
+        grayscale: bool = True,
+        limit: int | None = None,
+    ) -> list[Match]:
+        """Find all pattern occurrences with scale and rotation invariance (mock implementation)."""
+        self._simulate_latency()
+        self._record_attempt(
+            "find_all_template_invariant",
+            haystack_size=haystack.size,
+            needle_size=needle.size,
+            scales=scales,
+            rotations=rotations,
+            confidence=confidence,
+            limit=limit,
+        )
+        return self.find_all_patterns(haystack, needle, confidence, grayscale, limit)
+
     # Test helper methods
 
     def configure_match(

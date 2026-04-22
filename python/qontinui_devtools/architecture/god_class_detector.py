@@ -162,7 +162,7 @@ class GodClassDetector:
         # Basic metrics
         total_lines, code_lines = count_lines(node, source)
         method_counts = count_methods(node)
-        method_count = sum(method_counts.values())
+        method_count = method_counts["instance"] + method_counts["class"] + method_counts["static"]
         attribute_count = count_attributes(node)
         complexity = calculate_complexity(node)
 

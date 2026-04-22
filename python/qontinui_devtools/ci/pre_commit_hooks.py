@@ -255,8 +255,8 @@ def check_race_conditions(filenames: Sequence[str], severity: str) -> None:
             for file, race in found_issues:
                 console.print(f"  • [{race.severity.upper()}] in {file}")
                 console.print(f"    {race.description}")
-                if race.location:
-                    console.print(f"    Location: {race.location}")
+                state = race.shared_state
+                console.print(f"    Location: line {state.line_number} ('{state.name}')")
 
             console.print(
                 "\n[yellow]Add proper synchronization to prevent race conditions[/yellow]"

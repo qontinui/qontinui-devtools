@@ -53,10 +53,33 @@ class SharedStateVisitor(ast.NodeVisitor):
         self._lock_context_stack: list[str] = []
         self._assignment_targets: set[int] = set()  # Track nodes being assigned
 
+    @staticmethod
+    def _is_dataclass(node: ast.ClassDef) -> bool:
+        """Return True if the class has a @dataclass decorator."""
+        for decorator in node.decorator_list:
+            if isinstance(decorator, ast.Name) and decorator.id == "dataclass":
+                return True
+            if isinstance(decorator, ast.Attribute) and decorator.attr == "dataclass":
+                return True
+            if isinstance(decorator, ast.Call):
+                func = decorator.func
+                if isinstance(func, ast.Name) and func.id == "dataclass":
+                    return True
+                if isinstance(func, ast.Attribute) and func.attr == "dataclass":
+                    return True
+        return False
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Visit class definition to find class variables."""
         self._class_stack.append(node.name)
         self.context.current_class = node.name
+
+        # Dataclass annotations are instance fields, not shared class-level state — skip them.
+        if self._is_dataclass(node):
+            self.generic_visit(node)
+            self._class_stack.pop()
+            self.context.current_class = self._class_stack[-1] if self._class_stack else None
+            return
 
         # Find class variables (assignments at class level)
         for item in node.body:

@@ -137,7 +137,7 @@ def trace_imports(
         qontinui-devtools import trace mypackage --depth 3 --exclude "test_*"
     """
     try:
-        from .import_analysis import ImportTracer
+        from .import_analysis import ImportTracer, visualize_import_graph
     except ImportError:
         console.print("[red]Error: Import analysis module not available[/red]")
         sys.exit(1)
@@ -161,7 +161,7 @@ def trace_imports(
             console.print("[green]✅ No circular dependencies[/green]")
 
         if visualize:
-            tracer.visualize(output)
+            visualize_import_graph(tracer.get_graph(), output)
             console.print(f"\n[blue]📊 Graph saved to:[/blue] {output}")
 
     except ImportError as e:
@@ -514,6 +514,9 @@ def profile_memory(
     profiler.start()
 
     baseline = profiler.baseline
+    if baseline is None:
+        console.print("[red]Error: Failed to capture memory baseline[/red]")
+        sys.exit(1)
     console.print(
         f"Baseline: {baseline.total_mb:.1f} MB, {sum(baseline.objects_by_type.values()):,} objects"
     )
@@ -525,6 +528,8 @@ def profile_memory(
         for i in range(num_snapshots):
             time.sleep(interval)
             snapshot = profiler.take_snapshot()
+            if snapshot is None:
+                continue
 
             mem_change = snapshot.total_mb - baseline.total_mb
             obj_count = sum(snapshot.objects_by_type.values())
@@ -617,6 +622,29 @@ def profile_memory(
 
     console.print()
     console.print("[bold green]Memory profiling complete![/bold green]")
+
+
+def _handle_flame_graph(
+    profiler: Any,
+    flame_graph: str | None,
+    format: str,
+    enable_stack_sampling: bool,
+) -> None:
+    """Generate a flame graph if requested, warning appropriately if stack sampling is disabled."""
+    if not flame_graph:
+        return
+    if not enable_stack_sampling:
+        console.print("[yellow]Warning: --enable-stack-sampling required for flame graphs[/yellow]")
+        return
+    try:
+        profiler.generate_flame_graph(flame_graph, format=format)
+        console.print(f"[green]✅ Flame graph generated:[/green] {flame_graph}")
+        if format == "json":
+            console.print(
+                "[blue]💡 Upload to https://www.speedscope.app/ for interactive viewing[/blue]"
+            )
+    except ValueError as e:
+        console.print(f"[yellow]Warning: Could not generate flame graph: {e}[/yellow]")
 
 
 @profile.command("action")
@@ -816,18 +844,7 @@ with profiler.profile_action("click", "submit_button") as profile:
     console.print(f"[green]✅ Profile exported to:[/green] {output}")
 
     # Generate flame graph if requested
-    if flame_graph and enable_stack_sampling:
-        try:
-            profiler.generate_flame_graph(flame_graph, format=format)
-            console.print(f"[green]✅ Flame graph generated:[/green] {flame_graph}")
-            if format == "json":
-                console.print(
-                    "[blue]💡 Upload to https://www.speedscope.app/ for interactive viewing[/blue]"
-                )
-        except ValueError as e:
-            console.print(f"[yellow]Warning: Could not generate flame graph: {e}[/yellow]")
-    elif flame_graph and not enable_stack_sampling:
-        console.print("[yellow]Warning: --enable-stack-sampling required for flame graphs[/yellow]")
+    _handle_flame_graph(profiler, flame_graph, format, enable_stack_sampling)
 
     console.print()
     console.print("[bold green]Profiling complete![/bold green]")
@@ -968,7 +985,7 @@ def analyze_srp(path: str, detail: str, min_methods: int, output: str | None) ->
     console.print(f"\n[red]❌ Found {len(violations)} SRP violations:[/red]\n")
 
     # Group by severity
-    by_severity = {"critical": [], "high": [], "medium": []}
+    by_severity: dict[str, list[Any]] = {"critical": [], "high": [], "medium": []}
     for v in violations:
         by_severity[v.severity].append(v)
 
@@ -1140,6 +1157,102 @@ def visualize_graph(
         console.print("[blue]   - Search and filter[/blue]")
 
 
+def _display_coupling_section(coupling: list[Any], threshold: int, show_all: bool) -> None:
+    """Display the coupling analysis table to the console."""
+    console.print("\n[bold]Coupling Analysis:[/bold]\n")
+    if not coupling:
+        console.print("[yellow]No modules found.[/yellow]")
+        return
+
+    if not show_all:
+        high_coupling = [c for c in coupling if c.efferent_coupling > threshold]
+        if high_coupling:
+            coupling_to_show = high_coupling
+            console.print(f"[yellow]Modules with Ce > {threshold}:[/yellow]\n")
+        else:
+            coupling_to_show = sorted(coupling, key=lambda x: x.efferent_coupling, reverse=True)[
+                :10
+            ]
+            console.print(
+                f"[green]No modules exceed threshold of {threshold}. Showing top 10:[/green]\n"
+            )
+    else:
+        coupling_to_show = sorted(coupling, key=lambda x: x.efferent_coupling, reverse=True)
+
+    table = Table(title="Module Coupling Metrics")
+    table.add_column("Module", style="cyan")
+    table.add_column("Ca", justify="right")
+    table.add_column("Ce", justify="right")
+    table.add_column("Instability", justify="right")
+    table.add_column("Distance", justify="right")
+    table.add_column("Score", justify="center")
+
+    score_colors = {"excellent": "green", "good": "blue", "fair": "yellow", "poor": "red"}
+    for c in coupling_to_show[:20]:
+        color = score_colors[c.coupling_score]
+        table.add_row(
+            c.name,
+            str(c.afferent_coupling),
+            str(c.efferent_coupling),
+            f"{c.instability:.2f}",
+            f"{c.distance_from_main:.2f}",
+            f"[{color}]{c.coupling_score}[/{color}]",
+        )
+
+    console.print(table)
+
+
+def _display_cohesion_section(cohesion: list[Any]) -> None:
+    """Display the cohesion analysis results to the console."""
+    console.print("\n[bold]Cohesion Analysis:[/bold]\n")
+    if not cohesion:
+        console.print("[yellow]No classes found.[/yellow]")
+        return
+
+    poor_cohesion = [c for c in cohesion if c.lcom > 0.7 or c.lcom4 > 2.0]
+    if not poor_cohesion:
+        console.print("[green]✅ All classes have good cohesion![/green]")
+        return
+
+    console.print(f"[yellow]Found {len(poor_cohesion)} classes with poor cohesion:[/yellow]\n")
+    score_colors = {"excellent": "green", "good": "blue", "fair": "yellow", "poor": "red"}
+    for cls in sorted(poor_cohesion, key=lambda x: x.lcom, reverse=True)[:10]:
+        color = score_colors[cls.cohesion_score]
+        console.print(f"[{color}]{cls.name}[/{color}]:")
+        console.print(f"  File: {cls.file_path}")
+        console.print(f"  LCOM: {cls.lcom:.2f} (lower is better)")
+        console.print(f"  LCOM4: {cls.lcom4:.1f} (1 is ideal)")
+        console.print(f"  TCC: {cls.tcc:.2f} (higher is better)")
+        console.print(f"  LCC: {cls.lcc:.2f} (higher is better)")
+        console.print(f"  Score: {cls.cohesion_score.upper()}\n")
+
+
+def _display_coupling_summary(coupling: list[Any], cohesion: list[Any]) -> None:
+    """Display summary statistics for coupling and cohesion analysis."""
+    console.print("\n[bold]Summary Statistics:[/bold]\n")
+    if coupling:
+        avg_ce = sum(c.efferent_coupling for c in coupling) / len(coupling)
+        avg_ca = sum(c.afferent_coupling for c in coupling) / len(coupling)
+        avg_instability = sum(c.instability for c in coupling) / len(coupling)
+        console.print(f"Modules analyzed: {len(coupling)}")
+        console.print(f"Average Ce: {avg_ce:.2f}")
+        console.print(f"Average Ca: {avg_ca:.2f}")
+        console.print(f"Average Instability: {avg_instability:.2f}")
+        poor_count = len([c for c in coupling if c.coupling_score == "poor"])
+        if poor_count > 0:
+            console.print(f"[red]⚠️  {poor_count} modules with poor coupling[/red]")
+
+    if cohesion:
+        avg_lcom = sum(c.lcom for c in cohesion) / len(cohesion)
+        avg_tcc = sum(c.tcc for c in cohesion) / len(cohesion)
+        console.print(f"\nClasses analyzed: {len(cohesion)}")
+        console.print(f"Average LCOM: {avg_lcom:.2f}")
+        console.print(f"Average TCC: {avg_tcc:.2f}")
+        poor_count = len([c for c in cohesion if c.cohesion_score == "poor"])
+        if poor_count > 0:
+            console.print(f"[red]⚠️  {poor_count} classes with poor cohesion[/red]")
+
+
 @architecture.command("coupling")
 @click.argument("path", type=click.Path(exists=True))
 @click.option("--threshold", default=10, help="Max efferent coupling threshold")
@@ -1187,109 +1300,9 @@ def analyze_coupling(path: str, threshold: int, show_all: bool, output: str | No
     with console.status("[bold green]Analyzing modules and classes..."):
         coupling, cohesion = analyzer.analyze_directory(path)
 
-    # Coupling Analysis
-    console.print("\n[bold]Coupling Analysis:[/bold]\n")
-
-    if coupling:
-        # Filter by threshold if not showing all
-        if not show_all:
-            high_coupling = [c for c in coupling if c.efferent_coupling > threshold]
-            if high_coupling:
-                coupling_to_show = high_coupling
-                console.print(f"[yellow]Modules with Ce > {threshold}:[/yellow]\n")
-            else:
-                coupling_to_show = sorted(
-                    coupling, key=lambda x: x.efferent_coupling, reverse=True
-                )[:10]
-                console.print(
-                    f"[green]No modules exceed threshold of {threshold}. Showing top 10:[/green]\n"
-                )
-        else:
-            coupling_to_show = sorted(coupling, key=lambda x: x.efferent_coupling, reverse=True)
-
-        table = Table(title="Module Coupling Metrics")
-        table.add_column("Module", style="cyan")
-        table.add_column("Ca", justify="right")
-        table.add_column("Ce", justify="right")
-        table.add_column("Instability", justify="right")
-        table.add_column("Distance", justify="right")
-        table.add_column("Score", justify="center")
-
-        for c in coupling_to_show[:20]:  # Top 20
-            color = {"excellent": "green", "good": "blue", "fair": "yellow", "poor": "red"}[
-                c.coupling_score
-            ]
-
-            table.add_row(
-                c.name,
-                str(c.afferent_coupling),
-                str(c.efferent_coupling),
-                f"{c.instability:.2f}",
-                f"{c.distance_from_main:.2f}",
-                f"[{color}]{c.coupling_score}[/{color}]",
-            )
-
-        console.print(table)
-    else:
-        console.print("[yellow]No modules found.[/yellow]")
-
-    # Cohesion Analysis
-    console.print("\n[bold]Cohesion Analysis:[/bold]\n")
-
-    if cohesion:
-        # Find classes with poor cohesion
-        poor_cohesion = [c for c in cohesion if c.lcom > 0.7 or c.lcom4 > 2.0]
-
-        if poor_cohesion:
-            console.print(
-                f"[yellow]Found {len(poor_cohesion)} classes with poor cohesion:[/yellow]\n"
-            )
-
-            for c in sorted(poor_cohesion, key=lambda x: x.lcom, reverse=True)[:10]:
-                color = {"excellent": "green", "good": "blue", "fair": "yellow", "poor": "red"}[
-                    c.cohesion_score
-                ]
-
-                console.print(f"[{color}]{c.name}[/{color}]:")
-                console.print(f"  File: {c.file_path}")
-                console.print(f"  LCOM: {c.lcom:.2f} (lower is better)")
-                console.print(f"  LCOM4: {c.lcom4:.1f} (1 is ideal)")
-                console.print(f"  TCC: {c.tcc:.2f} (higher is better)")
-                console.print(f"  LCC: {c.lcc:.2f} (higher is better)")
-                console.print(f"  Score: {c.cohesion_score.upper()}\n")
-        else:
-            console.print("[green]✅ All classes have good cohesion![/green]")
-    else:
-        console.print("[yellow]No classes found.[/yellow]")
-
-    # Summary Statistics
-    console.print("\n[bold]Summary Statistics:[/bold]\n")
-
-    if coupling:
-        avg_ce = sum(c.efferent_coupling for c in coupling) / len(coupling)
-        avg_ca = sum(c.afferent_coupling for c in coupling) / len(coupling)
-        avg_instability = sum(c.instability for c in coupling) / len(coupling)
-
-        console.print(f"Modules analyzed: {len(coupling)}")
-        console.print(f"Average Ce: {avg_ce:.2f}")
-        console.print(f"Average Ca: {avg_ca:.2f}")
-        console.print(f"Average Instability: {avg_instability:.2f}")
-
-        poor_count = len([c for c in coupling if c.coupling_score == "poor"])
-        if poor_count > 0:
-            console.print(f"[red]⚠️  {poor_count} modules with poor coupling[/red]")
-
-    if cohesion:
-        avg_lcom = sum(c.lcom for c in cohesion) / len(cohesion)
-        avg_tcc = sum(c.tcc for c in cohesion) / len(cohesion)
-
-        console.print(f"\nClasses analyzed: {len(cohesion)}")
-        console.print(f"Average LCOM: {avg_lcom:.2f}")
-        console.print(f"Average TCC: {avg_tcc:.2f}")
-
-        poor_count = len([c for c in cohesion if c.cohesion_score == "poor"])
-        if poor_count > 0:
-            console.print(f"[red]⚠️  {poor_count} classes with poor cohesion[/red]")
+    _display_coupling_section(coupling, threshold, show_all)
+    _display_cohesion_section(cohesion)
+    _display_coupling_summary(coupling, cohesion)
 
     # Save report if requested
     if output:
@@ -1306,6 +1319,109 @@ def quality() -> None:
     and other maintainability problems.
     """
     pass
+
+
+def _display_dead_code_results(dead_code: list[Any], min_confidence: float) -> None:
+    """Display dead code findings grouped by type to the console."""
+    if not dead_code:
+        console.print("[green]✅ No dead code detected![/green]")
+        console.print(f"[dim](Minimum confidence: {min_confidence})[/dim]")
+        return
+
+    by_type: dict[Any, Any] = {}
+    for dc in dead_code:
+        by_type.setdefault(dc.type, []).append(dc)
+
+    console.print(f"\n[red]Found {len(dead_code)} pieces of dead code:[/red]\n")
+
+    summary_table = Table(title="Dead Code Summary", show_header=True, header_style="bold magenta")
+    summary_table.add_column("Type", style="cyan")
+    summary_table.add_column("Count", justify="right", style="bold")
+    summary_table.add_column("Avg Confidence", justify="right")
+
+    type_order = ["import", "variable", "function", "class"]
+    for dtype in type_order:
+        if dtype in by_type:
+            items = by_type[dtype]
+            avg_conf = sum(dc.confidence for dc in items) / len(items)
+            summary_table.add_row(dtype.capitalize() + "s", str(len(items)), f"{avg_conf:.2f}")
+
+    console.print(summary_table)
+    console.print()
+
+    for dtype in type_order:
+        if dtype not in by_type:
+            continue
+        items = by_type[dtype]
+        console.print(f"[bold cyan]{dtype.capitalize()}s ({len(items)}):[/bold cyan]")
+        for dc in sorted(items, key=lambda x: x.confidence, reverse=True)[:10]:
+            confidence_color = (
+                "red" if dc.confidence > 0.8 else "yellow" if dc.confidence > 0.6 else "blue"
+            )
+            console.print(
+                f"  [{confidence_color}]• {dc.name}[/{confidence_color}] "
+                f"(confidence: {dc.confidence:.2f})"
+            )
+            console.print(f"    {dc.file_path}:{dc.line_number}")
+            console.print(f"    [dim]{dc.reason}[/dim]")
+        if len(items) > 10:
+            console.print(f"  [dim]... and {len(items) - 10} more[/dim]")
+        console.print()
+
+
+def _save_dead_code_report(
+    dead_code: list[Any],
+    output: str,
+    format: str,
+    min_confidence: float,
+) -> None:
+    """Save dead code report to file in the requested format."""
+    type_order = ["import", "variable", "function", "class"]
+    by_type: dict[Any, Any] = {}
+    for dc in dead_code:
+        by_type.setdefault(dc.type, []).append(dc)
+
+    if format == "json":
+        import json
+
+        json_data = [
+            {
+                "type": dc.type,
+                "name": dc.name,
+                "file_path": dc.file_path,
+                "line_number": dc.line_number,
+                "reason": dc.reason,
+                "confidence": dc.confidence,
+            }
+            for dc in dead_code
+        ]
+        Path(output).write_text(json.dumps(json_data, indent=2))
+    elif format == "csv":
+        import csv
+
+        with open(output, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Type", "Name", "File", "Line", "Confidence", "Reason"])
+            for dc in dead_code:
+                writer.writerow(
+                    [dc.type, dc.name, dc.file_path, dc.line_number, dc.confidence, dc.reason]
+                )
+    else:  # text
+        lines = ["Dead Code Report", "=" * 80, ""]
+        lines.append(f"Total items: {len(dead_code)}")
+        lines.append(f"Minimum confidence: {min_confidence}")
+        lines.append("")
+        for dtype in type_order:
+            if dtype not in by_type:
+                continue
+            items = by_type[dtype]
+            lines.append(f"\n{dtype.capitalize()}s ({len(items)}):")
+            lines.append("-" * 40)
+            for dc in items:
+                lines.append(f"\n  {dc.name} (confidence: {dc.confidence:.2f})")
+                lines.append(f"  File: {dc.file_path}:{dc.line_number}")
+                lines.append(f"  Reason: {dc.reason}")
+        Path(output).write_text("\n".join(lines))
 
 
 @quality.command("dead-code")
@@ -1357,124 +1473,26 @@ def detect_dead_code(
         console.print("[red]Error: Code quality module not available[/red]")
         sys.exit(1)
 
+    _detect_method_map = {
+        "functions": "find_unused_functions",
+        "classes": "find_unused_classes",
+        "imports": "find_unused_imports",
+        "variables": "find_unused_variables",
+    }
+
     with console.status("[bold green]Analyzing code for dead code..."):
         detector = DeadCodeDetector(path)
-
-        # Get dead code based on type
-        if code_type == "all":
-            dead_code = detector.analyze()
-        elif code_type == "functions":
-            dead_code = detector.find_unused_functions()
-        elif code_type == "classes":
-            dead_code = detector.find_unused_classes()
-        elif code_type == "imports":
-            dead_code = detector.find_unused_imports()
-        elif code_type == "variables":
-            dead_code = detector.find_unused_variables()
+        method_name = _detect_method_map.get(code_type)
+        if method_name:
+            dead_code = getattr(detector, method_name)()
         else:
             dead_code = detector.analyze()
-
-        # Filter by confidence
         dead_code = [dc for dc in dead_code if dc.confidence >= min_confidence]
 
-    if not dead_code:
-        console.print("[green]✅ No dead code detected![/green]")
-        console.print(f"[dim](Minimum confidence: {min_confidence})[/dim]")
-        return
+    _display_dead_code_results(dead_code, min_confidence)
 
-    # Group by type
-    by_type: dict[Any, Any] = {}
-    for dc in dead_code:
-        by_type.setdefault(dc.type, []).append(dc)
-
-    # Display summary
-    console.print(f"\n[red]Found {len(dead_code)} pieces of dead code:[/red]\n")
-
-    # Create summary table
-    summary_table = Table(title="Dead Code Summary", show_header=True, header_style="bold magenta")
-    summary_table.add_column("Type", style="cyan")
-    summary_table.add_column("Count", justify="right", style="bold")
-    summary_table.add_column("Avg Confidence", justify="right")
-
-    type_order = ["import", "variable", "function", "class"]
-    for dtype in type_order:
-        if dtype in by_type:
-            items = by_type[dtype]
-            avg_conf = sum(dc.confidence for dc in items) / len(items)
-            summary_table.add_row(dtype.capitalize() + "s", str(len(items)), f"{avg_conf:.2f}")
-
-    console.print(summary_table)
-    console.print()
-
-    # Display detailed results
-    for dtype in type_order:
-        if dtype not in by_type:
-            continue
-
-        items = by_type[dtype]
-        console.print(f"[bold cyan]{dtype.capitalize()}s ({len(items)}):[/bold cyan]")
-
-        for dc in sorted(items, key=lambda x: x.confidence, reverse=True)[:10]:
-            confidence_color = (
-                "red" if dc.confidence > 0.8 else "yellow" if dc.confidence > 0.6 else "blue"
-            )
-            console.print(
-                f"  [{confidence_color}]• {dc.name}[/{confidence_color}] "
-                f"(confidence: {dc.confidence:.2f})"
-            )
-            console.print(f"    {dc.file_path}:{dc.line_number}")
-            console.print(f"    [dim]{dc.reason}[/dim]")
-
-        if len(items) > 10:
-            console.print(f"  [dim]... and {len(items) - 10} more[/dim]")
-        console.print()
-
-    # Save report if requested
-    if output:
-        if format == "json":
-            import json
-
-            json_data = [
-                {
-                    "type": dc.type,
-                    "name": dc.name,
-                    "file_path": dc.file_path,
-                    "line_number": dc.line_number,
-                    "reason": dc.reason,
-                    "confidence": dc.confidence,
-                }
-                for dc in dead_code
-            ]
-            Path(output).write_text(json.dumps(json_data, indent=2))
-        elif format == "csv":
-            import csv
-
-            with open(output, "w", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow(["Type", "Name", "File", "Line", "Confidence", "Reason"])
-                for dc in dead_code:
-                    writer.writerow(
-                        [dc.type, dc.name, dc.file_path, dc.line_number, dc.confidence, dc.reason]
-                    )
-        else:  # text
-            lines = ["Dead Code Report", "=" * 80, ""]
-            lines.append(f"Total items: {len(dead_code)}")
-            lines.append(f"Minimum confidence: {min_confidence}")
-            lines.append("")
-
-            for dtype in type_order:
-                if dtype not in by_type:
-                    continue
-                items = by_type[dtype]
-                lines.append(f"\n{dtype.capitalize()}s ({len(items)}):")
-                lines.append("-" * 40)
-                for dc in items:
-                    lines.append(f"\n  {dc.name} (confidence: {dc.confidence:.2f})")
-                    lines.append(f"  File: {dc.file_path}:{dc.line_number}")
-                    lines.append(f"  Reason: {dc.reason}")
-
-            Path(output).write_text("\n".join(lines))
-
+    if dead_code and output:
+        _save_dead_code_report(dead_code, output, format, min_confidence)
         console.print(f"[green]✅ Report saved to:[/green] {output}")
 
     # Statistics
@@ -1574,7 +1592,9 @@ def scan_security(path: str, output: str | None, format: str, severity: str) -> 
         console.print(f"[green]Report saved to: {output}[/green]")
 
 
-def _generate_security_report(report, vulnerabilities, output_path: str, format: str) -> None:
+def _generate_security_report(
+    report: Any, vulnerabilities: list[Any], output_path: str, format: str
+) -> None:
     """Generate security report in specified format."""
     import json
 
@@ -1612,7 +1632,7 @@ def _generate_security_report(report, vulnerabilities, output_path: str, format:
                 f.write("\n\n")
 
 
-def _generate_html_report(report, vulnerabilities) -> str:
+def _generate_html_report(report: Any, vulnerabilities: list[Any]) -> str:
     """Generate HTML security report."""
     from qontinui_schemas.common import utc_now
 
@@ -1753,7 +1773,7 @@ def generate_docs(path: str, output: str | None, format: str) -> None:
         qontinui-devtools docs generate ./src --output docs/ --format markdown
     """
     try:
-        from .documentation import DocumentationGenerator
+        from .documentation import DocumentationGenerator, OutputFormat
     except ImportError:
         console.print("[red]Error: Documentation module not available[/red]")
         sys.exit(1)
@@ -1761,9 +1781,10 @@ def generate_docs(path: str, output: str | None, format: str) -> None:
     output_dir = output or "docs"
     console.print(f"[bold cyan]Generating documentation:[/bold cyan] {path}\n")
 
-    generator = DocumentationGenerator(path)
+    generator = DocumentationGenerator()
     with console.status("[bold green]Generating documentation..."):
-        generator.generate(output_dir, format)
+        tree = generator.generate_docs(path, OutputFormat(format))
+        generator.write_docs(tree, output_dir, OutputFormat(format))
 
     console.print(f"[green]Documentation generated in: {output_dir}[/green]")
 
@@ -1806,14 +1827,15 @@ def check_regression(path: str, baseline: str | None) -> None:
 
     console.print(f"[bold cyan]Checking for regressions:[/bold cyan] {path}\n")
 
-    detector = RegressionDetector(path)
+    detector = RegressionDetector()
     with console.status("[bold green]Analyzing regressions..."):
-        regressions = detector.check(baseline)
+        report = detector.detect_regressions(path, baseline or "latest")
 
+    regressions = report.issues
     if regressions:
         console.print(f"[red]Found {len(regressions)} regressions:[/red]\n")
         for reg in regressions:
-            console.print(f"[yellow]• {reg.type}: {reg.description}[/yellow]")
+            console.print(f"[yellow]• {reg.change_type.value}: {reg.description}[/yellow]")
     else:
         console.print("[green]No regressions detected![/green]")
 
@@ -2168,43 +2190,105 @@ def trace_report(trace_file: str, output: str | None) -> None:
     )
 
 
-def save_report(data: Any, output: str, format: str, detector: Any = None) -> None:
-    """Save analysis report to file."""
+def _save_json_report(data: Any, output: str, detector: Any = None) -> None:
+    """Serialize circular dependency cycles to a JSON file."""
     import json
 
-    if format == "json":
-        with open(output, "w") as f:
-            json.dump(
-                {
-                    "cycles": [
-                        {
-                            "cycle": c.cycle,
-                            "severity": c.severity,
-                            "suggestion": {
-                                "type": c.suggestion.fix_type,
-                                "description": c.suggestion.description,
-                                "code_example": c.suggestion.code_example,
-                                "affected_files": c.suggestion.affected_files,
-                            },
-                            "import_chain": [
-                                {
-                                    "module": imp.module,
-                                    "file": imp.file_path,
-                                    "line": imp.line_number,
-                                    "statement": str(imp),
-                                }
-                                for imp in c.import_chain
-                            ],
-                        }
-                        for c in data
-                    ],
-                    "statistics": detector.get_statistics() if detector else {},
+    payload = {
+        "cycles": [
+            {
+                "cycle": c.cycle,
+                "severity": c.severity,
+                "suggestion": {
+                    "type": c.suggestion.fix_type,
+                    "description": c.suggestion.description,
+                    "code_example": c.suggestion.code_example,
+                    "affected_files": c.suggestion.affected_files,
                 },
-                f,
-                indent=2,
-            )
-    elif format == "html":
-        html_content = """<!DOCTYPE html>
+                "import_chain": [
+                    {
+                        "module": imp.module,
+                        "file": imp.file_path,
+                        "line": imp.line_number,
+                        "statement": str(imp),
+                    }
+                    for imp in c.import_chain
+                ],
+            }
+            for c in data
+        ],
+        "statistics": detector.get_statistics() if detector else {},
+    }
+    with open(output, "w") as f:
+        json.dump(payload, f, indent=2)
+
+
+def _build_html_cycle_block(i: int, cycle: Any) -> str:
+    """Build the HTML block for a single cycle entry."""
+    severity_class = cycle.severity.lower() if hasattr(cycle, "severity") else "info"
+    severity_display = cycle.severity.upper() if hasattr(cycle, "severity") else "INFO"
+
+    block = f"""
+    <div class="cycle {severity_class}">
+        <div class="cycle-header">
+            <span class="cycle-number">Cycle #{i}</span>
+            <span class="severity-badge severity-{severity_class}">{severity_display}</span>
+        </div>
+        <div class="cycle-path">
+            {" → ".join(cycle.cycle)}
+        </div>
+"""
+    if hasattr(cycle, "import_chain") and cycle.import_chain:
+        block += """
+        <div class="import-chain">
+            <div class="import-chain-header">Import Chain:</div>
+"""
+        for imp in cycle.import_chain:
+            block += f"""
+            <div class="import-item">
+                <strong>{imp.module}</strong><br>
+                File: {imp.file_path}:{imp.line_number}<br>
+                Statement: {str(imp)}
+            </div>
+"""
+        block += """
+        </div>
+"""
+    if hasattr(cycle, "suggestion"):
+        suggestion = cycle.suggestion
+        block += f"""
+        <div class="suggestion">
+            <div class="suggestion-header">💡 Suggested Fix ({suggestion.fix_type})</div>
+            <p>{suggestion.description}</p>
+"""
+        if suggestion.code_example:
+            block += f"""
+            <div class="code-example">{suggestion.code_example}</div>
+"""
+        if suggestion.affected_files:
+            block += """
+            <div class="affected-files">
+                <strong>Affected Files:</strong>
+                <ul>
+"""
+            for file in suggestion.affected_files:
+                block += f"                    <li>{file}</li>\n"
+            block += """
+                </ul>
+            </div>
+"""
+        block += """
+        </div>
+"""
+    block += """
+    </div>
+"""
+    return block
+
+
+def _save_html_report(data: Any, output: str, detector: Any = None) -> None:
+    """Write circular dependency cycles to a self-contained HTML report."""
+    html_content = """<!DOCTYPE html>
 <html>
 <head>
     <title>Circular Dependency Report</title>
@@ -2350,10 +2434,9 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
     <h1>🔄 Circular Dependency Report</h1>
 """
 
-        # Add statistics if available
-        if detector:
-            stats = detector.get_statistics()
-            html_content += f"""
+    if detector:
+        stats = detector.get_statistics()
+        html_content += f"""
     <div class="stats">
         <h2>Summary Statistics</h2>
         <div class="stats-grid">
@@ -2373,82 +2456,23 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
     </div>
 """
 
-        # Add each cycle
-        for i, cycle in enumerate(data, 1):
-            severity_class = cycle.severity.lower() if hasattr(cycle, "severity") else "info"
-            severity_display = cycle.severity.upper() if hasattr(cycle, "severity") else "INFO"
+    for i, cycle in enumerate(data, 1):
+        html_content += _build_html_cycle_block(i, cycle)
 
-            html_content += f"""
-    <div class="cycle {severity_class}">
-        <div class="cycle-header">
-            <span class="cycle-number">Cycle #{i}</span>
-            <span class="severity-badge severity-{severity_class}">{severity_display}</span>
-        </div>
-        <div class="cycle-path">
-            {" → ".join(cycle.cycle)}
-        </div>
-"""
-
-            # Add import chain if available
-            if hasattr(cycle, "import_chain") and cycle.import_chain:
-                html_content += """
-        <div class="import-chain">
-            <div class="import-chain-header">Import Chain:</div>
-"""
-                for imp in cycle.import_chain:
-                    html_content += f"""
-            <div class="import-item">
-                <strong>{imp.module}</strong><br>
-                File: {imp.file_path}:{imp.line_number}<br>
-                Statement: {str(imp)}
-            </div>
-"""
-                html_content += """
-        </div>
-"""
-
-            # Add suggestion
-            if hasattr(cycle, "suggestion"):
-                suggestion = cycle.suggestion
-                html_content += f"""
-        <div class="suggestion">
-            <div class="suggestion-header">💡 Suggested Fix ({suggestion.fix_type})</div>
-            <p>{suggestion.description}</p>
-"""
-
-                if suggestion.code_example:
-                    html_content += f"""
-            <div class="code-example">{suggestion.code_example}</div>
-"""
-
-                if suggestion.affected_files:
-                    html_content += """
-            <div class="affected-files">
-                <strong>Affected Files:</strong>
-                <ul>
-"""
-                    for file in suggestion.affected_files:
-                        html_content += f"                    <li>{file}</li>\n"
-                    html_content += """
-                </ul>
-            </div>
-"""
-
-                html_content += """
-        </div>
-"""
-
-            html_content += """
-    </div>
-"""
-
-        html_content += """
+    html_content += """
 </body>
 </html>
 """
+    with open(output, "w") as f:
+        f.write(html_content)
 
-        with open(output, "w") as f:
-            f.write(html_content)
+
+def save_report(data: Any, output: str, format: str, detector: Any = None) -> None:
+    """Save analysis report to file."""
+    if format == "json":
+        _save_json_report(data, output, detector)
+    elif format == "html":
+        _save_html_report(data, output, detector)
     else:
         with open(output, "w") as f:
             for i, cycle in enumerate(data, 1):
@@ -2506,6 +2530,113 @@ def generate_report(results: dict[str, Any], output: str, format: str) -> None:
                 f.write(f"  {result}\n\n")
 
 
+def _display_analyze_summary(report_data: Any) -> dict[str, Any]:
+    """Print the console summary for the analyze command and return the metrics dict."""
+    console.print("\n[bold cyan]═══ Analysis Summary ═══[/bold cyan]\n")
+
+    status_color, status_icon, status_message = report_data.get_overall_status()
+    console.print(
+        Panel(
+            f"{status_icon} {status_message}",
+            title="Overall Status",
+            border_style=status_color,
+        )
+    )
+
+    metrics: dict[str, Any] = report_data.summary_metrics
+    table = Table(title="\nKey Metrics", show_header=True, header_style="bold magenta")
+    table.add_column("Metric", style="cyan", width=30)
+    table.add_column("Value", justify="right", style="green")
+    table.add_row("Files Analyzed", str(metrics.get("files_analyzed", 0)))
+    table.add_row("Total Lines", f"{metrics.get('total_lines', 0):,}")
+    table.add_row("Circular Dependencies", str(metrics.get("circular_dependencies", 0)))
+    table.add_row("God Classes", str(metrics.get("god_classes", 0)))
+    table.add_row("Race Conditions", str(metrics.get("race_conditions", 0)))
+    table.add_row("SRP Violations", str(metrics.get("srp_violations", 0)))
+    table.add_row("Critical Issues", str(metrics.get("critical_issues", 0)))
+    console.print(table)
+
+    console.print("\n[bold]Section Results:[/bold]\n")
+    severity_icons = {"success": "✅", "warning": "⚠️", "error": "❌", "info": "ℹ️"}
+    severity_colors = {"success": "green", "warning": "yellow", "error": "red", "info": "blue"}
+    for section in report_data.sections:
+        icon = severity_icons[section.severity]
+        color = severity_colors[section.severity]
+        console.print(f"  {icon} [{color}]{section.title}[/{color}]")
+
+    return metrics
+
+
+def _generate_analyze_output(
+    report_data: Any,
+    format: str,
+    report: str | None,
+    output: str | None,
+    verbose: bool,
+) -> None:
+    """Write the analyze command output file (HTML or JSON) based on format."""
+    from .reporting import HTMLReportGenerator
+
+    if format == "html" or report:
+        output_path = report or output or "analysis_report.html"
+        generator = HTMLReportGenerator(verbose=verbose)
+        with console.status("[bold green]Generating HTML report..."):
+            try:
+                generator.generate(report_data, output_path)
+            except Exception as e:
+                console.print(f"[red]Error generating HTML report: {e}[/red]")
+                if verbose:
+                    import traceback
+
+                    traceback.print_exc()
+                sys.exit(1)
+        console.print(f"\n[green]✅ HTML report generated: {output_path}[/green]")
+        console.print(
+            "[blue]💡 Open in browser to view detailed analysis with charts and recommendations[/blue]"
+        )
+    elif format == "json" and output:
+        import json
+
+        json_data = {
+            "project_name": report_data.project_name,
+            "analysis_date": report_data.analysis_date.isoformat(),
+            "project_path": report_data.project_path,
+            "summary_metrics": report_data.summary_metrics,
+            "sections": [
+                {
+                    "id": s.id,
+                    "title": s.title,
+                    "severity": s.severity,
+                    "metrics": s.metrics,
+                }
+                for s in report_data.sections
+            ],
+        }
+        with open(output, "w") as f:
+            json.dump(json_data, f, indent=2)
+        console.print(f"\n[green]✅ JSON report saved: {output}[/green]")
+
+
+def _print_analyze_next_steps(metrics: dict[str, Any]) -> None:
+    """Print actionable next-steps recommendations based on analysis metrics."""
+    console.print("\n[bold]Next Steps:[/bold]")
+    if metrics.get("critical_issues", 0) > 0:
+        console.print(
+            "  [red]1. Address critical issues immediately (circular deps, race conditions)[/red]"
+        )
+        console.print("  [yellow]2. Review warnings and plan refactoring[/yellow]")
+        console.print("  3. Run analysis again to track progress")
+    elif metrics.get("circular_dependencies", 0) > 0 or metrics.get("god_classes", 0) > 0:
+        console.print("  [yellow]1. Refactor identified issues[/yellow]")
+        console.print("  2. Review architecture recommendations")
+        console.print("  3. Run analysis again to verify improvements")
+    else:
+        console.print("  [green]1. Excellent! Maintain code quality[/green]")
+        console.print("  2. Continue regular code reviews")
+        console.print("  3. Run analysis periodically to catch issues early")
+    console.print()
+
+
 @main.command("analyze")
 @click.argument("path", type=click.Path(exists=True))
 @click.option("--report", type=click.Path(), help="Generate HTML report at specified path")
@@ -2541,14 +2672,13 @@ def analyze(path: str, report: str | None, format: str, output: str | None, verb
         qontinui-devtools analyze ./src --report report.html --verbose
     """
     try:
-        from .reporting import HTMLReportGenerator, ReportAggregator
+        from .reporting import ReportAggregator
     except ImportError:
         console.print("[red]Error: Reporting module not available[/red]")
         sys.exit(1)
 
     console.print(f"[bold]Running comprehensive analysis on: {path}[/bold]\n")
 
-    # Create aggregator and run all analyses
     aggregator = ReportAggregator(path, verbose=verbose)
 
     with console.status("[bold green]Running all analyses..."):
@@ -2562,117 +2692,9 @@ def analyze(path: str, report: str | None, format: str, output: str | None, verb
                 traceback.print_exc()
             sys.exit(1)
 
-    # Display summary in console
-    console.print("\n[bold cyan]═══ Analysis Summary ═══[/bold cyan]\n")
-
-    # Overall status
-    status_color, status_icon, status_message = report_data.get_overall_status()
-    panel = Panel(
-        f"{status_icon} {status_message}",
-        title="Overall Status",
-        border_style=status_color,
-    )
-    console.print(panel)
-
-    # Key metrics table
-    table = Table(title="\nKey Metrics", show_header=True, header_style="bold magenta")
-    table.add_column("Metric", style="cyan", width=30)
-    table.add_column("Value", justify="right", style="green")
-
-    metrics = report_data.summary_metrics
-    table.add_row("Files Analyzed", str(metrics.get("files_analyzed", 0)))
-    table.add_row("Total Lines", f"{metrics.get('total_lines', 0):,}")
-    table.add_row("Circular Dependencies", str(metrics.get("circular_dependencies", 0)))
-    table.add_row("God Classes", str(metrics.get("god_classes", 0)))
-    table.add_row("Race Conditions", str(metrics.get("race_conditions", 0)))
-    table.add_row("SRP Violations", str(metrics.get("srp_violations", 0)))
-    table.add_row("Critical Issues", str(metrics.get("critical_issues", 0)))
-
-    console.print(table)
-
-    # Section summary
-    console.print("\n[bold]Section Results:[/bold]\n")
-    for section in report_data.sections:
-        severity_icon = {
-            "success": "✅",
-            "warning": "⚠️",
-            "error": "❌",
-            "info": "ℹ️",
-        }[section.severity]
-
-        severity_color = {
-            "success": "green",
-            "warning": "yellow",
-            "error": "red",
-            "info": "blue",
-        }[section.severity]
-
-        console.print(f"  {severity_icon} [{severity_color}]{section.title}[/{severity_color}]")
-
-    # Generate outputs based on format
-    if format == "html" or report:
-        output_path = report or output or "analysis_report.html"
-        generator = HTMLReportGenerator(verbose=verbose)
-
-        with console.status("[bold green]Generating HTML report..."):
-            try:
-                generator.generate(report_data, output_path)
-            except Exception as e:
-                console.print(f"[red]Error generating HTML report: {e}[/red]")
-                if verbose:
-                    import traceback
-
-                    traceback.print_exc()
-                sys.exit(1)
-
-        console.print(f"\n[green]✅ HTML report generated: {output_path}[/green]")
-        console.print(
-            "[blue]💡 Open in browser to view detailed analysis with charts and recommendations[/blue]"
-        )
-
-    elif format == "json" and output:
-        import json
-
-        # Convert report data to JSON
-        json_data = {
-            "project_name": report_data.project_name,
-            "analysis_date": report_data.analysis_date.isoformat(),
-            "project_path": report_data.project_path,
-            "summary_metrics": report_data.summary_metrics,
-            "sections": [
-                {
-                    "id": s.id,
-                    "title": s.title,
-                    "severity": s.severity,
-                    "metrics": s.metrics,
-                }
-                for s in report_data.sections
-            ],
-        }
-
-        with open(output, "w") as f:
-            json.dump(json_data, f, indent=2)
-
-        console.print(f"\n[green]✅ JSON report saved: {output}[/green]")
-
-    # Final recommendations
-    console.print("\n[bold]Next Steps:[/bold]")
-    if metrics.get("critical_issues", 0) > 0:
-        console.print(
-            "  [red]1. Address critical issues immediately (circular deps, race conditions)[/red]"
-        )
-        console.print("  [yellow]2. Review warnings and plan refactoring[/yellow]")
-        console.print("  3. Run analysis again to track progress")
-    elif metrics.get("circular_dependencies", 0) > 0 or metrics.get("god_classes", 0) > 0:
-        console.print("  [yellow]1. Refactor identified issues[/yellow]")
-        console.print("  2. Review architecture recommendations")
-        console.print("  3. Run analysis again to verify improvements")
-    else:
-        console.print("  [green]1. Excellent! Maintain code quality[/green]")
-        console.print("  2. Continue regular code reviews")
-        console.print("  3. Run analysis periodically to catch issues early")
-
-    console.print()
+    metrics = _display_analyze_summary(report_data)
+    _generate_analyze_output(report_data, format, report, output, verbose)
+    _print_analyze_next_steps(metrics)
 
 
 @main.command("dashboard")
