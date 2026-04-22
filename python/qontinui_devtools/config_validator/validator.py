@@ -206,7 +206,7 @@ class ConfigValidator:
                 return path
 
         raise FileNotFoundError(
-            "Could not find qontinui library. " "Please specify qontinui_path parameter."
+            "Could not find qontinui library. Please specify qontinui_path parameter."
         )
 
     def _setup_imports(self) -> None:

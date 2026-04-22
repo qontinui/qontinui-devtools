@@ -70,7 +70,7 @@ def main() -> None:
         time.sleep(1)
         snapshot = profiler.take_snapshot()
         mem_change = snapshot.total_mb - baseline.total_mb
-        print(f"  Snapshot {i+1}: {snapshot.total_mb:.1f} MB ({mem_change:+.1f} MB)")
+        print(f"  Snapshot {i + 1}: {snapshot.total_mb:.1f} MB ({mem_change:+.1f} MB)")
 
     profiler.stop()
     print()

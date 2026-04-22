@@ -270,7 +270,6 @@ class TestSpringTestAdapter:
             patch.object(self.adapter, "_extract_class_annotations") as mock_class_ann,
             patch.object(self.adapter, "_extract_field_annotations") as mock_field_ann,
         ):
-
             mock_class_ann.return_value = ["@SpringBootTest", '@ActiveProfiles("test")']
             mock_field_ann.return_value = {
                 "userService": ["@Autowired"],

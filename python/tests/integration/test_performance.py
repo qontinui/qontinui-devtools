@@ -158,8 +158,8 @@ class TestProfilerPerformance:
         overhead_percent = ((profiled_avg - baseline_avg) / baseline_avg) * 100
 
         print(f"\nProfiler Overhead: {overhead_percent:.2f}%")
-        print(f"Baseline: {baseline_avg*1000:.2f}ms")
-        print(f"Profiled: {profiled_avg*1000:.2f}ms")
+        print(f"Baseline: {baseline_avg * 1000:.2f}ms")
+        print(f"Profiled: {profiled_avg * 1000:.2f}ms")
 
         # Assert overhead is below threshold
         assert (
@@ -275,8 +275,8 @@ class TestEventTracerPerformance:
         overhead_percent = ((traced - baseline) / baseline) * 100
 
         print(f"\nEvent Tracer Overhead: {overhead_percent:.2f}%")
-        print(f"Baseline: {baseline*1000:.2f}ms")
-        print(f"Traced: {traced*1000:.2f}ms")
+        print(f"Baseline: {baseline * 1000:.2f}ms")
+        print(f"Traced: {traced * 1000:.2f}ms")
 
         assert (
             overhead_percent < performance_thresholds["max_overhead_percent"]
@@ -376,8 +376,8 @@ class TestEventTracerPerformance:
         print(f"  Threads: {num_threads}")
         print(f"  Events per thread: {events_per_thread}")
         print(f"  Total events: {len(events)}")
-        print(f"  Total time: {total_time*1000:.2f}ms")
-        print(f"  Events/sec: {len(events)/total_time:.0f}")
+        print(f"  Total time: {total_time * 1000:.2f}ms")
+        print(f"  Events/sec: {len(events) / total_time:.0f}")
 
         # Verify all events were captured
         assert len(events) == num_threads * events_per_thread
@@ -489,7 +489,7 @@ class TestStressTests:
         print("\nProfiler Stress Test:")
         print(f"  Total calls: {profile_data['total_calls']}")
         print(f"  Duration: {elapsed:.2f}s")
-        print(f"  Calls/sec: {profile_data['total_calls']/elapsed:.0f}")
+        print(f"  Calls/sec: {profile_data['total_calls'] / elapsed:.0f}")
 
         # Verify all calls were captured
         assert profile_data["total_calls"] == iterations
@@ -519,7 +519,7 @@ class TestStressTests:
         print("\nEvent Tracer Stress Test:")
         print(f"  Total events: {len(events)}")
         print(f"  Duration: {elapsed:.2f}s")
-        print(f"  Events/sec: {len(events)/elapsed:.0f}")
+        print(f"  Events/sec: {len(events) / elapsed:.0f}")
 
         # Verify all events were captured
         assert len(events) == num_events
@@ -626,7 +626,7 @@ class TestStressTests:
         print(f"  Iterations: {iteration}")
         print(f"  Profile calls: {profile_data['total_calls']}")
         print(f"  Events: {len(events)}")
-        print(f"  Avg time per iteration: {elapsed/iteration*1000:.2f}ms")
+        print(f"  Avg time per iteration: {elapsed / iteration * 1000:.2f}ms")
 
         assert profile_data["total_calls"] == iteration
         assert len(events) == iteration
@@ -775,8 +775,8 @@ class TestOverallPerformanceMetrics:
         overhead_percent = ((monitored_avg - baseline_avg) / baseline_avg) * 100
 
         print("\nCombined Overhead:")
-        print(f"  Baseline: {baseline_avg*1000:.2f}ms")
-        print(f"  Monitored: {monitored_avg*1000:.2f}ms")
+        print(f"  Baseline: {baseline_avg * 1000:.2f}ms")
+        print(f"  Monitored: {monitored_avg * 1000:.2f}ms")
         print(f"  Overhead: {overhead_percent:.2f}%")
 
         assert (

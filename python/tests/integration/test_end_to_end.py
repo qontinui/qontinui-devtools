@@ -187,15 +187,15 @@ class RuntimeReportGenerator:
     <h1>Runtime Monitoring Report</h1>
     <div class="metric">
         <strong>Total Function Calls:</strong>
-        {report['summary']['total_calls']}
+        {report["summary"]["total_calls"]}
     </div>
     <div class="metric">
         <strong>Total Events:</strong>
-        {report['summary']['total_events']}
+        {report["summary"]["total_events"]}
     </div>
     <div class="metric">
         <strong>Peak Memory (MB):</strong>
-        {report['summary']['peak_memory_mb']:.2f}
+        {report["summary"]["peak_memory_mb"]:.2f}
     </div>
     <div class="data">
         <h2>Full Report Data</h2>

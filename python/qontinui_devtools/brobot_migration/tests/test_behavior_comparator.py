@@ -188,7 +188,6 @@ class TestBehaviorComparator:
             patch.object(self.comparator, "_execute_java_test") as mock_java,
             patch.object(self.comparator, "_execute_python_test") as mock_python,
         ):
-
             # Set up mock results
             mock_java.return_value = TestResult(
                 test_name="TestExample",
@@ -224,7 +223,6 @@ class TestBehaviorComparator:
             patch.object(self.comparator, "_execute_java_test") as mock_java,
             patch.object(self.comparator, "_execute_python_test") as mock_python,
         ):
-
             # Set up mock results - both pass with same output
             mock_java.return_value = TestResult(
                 test_name="TestExample",
@@ -263,7 +261,6 @@ class TestBehaviorComparator:
             patch.object(self.comparator, "_execute_java_test") as mock_java,
             patch.object(self.comparator, "_execute_python_test") as mock_python,
         ):
-
             # Set up mock results - both pass but different outputs
             mock_java.return_value = TestResult(
                 test_name="TestExample",
@@ -303,7 +300,6 @@ class TestBehaviorComparator:
             patch.object(self.comparator, "_execute_java_test") as mock_java,
             patch.object(self.comparator, "_execute_python_test") as mock_python,
         ):
-
             # Set up mock results - different pass/fail status
             mock_java.return_value = TestResult(
                 test_name="TestExample",
@@ -340,7 +336,6 @@ class TestBehaviorComparator:
             patch.object(self.comparator, "_execute_java_component") as mock_java,
             patch.object(self.comparator, "_execute_python_component") as mock_python,
         ):
-
             # Set up mock results - matching outputs
             def java_side_effect(component: Any, test_input: Any) -> Any:
                 a, b = test_input
@@ -375,7 +370,6 @@ class TestBehaviorComparator:
             patch.object(self.comparator, "_execute_java_component") as mock_java,
             patch.object(self.comparator, "_execute_python_component") as mock_python,
         ):
-
             # Set up mock results - different outputs
             def java_side_effect(component: Any, test_input: Any) -> Any:
                 a, b = test_input

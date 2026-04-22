@@ -379,7 +379,7 @@ def test_race(threads: int, iterations: int, target: str, timeout: int) -> None:
         table.add_row("Total Iterations", str(result.total_iterations))
         table.add_row("Successful", str(result.successful))
         table.add_row("Failed", str(result.failed))
-        table.add_row("Success Rate", f"{result.successful/result.total_iterations*100:.1f}%")
+        table.add_row("Success Rate", f"{result.successful / result.total_iterations * 100:.1f}%")
 
         console.print(table)
         console.print()
@@ -530,7 +530,7 @@ def profile_memory(
             obj_count = sum(snapshot.objects_by_type.values())
 
             status.update(
-                f"[bold green]Snapshot {i+1}/{num_snapshots}: "
+                f"[bold green]Snapshot {i + 1}/{num_snapshots}: "
                 f"{snapshot.total_mb:.1f} MB ({mem_change:+.1f} MB), "
                 f"{obj_count:,} objects"
             )
@@ -572,7 +572,7 @@ def profile_memory(
             }.get(severity, "white")
 
             console.print(
-                f"  [{severity_color}]{i}. {leak.object_type}[/{severity_color}] " f"({severity})"
+                f"  [{severity_color}]{i}. {leak.object_type}[/{severity_color}] ({severity})"
             )
             console.print(f"     Growth: +{leak.count_increase:,} objects")
             console.print(f"     Size: +{leak.size_increase_mb:.2f} MB")
@@ -1638,10 +1638,10 @@ def _generate_html_report(report, vulnerabilities) -> str:
             .stat-label {{ font-size: 14px; color: #666; }}
             .stat-value {{ font-size: 28px; font-weight: bold; color: #333; }}
             .vulnerability {{ margin: 20px 0; padding: 20px; border-left: 4px solid #ccc; background: #f8f9fa; }}
-            .severity-critical {{ border-left-color: {severity_colors['critical']}; }}
-            .severity-high {{ border-left-color: {severity_colors['high']}; }}
-            .severity-medium {{ border-left-color: {severity_colors['medium']}; }}
-            .severity-low {{ border-left-color: {severity_colors['low']}; }}
+            .severity-critical {{ border-left-color: {severity_colors["critical"]}; }}
+            .severity-high {{ border-left-color: {severity_colors["high"]}; }}
+            .severity-medium {{ border-left-color: {severity_colors["medium"]}; }}
+            .severity-low {{ border-left-color: {severity_colors["low"]}; }}
             .vuln-header {{ display: flex; justify-content: space-between; align-items: start; }}
             .vuln-title {{ font-size: 18px; font-weight: bold; color: #333; }}
             .severity-badge {{ padding: 4px 12px; border-radius: 4px; color: white; font-size: 12px; font-weight: bold; }}
@@ -1653,7 +1653,7 @@ def _generate_html_report(report, vulnerabilities) -> str:
     <body>
         <div class="container">
             <h1>Security Analysis Report</h1>
-            <p>Generated: {utc_now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            <p>Generated: {utc_now().strftime("%Y-%m-%d %H:%M:%S")}</p>
 
             <div class="summary">
                 <div class="stat">
@@ -1666,19 +1666,19 @@ def _generate_html_report(report, vulnerabilities) -> str:
                 </div>
                 <div class="stat">
                     <div class="stat-label">Critical</div>
-                    <div class="stat-value" style="color: {severity_colors['critical']}">{sum(1 for v in vulnerabilities if v.severity.value == 'critical')}</div>
+                    <div class="stat-value" style="color: {severity_colors["critical"]}">{sum(1 for v in vulnerabilities if v.severity.value == "critical")}</div>
                 </div>
                 <div class="stat">
                     <div class="stat-label">High</div>
-                    <div class="stat-value" style="color: {severity_colors['high']}">{sum(1 for v in vulnerabilities if v.severity.value == 'high')}</div>
+                    <div class="stat-value" style="color: {severity_colors["high"]}">{sum(1 for v in vulnerabilities if v.severity.value == "high")}</div>
                 </div>
                 <div class="stat">
                     <div class="stat-label">Medium</div>
-                    <div class="stat-value" style="color: {severity_colors['medium']}">{sum(1 for v in vulnerabilities if v.severity.value == 'medium')}</div>
+                    <div class="stat-value" style="color: {severity_colors["medium"]}">{sum(1 for v in vulnerabilities if v.severity.value == "medium")}</div>
                 </div>
                 <div class="stat">
                     <div class="stat-label">Low</div>
-                    <div class="stat-value" style="color: {severity_colors['low']}">{sum(1 for v in vulnerabilities if v.severity.value == 'low')}</div>
+                    <div class="stat-value" style="color: {severity_colors["low"]}">{sum(1 for v in vulnerabilities if v.severity.value == "low")}</div>
                 </div>
             </div>
 
@@ -1690,7 +1690,7 @@ def _generate_html_report(report, vulnerabilities) -> str:
         html += f"""
             <div class="vulnerability severity-{severity}">
                 <div class="vuln-header">
-                    <div class="vuln-title">{vuln.type.value.replace('_', ' ').title()}</div>
+                    <div class="vuln-title">{vuln.type.value.replace("_", " ").title()}</div>
                     <span class="severity-badge" style="background: {severity_colors[severity]}">{severity.upper()}</span>
                 </div>
                 <div class="meta">
@@ -1861,7 +1861,7 @@ def type_coverage(path: str, suggest: bool) -> None:
     cov = report.overall_coverage
     console.print(f"\n[bold]Overall Type Coverage:[/bold] {cov.coverage_percentage:.1f}%")
     console.print(
-        f"  Fully typed functions: {cov.fully_typed_functions}/{cov.total_functions} ({cov.fully_typed_functions/cov.total_functions*100 if cov.total_functions > 0 else 0:.1f}%)"
+        f"  Fully typed functions: {cov.fully_typed_functions}/{cov.total_functions} ({cov.fully_typed_functions / cov.total_functions * 100 if cov.total_functions > 0 else 0:.1f}%)"
     )
     console.print(
         f"  Typed parameters: {cov.typed_parameters}/{cov.total_parameters} ({cov.parameter_coverage:.1f}%)"
@@ -2362,11 +2362,11 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
                 <div class="stat-label">Total Cycles</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">{stats.get('total_files_analyzed', 0)}</div>
+                <div class="stat-value">{stats.get("total_files_analyzed", 0)}</div>
                 <div class="stat-label">Files Analyzed</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">{stats.get('total_imports', 0)}</div>
+                <div class="stat-value">{stats.get("total_imports", 0)}</div>
                 <div class="stat-label">Total Imports</div>
             </div>
         </div>
@@ -2385,7 +2385,7 @@ def save_report(data: Any, output: str, format: str, detector: Any = None) -> No
             <span class="severity-badge severity-{severity_class}">{severity_display}</span>
         </div>
         <div class="cycle-path">
-            {' → '.join(cycle.cycle)}
+            {" → ".join(cycle.cycle)}
         </div>
 """
 
@@ -2485,8 +2485,12 @@ def generate_report(results: dict[str, Any], output: str, format: str) -> None:
     <h1>Qontinui DevTools Analysis Report</h1>
     <table>
         <tr><th>Check</th><th>Status</th><th>Details</th></tr>
-        {"".join(f"<tr><td>{k}</td><td class='{v['status'].lower()}'>{v['status']}</td><td>{v}</td></tr>"
-                 for k, v in results.items())}
+        {
+            "".join(
+                f"<tr><td>{k}</td><td class='{v['status'].lower()}'>{v['status']}</td><td>{v}</td></tr>"
+                for k, v in results.items()
+            )
+        }
     </table>
 </body>
 </html>

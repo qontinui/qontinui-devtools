@@ -107,9 +107,7 @@ def main() -> None:
         emoji = status_emoji.get(dep.health_status, "❓")
 
         print(
-            f"{emoji} {dep.name:30} "
-            f"v{dep.current_version:15} "
-            f"Health: {dep.health_score:5.1f}/100"
+            f"{emoji} {dep.name:30} v{dep.current_version:15} Health: {dep.health_score:5.1f}/100"
         )
 
         if dep.latest_version and dep.latest_version != dep.current_version:

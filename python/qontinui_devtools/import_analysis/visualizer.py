@@ -51,7 +51,7 @@ def visualize_import_graph(
         import graphviz
     except ImportError as e:
         raise ImportError(
-            "graphviz package is required for visualization. " "Install with: pip install graphviz"
+            "graphviz package is required for visualization. Install with: pip install graphviz"
         ) from e
 
     output_path_obj = Path(output_path)

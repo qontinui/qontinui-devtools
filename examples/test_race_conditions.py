@@ -116,14 +116,14 @@ def example_3_stress_test() -> None:
     print(f"  Successful: {result.successful}")
     print(f"  Failed: {result.failed}")
     print(f"  Elapsed time: {elapsed:.2f}s")
-    print(f"  Operations/sec: {result.total_iterations/elapsed:.0f}")
+    print(f"  Operations/sec: {result.total_iterations / elapsed:.0f}")
     print(f"  Race detected: {result.race_detected}")
 
     if result.execution_times:
         print("\n  Timing statistics:")
-        print(f"    Avg: {result.avg_execution_time*1000:.2f}ms")
-        print(f"    Min: {result.min_execution_time*1000:.2f}ms")
-        print(f"    Max: {result.max_execution_time*1000:.2f}ms")
+        print(f"    Avg: {result.avg_execution_time * 1000:.2f}ms")
+        print(f"    Min: {result.min_execution_time * 1000:.2f}ms")
+        print(f"    Max: {result.max_execution_time * 1000:.2f}ms")
 
 
 def example_4_compare_safe_vs_unsafe() -> None:

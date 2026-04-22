@@ -483,7 +483,7 @@ class TypeAnalyzer:
         lines.append("")
         lines.append(f"Total functions: {cov.total_functions}")
         lines.append(
-            f"Fully typed: {cov.fully_typed_functions} ({cov.fully_typed_functions/cov.total_functions*100 if cov.total_functions > 0 else 0:.1f}%)"
+            f"Fully typed: {cov.fully_typed_functions} ({cov.fully_typed_functions / cov.total_functions * 100 if cov.total_functions > 0 else 0:.1f}%)"
         )
         lines.append(f"Partially typed: {cov.typed_functions - cov.fully_typed_functions}")
         lines.append(f"Untyped: {cov.total_functions - cov.typed_functions}")

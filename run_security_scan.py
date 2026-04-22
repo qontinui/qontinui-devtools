@@ -27,9 +27,9 @@ def main() -> None:
             print(f"Skipping {repo_name} (not found)")
             continue
 
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Scanning: {repo_name}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         analyzer = SecurityAnalyzer()
         report = analyzer.analyze_directory(str(repo_path_obj))
@@ -111,9 +111,9 @@ def main() -> None:
                         )
                         f.write(f"  {vuln.description}\n")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Summary written to: {summary_path}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
 
 if __name__ == "__main__":

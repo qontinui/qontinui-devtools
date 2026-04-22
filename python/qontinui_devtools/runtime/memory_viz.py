@@ -35,7 +35,7 @@ def plot_memory_timeline(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. Install it with: pip install matplotlib"
         )
 
     if not snapshots:
@@ -94,7 +94,7 @@ def plot_object_growth(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. Install it with: pip install matplotlib"
         )
 
     if not snapshots:
@@ -154,7 +154,7 @@ def plot_top_objects(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. Install it with: pip install matplotlib"
         )
 
     if not snapshots:
@@ -216,7 +216,7 @@ def plot_leak_heatmap(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. Install it with: pip install matplotlib"
         )
 
     if not snapshots or len(snapshots) < 2:
@@ -291,7 +291,7 @@ def plot_comparison(
     """
     if not MATPLOTLIB_AVAILABLE:
         raise ImportError(
-            "matplotlib is required for visualization. " "Install it with: pip install matplotlib"
+            "matplotlib is required for visualization. Install it with: pip install matplotlib"
         )
 
     # Calculate differences
@@ -363,9 +363,7 @@ def plot_comparison(
 
     # Add summary text
     summary = (
-        f"Time: {time_diff:.1f}s\n"
-        f"Memory: {mem_diff:+.1f} MB\n"
-        f"Rate: {mem_diff / time_diff:.2f} MB/s"
+        f"Time: {time_diff:.1f}s\nMemory: {mem_diff:+.1f} MB\nRate: {mem_diff / time_diff:.2f} MB/s"
     )
     ax2.text(
         0.02,
@@ -529,7 +527,7 @@ def generate_html_report(
             </div>
             <div class="metric">
                 <div class="metric-label">Change</div>
-                <div class="metric-value {'positive' if mem_change < 0 else 'negative'}">
+                <div class="metric-value {"positive" if mem_change < 0 else "negative"}">
                     {mem_change:+.1f} MB
                 </div>
             </div>

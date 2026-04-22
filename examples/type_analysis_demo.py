@@ -147,7 +147,7 @@ def main() -> None:
         print()
         print(f"  Total functions: {summary['total_functions']}")
         print(
-            f"  Fully typed: {summary['fully_typed_functions']} ({summary['fully_typed_functions']/summary['total_functions']*100:.1f}%)"
+            f"  Fully typed: {summary['fully_typed_functions']} ({summary['fully_typed_functions'] / summary['total_functions'] * 100:.1f}%)"
         )
         print(f"  Partially typed: {summary['typed_functions'] - summary['fully_typed_functions']}")
         print(f"  Untyped: {summary['total_functions'] - summary['typed_functions']}")

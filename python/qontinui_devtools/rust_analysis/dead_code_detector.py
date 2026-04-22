@@ -360,9 +360,7 @@ class DeadCodeDetector:
 
             for dc in items:
                 rel_path = Path(dc.file_path).relative_to(self.root_path)
-                lines.append(
-                    f"\n  {dc.name} ({dc.visibility})" f" - Confidence: {dc.confidence:.0%}"
-                )
+                lines.append(f"\n  {dc.name} ({dc.visibility}) - Confidence: {dc.confidence:.0%}")
                 lines.append(f"    {rel_path}:{dc.line_number}")
                 lines.append(f"    {dc.reason}")
 

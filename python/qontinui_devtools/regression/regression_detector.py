@@ -164,7 +164,7 @@ class RegressionDetector:
                     old_signature=old_sig,
                     new_signature=None,
                     impact_description=(
-                        f"Calls to {func_key}() will fail. " f"This is a breaking API change."
+                        f"Calls to {func_key}() will fail. This is a breaking API change."
                     ),
                     migration_guide=(
                         f"1. Search codebase for calls to {func_key}()\n"

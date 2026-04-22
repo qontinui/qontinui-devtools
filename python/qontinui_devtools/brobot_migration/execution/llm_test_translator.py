@@ -200,7 +200,7 @@ You are an expert in translating Java tests to Python tests. Translate the follo
 ## Test File Information
 - File: {test_file.path.name}
 - Class: {test_file.class_name}
-- Package: {test_file.package or 'default'}
+- Package: {test_file.package or "default"}
 - Test Type: {test_file.test_type.value}
 - Number of test methods: {len(test_file.test_methods)}
 - Uses mocks: {bool(test_file.mock_usage)}
@@ -249,7 +249,7 @@ Return only the Python code, no explanations:
 
         # Reconstruct from test file model
         java_content = f"""
-package {test_file.package or 'com.example'};
+package {test_file.package or "com.example"};
 
 // Imports (reconstructed)
 import org.junit.jupiter.api.Test;
@@ -265,7 +265,7 @@ public class {test_file.class_name} {{
                 java_content += f"""
     @BeforeEach
     public void {setup_method.name}() {{
-        {setup_method.body or '// Setup logic'}
+        {setup_method.body or "// Setup logic"}
     }}
 """
 
@@ -274,7 +274,7 @@ public class {test_file.class_name} {{
             java_content += f"""
     @Test
     public void {test_method.name}() {{
-        {test_method.body or '// Test logic'}
+        {test_method.body or "// Test logic"}
     }}
 """
 

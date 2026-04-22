@@ -171,7 +171,6 @@ def mock_validator() -> Iterator[ConfigValidator]:
         patch.object(ConfigValidator, "_setup_imports"),
         patch.object(ConfigValidator, "_find_inline_workflows", return_value=[]),
     ):
-
         mock_find.return_value = Path("/mock/qontinui/path")
 
         validator = ConfigValidator()
@@ -200,7 +199,6 @@ class TestConfigValidatorInitialization:
             patch.object(ConfigValidator, "_find_qontinui_path") as mock_find,
             patch.object(ConfigValidator, "_setup_imports"),
         ):
-
             mock_find.return_value = Path("/auto/detected/path")
             validator = ConfigValidator()
 
@@ -213,7 +211,6 @@ class TestConfigValidatorInitialization:
             patch.object(ConfigValidator, "_setup_imports"),
             patch("pathlib.Path.exists") as mock_exists,
         ):
-
             # Mock that the second candidate path exists
             mock_exists.side_effect = [False, True]
 
@@ -228,7 +225,6 @@ class TestConfigValidatorInitialization:
             patch.object(ConfigValidator, "_setup_imports"),
             patch("pathlib.Path.exists", return_value=False),
         ):
-
             with pytest.raises(FileNotFoundError, match="Could not find qontinui library"):
                 ConfigValidator()
 

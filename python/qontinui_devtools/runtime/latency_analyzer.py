@@ -95,7 +95,8 @@ def find_bottleneck(traces: list["EventTrace"]) -> str:
 
 
 def detect_anomalies(
-    traces: list["EventTrace"], threshold: float = 2.0  # 2x average
+    traces: list["EventTrace"],
+    threshold: float = 2.0,  # 2x average
 ) -> list[tuple[str, "EventTrace", str]]:
     """Detect anomalously slow events.
 

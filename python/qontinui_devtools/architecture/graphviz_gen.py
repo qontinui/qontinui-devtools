@@ -54,11 +54,11 @@ def generate_dot(
         style = apply_styling(node)
         attrs = [
             f'label="{node.label}"',
-            f'shape={style["shape"]}',
-            f'style={style["style"]}',
+            f"shape={style['shape']}",
+            f"style={style['style']}",
             f'fillcolor="{style["fillcolor"]}"',
             f'color="{style["color"]}"',
-            f'penwidth={style["penwidth"]}',
+            f"penwidth={style['penwidth']}",
         ]
 
         if node.size:

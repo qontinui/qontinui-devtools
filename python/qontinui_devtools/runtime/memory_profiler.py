@@ -85,7 +85,7 @@ class MemoryProfiler:
         """
         if psutil is None:
             raise ImportError(
-                "psutil is required for memory profiling. " "Install it with: pip install psutil"
+                "psutil is required for memory profiling. Install it with: pip install psutil"
             )
 
         self._snapshots: list[MemorySnapshot] = []

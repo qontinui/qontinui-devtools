@@ -22,9 +22,7 @@ class Access:
     def __repr__(self) -> str:
         """String representation."""
         return (
-            f"Access(thread={self.thread_id}, "
-            f"type={self.access_type}, "
-            f"time={self.timestamp:.6f})"
+            f"Access(thread={self.thread_id}, type={self.access_type}, time={self.timestamp:.6f})"
         )
 
 
@@ -44,7 +42,7 @@ class RaceConflict:
             f"RaceConflict(obj={self.obj_id}, "
             f"type={self.conflict_type}, "
             f"threads=[{self.access_1.thread_id}, {self.access_2.thread_id}], "
-            f"time_diff={self.time_difference*1000:.2f}ms)"
+            f"time_diff={self.time_difference * 1000:.2f}ms)"
         )
 
 

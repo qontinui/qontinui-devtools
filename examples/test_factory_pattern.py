@@ -110,10 +110,10 @@ def test_unsafe_factory() -> None:
 
     if result.execution_times:
         print("\nTiming Statistics:")
-        print(f"  Avg: {result.avg_execution_time*1000:.2f}ms")
-        print(f"  Min: {result.min_execution_time*1000:.2f}ms")
-        print(f"  Max: {result.max_execution_time*1000:.2f}ms")
-        print(f"  Variance: {result.timing_variance*1000:.2f}ms")
+        print(f"  Avg: {result.avg_execution_time * 1000:.2f}ms")
+        print(f"  Min: {result.min_execution_time * 1000:.2f}ms")
+        print(f"  Max: {result.max_execution_time * 1000:.2f}ms")
+        print(f"  Variance: {result.timing_variance * 1000:.2f}ms")
 
 
 def test_safe_factory() -> None:
@@ -150,10 +150,10 @@ def test_safe_factory() -> None:
 
     if result.execution_times:
         print("\nTiming Statistics:")
-        print(f"  Avg: {result.avg_execution_time*1000:.2f}ms")
-        print(f"  Min: {result.min_execution_time*1000:.2f}ms")
-        print(f"  Max: {result.max_execution_time*1000:.2f}ms")
-        print(f"  Variance: {result.timing_variance*1000:.2f}ms")
+        print(f"  Avg: {result.avg_execution_time * 1000:.2f}ms")
+        print(f"  Min: {result.min_execution_time * 1000:.2f}ms")
+        print(f"  Max: {result.max_execution_time * 1000:.2f}ms")
+        print(f"  Variance: {result.timing_variance * 1000:.2f}ms")
 
 
 def test_comparison() -> None:
@@ -178,13 +178,13 @@ def test_comparison() -> None:
 
     print("\nUnsafe Version:")
     print(f"  Total time: {unsafe_time:.3f}s")
-    print(f"  Operations/sec: {result_unsafe.total_iterations/unsafe_time:.0f}")
+    print(f"  Operations/sec: {result_unsafe.total_iterations / unsafe_time:.0f}")
     print(f"  Race detected: {result_unsafe.race_detected}")
     print(f"  Instances created: {HALFactory._creation_count}")
 
     print("\nSafe Version:")
     print(f"  Total time: {safe_time:.3f}s")
-    print(f"  Operations/sec: {result_safe.total_iterations/safe_time:.0f}")
+    print(f"  Operations/sec: {result_safe.total_iterations / safe_time:.0f}")
     print(f"  Race detected: {result_safe.race_detected}")
     print(f"  Instances created: {SafeHALFactory._creation_count}")
 

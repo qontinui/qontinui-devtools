@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # Also create a Windows batch file
     if sys.platform == "win32":
         batch_content = f"""@echo off
-python "{current_dir / 'cli.py'}" %*
+python "{current_dir / "cli.py"}" %*
 """
         batch_path = current_dir / "qontinui-test-migration.bat"
         batch_path.write_text(batch_content)

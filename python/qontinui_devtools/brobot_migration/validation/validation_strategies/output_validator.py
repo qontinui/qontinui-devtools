@@ -103,7 +103,7 @@ class OutputValidator:
             line2 = lines2[i] if i < len(lines2) else ""
 
             if line1 != line2:
-                differences.append(f"Line {i+1}: '{line1}' vs '{line2}'")
+                differences.append(f"Line {i + 1}: '{line1}' vs '{line2}'")
 
         return differences[:10]  # Limit to first 10 differences
 

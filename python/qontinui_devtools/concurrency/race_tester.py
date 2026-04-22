@@ -84,10 +84,10 @@ class RaceTestResult:
         if self.execution_times:
             lines.extend(
                 [
-                    f"  Avg Time: {self.avg_execution_time*1000:.2f}ms",
-                    f"  Min Time: {self.min_execution_time*1000:.2f}ms",
-                    f"  Max Time: {self.max_execution_time*1000:.2f}ms",
-                    f"  Variance: {self.timing_variance*1000:.2f}ms",
+                    f"  Avg Time: {self.avg_execution_time * 1000:.2f}ms",
+                    f"  Min Time: {self.min_execution_time * 1000:.2f}ms",
+                    f"  Max Time: {self.max_execution_time * 1000:.2f}ms",
+                    f"  Variance: {self.timing_variance * 1000:.2f}ms",
                 ]
             )
 

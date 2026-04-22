@@ -417,7 +417,7 @@ class {class_name}:
         """TODO: Implement test for {test_method.name}."""
         # Original Java method: {test_method.name}
         # TODO: Translate the following Java code:
-        # {test_method.body[:200] + '...' if test_method.body and len(test_method.body) > 200 else test_method.body or 'No body available'}
+        # {test_method.body[:200] + "..." if test_method.body and len(test_method.body) > 200 else test_method.body or "No body available"}
         pytest.skip("Translation incomplete - manual review required")
 
 '''

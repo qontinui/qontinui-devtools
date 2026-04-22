@@ -166,7 +166,7 @@ def check_new_god_classes(filenames: Sequence[str], min_lines: int, min_methods:
             for god_class in found_god_classes:
                 console.print(f"  • {god_class.name} in {god_class.file_path}")
                 console.print(
-                    f"    ({god_class.line_count} lines, " f"{god_class.method_count} methods)"
+                    f"    ({god_class.line_count} lines, {god_class.method_count} methods)"
                 )
             console.print(
                 "\n[yellow]Consider refactoring large classes into "
@@ -321,7 +321,7 @@ def check_complexity(filenames: Sequence[str], max_complexity: int) -> None:
                 f"with complexity > {max_complexity}:[/red]"
             )
             for file, result in high_complexity_functions:
-                console.print(f"  • {result.name} in {file} " f"(complexity: {result.complexity})")
+                console.print(f"  • {result.name} in {file} (complexity: {result.complexity})")
 
             console.print(
                 "\n[yellow]Consider refactoring complex functions into "

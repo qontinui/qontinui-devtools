@@ -174,7 +174,7 @@ class TestImportGraph(unittest.TestCase):
 
         def add_imports(start_idx: int) -> None:
             for i in range(start_idx, start_idx + 100):
-                self.graph.add_import(f"module_{i}", f"module_{i+1}")
+                self.graph.add_import(f"module_{i}", f"module_{i + 1}")
 
         threads: list[Any] = []
         for i in range(5):

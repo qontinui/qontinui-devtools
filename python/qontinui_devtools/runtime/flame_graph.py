@@ -166,7 +166,7 @@ def samples_to_svg(
 
     svg_parts = [
         f'<svg width="{width}" height="{svg_height}" xmlns="http://www.w3.org/2000/svg">',
-        f'<text x="{width/2}" y="30" text-anchor="middle" font-size="18" font-weight="bold">{title}</text>',
+        f'<text x="{width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold">{title}</text>',
         '<g transform="translate(0, 50)">',
     ]
 
@@ -226,7 +226,7 @@ def _generate_empty_svg(title: str, width: int, height: int) -> str:
         SVG content
     """
     return f"""<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
-    <text x="{width/2}" y="{height/2}" text-anchor="middle" font-size="18" fill="#999">
+    <text x="{width / 2}" y="{height / 2}" text-anchor="middle" font-size="18" fill="#999">
         {title} - No samples available
     </text>
 </svg>"""
