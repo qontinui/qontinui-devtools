@@ -151,14 +151,14 @@ def trace_imports(
         events = tracer.get_events()
         cycles = tracer.find_circular_dependencies()
 
-        console.print(f"[green]✅ Imported {len(events)} modules[/green]\n")
+        console.print(f"[green][OK] Imported {len(events)} modules[/green]\n")
 
         if cycles:
-            console.print("[red]❌ Circular dependencies detected:[/red]")
+            console.print("[red][FAIL] Circular dependencies detected:[/red]")
             for cycle in cycles:
                 console.print(f"  {' → '.join(cycle)}")
         else:
-            console.print("[green]✅ No circular dependencies[/green]")
+            console.print("[green][OK] No circular dependencies[/green]")
 
         if visualize:
             visualize_import_graph(tracer.get_graph(), output)
@@ -255,7 +255,7 @@ def check_concurrency(path: str, severity: str, output: str | None, detailed: bo
         races = [r for r in races if severity_order[r.severity] >= min_level]
 
         if races:
-            console.print(f"[red]⚠️  Found {len(races)} potential race conditions:[/red]\n")
+            console.print(f"[red][WARN]  Found {len(races)} potential race conditions:[/red]\n")
 
             severity_colors = {"critical": "red", "high": "yellow", "medium": "blue", "low": "dim"}
 
@@ -280,7 +280,7 @@ def check_concurrency(path: str, severity: str, output: str | None, detailed: bo
                 )
                 console.print()
         else:
-            console.print("[green]✅ No race conditions detected[/green]")
+            console.print("[green][OK] No race conditions detected[/green]")
 
     except Exception as e:
         console.print(f"[red]Error during analysis:[/red] {e}")
@@ -387,7 +387,7 @@ def test_race(threads: int, iterations: int, target: str, timeout: int) -> None:
         if result.race_detected:
             console.print(
                 Panel(
-                    "[red]❌ Race condition detected![/red]\n\n"
+                    "[red][FAIL] Race condition detected![/red]\n\n"
                     + "\n".join(f"• {detail}" for detail in result.failure_details),
                     border_style="red",
                     title="Race Condition",
@@ -395,7 +395,7 @@ def test_race(threads: int, iterations: int, target: str, timeout: int) -> None:
             )
             sys.exit(1)
         else:
-            console.print("[green]✅ No race conditions detected[/green]")
+            console.print("[green][OK] No race conditions detected[/green]")
 
     except (ImportError, AttributeError) as e:
         console.print(f"[red]Failed to load target function:[/red] {e}")
@@ -558,7 +558,7 @@ def profile_memory(
     )
 
     if leaks:
-        console.print(f"[red]⚠️  Detected {len(leaks)} potential memory leaks:[/red]")
+        console.print(f"[red][WARN]  Detected {len(leaks)} potential memory leaks:[/red]")
         console.print()
 
         # Display top leaks
@@ -595,7 +595,7 @@ def profile_memory(
             console.print()
 
     else:
-        console.print("[green]✅ No memory leaks detected[/green]")
+        console.print("[green][OK] No memory leaks detected[/green]")
         console.print()
 
     # Generate HTML report
@@ -607,18 +607,18 @@ def profile_memory(
             output,
             plot_dir=plot_dir,
         )
-        console.print(f"[green]✓ Report saved to:[/green] {output}")
+        console.print(f"[green][OK] Report saved to:[/green] {output}")
 
         # Show plot directory if created
         if plot_dir:
-            console.print(f"[green]✓ Plots saved to:[/green] {plot_dir}")
+            console.print(f"[green][OK] Plots saved to:[/green] {plot_dir}")
     except Exception as e:
         console.print(f"[yellow]Warning: Could not generate full report: {e}[/yellow]")
         # Fall back to text report
         text_report = profiler.generate_report()
         output_txt = str(Path(output).with_suffix(".txt"))
         Path(output_txt).write_text(text_report)
-        console.print(f"[green]✓ Text report saved to:[/green] {output_txt}")
+        console.print(f"[green][OK] Text report saved to:[/green] {output_txt}")
 
     console.print()
     console.print("[bold green]Memory profiling complete![/bold green]")
@@ -638,7 +638,7 @@ def _handle_flame_graph(
         return
     try:
         profiler.generate_flame_graph(flame_graph, format=format)
-        console.print(f"[green]✅ Flame graph generated:[/green] {flame_graph}")
+        console.print(f"[green][OK] Flame graph generated:[/green] {flame_graph}")
         if format == "json":
             console.print(
                 "[blue]💡 Upload to https://www.speedscope.app/ for interactive viewing[/blue]"
@@ -841,7 +841,7 @@ with profiler.profile_action("click", "submit_button") as profile:
 
     # Export to JSON
     profiler.export_to_json(output)
-    console.print(f"[green]✅ Profile exported to:[/green] {output}")
+    console.print(f"[green][OK] Profile exported to:[/green] {output}")
 
     # Generate flame graph if requested
     _handle_flame_graph(profiler, flame_graph, format, enable_stack_sampling)
@@ -903,10 +903,10 @@ def detect_god_classes(
         god_classes = detector.analyze_directory(path)
 
     if not god_classes:
-        console.print("[green]✅ No god classes detected![/green]")
+        console.print("[green][OK] No god classes detected![/green]")
         return
 
-    console.print(f"\n[red]❌ Found {len(god_classes)} god classes:[/red]\n")
+    console.print(f"\n[red][FAIL] Found {len(god_classes)} god classes:[/red]\n")
 
     for i, cls in enumerate(god_classes, 1):
         color = {"critical": "red", "high": "yellow", "medium": "blue"}[cls.severity]
@@ -979,10 +979,10 @@ def analyze_srp(path: str, detail: str, min_methods: int, output: str | None) ->
         violations = analyzer.analyze_directory(path, min_methods=min_methods)
 
     if not violations:
-        console.print("[green]✅ No SRP violations detected![/green]")
+        console.print("[green][OK] No SRP violations detected![/green]")
         return
 
-    console.print(f"\n[red]❌ Found {len(violations)} SRP violations:[/red]\n")
+    console.print(f"\n[red][FAIL] Found {len(violations)} SRP violations:[/red]\n")
 
     # Group by severity
     by_severity: dict[str, list[Any]] = {"critical": [], "high": [], "medium": []}
@@ -1112,14 +1112,14 @@ def visualize_graph(
             console.print(f"[red]Error building graph: {e}[/red]")
             sys.exit(1)
 
-    console.print(f"[green]✅ Graph built:[/green] {len(nodes)} nodes, {len(edges)} edges")
+    console.print(f"[green][OK] Graph built:[/green] {len(nodes)} nodes, {len(edges)} edges")
 
     # Detect cycles if requested
     if highlight_cycles:
         with console.status("[bold green]Detecting circular dependencies..."):
             cycles = visualizer.detect_cycles(nodes, edges)
         if cycles:
-            console.print(f"[yellow]⚠️  Found {len(cycles)} circular dependencies[/yellow]")
+            console.print(f"[yellow][WARN]  Found {len(cycles)} circular dependencies[/yellow]")
 
     # Generate visualization
     with console.status(f"[bold green]Generating {format} visualization..."):
@@ -1148,7 +1148,7 @@ def visualize_graph(
             console.print(f"[red]Error generating visualization: {e}[/red]")
             sys.exit(1)
 
-    console.print(f"[green]✅ Graph saved to:[/green] {output}")
+    console.print(f"[green][OK] Graph saved to:[/green] {output}")
 
     if format == "html":
         console.print("[blue]💡 Open in browser to interact with the graph[/blue]")
@@ -1211,7 +1211,7 @@ def _display_cohesion_section(cohesion: list[Any]) -> None:
 
     poor_cohesion = [c for c in cohesion if c.lcom > 0.7 or c.lcom4 > 2.0]
     if not poor_cohesion:
-        console.print("[green]✅ All classes have good cohesion![/green]")
+        console.print("[green][OK] All classes have good cohesion![/green]")
         return
 
     console.print(f"[yellow]Found {len(poor_cohesion)} classes with poor cohesion:[/yellow]\n")
@@ -1240,7 +1240,7 @@ def _display_coupling_summary(coupling: list[Any], cohesion: list[Any]) -> None:
         console.print(f"Average Instability: {avg_instability:.2f}")
         poor_count = len([c for c in coupling if c.coupling_score == "poor"])
         if poor_count > 0:
-            console.print(f"[red]⚠️  {poor_count} modules with poor coupling[/red]")
+            console.print(f"[red][WARN]  {poor_count} modules with poor coupling[/red]")
 
     if cohesion:
         avg_lcom = sum(c.lcom for c in cohesion) / len(cohesion)
@@ -1250,7 +1250,7 @@ def _display_coupling_summary(coupling: list[Any], cohesion: list[Any]) -> None:
         console.print(f"Average TCC: {avg_tcc:.2f}")
         poor_count = len([c for c in cohesion if c.cohesion_score == "poor"])
         if poor_count > 0:
-            console.print(f"[red]⚠️  {poor_count} classes with poor cohesion[/red]")
+            console.print(f"[red][WARN]  {poor_count} classes with poor cohesion[/red]")
 
 
 @architecture.command("coupling")
@@ -1308,7 +1308,7 @@ def analyze_coupling(path: str, threshold: int, show_all: bool, output: str | No
     if output:
         report = analyzer.generate_report(coupling, cohesion)
         Path(output).write_text(report)
-        console.print(f"\n[green]✅ Report saved to:[/green] {output}")
+        console.print(f"\n[green][OK] Report saved to:[/green] {output}")
 
 
 @main.group()
@@ -1324,7 +1324,7 @@ def quality() -> None:
 def _display_dead_code_results(dead_code: list[Any], min_confidence: float) -> None:
     """Display dead code findings grouped by type to the console."""
     if not dead_code:
-        console.print("[green]✅ No dead code detected![/green]")
+        console.print("[green][OK] No dead code detected![/green]")
         console.print(f"[dim](Minimum confidence: {min_confidence})[/dim]")
         return
 
@@ -1493,7 +1493,7 @@ def detect_dead_code(
 
     if dead_code and output:
         _save_dead_code_report(dead_code, output, format, min_confidence)
-        console.print(f"[green]✅ Report saved to:[/green] {output}")
+        console.print(f"[green][OK] Report saved to:[/green] {output}")
 
     # Statistics
     stats = detector.get_stats()
@@ -2112,7 +2112,7 @@ def trace_events(duration: int, output: str, timeline: str | None, html: str | N
             event_count += 1
             status.update(f"[bold green]Traced {event_count} events...")
 
-    console.print(f"[green]✓[/green] Traced {event_count} events")
+    console.print(f"[green][OK][/green] Traced {event_count} events")
     console.print()
 
     # Analyze
@@ -2139,12 +2139,12 @@ def trace_events(duration: int, output: str, timeline: str | None, html: str | N
     # Export timeline
     if timeline:
         export_chrome_trace(tracer.get_all_traces(), timeline)
-        console.print(f"[green]✓[/green] Chrome trace saved to: {timeline}")
+        console.print(f"[green][OK][/green] Chrome trace saved to: {timeline}")
         console.print("  Open in chrome://tracing or https://ui.perfetto.dev/")
 
     if html:
         export_timeline_html(tracer.get_all_traces(), html)
-        console.print(f"[green]✓[/green] HTML timeline saved to: {html}")
+        console.print(f"[green][OK][/green] HTML timeline saved to: {html}")
         console.print(f"  Open {html} in your browser")
 
 
@@ -2557,7 +2557,7 @@ def _display_analyze_summary(report_data: Any) -> dict[str, Any]:
     console.print(table)
 
     console.print("\n[bold]Section Results:[/bold]\n")
-    severity_icons = {"success": "✅", "warning": "⚠️", "error": "❌", "info": "ℹ️"}
+    severity_icons = {"success": "[OK]", "warning": "[WARN]", "error": "[FAIL]", "info": "ℹ️"}
     severity_colors = {"success": "green", "warning": "yellow", "error": "red", "info": "blue"}
     for section in report_data.sections:
         icon = severity_icons[section.severity]
@@ -2590,7 +2590,7 @@ def _generate_analyze_output(
 
                     traceback.print_exc()
                 sys.exit(1)
-        console.print(f"\n[green]✅ HTML report generated: {output_path}[/green]")
+        console.print(f"\n[green][OK] HTML report generated: {output_path}[/green]")
         console.print(
             "[blue]💡 Open in browser to view detailed analysis with charts and recommendations[/blue]"
         )
@@ -2614,7 +2614,7 @@ def _generate_analyze_output(
         }
         with open(output, "w") as f:
             json.dump(json_data, f, indent=2)
-        console.print(f"\n[green]✅ JSON report saved: {output}[/green]")
+        console.print(f"\n[green][OK] JSON report saved: {output}[/green]")
 
 
 def _print_analyze_next_steps(metrics: dict[str, Any]) -> None:
@@ -2762,13 +2762,13 @@ def start_dashboard(host: str, port: int, interval: float) -> None:
     server = DashboardServer(host=host, port=port, metrics_collector=collector)
 
     try:
-        console.print(f"\n[green]✅ Dashboard running at http://{host}:{port}[/green]")
+        console.print(f"\n[green][OK] Dashboard running at http://{host}:{port}[/green]")
         console.print("[dim]Waiting for connections...[/dim]\n")
         server.start()
     except KeyboardInterrupt:
         console.print("\n[yellow]Stopping dashboard...[/yellow]")
         collector.stop()
-        console.print("[green]✅ Dashboard stopped[/green]")
+        console.print("[green][OK] Dashboard stopped[/green]")
     except OSError as e:
         if "Address already in use" in str(e):
             console.print(f"[red]Error: Port {port} is already in use[/red]")
