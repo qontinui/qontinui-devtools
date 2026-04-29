@@ -2,7 +2,7 @@
 
 > Sophisticated analysis, debugging, and diagnostic tools for the Qontinui automation ecosystem
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Tests](https://img.shields.io/badge/tests-162%20passed-brightgreen.svg)](python/tests/)
@@ -396,7 +396,7 @@ DevTools supports the current and previous major version of Qontinui.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+Licensed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later). See [LICENSE](LICENSE) for full terms.
 
 ## Support
 
