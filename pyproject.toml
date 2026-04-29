@@ -3,7 +3,7 @@ name = "qontinui-devtools"
 version = "1.1.0"
 description = "Sophisticated analysis, debugging, and diagnostic tools for Qontinui - Now with Phase 4 Advanced Analysis"
 authors = ["Qontinui Team"]
-license = "MIT"
+license = "AGPL-3.0-or-later"
 readme = "README.md"
 homepage = "https://github.com/qontinui/qontinui-devtools"
 repository = "https://github.com/qontinui/qontinui-devtools"
@@ -12,7 +12,7 @@ keywords = ["automation", "debugging", "analysis", "testing", "diagnostics"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
