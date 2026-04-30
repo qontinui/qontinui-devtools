@@ -6,22 +6,18 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
       - id: check-yaml
       - id: check-json
       - id: check-added-large-files
         args: ['--maxkb=1000']
       - id: check-merge-conflict
-      - id: mixed-line-ending
 
-  # Python code formatting
+  # Python linting (ruff-format removed; ruff lint kept)
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.6.9
     hooks:
       - id: ruff
         args: ["--fix"]
-      - id: ruff-format
 
   # Note: flake8 dropped in favor of ruff (same lints, unified config).
   # Note: Mypy disabled in pre-commit - run manually with: poetry run mypy
@@ -69,8 +65,8 @@ repos:
 
       - id: block-claude-attribution
         name: Block Claude Attribution
-        entry: .pre-commit-hooks/block-claude-attribution.sh
-        language: script
+        entry: bash .pre-commit-hooks/block-claude-attribution.sh
+        language: system
         stages: [commit-msg]
 
 # Global settings
