@@ -56,7 +56,10 @@ class MockInputController(IInputController):
     """
 
     def __init__(
-        self, latency: float = 0.0, failure_rate: float = 0.0, simulate_errors: bool = False
+        self,
+        latency: float = 0.0,
+        failure_rate: float = 0.0,
+        simulate_errors: bool = False,
     ) -> None:
         """Initialize mock input controller.
 
@@ -149,7 +152,10 @@ class MockInputController(IInputController):
         return True
 
     def mouse_down(
-        self, x: int | None = None, y: int | None = None, button: MouseButton = MouseButton.LEFT
+        self,
+        x: int | None = None,
+        y: int | None = None,
+        button: MouseButton = MouseButton.LEFT,
     ) -> bool:
         """Press and hold mouse button."""
         self._simulate_latency()
@@ -160,12 +166,18 @@ class MockInputController(IInputController):
             self._mouse_position = MousePosition(x=x, y=y)
 
         self._record_action(
-            "mouse_down", x=self._mouse_position.x, y=self._mouse_position.y, button=button.value
+            "mouse_down",
+            x=self._mouse_position.x,
+            y=self._mouse_position.y,
+            button=button.value,
         )
         return True
 
     def mouse_up(
-        self, x: int | None = None, y: int | None = None, button: MouseButton = MouseButton.LEFT
+        self,
+        x: int | None = None,
+        y: int | None = None,
+        button: MouseButton = MouseButton.LEFT,
     ) -> bool:
         """Release mouse button."""
         self._simulate_latency()
@@ -176,7 +188,10 @@ class MockInputController(IInputController):
             self._mouse_position = MousePosition(x=x, y=y)
 
         self._record_action(
-            "mouse_up", x=self._mouse_position.x, y=self._mouse_position.y, button=button.value
+            "mouse_up",
+            x=self._mouse_position.x,
+            y=self._mouse_position.y,
+            button=button.value,
         )
         return True
 
@@ -206,7 +221,9 @@ class MockInputController(IInputController):
         )
         return True
 
-    def mouse_scroll(self, clicks: int, x: int | None = None, y: int | None = None) -> bool:
+    def mouse_scroll(
+        self, clicks: int, x: int | None = None, y: int | None = None
+    ) -> bool:
         """Scroll mouse wheel."""
         self._simulate_latency()
         if not self._check_failure():
@@ -216,7 +233,10 @@ class MockInputController(IInputController):
             self._mouse_position = MousePosition(x=x, y=y)
 
         self._record_action(
-            "mouse_scroll", clicks=clicks, x=self._mouse_position.x, y=self._mouse_position.y
+            "mouse_scroll",
+            clicks=clicks,
+            x=self._mouse_position.x,
+            y=self._mouse_position.y,
         )
         return True
 
@@ -228,7 +248,9 @@ class MockInputController(IInputController):
         """Click at specific coordinates."""
         return self.mouse_click(x=x, y=y, button=button, clicks=1)
 
-    def double_click_at(self, x: int, y: int, button: MouseButton = MouseButton.LEFT) -> bool:
+    def double_click_at(
+        self, x: int, y: int, button: MouseButton = MouseButton.LEFT
+    ) -> bool:
         """Double click at specific coordinates."""
         return self.mouse_click(x=x, y=y, button=button, clicks=2)
 
@@ -248,14 +270,18 @@ class MockInputController(IInputController):
 
     # Keyboard operations
 
-    def key_press(self, key: str | Key, presses: int = 1, interval: float = 0.0) -> bool:
+    def key_press(
+        self, key: str | Key, presses: int = 1, interval: float = 0.0
+    ) -> bool:
         """Press key (down and up)."""
         self._simulate_latency()
         if not self._check_failure():
             return False
 
         key_str = key.value if isinstance(key, Key) else key
-        self._record_action("key_press", key=key_str, presses=presses, interval=interval)
+        self._record_action(
+            "key_press", key=key_str, presses=presses, interval=interval
+        )
         return True
 
     def key_down(self, key: str | Key) -> bool:
@@ -313,7 +339,9 @@ class MockInputController(IInputController):
             List of all text strings that were typed
         """
         return [
-            action.params["text"] for action in self.actions if action.action_type == "type_text"
+            action.params["text"]
+            for action in self.actions
+            if action.action_type == "type_text"
         ]
 
     def get_clicks(self) -> list[dict[str, Any]]:
@@ -322,7 +350,11 @@ class MockInputController(IInputController):
         Returns:
             List of click action parameters
         """
-        return [action.params for action in self.actions if action.action_type == "mouse_click"]
+        return [
+            action.params
+            for action in self.actions
+            if action.action_type == "mouse_click"
+        ]
 
     def assert_clicked_at(self, x: int, y: int, button: str = "left") -> None:
         """Assert that a click occurred at coordinates.
@@ -372,7 +404,9 @@ class MockInputController(IInputController):
             if action.action_type in ("key_press", "key_down")
         ]
         if key not in key_presses:
-            raise AssertionError(f"Key '{key}' not pressed. Pressed keys: {key_presses}")
+            raise AssertionError(
+                f"Key '{key}' not pressed. Pressed keys: {key_presses}"
+            )
 
     def assert_hotkey_pressed(self, *keys: str) -> None:
         """Assert that specific hotkey combination was pressed.
@@ -390,7 +424,9 @@ class MockInputController(IInputController):
         ]
         key_tuple = tuple(keys)
         if key_tuple not in hotkeys:
-            raise AssertionError(f"Hotkey {key_tuple} not pressed. Pressed hotkeys: {hotkeys}")
+            raise AssertionError(
+                f"Hotkey {key_tuple} not pressed. Pressed hotkeys: {hotkeys}"
+            )
 
     def get_actions_by_type(self, action_type: str) -> list[InputAction]:
         """Get all actions of a specific type.

@@ -225,7 +225,15 @@ def find_python_files(root_path: str) -> list[str]:
 
     for path in root.rglob("*.py"):
         # Skip common directories that shouldn't be analyzed
-        skip_dirs = {".git", ".venv", "venv", "__pycache__", ".pytest_cache", "build", "dist"}
+        skip_dirs = {
+            ".git",
+            ".venv",
+            "venv",
+            "__pycache__",
+            ".pytest_cache",
+            "build",
+            "dist",
+        }
 
         if any(skip_dir in path.parts for skip_dir in skip_dirs):
             continue

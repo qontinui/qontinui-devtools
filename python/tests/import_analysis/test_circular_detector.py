@@ -17,14 +17,12 @@ class TestImportExtraction:
     def test_extract_imports_from_simple_file(self, tmp_path: Path) -> None:
         """Test extracting imports from a simple Python file."""
         test_file = tmp_path / "test_module.py"
-        test_file.write_text(
-            """
+        test_file.write_text("""
 import os
 import sys
 from pathlib import Path
 from typing import List, Dict
-"""
-        )
+""")
 
         imports = extract_imports(str(test_file))
 
@@ -37,11 +35,9 @@ from typing import List, Dict
     def test_extract_from_import_with_multiple_names(self, tmp_path: Path) -> None:
         """Test extracting 'from X import Y, Z' statements."""
         test_file = tmp_path / "test_module.py"
-        test_file.write_text(
-            """
+        test_file.write_text("""
 from collections import Counter, defaultdict, OrderedDict
-"""
-        )
+""")
 
         imports = extract_imports(str(test_file))
 
@@ -56,11 +52,9 @@ from collections import Counter, defaultdict, OrderedDict
     def test_extract_wildcard_import(self, tmp_path: Path) -> None:
         """Test extracting 'from X import *' statements."""
         test_file = tmp_path / "test_module.py"
-        test_file.write_text(
-            """
+        test_file.write_text("""
 from os.path import *
-"""
-        )
+""")
 
         imports = extract_imports(str(test_file))
 
@@ -72,15 +66,13 @@ from os.path import *
     def test_extract_imports_with_line_numbers(self, tmp_path: Path) -> None:
         """Test that line numbers are correctly recorded."""
         test_file = tmp_path / "test_module.py"
-        test_file.write_text(
-            """import os
+        test_file.write_text("""import os
 
 def foo() -> None:
     pass
 
 from pathlib import Path
-"""
-        )
+""")
 
         imports = extract_imports(str(test_file))
 
@@ -190,7 +182,11 @@ class TestCircularDetector:
 
         for cycle in cycles:
             assert cycle.suggestion is not None
-            assert cycle.suggestion.fix_type in ["lazy_import", "type_checking", "restructure"]
+            assert cycle.suggestion.fix_type in [
+                "lazy_import",
+                "type_checking",
+                "restructure",
+            ]
             assert cycle.suggestion.description
             assert len(cycle.suggestion.affected_files) > 0
 

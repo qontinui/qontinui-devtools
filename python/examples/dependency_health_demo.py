@@ -10,7 +10,11 @@ from pathlib import Path
 from typing import Any
 from unittest.mock import Mock
 
-from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus, UpdateType
+from qontinui_devtools.dependencies import (
+    DependencyHealthChecker,
+    HealthStatus,
+    UpdateType,
+)
 from qontinui_devtools.dependencies.pypi_client import PackageInfo, PyPIClient
 from qontinui_schemas.common import utc_now
 

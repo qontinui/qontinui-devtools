@@ -52,7 +52,13 @@ class MockOCREngine(IOCREngine):
         self._text_map: dict[str, str] = {}  # image hash → text
         self._region_map: dict[str, list[TextRegion]] = {}  # image hash → regions
         self.ocr_calls: list[dict[str, Any]] = []
-        self._supported_languages = supported_languages or ["en", "es", "fr", "de", "zh"]
+        self._supported_languages = supported_languages or [
+            "en",
+            "es",
+            "fr",
+            "de",
+            "zh",
+        ]
 
     def _simulate_latency(self) -> None:
         """Simulate OCR processing latency."""
@@ -100,7 +106,9 @@ class MockOCREngine(IOCREngine):
 
         return "".join(chars)
 
-    def extract_text(self, image: Image.Image, languages: list[str] | None = None) -> str:
+    def extract_text(
+        self, image: Image.Image, languages: list[str] | None = None
+    ) -> str:
         """Extract all text from image.
 
         Args:
@@ -121,7 +129,10 @@ class MockOCREngine(IOCREngine):
         return self._add_noise(self.default_text)
 
     def get_text_regions(
-        self, image: Image.Image, languages: list[str] | None = None, min_confidence: float = 0.5
+        self,
+        image: Image.Image,
+        languages: list[str] | None = None,
+        min_confidence: float = 0.5,
     ) -> list[TextRegion]:
         """Get all text regions with bounding boxes.
 
@@ -164,7 +175,11 @@ class MockOCREngine(IOCREngine):
         ]
 
     def find_text(
-        self, image: Image.Image, text: str, case_sensitive: bool = False, confidence: float = 0.8
+        self,
+        image: Image.Image,
+        text: str,
+        case_sensitive: bool = False,
+        confidence: float = 0.8,
     ) -> TextMatch | None:
         """Find specific text in image.
 
@@ -201,7 +216,11 @@ class MockOCREngine(IOCREngine):
         return None
 
     def find_all_text(
-        self, image: Image.Image, text: str, case_sensitive: bool = False, confidence: float = 0.8
+        self,
+        image: Image.Image,
+        text: str,
+        case_sensitive: bool = False,
+        confidence: float = 0.8,
     ) -> list[TextMatch]:
         """Find all occurrences of text in image.
 
@@ -234,7 +253,9 @@ class MockOCREngine(IOCREngine):
 
             if search_text in region_text:
                 similarity = 1.0 if region_text == search_text else 0.9
-                matches.append(TextMatch(text=region.text, region=region, similarity=similarity))
+                matches.append(
+                    TextMatch(text=region.text, region=region, similarity=similarity)
+                )
 
         return matches
 
@@ -256,7 +277,10 @@ class MockOCREngine(IOCREngine):
         """
         self._simulate_latency()
         self._record_call(
-            "extract_text_from_region", image_size=image.size, region=region, languages=languages
+            "extract_text_from_region",
+            image_size=image.size,
+            region=region,
+            languages=languages,
         )
 
         # Crop image to region

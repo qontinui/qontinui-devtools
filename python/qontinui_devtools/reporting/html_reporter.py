@@ -203,7 +203,9 @@ class HTMLReportGenerator:
         if not self.report_data:
             raise ValueError("No report data set")
 
-        status_color, status_icon, status_message = self.report_data.get_overall_status()
+        status_color, status_icon, status_message = (
+            self.report_data.get_overall_status()
+        )
 
         return {
             "project_name": self.report_data.project_name,
@@ -236,7 +238,11 @@ class HTMLReportGenerator:
             {
                 "name": "Total Issues",
                 "value": total_issues,
-                "color": "red" if error_count > 0 else ("yellow" if warning_count > 0 else "green"),
+                "color": (
+                    "red"
+                    if error_count > 0
+                    else ("yellow" if warning_count > 0 else "green")
+                ),
                 "description": f"{error_count} errors, {warning_count} warnings",
             }
         )
@@ -259,7 +265,9 @@ class HTMLReportGenerator:
                 "name": "Quality Score",
                 "value": f"{quality_score:.1f}/100",
                 "color": (
-                    "green" if quality_score >= 80 else ("yellow" if quality_score >= 60 else "red")
+                    "green"
+                    if quality_score >= 80
+                    else ("yellow" if quality_score >= 60 else "red")
                 ),
                 "description": "Overall code quality rating",
             }
@@ -294,7 +302,9 @@ class HTMLReportGenerator:
         score -= min(error_count * 10, 50)
 
         # Deduct for warnings (2 points each, max -20)
-        warning_count = sum(1 for s in self.report_data.sections if s.severity == "warning")
+        warning_count = sum(
+            1 for s in self.report_data.sections if s.severity == "warning"
+        )
         score -= min(warning_count * 2, 20)
 
         # Deduct for specific issues
@@ -591,8 +601,7 @@ class HTMLReportGenerator:
         section_counts = [len(s.metrics) if s.metrics else 1 for s in sections]
 
         if section_labels:
-            scripts.append(
-                f"""
+            scripts.append(f"""
         const issueCtx = document.getElementById('issueChart');
         if (issueCtx) {{
             new Chart(issueCtx, {{
@@ -640,8 +649,7 @@ class HTMLReportGenerator:
                 }}
             }});
         }}
-"""
-            )
+""")
 
         # Severity breakdown chart
         severity_counts = {
@@ -651,8 +659,7 @@ class HTMLReportGenerator:
             "Success": sum(1 for s in sections if s.severity == "success"),
         }
 
-        scripts.append(
-            f"""
+        scripts.append(f"""
         const severityCtx = document.getElementById('severityChart');
         if (severityCtx) {{
             new Chart(severityCtx, {{
@@ -688,21 +695,18 @@ class HTMLReportGenerator:
                 }}
             }});
         }}
-"""
-        )
+""")
 
         # Add section-specific charts
         for section in sections:
             if section.chart_data:
                 chart_id = f"{section.id}Chart"
-                scripts.append(
-                    f"""
+                scripts.append(f"""
         const {section.id}Ctx = document.getElementById('{chart_id}');
         if ({section.id}Ctx) {{
             new Chart({section.id}Ctx, {json.dumps(section.chart_data)});
         }}
-"""
-                )
+""")
 
         return "\n".join(scripts)
 

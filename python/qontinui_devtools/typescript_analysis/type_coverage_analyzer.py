@@ -101,7 +101,9 @@ class TypeCoverageAnalyzer:
                 TextColumn("[progress.description]{task.description}"),
                 console=self.console,
             ) as progress:
-                task = progress.add_task("Analyzing type coverage...", total=len(self.files))
+                task = progress.add_task(
+                    "Analyzing type coverage...", total=len(self.files)
+                )
 
                 for file_path in self.files:
                     self._analyze_file(file_path)
@@ -136,7 +138,11 @@ class TypeCoverageAnalyzer:
             stripped = line.strip()
 
             # Skip comments
-            if stripped.startswith("//") or stripped.startswith("/*") or stripped.startswith("*"):
+            if (
+                stripped.startswith("//")
+                or stripped.startswith("/*")
+                or stripped.startswith("*")
+            ):
                 continue
 
             # Check for 'any' usage
@@ -286,7 +292,9 @@ class TypeCoverageAnalyzer:
             f"  Parameters: {coverage['typed_parameters']}/{coverage['total_parameters']} typed"
         )
         self.console.print(f"  'any' usage: {coverage['any_count']} occurrences")
-        self.console.print(f"  'unknown' usage: {coverage['unknown_count']} occurrences")
+        self.console.print(
+            f"  'unknown' usage: {coverage['unknown_count']} occurrences"
+        )
 
         # Issues breakdown
         issues_by_type = coverage["issues_by_type"]
@@ -364,7 +372,9 @@ class TypeCoverageAnalyzer:
                     if issue.file_path.is_relative_to(self.root_path)
                     else issue.file_path
                 )
-                lines.append(f"  {rel_path}:{issue.line_number} - {issue.type} ({issue.severity})")
+                lines.append(
+                    f"  {rel_path}:{issue.line_number} - {issue.type} ({issue.severity})"
+                )
 
             if len(self.issues) > 20:
                 lines.append(f"\n... and {len(self.issues) - 20} more issues")

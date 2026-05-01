@@ -295,7 +295,9 @@ def plot_comparison(
         )
 
     # Calculate differences
-    all_types = set(snapshot1.objects_by_type.keys()) | set(snapshot2.objects_by_type.keys())
+    all_types = set(snapshot1.objects_by_type.keys()) | set(
+        snapshot2.objects_by_type.keys()
+    )
 
     diffs: dict[Any, Any] = {}
     for obj_type in all_types:
@@ -362,9 +364,7 @@ def plot_comparison(
     ax2.grid(True, axis="y", alpha=0.3)
 
     # Add summary text
-    summary = (
-        f"Time: {time_diff:.1f}s\nMemory: {mem_diff:+.1f} MB\nRate: {mem_diff / time_diff:.2f} MB/s"
-    )
+    summary = f"Time: {time_diff:.1f}s\nMemory: {mem_diff:+.1f} MB\nRate: {mem_diff / time_diff:.2f} MB/s"
     ax2.text(
         0.02,
         0.98,
@@ -545,7 +545,9 @@ def generate_html_report(
 """
         for i, leak in enumerate(leaks[:10], 1):
             severity = (
-                "high" if leak.confidence > 0.9 else "medium" if leak.confidence > 0.7 else "low"
+                "high"
+                if leak.confidence > 0.9
+                else "medium" if leak.confidence > 0.7 else "low"
             )
             html += f"""
         <div class="leak leak-{severity}">

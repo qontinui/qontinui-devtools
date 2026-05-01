@@ -101,7 +101,9 @@ class TestMockInputController:
 
     def test_simulated_failures(self) -> None:
         """Test simulated failures."""
-        controller = MockInputController(failure_rate=1.0, simulate_errors=True)  # Always fail
+        controller = MockInputController(
+            failure_rate=1.0, simulate_errors=True
+        )  # Always fail
 
         with pytest.raises(InputControlError):
             controller.type_text("test")
@@ -385,7 +387,9 @@ class TestMockPlatformSpecific:
         """Test adding UI elements to window."""
         platform = MockPlatformSpecific()
         window = platform.add_window("Test", 0, 0, 800, 600)
-        platform.add_ui_element(window, element_type="button", name="submit_btn", text="Submit")
+        platform.add_ui_element(
+            window, element_type="button", name="submit_btn", text="Submit"
+        )
 
         elements = platform.get_ui_elements(window)
 
@@ -406,7 +410,9 @@ class TestMockPlatformSpecific:
 
     def test_platform_info(self) -> None:
         """Test getting platform information."""
-        platform = MockPlatformSpecific(platform_name="TestOS", platform_version="1.2.3")
+        platform = MockPlatformSpecific(
+            platform_name="TestOS", platform_version="1.2.3"
+        )
 
         assert platform.get_platform_name() == "TestOS"
         assert platform.get_platform_version() == "1.2.3"
@@ -494,7 +500,9 @@ class TestIntegration:
         hal = MockHAL.create()
 
         # Configure behavior
-        hal.pattern_matcher.configure_match("default", success=True, location=(200, 300))
+        hal.pattern_matcher.configure_match(
+            "default", success=True, location=(200, 300)
+        )
         hal.ocr_engine.default_text = "Login"
 
         # Simulate workflow
@@ -519,7 +527,9 @@ class TestIntegration:
         screenshot = hal.screen_capture.capture_screen()
         button = Image.new("RGB", (100, 50))
 
-        hal.pattern_matcher.configure_match_for_image(button, success=True, location=(300, 400))
+        hal.pattern_matcher.configure_match_for_image(
+            button, success=True, location=(300, 400)
+        )
 
         # Find and click
         match = hal.pattern_matcher.find_pattern(screenshot, button)

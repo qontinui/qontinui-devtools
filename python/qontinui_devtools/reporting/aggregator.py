@@ -101,7 +101,9 @@ class ReportAggregator:
                 "circular_dependencies": len(cycles),
                 "cycles": cycles,
                 "graph": detector.graph if hasattr(detector, "graph") else None,
-                "total_imports": len(detector.graph.edges() if hasattr(detector, "graph") else []),
+                "total_imports": len(
+                    detector.graph.edges() if hasattr(detector, "graph") else []
+                ),
             }
         except ImportError:
             return {"error": "Import analysis module not available"}
@@ -240,8 +242,12 @@ class ReportAggregator:
                 "circular_dependencies", 0
             ),
             "god_classes": self.results.get("architecture", {}).get("god_classes", 0),
-            "race_conditions": self.results.get("concurrency", {}).get("race_conditions", 0),
-            "srp_violations": self.results.get("architecture", {}).get("srp_violations", 0),
+            "race_conditions": self.results.get("concurrency", {}).get(
+                "race_conditions", 0
+            ),
+            "srp_violations": self.results.get("architecture", {}).get(
+                "srp_violations", 0
+            ),
             "critical_issues": self._count_critical_issues(),
         }
 
@@ -279,7 +285,9 @@ class ReportAggregator:
 
         if circular_deps == 0:
             severity = "success"
-            content = "<p>✓ No circular dependencies detected. Import structure is clean.</p>"
+            content = (
+                "<p>✓ No circular dependencies detected. Import structure is clean.</p>"
+            )
         elif circular_deps <= 2:
             severity = "warning"
             content = f"<p>⚠ Found {circular_deps} circular dependencies:</p><ul>"
@@ -289,9 +297,7 @@ class ReportAggregator:
             content += "</ul>"
         else:
             severity = "error"
-            content = (
-                f"<p>❌ Found {circular_deps} circular dependencies (showing first 5):</p><ul>"
-            )
+            content = f"<p>❌ Found {circular_deps} circular dependencies (showing first 5):</p><ul>"
             for cycle in cycles[:5]:
                 cycle_str = " → ".join(html.escape(str(c)) for c in cycle)
                 content += f"<li><code>{cycle_str}</code></li>"
@@ -323,9 +329,7 @@ class ReportAggregator:
             content = "<p>✓ Architecture is clean. No god classes or SRP violations detected.</p>"
         elif god_classes <= 2:
             severity = "warning"
-            content = (
-                f"<p>⚠ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
-            )
+            content = f"<p>⚠ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
             if god_class_details:
                 content += "<h3>God Classes:</h3><ul>"
                 for cls in god_class_details[:3]:
@@ -336,9 +340,7 @@ class ReportAggregator:
                 content += "</ul>"
         else:
             severity = "error"
-            content = (
-                f"<p>❌ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
-            )
+            content = f"<p>❌ Found {god_classes} god classes and {srp_violations} SRP violations.</p>"
             content += "<p><strong>Critical:</strong> Multiple god classes detected. Consider refactoring.</p>"
             if god_class_details:
                 content += "<h3>Top God Classes:</h3><ul>"
@@ -369,9 +371,15 @@ class ReportAggregator:
         total_lines = quality.get("total_lines", 0)
         issues = quality.get("issues", [])
 
-        severity = "success" if len(issues) < 5 else ("warning" if len(issues) < 10 else "error")
+        severity = (
+            "success"
+            if len(issues) < 5
+            else ("warning" if len(issues) < 10 else "error")
+        )
 
-        content = f"<p>Analyzed {total_files} files with {total_lines:,} lines of code.</p>"
+        content = (
+            f"<p>Analyzed {total_files} files with {total_lines:,} lines of code.</p>"
+        )
 
         if len(issues) == 0:
             content += "<p>✓ No code quality issues detected.</p>"
@@ -419,7 +427,9 @@ class ReportAggregator:
             content += "</ul>"
         else:
             severity = "error"
-            content = f"<p>❌ Found {race_conditions} potential race conditions:</p><ul>"
+            content = (
+                f"<p>❌ Found {race_conditions} potential race conditions:</p><ul>"
+            )
             for race in race_details[:5]:
                 if hasattr(race, "description"):
                     content += f"<li>{html.escape(race.description)}</li>"
@@ -473,7 +483,9 @@ class ReportAggregator:
             )
 
         if not recommendations:
-            content = "<p>✓ Excellent! No major issues found. Keep up the good work!</p>"
+            content = (
+                "<p>✓ Excellent! No major issues found. Keep up the good work!</p>"
+            )
             content += "<h3>Best Practices:</h3><ul>"
             content += "<li>Continue writing unit tests</li>"
             content += "<li>Document complex code sections</li>"

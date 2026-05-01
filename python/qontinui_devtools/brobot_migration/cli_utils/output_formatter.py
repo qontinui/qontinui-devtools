@@ -78,7 +78,9 @@ class OutputFormatter:
                         "path": str(test_file.path),
                         "type": test_file.test_type.value,
                         "package": test_file.package,
-                        "dependencies": [dep.java_import for dep in test_file.dependencies],
+                        "dependencies": [
+                            dep.java_import for dep in test_file.dependencies
+                        ],
                     }
                     for test_file in discovered_tests
                 ],
@@ -270,7 +272,9 @@ class OutputFormatter:
             OutputFormatter._display_migration_text(results)
 
     @staticmethod
-    def save_migration_report(results: Any, report_file: Path, orchestrator: Any) -> None:
+    def save_migration_report(
+        results: Any, report_file: Path, orchestrator: Any
+    ) -> None:
         """Save migration report to file."""
         report_data = {
             "migration_results": {

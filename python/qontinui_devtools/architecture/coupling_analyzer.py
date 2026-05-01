@@ -53,7 +53,9 @@ class CouplingCohesionAnalyzer:
         self.verbose = verbose
         self.graph_builder = DependencyGraphBuilder(verbose=verbose)
 
-    def analyze_directory(self, path: str) -> tuple[list[CouplingMetrics], list[CohesionMetrics]]:
+    def analyze_directory(
+        self, path: str
+    ) -> tuple[list[CouplingMetrics], list[CohesionMetrics]]:
         """Analyze a directory for coupling and cohesion metrics.
 
         Args:
@@ -146,7 +148,9 @@ class CouplingCohesionAnalyzer:
             coupling_score=coupling_score,
         )
 
-    def calculate_cohesion(self, class_node: ast.ClassDef, file_path: str) -> CohesionMetrics:
+    def calculate_cohesion(
+        self, class_node: ast.ClassDef, file_path: str
+    ) -> CohesionMetrics:
         """Calculate cohesion metrics for a class.
 
         Args:
@@ -229,7 +233,9 @@ class CouplingCohesionAnalyzer:
             return 0.0
         return ce / total
 
-    def calculate_distance_from_main(self, instability: float, abstractness: float) -> float:
+    def calculate_distance_from_main(
+        self, instability: float, abstractness: float
+    ) -> float:
         """Calculate distance from the main sequence.
 
         The main sequence is the ideal balance: A + I = 1
@@ -244,7 +250,9 @@ class CouplingCohesionAnalyzer:
         """
         return abs(abstractness + instability - 1.0)
 
-    def _classify_coupling(self, ca: int, ce: int, instability: float, distance: float) -> str:
+    def _classify_coupling(
+        self, ca: int, ce: int, instability: float, distance: float
+    ) -> str:
         """Classify coupling quality.
 
         Args:
@@ -281,7 +289,9 @@ class CouplingCohesionAnalyzer:
         else:
             return "poor"
 
-    def _classify_cohesion(self, lcom: float, lcom4: float, tcc: float, lcc: float) -> str:
+    def _classify_cohesion(
+        self, lcom: float, lcom4: float, tcc: float, lcc: float
+    ) -> str:
         """Classify cohesion quality.
 
         Args:
@@ -349,7 +359,9 @@ class CouplingCohesionAnalyzer:
 
         if coupling:
             # Sort by efferent coupling (highest first)
-            sorted_coupling = sorted(coupling, key=lambda x: x.efferent_coupling, reverse=True)
+            sorted_coupling = sorted(
+                coupling, key=lambda x: x.efferent_coupling, reverse=True
+            )
 
             for metric in sorted_coupling[:20]:  # Top 20
                 lines.append(f"Module: {metric.name}")

@@ -184,8 +184,9 @@ class ImportHook:
             frame_globals = frame.f_globals
             if "__name__" in frame_globals:
                 potential_importer = frame_globals["__name__"]
-                if potential_importer != "__main__" and not potential_importer.startswith(
-                    "importlib"
+                if (
+                    potential_importer != "__main__"
+                    and not potential_importer.startswith("importlib")
                 ):
                     importer = potential_importer
                     break
@@ -195,7 +196,9 @@ class ImportHook:
         stack = traceback.format_stack()
         # Filter out internal import machinery
         filtered_stack = [
-            frame for frame in stack if "importlib" not in frame and "import_tracer.py" not in frame
+            frame
+            for frame in stack
+            if "importlib" not in frame and "import_tracer.py" not in frame
         ]
 
         # Record the import event
@@ -364,7 +367,9 @@ class ImportTracer:
         if import_counts:
             lines.append("Most imported modules:")
             lines.append("-" * 80)
-            top_imports = sorted(import_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+            top_imports = sorted(
+                import_counts.items(), key=lambda x: x[1], reverse=True
+            )[:10]
             for module, count in top_imports:
                 lines.append(f"  {module}: {count} time(s)")
             lines.append("")

@@ -89,7 +89,10 @@ class TestPytestRunner:
 
         assert isinstance(result, TestResult)
         assert not result.passed
-        assert result.error_message is not None and "Test file not found" in result.error_message
+        assert (
+            result.error_message is not None
+            and "Test file not found" in result.error_message
+        )
         assert result.test_name == "test.py"
 
     @patch("subprocess.run")
@@ -162,7 +165,10 @@ class TestPytestRunner:
 
                 assert isinstance(result, TestResult)
                 assert not result.passed
-                assert result.error_message is not None and "timed out" in result.error_message
+                assert (
+                    result.error_message is not None
+                    and "timed out" in result.error_message
+                )
 
             finally:
                 test_file.unlink()

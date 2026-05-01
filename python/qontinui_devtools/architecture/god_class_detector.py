@@ -162,7 +162,9 @@ class GodClassDetector:
         # Basic metrics
         total_lines, code_lines = count_lines(node, source)
         method_counts = count_methods(node)
-        method_count = method_counts["instance"] + method_counts["class"] + method_counts["static"]
+        method_count = (
+            method_counts["instance"] + method_counts["class"] + method_counts["static"]
+        )
         attribute_count = count_attributes(node)
         complexity = calculate_complexity(node)
 
@@ -212,7 +214,11 @@ class GodClassDetector:
         Returns:
             LCOM value (0-1)
         """
-        methods = [n for n in node.body if isinstance(n, ast.FunctionDef) and n.name != "__init__"]
+        methods = [
+            n
+            for n in node.body
+            if isinstance(n, ast.FunctionDef) and n.name != "__init__"
+        ]
 
         if len(methods) < 2:
             return 0.0
@@ -253,9 +259,29 @@ class GodClassDetector:
         patterns = {
             "data_access": ["get_", "set_", "fetch_", "retrieve_", "load_", "find_"],
             "validation": ["validate_", "check_", "verify_", "is_valid_", "ensure_"],
-            "persistence": ["save_", "store_", "persist_", "write_", "delete_", "update_"],
-            "business_logic": ["calculate_", "compute_", "process_", "execute_", "perform_"],
-            "presentation": ["render_", "display_", "show_", "format_", "to_string", "to_dict"],
+            "persistence": [
+                "save_",
+                "store_",
+                "persist_",
+                "write_",
+                "delete_",
+                "update_",
+            ],
+            "business_logic": [
+                "calculate_",
+                "compute_",
+                "process_",
+                "execute_",
+                "perform_",
+            ],
+            "presentation": [
+                "render_",
+                "display_",
+                "show_",
+                "format_",
+                "to_string",
+                "to_dict",
+            ],
             "initialization": ["init_", "setup_", "configure_", "initialize_"],
             "error_handling": ["handle_", "on_error_", "catch_", "recover_"],
             "event_handling": ["on_", "handle_event_", "dispatch_", "trigger_"],
@@ -285,7 +311,13 @@ class GodClassDetector:
                 # Extract keywords from method name
                 words = method_name.lower().replace("_", " ").split()
                 # Group by first meaningful word
-                if len(words) > 1 and words[0] not in ["get", "set", "is", "has", "can"]:
+                if len(words) > 1 and words[0] not in [
+                    "get",
+                    "set",
+                    "is",
+                    "has",
+                    "can",
+                ]:
                     key = f"{words[0]}_operations"
                     responsibility_groups[key].append(method_name)
 
@@ -329,7 +361,14 @@ class GodClassDetector:
             # Group methods by responsibility patterns
             method_names = extract_method_names(class_node)
             patterns = {
-                "DataAccessor": ["get_", "set_", "fetch_", "retrieve_", "load_", "find_"],
+                "DataAccessor": [
+                    "get_",
+                    "set_",
+                    "fetch_",
+                    "retrieve_",
+                    "load_",
+                    "find_",
+                ],
                 "Validator": ["validate_", "check_", "verify_", "is_valid_", "ensure_"],
                 "PersistenceManager": [
                     "save_",
@@ -346,7 +385,14 @@ class GodClassDetector:
                     "execute_",
                     "perform_",
                 ],
-                "Formatter": ["render_", "display_", "show_", "format_", "to_string", "to_dict"],
+                "Formatter": [
+                    "render_",
+                    "display_",
+                    "show_",
+                    "format_",
+                    "to_string",
+                    "to_dict",
+                ],
                 "EventHandler": ["on_", "handle_event_", "dispatch_", "trigger_"],
                 "Notifier": ["notify_", "alert_", "send_", "publish_"],
                 "Transformer": ["transform_", "convert_", "map_", "adapt_"],
@@ -372,7 +418,9 @@ class GodClassDetector:
                             estimated_lines += code_lines
 
                     # Create suggestion
-                    responsibility = class_name.replace("Manager", "").replace("Processor", "")
+                    responsibility = class_name.replace("Manager", "").replace(
+                        "Processor", ""
+                    )
                     suggestions.append(
                         ExtractionSuggestion(
                             new_class_name=class_name,

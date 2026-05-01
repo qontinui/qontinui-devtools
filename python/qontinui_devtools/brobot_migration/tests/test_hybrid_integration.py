@@ -5,8 +5,15 @@ Integration tests for the hybrid translation system.
 from pathlib import Path
 
 import pytest
-from qontinui.test_migration.core.models import MockUsage, TestFile, TestMethod, TestType
-from qontinui.test_migration.execution.hybrid_test_translator import HybridTestTranslator
+from qontinui.test_migration.core.models import (
+    MockUsage,
+    TestFile,
+    TestMethod,
+    TestType,
+)
+from qontinui.test_migration.execution.hybrid_test_translator import (
+    HybridTestTranslator,
+)
 from qontinui.test_migration.execution.llm_test_translator import LLMTestTranslator
 from qontinui.test_migration.execution.python_test_generator import PythonTestGenerator
 
@@ -219,7 +226,9 @@ class TestHybridTranslationIntegration:
         assert self.hybrid_translator.llm_confidence_threshold == 0.7
 
         # Test threshold configuration
-        self.hybrid_translator.configure_thresholds(utility_threshold=0.9, llm_threshold=0.6)
+        self.hybrid_translator.configure_thresholds(
+            utility_threshold=0.9, llm_threshold=0.6
+        )
 
         assert self.hybrid_translator.utility_confidence_threshold == 0.9
         assert self.hybrid_translator.llm_confidence_threshold == 0.6
@@ -257,7 +266,11 @@ class TestHybridTranslationIntegration:
         )
 
         target_dir = Path("/target/tests")
-        generated_path = self.utility_translator.generate_test_file_path(test_file, target_dir)
+        generated_path = self.utility_translator.generate_test_file_path(
+            test_file, target_dir
+        )
 
-        expected_path = target_dir / "com" / "example" / "service" / "test_userservice.py"
+        expected_path = (
+            target_dir / "com" / "example" / "service" / "test_userservice.py"
+        )
         assert generated_path == expected_path

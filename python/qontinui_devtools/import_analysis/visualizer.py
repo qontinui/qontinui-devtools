@@ -142,13 +142,17 @@ def visualize_import_graph(
             "ast",
         }
         modules_to_include = {
-            m for m in modules_to_include if not any(m.startswith(s) for s in stdlib_patterns)
+            m
+            for m in modules_to_include
+            if not any(m.startswith(s) for s in stdlib_patterns)
         }
 
     # Limit number of nodes if specified
     if max_nodes and len(modules_to_include) > max_nodes:
         # Keep most connected nodes
-        node_degrees = {node: len(graph.get_dependencies(node)) for node in modules_to_include}
+        node_degrees = {
+            node: len(graph.get_dependencies(node)) for node in modules_to_include
+        }
         sorted_nodes = sorted(node_degrees.items(), key=lambda x: x[1], reverse=True)
         modules_to_include = {node for node, _ in sorted_nodes[:max_nodes]}
 
@@ -413,9 +417,7 @@ def generate_html_report(
             circular_html += f'<div class="cycle">{i}. {cycle_str}</div>\n'
         circular_html += "</div>\n"
     else:
-        circular_html = (
-            '<div style="background-color: #e6ffe6; padding: 15px; border-radius: 5px;">\n'
-        )
+        circular_html = '<div style="background-color: #e6ffe6; padding: 15px; border-radius: 5px;">\n'
         circular_html += '<h2 style="color: #006600;">✓ No Circular Dependencies</h2>\n'
         circular_html += "</div>\n"
 

@@ -81,11 +81,15 @@ class DocstringParser:
             Detected style
         """
         # Google style indicators
-        if re.search(r"^\s*(Args|Returns|Raises|Examples?):\s*$", docstring, re.MULTILINE):
+        if re.search(
+            r"^\s*(Args|Returns|Raises|Examples?):\s*$", docstring, re.MULTILINE
+        ):
             return DocstringStyle.GOOGLE
 
         # NumPy style indicators (section header followed by dashes)
-        if re.search(r"^\s*(Parameters|Returns|Raises)\s*\n\s*-{3,}\s*$", docstring, re.MULTILINE):
+        if re.search(
+            r"^\s*(Parameters|Returns|Raises)\s*\n\s*-{3,}\s*$", docstring, re.MULTILINE
+        ):
             return DocstringStyle.NUMPY
 
         return DocstringStyle.GOOGLE  # Default
@@ -142,7 +146,9 @@ class DocstringParser:
             ]:
                 # Save previous section
                 if current_section:
-                    self._process_google_section(result, current_section, current_content)
+                    self._process_google_section(
+                        result, current_section, current_content
+                    )
 
                 in_description = False
                 current_section = stripped[:-1]
@@ -252,7 +258,10 @@ class DocstringParser:
         # Try to extract type and description
         match = re.match(r"^([^:]+):\s*(.*)$", content, re.DOTALL)
         if match:
-            return {"type": match.group(1).strip(), "description": match.group(2).strip()}
+            return {
+                "type": match.group(1).strip(),
+                "description": match.group(2).strip(),
+            }
 
         return {"type": None, "description": content}
 
@@ -621,7 +630,9 @@ class ASTDocExtractor(ast.NodeVisitor):
         """Visit async function definition."""
         self._visit_function(node, is_async=True)
 
-    def _visit_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef, is_async: bool) -> None:
+    def _visit_function(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef, is_async: bool
+    ) -> None:
         """Visit function or method."""
         docstring = ast.get_docstring(node)
 
@@ -651,7 +662,9 @@ class ASTDocExtractor(ast.NodeVisitor):
         # Extract examples
         examples: list[Any] = []
         for ex in parsed["examples"]:
-            examples.append(Example(code=ex["code"], description=ex.get("description", "")))
+            examples.append(
+                Example(code=ex["code"], description=ex.get("description", ""))
+            )
 
         # Get return description
         return_description = None
@@ -878,7 +891,11 @@ class DocumentationGenerator:
                 parent.children.append(item.qualified_name)
 
                 # Add to parent's methods or attributes
-                if item.type in (DocItemType.METHOD, DocItemType.FUNCTION, DocItemType.PROPERTY):
+                if item.type in (
+                    DocItemType.METHOD,
+                    DocItemType.FUNCTION,
+                    DocItemType.PROPERTY,
+                ):
                     parent.methods.append(item)
                 else:
                     parent.attributes.append(item)
@@ -1044,7 +1061,9 @@ class DocumentationGenerator:
 
         return "\n".join(lines)
 
-    def _generate_module_markdown(self, module: DocItem, tree: DocumentationTree) -> str:
+    def _generate_module_markdown(
+        self, module: DocItem, tree: DocumentationTree
+    ) -> str:
         """Generate markdown for a module."""
         lines: list[Any] = []
         lines.append(f"# {module.name}\n")
@@ -1082,7 +1101,8 @@ class DocumentationGenerator:
         functions = [
             item
             for item in tree.all_items.values()
-            if item.parent == module.qualified_name and item.type == DocItemType.FUNCTION
+            if item.parent == module.qualified_name
+            and item.type == DocItemType.FUNCTION
         ]
 
         if functions:

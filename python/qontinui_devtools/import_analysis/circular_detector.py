@@ -13,7 +13,12 @@ import networkx as nx
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from .ast_utils import ImportStatement, extract_imports, find_python_files, module_path_from_file
+from .ast_utils import (
+    ImportStatement,
+    extract_imports,
+    find_python_files,
+    module_path_from_file,
+)
 from .fix_suggester import FixSuggestion, analyze_cycle, suggest_best_break_point
 
 
@@ -100,7 +105,9 @@ class CircularDependencyDetector:
         elapsed = time.time() - start_time
 
         if self.verbose:
-            self.console.print(f"\n[bold green]Analysis complete[/bold green] in {elapsed:.2f}s")
+            self.console.print(
+                f"\n[bold green]Analysis complete[/bold green] in {elapsed:.2f}s"
+            )
             self.console.print(f"Files scanned: {len(self.file_map)}")
             self.console.print(f"Dependencies: {len(self.graph.edges())}")
             self.console.print(f"Cycles found: {len(circular_deps)}")
@@ -118,7 +125,8 @@ class CircularDependencyDetector:
                 console=self.console,
             ) as progress:
                 task = progress.add_task(
-                    f"Scanning {len(python_files)} Python files...", total=len(python_files)
+                    f"Scanning {len(python_files)} Python files...",
+                    total=len(python_files),
                 )
 
                 for file_path in python_files:
@@ -150,7 +158,9 @@ class CircularDependencyDetector:
 
         except (SyntaxError, ValueError) as e:
             if self.verbose:
-                self.console.print(f"[yellow]Warning: Could not parse {file_path}: {e}[/yellow]")
+                self.console.print(
+                    f"[yellow]Warning: Could not parse {file_path}: {e}[/yellow]"
+                )
 
     def _build_dependency_graph(self) -> None:
         """Build directed graph of module dependencies."""
@@ -165,7 +175,9 @@ class CircularDependencyDetector:
 
                 # Only add edge if the imported module is in our project
                 if imported_module and imported_module in self.file_map:
-                    self.graph.add_edge(module, imported_module, import_stmt=import_stmt)
+                    self.graph.add_edge(
+                        module, imported_module, import_stmt=import_stmt
+                    )
 
     def _resolve_import(self, import_module: str, current_module: str) -> str | None:
         """Resolve an import to a module in our project.
@@ -332,14 +344,20 @@ class CircularDependencyDetector:
             cycles: List of detected circular dependencies
         """
         if not cycles:
-            self.console.print("\n[bold green]✓ No circular dependencies found[/bold green]\n")
+            self.console.print(
+                "\n[bold green]✓ No circular dependencies found[/bold green]\n"
+            )
             return
 
-        self.console.print(f"\n[bold red]✗ Found {len(cycles)} circular dependencies[/bold red]\n")
+        self.console.print(
+            f"\n[bold red]✗ Found {len(cycles)} circular dependencies[/bold red]\n"
+        )
 
         for idx, cycle in enumerate(cycles, 1):
             # Severity color
-            severity_color = {"high": "red", "medium": "yellow", "low": "blue"}[cycle.severity]
+            severity_color = {"high": "red", "medium": "yellow", "low": "blue"}[
+                cycle.severity
+            ]
 
             self.console.print(
                 f"[bold {severity_color}]Cycle #{idx} "
@@ -354,11 +372,17 @@ class CircularDependencyDetector:
             self.console.print("\n  [bold]Import chain:[/bold]")
             for imp in cycle.import_chain:
                 file_rel = Path(imp.file_path).relative_to(self.root_path)
-                self.console.print(f"    {file_rel}:{imp.line_number}: [dim]{imp}[/dim]")
+                self.console.print(
+                    f"    {file_rel}:{imp.line_number}: [dim]{imp}[/dim]"
+                )
 
             # Suggestion
-            self.console.print(f"\n  [bold]Fix type:[/bold] {cycle.suggestion.fix_type}")
-            self.console.print(f"  [bold]Description:[/bold] {cycle.suggestion.description}")
+            self.console.print(
+                f"\n  [bold]Fix type:[/bold] {cycle.suggestion.fix_type}"
+            )
+            self.console.print(
+                f"  [bold]Description:[/bold] {cycle.suggestion.description}"
+            )
 
             if cycle.suggestion.code_example:
                 self.console.print("\n  [bold]Example fix:[/bold]")

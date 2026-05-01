@@ -84,7 +84,11 @@ def generate_dot(
         # Check if this edge is part of a cycle
         is_cycle_edge = (edge.source, edge.target) in cycle_edges
 
-        color = "#ff0000" if is_cycle_edge else edge_type_colors.get(edge.edge_type, "#555555")
+        color = (
+            "#ff0000"
+            if is_cycle_edge
+            else edge_type_colors.get(edge.edge_type, "#555555")
+        )
         penwidth = 2.0 if is_cycle_edge else 1.0
         edge_style = "bold" if is_cycle_edge else "solid"
 
@@ -111,7 +115,9 @@ def generate_dot(
     return "\n".join(dot_lines)
 
 
-def apply_styling(node: GraphNode, metrics: dict[str, Any] | None = None) -> dict[str, str]:
+def apply_styling(
+    node: GraphNode, metrics: dict[str, Any] | None = None
+) -> dict[str, str]:
     """Apply visual styling based on node metrics.
 
     Args:

@@ -157,7 +157,9 @@ class SRPAnalyzer:
         methods = self._extract_methods(class_node)
 
         # Filter out magic methods and private methods for cleaner analysis
-        public_methods = [m for m in methods if not m.startswith("__") and not m.startswith("_")]
+        public_methods = [
+            m for m in methods if not m.startswith("__") and not m.startswith("_")
+        ]
 
         # Skip classes with too few methods
         if len(public_methods) < min_methods:
@@ -178,7 +180,9 @@ class SRPAnalyzer:
 
         # Generate recommendations
         recommendation = self._generate_recommendation(class_node.name, clusters)
-        suggested_refactorings = self._generate_refactoring_suggestions(class_node.name, clusters)
+        suggested_refactorings = self._generate_refactoring_suggestions(
+            class_node.name, clusters
+        )
 
         return SRPViolation(
             class_name=class_node.name,
@@ -234,7 +238,9 @@ class SRPAnalyzer:
         else:
             return "medium"
 
-    def _generate_recommendation(self, class_name: str, clusters: list[MethodCluster]) -> str:
+    def _generate_recommendation(
+        self, class_name: str, clusters: list[MethodCluster]
+    ) -> str:
         """Generate a recommendation for fixing the violation.
 
         Args:
@@ -351,7 +357,11 @@ class SRPAnalyzer:
         lines.append("")
 
         # Group by severity
-        by_severity: dict[str, list[SRPViolation]] = {"critical": [], "high": [], "medium": []}
+        by_severity: dict[str, list[SRPViolation]] = {
+            "critical": [],
+            "high": [],
+            "medium": [],
+        }
         for violation in violations:
             by_severity[violation.severity].append(violation)
 

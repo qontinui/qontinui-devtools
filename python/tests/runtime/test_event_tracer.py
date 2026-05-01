@@ -22,7 +22,9 @@ class TestEventTrace:
 
     def test_create_trace(self) -> None:
         """Test creating an event trace."""
-        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
+        trace = EventTrace(
+            event_id="evt_001", event_type="click", created_at=time.time()
+        )
 
         assert trace.event_id == "evt_001"
         assert trace.event_type == "click"
@@ -32,7 +34,9 @@ class TestEventTrace:
 
     def test_add_checkpoint(self) -> None:
         """Test adding checkpoints to a trace."""
-        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
+        trace = EventTrace(
+            event_id="evt_001", event_type="click", created_at=time.time()
+        )
 
         # Add checkpoints
         trace.add_checkpoint("frontend_emit")
@@ -49,7 +53,9 @@ class TestEventTrace:
 
     def test_add_checkpoint_with_metadata(self) -> None:
         """Test adding checkpoints with metadata."""
-        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
+        trace = EventTrace(
+            event_id="evt_001", event_type="click", created_at=time.time()
+        )
 
         metadata = {"button": "submit", "x": 100, "y": 200}
         trace.add_checkpoint("frontend_emit", metadata=metadata)
@@ -58,7 +64,9 @@ class TestEventTrace:
 
     def test_get_latency(self) -> None:
         """Test calculating latency between checkpoints."""
-        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
+        trace = EventTrace(
+            event_id="evt_001", event_type="click", created_at=time.time()
+        )
 
         trace.add_checkpoint("frontend_emit")
         time.sleep(0.01)
@@ -75,7 +83,9 @@ class TestEventTrace:
 
     def test_get_latency_invalid_checkpoint(self) -> None:
         """Test error handling for invalid checkpoints."""
-        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
+        trace = EventTrace(
+            event_id="evt_001", event_type="click", created_at=time.time()
+        )
 
         trace.add_checkpoint("frontend_emit")
         trace.add_checkpoint("tauri_receive")
@@ -88,7 +98,9 @@ class TestEventTrace:
 
     def test_get_latency_invalid_order(self) -> None:
         """Test error handling for invalid checkpoint order."""
-        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
+        trace = EventTrace(
+            event_id="evt_001", event_type="click", created_at=time.time()
+        )
 
         trace.add_checkpoint("frontend_emit")
         trace.add_checkpoint("tauri_receive")
@@ -98,7 +110,9 @@ class TestEventTrace:
 
     def test_get_stage_latencies(self) -> None:
         """Test getting all stage latencies."""
-        trace = EventTrace(event_id="evt_001", event_type="click", created_at=time.time())
+        trace = EventTrace(
+            event_id="evt_001", event_type="click", created_at=time.time()
+        )
 
         trace.add_checkpoint("frontend_emit")
         time.sleep(0.01)
@@ -493,7 +507,9 @@ class TestPerformance:
 
         # Overhead should be small (allow 100x for safety)
         overhead_pct = (traced - baseline) / traced * 100 if traced > 0 else 0
-        print(f"Baseline: {baseline:.4f}s, Traced: {traced:.4f}s, Overhead: {overhead_pct:.1f}%")
+        print(
+            f"Baseline: {baseline:.4f}s, Traced: {traced:.4f}s, Overhead: {overhead_pct:.1f}%"
+        )
 
         # Should be reasonably fast
         assert traced < 1.0  # Less than 1 second for 1000 traces
@@ -527,4 +543,6 @@ class TestPerformance:
 
         # Should complete in reasonable time
         assert elapsed < 5.0
-        print(f"Concurrent tracing: {num_threads * traces_per_thread} traces in {elapsed:.2f}s")
+        print(
+            f"Concurrent tracing: {num_threads * traces_per_thread} traces in {elapsed:.2f}s"
+        )

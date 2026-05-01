@@ -154,8 +154,7 @@ def java_test_files(temp_dir: Path) -> list[Path]:
 
     # Create unit test
     unit_test = java_dir / "UnitTest.java"
-    unit_test.write_text(
-        """
+    unit_test.write_text("""
 package com.example;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -166,13 +165,11 @@ public class UnitTest {
         assertTrue(true);
     }
 }
-"""
-    )
+""")
 
     # Create integration test
     integration_test = java_dir / "IntegrationTest.java"
-    integration_test.write_text(
-        """
+    integration_test.write_text("""
 package com.example;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -184,7 +181,6 @@ public class IntegrationTest {
         assertTrue(true);
     }
 }
-"""
-    )
+""")
 
     return [unit_test, integration_test]

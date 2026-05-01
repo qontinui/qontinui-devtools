@@ -588,7 +588,9 @@ class MyClass:
         items = extractor.extract()
 
         method_items = [
-            item for item in items if item.type in (DocItemType.METHOD, DocItemType.PROPERTY)
+            item
+            for item in items
+            if item.type in (DocItemType.METHOD, DocItemType.PROPERTY)
         ]
 
         prop = next(item for item in method_items if item.name == "value")
@@ -625,8 +627,7 @@ class TestDocumentationGenerator:
     def test_generate_docs_from_file(self) -> None:
         """Test generating docs from a file."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(
-                '''"""Test module."""
+            f.write('''"""Test module."""
 
 def foo(x: int) -> int:
     """Foo function.
@@ -638,8 +639,7 @@ def foo(x: int) -> int:
         Result
     """
     return x * 2
-'''
-            )
+''')
             f.flush()
 
             gen = DocumentationGenerator()
@@ -657,23 +657,19 @@ def foo(x: int) -> int:
         """Test generating docs from a directory."""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create test files
-            (Path(tmpdir) / "module1.py").write_text(
-                '''"""Module 1."""
+            (Path(tmpdir) / "module1.py").write_text('''"""Module 1."""
 
 def func1() -> None:
     """Function 1."""
     pass
-'''
-            )
+''')
 
-            (Path(tmpdir) / "module2.py").write_text(
-                '''"""Module 2."""
+            (Path(tmpdir) / "module2.py").write_text('''"""Module 2."""
 
 class MyClass:
     """A class."""
     pass
-'''
-            )
+''')
 
             gen = DocumentationGenerator()
             tree = gen.generate_docs(tmpdir)
@@ -685,8 +681,7 @@ class MyClass:
     def test_exclude_private_members(self) -> None:
         """Test excluding private members."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(
-                '''"""Test module."""
+            f.write('''"""Test module."""
 
 def public_func() -> None:
     """Public function."""
@@ -695,8 +690,7 @@ def public_func() -> None:
 def _private_func() -> None:
     """Private function."""
     pass
-'''
-            )
+''')
             f.flush()
 
             gen = DocumentationGenerator()
@@ -712,8 +706,7 @@ def _private_func() -> None:
     def test_include_private_members(self) -> None:
         """Test including private members."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(
-                '''"""Test module."""
+            f.write('''"""Test module."""
 
 def public_func() -> None:
     """Public function."""
@@ -722,8 +715,7 @@ def public_func() -> None:
 def _private_func() -> None:
     """Private function."""
     pass
-'''
-            )
+''')
             f.flush()
 
             gen = DocumentationGenerator()
@@ -927,8 +919,7 @@ class TestEndToEnd:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create a test module
             source_file = Path(tmpdir) / "mylib.py"
-            source_file.write_text(
-                '''"""My Library.
+            source_file.write_text('''"""My Library.
 
 A library for doing cool things.
 """
@@ -982,8 +973,7 @@ def multiply(x: int, y: int) -> int:
         ValueError: If inputs are invalid
     """
     return x * y
-'''
-            )
+''')
 
             # Generate documentation
             gen = DocumentationGenerator()
@@ -1033,8 +1023,7 @@ def multiply(x: int, y: int) -> int:
     def test_numpy_style_docstrings(self) -> None:
         """Test with NumPy-style docstrings."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(
-                '''"""Module with NumPy docstrings."""
+            f.write('''"""Module with NumPy docstrings."""
 
 def calculate(x, y) -> Any:
     """
@@ -1058,8 +1047,7 @@ def calculate(x, y) -> Any:
         If inputs are invalid
     """
     return x + y
-'''
-            )
+''')
             f.flush()
 
             gen = DocumentationGenerator(DocstringStyle.NUMPY)

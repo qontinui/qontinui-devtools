@@ -35,7 +35,10 @@ def force_directed_layout(
 
     # Use networkx's spring layout (Fruchterman-Reingold)
     pos = nx.spring_layout(
-        G, k=2 / math.sqrt(len(nodes)), iterations=iterations, scale=min(width, height) / 2
+        G,
+        k=2 / math.sqrt(len(nodes)),
+        iterations=iterations,
+        scale=min(width, height) / 2,
     )
 
     # Scale to canvas size and center
@@ -114,7 +117,9 @@ def _assign_layers_cyclic(G: nx.DiGraph) -> list[list[str]]:
     while remaining:
         # Find nodes with minimum in-degree from remaining nodes
         current_layer = [
-            node for node in remaining if in_degree[node] == min(in_degree[n] for n in remaining)
+            node
+            for node in remaining
+            if in_degree[node] == min(in_degree[n] for n in remaining)
         ]
 
         if not current_layer:

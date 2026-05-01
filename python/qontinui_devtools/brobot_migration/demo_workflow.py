@@ -16,8 +16,7 @@ def create_sample_java_tests(source_dir: Path) -> None:
 
     # Simple unit test
     unit_test = source_dir / "CalculatorTest.java"
-    unit_test.write_text(
-        """
+    unit_test.write_text("""
 package com.example.calculator;
 
 import org.junit.jupiter.api.Test;
@@ -52,13 +51,11 @@ public class CalculatorTest {
         });
     }
 }
-"""
-    )
+""")
 
     # Integration test
     integration_test = source_dir / "DatabaseIntegrationTest.java"
-    integration_test.write_text(
-        """
+    integration_test.write_text("""
 package com.example.integration;
 
 import org.junit.jupiter.api.Test;
@@ -89,8 +86,7 @@ public class DatabaseIntegrationTest {
         Assertions.assertEquals(testData, result);
     }
 }
-"""
-    )
+""")
 
 
 def demonstrate_discovery_phase(orchestrator: Any, source_dir: Path) -> Any:
@@ -122,8 +118,7 @@ def demonstrate_validation_phase(orchestrator: Any, target_dir: Path) -> Any:
 
     # Create some sample migrated tests
     migrated_test1 = target_dir / "test_calculator.py"
-    migrated_test1.write_text(
-        """
+    migrated_test1.write_text("""
 import pytest
 
 class TestCalculator:
@@ -155,12 +150,10 @@ class MockCalculator:
         if b == 0:
             raise ZeroDivisionError("Division by zero")
         return a / b
-"""
-    )
+""")
 
     migrated_test2 = target_dir / "test_database_integration.py"
-    migrated_test2.write_text(
-        """
+    migrated_test2.write_text("""
 import pytest
 from unittest.mock import Mock
 
@@ -180,8 +173,7 @@ class TestDatabaseIntegration:
         self.database_service.get_data.return_value = test_data
         result = self.database_service.get_data("key")
         assert result == test_data
-"""
-    )
+""")
 
     print("Created migrated test files:")
     print(f"  - {migrated_test1.name}")
@@ -257,7 +249,9 @@ def demonstrate_cli_usage() -> None:
     print()
 
     print("3. Generate HTML report:")
-    print("   python cli.py report /path/to/qontinui/tests --format html --output report.html")
+    print(
+        "   python cli.py report /path/to/qontinui/tests --format html --output report.html"
+    )
     print()
 
     print("4. Create configuration file:")
@@ -265,7 +259,9 @@ def demonstrate_cli_usage() -> None:
     print()
 
     print("5. Dry run migration:")
-    print("   python cli.py migrate /path/to/brobot/tests /path/to/qontinui/tests --dry-run")
+    print(
+        "   python cli.py migrate /path/to/brobot/tests /path/to/qontinui/tests --dry-run"
+    )
 
 
 def main() -> Any:

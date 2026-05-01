@@ -364,7 +364,9 @@ public class SampleTest {
         assert target_path.parent == target_dir
         assert target_path.name == "Sample_test.py"
 
-    def test_error_handling_in_migration(self, orchestrator: Any, temp_directories: Any) -> None:
+    def test_error_handling_in_migration(
+        self, orchestrator: Any, temp_directories: Any
+    ) -> None:
         """Test error handling during migration process."""
         source_dir, target_dir = temp_directories
 

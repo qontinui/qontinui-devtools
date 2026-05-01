@@ -63,10 +63,12 @@ def count_methods(class_node: ast.ClassDef) -> dict[str, int]:
         if isinstance(node, ast.FunctionDef):
             # Check for decorators
             is_classmethod = any(
-                isinstance(d, ast.Name) and d.id == "classmethod" for d in node.decorator_list
+                isinstance(d, ast.Name) and d.id == "classmethod"
+                for d in node.decorator_list
             )
             is_staticmethod = any(
-                isinstance(d, ast.Name) and d.id == "staticmethod" for d in node.decorator_list
+                isinstance(d, ast.Name) and d.id == "staticmethod"
+                for d in node.decorator_list
             )
 
             if is_classmethod:
@@ -119,7 +121,10 @@ def count_attributes(class_node: ast.ClassDef) -> int:
 
         def visit_AnnAssign(self, node: ast.AnnAssign) -> Any:
             if isinstance(node.target, ast.Attribute):
-                if isinstance(node.target.value, ast.Name) and node.target.value.id == "self":
+                if (
+                    isinstance(node.target.value, ast.Name)
+                    and node.target.value.id == "self"
+                ):
                     self.attributes.add(node.target.attr)
             self.generic_visit(node)
 
@@ -216,7 +221,9 @@ def extract_method_names(class_node: ast.ClassDef) -> list[str]:
     return method_names
 
 
-def find_shared_attributes(method1: ast.FunctionDef, method2: ast.FunctionDef) -> set[str]:
+def find_shared_attributes(
+    method1: ast.FunctionDef, method2: ast.FunctionDef
+) -> set[str]:
     """Find attributes shared between two methods.
 
     Args:
@@ -247,7 +254,9 @@ def find_shared_attributes(method1: ast.FunctionDef, method2: ast.FunctionDef) -
     return attrs1 & attrs2
 
 
-def get_method_by_name(class_node: ast.ClassDef, method_name: str) -> ast.FunctionDef | None:
+def get_method_by_name(
+    class_node: ast.ClassDef, method_name: str
+) -> ast.FunctionDef | None:
     """Get method node by name.
 
     Args:

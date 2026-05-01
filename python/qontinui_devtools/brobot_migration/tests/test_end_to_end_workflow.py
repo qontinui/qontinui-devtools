@@ -45,8 +45,7 @@ class TestEndToEndMigrationWorkflow:
 
         # Simple unit test
         unit_test = source_dir / "SimpleUnitTest.java"
-        unit_test.write_text(
-            """
+        unit_test.write_text("""
 package com.example.test;
 
 import org.junit.jupiter.api.Test;
@@ -66,13 +65,11 @@ public class SimpleUnitTest {
         Assertions.assertEquals(2, result);
     }
 }
-"""
-        )
+""")
 
         # Integration test with mocks
         integration_test = source_dir / "IntegrationTest.java"
-        integration_test.write_text(
-            """
+        integration_test.write_text("""
 package com.example.integration;
 
 import org.junit.jupiter.api.Test;
@@ -95,13 +92,11 @@ public class IntegrationTest {
         Assertions.assertEquals("test", result);
     }
 }
-"""
-        )
+""")
 
         # Test with Brobot mocks
         brobot_test = source_dir / "BrobotMockTest.java"
-        brobot_test.write_text(
-            """
+        brobot_test.write_text("""
 package com.example.brobot;
 
 import org.junit.jupiter.api.Test;
@@ -120,10 +115,11 @@ public class BrobotMockTest {
         mock.click();
     }
 }
-"""
-        )
+""")
 
-    def test_complete_migration_workflow_with_orchestrator(self, temp_workspace: Any) -> None:
+    def test_complete_migration_workflow_with_orchestrator(
+        self, temp_workspace: Any
+    ) -> None:
         """Test complete migration workflow using the orchestrator directly."""
         workspace, source_dir, target_dir = temp_workspace
 
@@ -163,7 +159,11 @@ public class BrobotMockTest {
     @patch("qontinui.src.qontinui.test_migration.orchestrator.HybridTestTranslator")
     @patch("qontinui.src.qontinui.test_migration.orchestrator.PytestRunner")
     def test_migration_workflow_with_mocked_components(
-        self, mock_runner: Any, mock_translator: Any, mock_scanner: Any, temp_workspace: Any
+        self,
+        mock_runner: Any,
+        mock_translator: Any,
+        mock_scanner: Any,
+        temp_workspace: Any,
     ) -> None:
         """Test migration workflow with mocked components for controlled testing."""
         workspace, source_dir, target_dir = temp_workspace
@@ -339,14 +339,15 @@ def test_subtraction() -> None:
         # Validation should fail
         assert exit_code == 1
 
-    def test_reporting_dashboard_comprehensive_report(self, temp_workspace: Any) -> None:
+    def test_reporting_dashboard_comprehensive_report(
+        self, temp_workspace: Any
+    ) -> None:
         """Test reporting dashboard comprehensive report generation."""
         workspace, source_dir, target_dir = temp_workspace
 
         # Create some migrated test files
         migrated_test = target_dir / "test_simple.py"
-        migrated_test.write_text(
-            """
+        migrated_test.write_text("""
 import pytest
 
 def test_addition() -> None:
@@ -359,8 +360,7 @@ def sample_data() -> Any:
 
 def test_with_fixture(sample_data) -> None:
     assert sample_data["key"] == "value"
-"""
-        )
+""")
 
         dashboard = MigrationReportingDashboard()
 
@@ -494,8 +494,7 @@ def test_with_fixture(sample_data) -> None:
 
         # Create a simple migrated test that should pass
         migrated_test = target_dir / "test_integration.py"
-        migrated_test.write_text(
-            """
+        migrated_test.write_text("""
 def test_simple_assertion() -> None:
     assert 1 + 1 == 2
 
@@ -503,8 +502,7 @@ def test_string_operations() -> None:
     text = "hello world"
     assert "hello" in text
     assert text.upper() == "HELLO WORLD"
-"""
-        )
+""")
 
         # Try to run pytest on the migrated test
         try:
@@ -540,8 +538,7 @@ class TestWorkflowRecovery:
 
             # Create a problematic Java test
             problematic_test = source_dir / "ProblematicTest.java"
-            problematic_test.write_text(
-                """
+            problematic_test.write_text("""
 package com.example;
 
 import org.junit.jupiter.api.Test;
@@ -555,8 +552,7 @@ public class ProblematicTest {
         // This test has migration challenges
     }
 }
-"""
-            )
+""")
 
             yield workspace, source_dir, target_dir
 
@@ -590,7 +586,9 @@ public class ProblematicTest {
                 "stack_trace": "Mock stack trace",
             }
 
-            recovery_result = orchestrator.recover_from_failure("ProblematicTest", error_info)
+            recovery_result = orchestrator.recover_from_failure(
+                "ProblematicTest", error_info
+            )
 
             # Current implementation returns False, but the mechanism is tested
             assert isinstance(recovery_result, bool)
@@ -601,8 +599,7 @@ public class ProblematicTest {
 
         # Add a good test alongside the problematic one
         good_test = source_dir / "GoodTest.java"
-        good_test.write_text(
-            """
+        good_test.write_text("""
 package com.example;
 
 import org.junit.jupiter.api.Test;
@@ -615,8 +612,7 @@ public class GoodTest {
         Assertions.assertEquals(1, 1);
     }
 }
-"""
-        )
+""")
 
         config = MigrationConfig(
             source_directories=[source_dir],

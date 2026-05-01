@@ -122,10 +122,14 @@ def calculate_metrics(profiles: list[ActionProfile]) -> PerformanceMetrics:
 
     # Slowest/fastest actions
     sorted_by_duration = sorted(profiles, key=lambda p: p.duration, reverse=True)
-    slowest_actions = [(p.action_id, p.duration) for p in sorted_by_duration[:10]]  # Top 10
+    slowest_actions = [
+        (p.action_id, p.duration) for p in sorted_by_duration[:10]
+    ]  # Top 10
 
     sorted_by_duration_asc = sorted(profiles, key=lambda p: p.duration)
-    fastest_actions = [(p.action_id, p.duration) for p in sorted_by_duration_asc[:10]]  # Bottom 10
+    fastest_actions = [
+        (p.action_id, p.duration) for p in sorted_by_duration_asc[:10]
+    ]  # Bottom 10
 
     return PerformanceMetrics(
         total_actions=total_actions,
@@ -150,7 +154,9 @@ def calculate_metrics(profiles: list[ActionProfile]) -> PerformanceMetrics:
     )
 
 
-def calculate_phase_metrics(profiles: list[ActionProfile]) -> dict[str, dict[str, float]]:
+def calculate_phase_metrics(
+    profiles: list[ActionProfile],
+) -> dict[str, dict[str, float]]:
     """Calculate metrics for each phase across all actions.
 
     Args:

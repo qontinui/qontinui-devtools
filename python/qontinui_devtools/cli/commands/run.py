@@ -119,7 +119,9 @@ def run(
             try:
                 # Build streaming endpoint URL
                 if cloud_url:
-                    stream_url = f"{cloud_url.rstrip('/')}/api/v1/projects/{project_id}/results"
+                    stream_url = (
+                        f"{cloud_url.rstrip('/')}/api/v1/projects/{project_id}/results"
+                    )
                     streamer = ResultStreamer(stream_url, api_token=api_token)
                     click.echo(f"Cloud streaming enabled: {stream_url}")
                 else:
@@ -258,7 +260,9 @@ def _select_workflow(runner: JSONRunner, workflow_name: str | None) -> str | Non
     return None
 
 
-def _run_with_timeout(runner: JSONRunner, workflow_id: str, monitor: int, timeout: int) -> bool:
+def _run_with_timeout(
+    runner: JSONRunner, workflow_id: str, monitor: int, timeout: int
+) -> bool:
     """Run workflow with a timeout.
 
     Args:
@@ -277,7 +281,9 @@ def _run_with_timeout(runner: JSONRunner, workflow_id: str, monitor: int, timeou
 
     def run_workflow() -> None:
         try:
-            result["success"] = runner.run(process_id=workflow_id, monitor_index=monitor)
+            result["success"] = runner.run(
+                process_id=workflow_id, monitor_index=monitor
+            )
         except Exception as e:
             result["error"] = e
 

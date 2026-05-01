@@ -85,7 +85,9 @@ def main() -> None:
         )
     }
 
-    perf_issues = detector.detect_performance_regressions(baseline_metrics, current_metrics)
+    perf_issues = detector.detect_performance_regressions(
+        baseline_metrics, current_metrics
+    )
 
     if perf_issues:
         print(f"\nFound {len(perf_issues)} performance regressions:")

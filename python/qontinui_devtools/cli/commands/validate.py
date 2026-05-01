@@ -67,8 +67,12 @@ def validate(config: Path, verbose: bool) -> None:
                 click.echo(f"  - {state.name} (ID: {state.id})")
                 if state.is_initial:
                     click.echo("    [INITIAL STATE]")
-                click.echo(f"    Outgoing transitions: {len(state.outgoing_transitions)}")
-                click.echo(f"    Incoming transitions: {len(state.incoming_transitions)}")
+                click.echo(
+                    f"    Outgoing transitions: {len(state.outgoing_transitions)}"
+                )
+                click.echo(
+                    f"    Incoming transitions: {len(state.incoming_transitions)}"
+                )
 
         print_success("\nConfiguration is valid and ready to run")
         sys.exit(ExitCode.SUCCESS)

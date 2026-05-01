@@ -114,7 +114,9 @@ class DashboardServer:
 
         return ws
 
-    async def _handle_client_message(self, ws: web.WebSocketResponse, data: dict[str, Any]) -> None:
+    async def _handle_client_message(
+        self, ws: web.WebSocketResponse, data: dict[str, Any]
+    ) -> None:
         """Handle messages from clients.
 
         Args:

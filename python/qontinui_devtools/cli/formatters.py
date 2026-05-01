@@ -71,7 +71,9 @@ def _format_junit(test_results: list[dict], summary: dict) -> str:
     testsuites.set("tests", str(summary["total_tests"]))
     testsuites.set("failures", str(summary["failed"]))
     testsuites.set("time", f"{summary['total_duration']:.3f}")
-    testsuites.set("timestamp", datetime.fromtimestamp(summary["timestamp"]).isoformat())
+    testsuites.set(
+        "timestamp", datetime.fromtimestamp(summary["timestamp"]).isoformat()
+    )
 
     # Create testsuite element
     testsuite = ET.SubElement(testsuites, "testsuite")

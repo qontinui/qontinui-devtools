@@ -238,7 +238,9 @@ class PyPIClient:
 
                 if response.status == 200:
                     data = json.loads(response.read().decode("utf-8"))
-                    return cast(dict[str, Any], data) if isinstance(data, dict) else None
+                    return (
+                        cast(dict[str, Any], data) if isinstance(data, dict) else None
+                    )
 
         except HTTPError as e:
             if e.code == 404:
@@ -287,14 +289,18 @@ class PyPIClient:
             if isinstance(req, str):
                 # Parse "package (>=version)" format
                 dep_name = req.split()[0].split("[")[0].strip()
-                if dep_name and not any(extra in req.lower() for extra in ["extra", "dev", "test"]):
+                if dep_name and not any(
+                    extra in req.lower() for extra in ["extra", "dev", "test"]
+                ):
                     dependencies.append(dep_name)
 
         # Extract maintainers
         maintainers: list[Any] = []
         if info_data.get("author"):
             maintainers.append(info_data["author"])
-        if info_data.get("maintainer") and info_data["maintainer"] != info_data.get("author"):
+        if info_data.get("maintainer") and info_data["maintainer"] != info_data.get(
+            "author"
+        ):
             maintainers.append(info_data["maintainer"])
 
         return PackageInfo(

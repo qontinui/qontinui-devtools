@@ -164,7 +164,9 @@ def example_simulated_qontinui_issue() -> None:
     print()
 
     # Simulate with our test modules
-    print("Simulating with test modules (circular_c → circular_d → circular_e → circular_c):")
+    print(
+        "Simulating with test modules (circular_c → circular_d → circular_e → circular_c):"
+    )
     print()
 
     # Remove modules if cached
@@ -182,7 +184,9 @@ def example_simulated_qontinui_issue() -> None:
     circular = tracer.find_circular_dependencies()
 
     if circular:
-        print(f"✓ ImportTracer successfully detected {len(circular)} circular dependency!")
+        print(
+            f"✓ ImportTracer successfully detected {len(circular)} circular dependency!"
+        )
         print()
         for cycle in circular:
             if any("circular" in node for node in cycle):

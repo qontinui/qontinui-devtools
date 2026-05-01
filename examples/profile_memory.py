@@ -94,10 +94,14 @@ def main() -> None:
         snapshot = profiler.take_snapshot()
         mem_change = snapshot.total_mb - baseline.total_mb
 
-        print(f"Iteration {iteration + 1}: {snapshot.total_mb:.1f} MB ({mem_change:+.1f} MB)")
+        print(
+            f"Iteration {iteration + 1}: {snapshot.total_mb:.1f} MB ({mem_change:+.1f} MB)"
+        )
 
         # Create leak
-        leaky_cache.extend([{"iteration": iteration, "data": "x" * 1000} for _ in range(300)])
+        leaky_cache.extend(
+            [{"iteration": iteration, "data": "x" * 1000} for _ in range(300)]
+        )
         time.sleep(0.3)
 
     profiler.stop()

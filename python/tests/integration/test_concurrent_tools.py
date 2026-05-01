@@ -156,7 +156,9 @@ class PerformanceDashboard:
 class TestConcurrentToolAccess:
     """Test concurrent access to monitoring tools."""
 
-    def test_profiler_thread_safety(self, sample_action_instance: Any, profiler_config: Any) -> Any:
+    def test_profiler_thread_safety(
+        self, sample_action_instance: Any, profiler_config: Any
+    ) -> Any:
         """Test that profiler is thread-safe."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
@@ -175,7 +177,9 @@ class TestConcurrentToolAccess:
         iterations_per_thread = 20
 
         for i in range(num_threads):
-            t = threading.Thread(target=execute_in_thread, args=(i, iterations_per_thread))
+            t = threading.Thread(
+                target=execute_in_thread, args=(i, iterations_per_thread)
+            )
             threads.append(t)
             t.start()
 
@@ -269,7 +273,12 @@ class TestConcurrentToolAccess:
         def update_metrics(thread_id: int, count: int) -> None:
             for i in range(count):
                 dashboard.update_metrics(
-                    {f"thread_{thread_id}_metric_{i}": {"value": i, "timestamp": time.time()}}
+                    {
+                        f"thread_{thread_id}_metric_{i}": {
+                            "value": i,
+                            "timestamp": time.time(),
+                        }
+                    }
                 )
                 time.sleep(0.001)
 
@@ -364,7 +373,10 @@ class TestConcurrentToolLifecycle:
             tool.stop()
 
     def test_concurrent_tool_shutdown(
-        self, profiler_config: Any, event_tracer_config: Any, memory_profiler_config: Any
+        self,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        memory_profiler_config: Any,
     ) -> None:
         """Test shutting down all tools concurrently."""
         # Initialize tools
@@ -454,7 +466,10 @@ class TestConcurrentDataCollection:
     """Test data collection during concurrent operations."""
 
     def test_concurrent_profiling_and_tracing(
-        self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any
+        self,
+        sample_action_instance: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
     ) -> None:
         """Test profiling and tracing during concurrent execution."""
         profiler = ActionProfiler(profiler_config)
@@ -528,7 +543,9 @@ class TestConcurrentDataCollection:
             @profiler.profile
             def collect() -> None:
                 for i in range(20):
-                    tracer.trace_event("collection", {"collector_id": collector_id, "index": i})
+                    tracer.trace_event(
+                        "collection", {"collector_id": collector_id, "index": i}
+                    )
 
                     # Update dashboard periodically
                     if i % 5 == 0:
@@ -583,7 +600,8 @@ class TestRaceConditions:
         def trace_sequence(thread_id: int, count: int) -> None:
             for i in range(count):
                 tracer.trace_event(
-                    "sequence", {"thread_id": thread_id, "sequence": i, "timestamp": time.time()}
+                    "sequence",
+                    {"thread_id": thread_id, "sequence": i, "timestamp": time.time()},
                 )
 
         # Trace events from multiple threads

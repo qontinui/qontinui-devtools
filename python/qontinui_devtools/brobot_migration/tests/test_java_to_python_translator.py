@@ -11,7 +11,9 @@ from qontinui.test_migration.core.models import (
     TestMethod,
     TestType,
 )
-from qontinui.test_migration.translation.java_to_python_translator import JavaToPythonTranslator
+from qontinui.test_migration.translation.java_to_python_translator import (
+    JavaToPythonTranslator,
+)
 
 
 class TestJavaToPythonTranslator:
@@ -103,7 +105,9 @@ class TestJavaToPythonTranslator:
         assert result == "assert not(condition)"
 
         # assertEquals
-        result = self.translator._basic_assertion_translation("assertEquals(expected, actual)")
+        result = self.translator._basic_assertion_translation(
+            "assertEquals(expected, actual)"
+        )
         assert result == "assert(expected, actual)"
 
     def test_java_line_translation(self) -> None:
@@ -264,7 +268,10 @@ class TestJavaToPythonTranslator:
         """
 
         signature = self.translator._extract_method_signature(java_method)
-        assert signature is not None and "public void testSomething(String param)" in signature
+        assert (
+            signature is not None
+            and "public void testSomething(String param)" in signature
+        )
 
     def test_extract_method_body(self) -> None:
         """Test method body extraction from Java code."""

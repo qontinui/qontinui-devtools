@@ -134,9 +134,7 @@ class DeadCodeDetector:
                 # fn foo(...) -> ...
                 # pub fn foo(...) -> ...
                 # async fn foo(...) -> ...
-                func_pattern = (
-                    r"(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?(?:unsafe\s+)?fn\s+(\w+)\s*[<(]"
-                )
+                func_pattern = r"(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?(?:unsafe\s+)?fn\s+(\w+)\s*[<(]"
                 func_match = re.search(func_pattern, line)
                 if func_match:
                     name = func_match.group(1)
@@ -153,7 +151,9 @@ class DeadCodeDetector:
                 struct_match = re.search(struct_pattern, line)
                 if struct_match:
                     name = struct_match.group(1)
-                    self._definitions["struct"].append((name, line_num, str(file_path), visibility))
+                    self._definitions["struct"].append(
+                        (name, line_num, str(file_path), visibility)
+                    )
 
                 # Match enum definitions
                 # enum Foo { ... }
@@ -162,7 +162,9 @@ class DeadCodeDetector:
                 enum_match = re.search(enum_pattern, line)
                 if enum_match:
                     name = enum_match.group(1)
-                    self._definitions["enum"].append((name, line_num, str(file_path), visibility))
+                    self._definitions["enum"].append(
+                        (name, line_num, str(file_path), visibility)
+                    )
 
                 # Match trait definitions
                 # trait Foo { ... }
@@ -171,16 +173,22 @@ class DeadCodeDetector:
                 trait_match = re.search(trait_pattern, line)
                 if trait_match:
                     name = trait_match.group(1)
-                    self._definitions["trait"].append((name, line_num, str(file_path), visibility))
+                    self._definitions["trait"].append(
+                        (name, line_num, str(file_path), visibility)
+                    )
 
                 # Match const definitions
                 # const FOO: ...
                 # pub const FOO: ...
-                const_pattern = r"(?:pub(?:\([^)]*\))?\s+)?const\s+([A-Z_][A-Z0-9_]*)\s*:"
+                const_pattern = (
+                    r"(?:pub(?:\([^)]*\))?\s+)?const\s+([A-Z_][A-Z0-9_]*)\s*:"
+                )
                 const_match = re.search(const_pattern, line)
                 if const_match:
                     name = const_match.group(1)
-                    self._definitions["const"].append((name, line_num, str(file_path), visibility))
+                    self._definitions["const"].append(
+                        (name, line_num, str(file_path), visibility)
+                    )
 
         except (UnicodeDecodeError, PermissionError):
             pass
@@ -360,7 +368,9 @@ class DeadCodeDetector:
 
             for dc in items:
                 rel_path = Path(dc.file_path).relative_to(self.root_path)
-                lines.append(f"\n  {dc.name} ({dc.visibility}) - Confidence: {dc.confidence:.0%}")
+                lines.append(
+                    f"\n  {dc.name} ({dc.visibility}) - Confidence: {dc.confidence:.0%}"
+                )
                 lines.append(f"    {rel_path}:{dc.line_number}")
                 lines.append(f"    {dc.reason}")
 

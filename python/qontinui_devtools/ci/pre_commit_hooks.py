@@ -109,7 +109,9 @@ def check_circular_imports(filenames: Sequence[str]) -> None:
             sys.exit(0)
 
     except ImportError:
-        console.print("[yellow]Warning: qontinui-devtools not installed, skipping check[/yellow]")
+        console.print(
+            "[yellow]Warning: qontinui-devtools not installed, skipping check[/yellow]"
+        )
         sys.exit(0)
     except Exception as e:
         console.print(f"[red]Error checking circular imports: {e}[/red]")
@@ -130,13 +132,22 @@ def check_circular_imports(filenames: Sequence[str]) -> None:
     default=30,
     help="Minimum methods to consider a god class (default: 30)",
 )
-def check_new_god_classes(filenames: Sequence[str], min_lines: int, min_methods: int) -> None:
+@click.option(
+    "--max-lcom",
+    type=float,
+    default=0.8,
+    help="Maximum LCOM to consider a god class (default: 0.8)",
+)
+def check_new_god_classes(
+    filenames: Sequence[str], min_lines: int, min_methods: int, max_lcom: float
+) -> None:
     """Check if any staged files contain god classes.
 
     Args:
         filenames: Optional list of filenames to check
         min_lines: Minimum lines to flag as god class
         min_methods: Minimum methods to flag as god class
+        max_lcom: Maximum LCOM threshold to flag as god class
     """
     console.print("[cyan]Checking for god classes...[/cyan]")
 
@@ -154,7 +165,9 @@ def check_new_god_classes(filenames: Sequence[str], min_lines: int, min_methods:
     try:
         from qontinui_devtools.architecture.god_class_detector import GodClassDetector
 
-        detector = GodClassDetector(min_lines=min_lines, min_methods=min_methods)
+        detector = GodClassDetector(
+            min_lines=min_lines, min_methods=min_methods, max_lcom=max_lcom
+        )
 
         found_god_classes: list[Any] = []
 
@@ -184,7 +197,9 @@ def check_new_god_classes(filenames: Sequence[str], min_lines: int, min_methods:
             sys.exit(0)
 
     except ImportError:
-        console.print("[yellow]Warning: qontinui-devtools not installed, skipping check[/yellow]")
+        console.print(
+            "[yellow]Warning: qontinui-devtools not installed, skipping check[/yellow]"
+        )
         sys.exit(0)
     except Exception as e:
         console.print(f"[red]Error checking god classes: {e}[/red]")
@@ -256,18 +271,24 @@ def check_race_conditions(filenames: Sequence[str], severity: str) -> None:
                 console.print(f"  • [{race.severity.upper()}] in {file}")
                 console.print(f"    {race.description}")
                 state = race.shared_state
-                console.print(f"    Location: line {state.line_number} ('{state.name}')")
+                console.print(
+                    f"    Location: line {state.line_number} ('{state.name}')"
+                )
 
             console.print(
                 "\n[yellow]Add proper synchronization to prevent race conditions[/yellow]"
             )
             sys.exit(1)
         else:
-            console.print(f"[green]✅ No race conditions found (severity >= {severity})[/green]")
+            console.print(
+                f"[green]✅ No race conditions found (severity >= {severity})[/green]"
+            )
             sys.exit(0)
 
     except ImportError:
-        console.print("[yellow]Warning: qontinui-devtools not installed, skipping check[/yellow]")
+        console.print(
+            "[yellow]Warning: qontinui-devtools not installed, skipping check[/yellow]"
+        )
         sys.exit(0)
     except Exception as e:
         console.print(f"[red]Error checking race conditions: {e}[/red]")
@@ -327,7 +348,9 @@ def check_complexity(filenames: Sequence[str], max_complexity: int) -> None:
                 f"with complexity > {max_complexity}:[/red]"
             )
             for file, result in high_complexity_functions:
-                console.print(f"  • {result.name} in {file} (complexity: {result.complexity})")
+                console.print(
+                    f"  • {result.name} in {file} (complexity: {result.complexity})"
+                )
 
             console.print(
                 "\n[yellow]Consider refactoring complex functions into "
@@ -335,11 +358,15 @@ def check_complexity(filenames: Sequence[str], max_complexity: int) -> None:
             )
             sys.exit(1)
         else:
-            console.print(f"[green]✅ All functions have complexity <= {max_complexity}[/green]")
+            console.print(
+                f"[green]✅ All functions have complexity <= {max_complexity}[/green]"
+            )
             sys.exit(0)
 
     except ImportError:
-        console.print("[yellow]Warning: radon not installed, skipping complexity check[/yellow]")
+        console.print(
+            "[yellow]Warning: radon not installed, skipping complexity check[/yellow]"
+        )
         sys.exit(0)
     except Exception as e:
         console.print(f"[red]Error checking complexity: {e}[/red]")

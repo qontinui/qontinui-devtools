@@ -113,7 +113,9 @@ def cluster_methods_by_keywords(
     return clusters
 
 
-def _cluster_by_similarity(methods: list[str], min_cluster_size: int) -> list[MethodCluster]:
+def _cluster_by_similarity(
+    methods: list[str], min_cluster_size: int
+) -> list[MethodCluster]:
     """Cluster methods using similarity-based approach.
 
     Uses a simple greedy algorithm to group similar methods together.
@@ -141,7 +143,9 @@ def _cluster_by_similarity(methods: list[str], min_cluster_size: int) -> list[Me
         to_remove = set()
         for method in unclustered:
             # Check similarity with all methods in current cluster
-            similarities = [calculate_similarity_score(method, m) for m in cluster_methods]
+            similarities = [
+                calculate_similarity_score(method, m) for m in cluster_methods
+            ]
             avg_similarity = sum(similarities) / len(similarities)
 
             if avg_similarity > 0.3:  # Threshold for similarity
@@ -238,7 +242,9 @@ def merge_similar_clusters(
             if j in used:
                 continue
 
-            similarity = calculate_cluster_similarity(cluster1.methods, cluster2.methods)
+            similarity = calculate_cluster_similarity(
+                cluster1.methods, cluster2.methods
+            )
 
             if similarity >= threshold:
                 combined_methods.extend(cluster2.methods)

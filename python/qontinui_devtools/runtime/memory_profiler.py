@@ -243,10 +243,15 @@ class MemoryProfiler:
 
         # Analyze each object type
         for obj_type in all_types:
-            samples = [(s.timestamp, s.objects_by_type.get(obj_type, 0)) for s in self._snapshots]
+            samples = [
+                (s.timestamp, s.objects_by_type.get(obj_type, 0))
+                for s in self._snapshots
+            ]
 
             # Check for steady growth
-            is_growing, growth_rate, confidence = self._analyze_growth(samples, growth_threshold)
+            is_growing, growth_rate, confidence = self._analyze_growth(
+                samples, growth_threshold
+            )
 
             if is_growing:
                 # Calculate metrics
@@ -256,7 +261,9 @@ class MemoryProfiler:
 
                 if count_increase >= min_increase:
                     # Estimate size increase (rough)
-                    size_increase_mb = self._estimate_size_increase(obj_type, count_increase)
+                    size_increase_mb = self._estimate_size_increase(
+                        obj_type, count_increase
+                    )
 
                     leak = MemoryLeak(
                         object_type=obj_type,
@@ -312,7 +319,9 @@ class MemoryProfiler:
         # Calculate R-squared (confidence)
         mean_y = sum_y / n
         ss_tot = sum((c - mean_y) ** 2 for c in counts)
-        ss_res = sum((counts[i] - (slope * times[i] + intercept)) ** 2 for i in range(n))
+        ss_res = sum(
+            (counts[i] - (slope * times[i] + intercept)) ** 2 for i in range(n)
+        )
 
         r_squared = 1.0 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
@@ -363,7 +372,9 @@ class MemoryProfiler:
 
         # Compare object counts
         type_diffs: dict[str, int] = {}
-        all_types = set(snapshot1.objects_by_type.keys()) | set(snapshot2.objects_by_type.keys())
+        all_types = set(snapshot1.objects_by_type.keys()) | set(
+            snapshot2.objects_by_type.keys()
+        )
 
         for obj_type in all_types:
             count1 = snapshot1.objects_by_type.get(obj_type, 0)
@@ -382,7 +393,8 @@ class MemoryProfiler:
             "total_objects_diff": sum(type_diffs.values()),
             "type_diffs": dict(sorted_diffs[:20]),  # Top 20
             "gc_collections_diff": [
-                snapshot2.gc_stats["collections"][i] - snapshot1.gc_stats["collections"][i]
+                snapshot2.gc_stats["collections"][i]
+                - snapshot1.gc_stats["collections"][i]
                 for i in range(3)
             ],
         }
@@ -416,7 +428,9 @@ class MemoryProfiler:
             f"Memory: {first.total_mb:.1f} MB → {last.total_mb:.1f} MB "
             f"({last.total_mb - first.total_mb:+.1f} MB)"
         )
-        lines.append(f"Rate: {(last.total_mb - first.total_mb) / duration:.2f} MB/second")
+        lines.append(
+            f"Rate: {(last.total_mb - first.total_mb) / duration:.2f} MB/second"
+        )
         lines.append("")
 
         # Detect leaks
@@ -445,7 +459,9 @@ class MemoryProfiler:
         # GC statistics
         lines.append("GARBAGE COLLECTION")
         lines.append("-" * 80)
-        lines.append(f"Collections (gen0, gen1, gen2): {tuple(last.gc_stats['collections'])}")
+        lines.append(
+            f"Collections (gen0, gen1, gen2): {tuple(last.gc_stats['collections'])}"
+        )
         lines.append(f"Total objects: {last.gc_stats['objects']:,}")
         lines.append(f"Garbage objects: {last.gc_stats['garbage']}")
         lines.append("")

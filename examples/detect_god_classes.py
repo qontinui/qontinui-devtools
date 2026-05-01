@@ -47,7 +47,9 @@ def main() -> None:
     console.print(f"\n[red]❌ Found {len(god_classes)} god classes:[/red]\n")
 
     # Create summary table
-    table = Table(title="God Classes Summary", show_header=True, header_style="bold magenta")
+    table = Table(
+        title="God Classes Summary", show_header=True, header_style="bold magenta"
+    )
     table.add_column("Class", style="cyan", no_wrap=True)
     table.add_column("Lines", justify="right", style="yellow")
     table.add_column("Methods", justify="right", style="yellow")
@@ -62,7 +64,11 @@ def main() -> None:
         }[cls.severity]
 
         table.add_row(
-            cls.name, str(cls.line_count), str(cls.method_count), f"{cls.lcom:.2f}", severity_color
+            cls.name,
+            str(cls.line_count),
+            str(cls.method_count),
+            f"{cls.lcom:.2f}",
+            severity_color,
         )
 
     console.print(table)
@@ -98,7 +104,9 @@ def main() -> None:
                 console.print(f"     Responsibility: {sug.responsibility}")
                 console.print(f"     Methods: {len(sug.methods_to_extract)}")
                 console.print(f"     Estimated Lines: {sug.estimated_lines}")
-                console.print(f"     Example methods: {', '.join(sug.methods_to_extract[:5])}")
+                console.print(
+                    f"     Example methods: {', '.join(sug.methods_to_extract[:5])}"
+                )
 
         console.print("\n" + "─" * 80)
 

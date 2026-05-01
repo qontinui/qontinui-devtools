@@ -135,7 +135,11 @@ def create_custom_report() -> None:
         chart_data=create_line_chart(
             labels=["Week 1", "Week 2", "Week 3", "Week 4"],
             datasets=[
-                {"label": "Code Quality Score", "data": [72, 75, 78, 82], "color": "green"},
+                {
+                    "label": "Code Quality Score",
+                    "data": [72, 75, 78, 82],
+                    "color": "green",
+                },
                 {"label": "Test Coverage", "data": [65, 68, 72, 75], "color": "blue"},
             ],
             title="Quality Trends",

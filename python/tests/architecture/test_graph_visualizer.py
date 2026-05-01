@@ -5,7 +5,11 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.architecture import DependencyGraphVisualizer, GraphEdge, GraphNode
+from qontinui_devtools.architecture import (
+    DependencyGraphVisualizer,
+    GraphEdge,
+    GraphNode,
+)
 
 
 @pytest.fixture
@@ -114,7 +118,9 @@ class TestGraphEdge:
 
     def test_create_edge(self) -> None:
         """Test creating a graph edge."""
-        edge = GraphEdge(source="module_a", target="module_b", edge_type="imports", weight=2)
+        edge = GraphEdge(
+            source="module_a", target="module_b", edge_type="imports", weight=2
+        )
 
         assert edge.source == "module_a"
         assert edge.target == "module_b"
@@ -278,7 +284,9 @@ class TestDependencyGraphVisualizer:
             output_path = f.name
 
         try:
-            visualizer.visualize(nodes, edges, output_path, format="html", highlight_cycles=True)
+            visualizer.visualize(
+                nodes, edges, output_path, format="html", highlight_cycles=True
+            )
 
             assert Path(output_path).exists()
         finally:
@@ -325,7 +333,9 @@ class TestDependencyGraphVisualizer:
         # Test force-directed layout
         positions = visualizer.apply_layout(nodes, edges, "force")
         assert len(positions) == 3
-        assert all(isinstance(pos, tuple) and len(pos) == 2 for pos in positions.values())
+        assert all(
+            isinstance(pos, tuple) and len(pos) == 2 for pos in positions.values()
+        )
 
         # Test hierarchical layout
         positions = visualizer.apply_layout(nodes, edges, "hierarchical")
@@ -451,7 +461,9 @@ class TestLayouts:
             GraphEdge("b", "c", "imports"),
         ]
 
-        positions = force_directed_layout(nodes, edges, width=1000, height=1000, iterations=50)
+        positions = force_directed_layout(
+            nodes, edges, width=1000, height=1000, iterations=50
+        )
 
         assert len(positions) == 3
         for _node_id, (x, y) in positions.items():
@@ -527,7 +539,9 @@ class TestLayouts:
 class TestIntegration:
     """Integration tests with real code."""
 
-    def test_visualize_qontinui_devtools(self, visualizer: DependencyGraphVisualizer) -> None:
+    def test_visualize_qontinui_devtools(
+        self, visualizer: DependencyGraphVisualizer
+    ) -> None:
         """Test visualizing the qontinui-devtools codebase itself."""
         # Get the path to the qontinui_devtools package
         import qontinui_devtools

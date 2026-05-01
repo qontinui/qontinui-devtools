@@ -94,7 +94,9 @@ class MockPatternMatcher(IPatternMatcher):
 
     def _record_attempt(self, attempt_type: str, **kwargs: Any) -> None:
         """Record a match attempt."""
-        self.match_attempts.append({"type": attempt_type, "timestamp": time.time(), **kwargs})
+        self.match_attempts.append(
+            {"type": attempt_type, "timestamp": time.time(), **kwargs}
+        )
 
     def _get_config(self, template: Image.Image) -> MatchConfig | None:
         """Get configuration for template.
@@ -223,7 +225,9 @@ class MockPatternMatcher(IPatternMatcher):
             return [match]
 
         # Default behavior - return 0-3 matches
-        num_matches = random.randint(0, 3) if random.random() < self.default_success_rate else 0
+        num_matches = (
+            random.randint(0, 3) if random.random() < self.default_success_rate else 0
+        )
         if limit is not None:
             num_matches = min(num_matches, limit)
 
@@ -303,8 +307,12 @@ class MockPatternMatcher(IPatternMatcher):
         num_matches = min(len(features1), len(features2)) // 2
         matches: list[Any] = []
 
-        indices1 = random.sample(range(len(features1)), min(num_matches, len(features1)))
-        indices2 = random.sample(range(len(features2)), min(num_matches, len(features2)))
+        indices1 = random.sample(
+            range(len(features1)), min(num_matches, len(features1))
+        )
+        indices2 = random.sample(
+            range(len(features2)), min(num_matches, len(features2))
+        )
 
         for i1, i2 in zip(indices1, indices2, strict=False):
             matches.append((features1[i1], features2[i2]))
@@ -357,7 +365,10 @@ class MockPatternMatcher(IPatternMatcher):
         """
         self._simulate_latency()
         self._record_attempt(
-            "compare_histograms", image1_size=image1.size, image2_size=image2.size, method=method
+            "compare_histograms",
+            image1_size=image1.size,
+            image2_size=image2.size,
+            method=method,
         )
 
         # Return random similarity score
@@ -487,7 +498,9 @@ class MockPatternMatcher(IPatternMatcher):
             height=h,
         )
 
-    def get_match_attempts(self, attempt_type: str | None = None) -> list[dict[str, Any]]:
+    def get_match_attempts(
+        self, attempt_type: str | None = None
+    ) -> list[dict[str, Any]]:
         """Get list of match attempts.
 
         Args:

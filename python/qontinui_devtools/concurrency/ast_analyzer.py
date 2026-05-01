@@ -78,7 +78,9 @@ class SharedStateVisitor(ast.NodeVisitor):
         if self._is_dataclass(node):
             self.generic_visit(node)
             self._class_stack.pop()
-            self.context.current_class = self._class_stack[-1] if self._class_stack else None
+            self.context.current_class = (
+                self._class_stack[-1] if self._class_stack else None
+            )
             return
 
         # Find class variables (assignments at class level)
@@ -120,7 +122,9 @@ class SharedStateVisitor(ast.NodeVisitor):
 
         self.generic_visit(node)
         self._class_stack.pop()
-        self.context.current_class = self._class_stack[-1] if self._class_stack else None
+        self.context.current_class = (
+            self._class_stack[-1] if self._class_stack else None
+        )
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         """Visit function definition."""
@@ -128,7 +132,9 @@ class SharedStateVisitor(ast.NodeVisitor):
         self.context.current_function = node.name
         self.generic_visit(node)
         self._function_stack.pop()
-        self.context.current_function = self._function_stack[-1] if self._function_stack else None
+        self.context.current_function = (
+            self._function_stack[-1] if self._function_stack else None
+        )
 
     def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
         """Visit async function definition."""
@@ -136,7 +142,9 @@ class SharedStateVisitor(ast.NodeVisitor):
         self.context.current_function = node.name
         self.generic_visit(node)
         self._function_stack.pop()
-        self.context.current_function = self._function_stack[-1] if self._function_stack else None
+        self.context.current_function = (
+            self._function_stack[-1] if self._function_stack else None
+        )
 
     def visit_Assign(self, node: ast.Assign) -> None:
         """Find module-level assignments and track state access."""
@@ -178,7 +186,9 @@ class SharedStateVisitor(ast.NodeVisitor):
         """Track augmented assignments (+=, -=, etc.)."""
         if self._function_stack:
             self._assignment_targets.add(id(node.target))
-            self._record_state_access(node.target, "read_write", node.lineno, node.col_offset)
+            self._record_state_access(
+                node.target, "read_write", node.lineno, node.col_offset
+            )
         self.generic_visit(node)
         if self._function_stack:
             self._assignment_targets.discard(id(node.target))
@@ -196,7 +206,9 @@ class SharedStateVisitor(ast.NodeVisitor):
         if self._function_stack:
             # Determine if it's a read or write based on whether it's an assignment target
             access_type = "write" if id(node) in self._assignment_targets else "read"
-            self._record_state_access(node.value, access_type, node.lineno, node.col_offset)
+            self._record_state_access(
+                node.value, access_type, node.lineno, node.col_offset
+            )
         self.generic_visit(node)
 
     def visit_Name(self, node: ast.Name) -> None:
@@ -207,7 +219,9 @@ class SharedStateVisitor(ast.NodeVisitor):
                 self._record_state_access(node, "read", node.lineno, node.col_offset)
         self.generic_visit(node)
 
-    def _record_state_access(self, node: ast.AST, access_type: str, line: int, col: int) -> None:
+    def _record_state_access(
+        self, node: ast.AST, access_type: str, line: int, col: int
+    ) -> None:
         """Record an access to potentially shared state."""
         name = self._extract_name(node)
         if name and not name.startswith("__"):
@@ -352,7 +366,9 @@ class LockUsageVisitor(ast.NodeVisitor):
         if self._in_with_lock != old_in_with:
             if self._lock_stack:
                 self._lock_stack.pop()
-            self.context.current_lock = self._lock_stack[-1] if self._lock_stack else None
+            self.context.current_lock = (
+                self._lock_stack[-1] if self._lock_stack else None
+            )
             self.context.lock_depth = old_depth
             self.context.in_lock_context = len(self._lock_stack) > 0
 

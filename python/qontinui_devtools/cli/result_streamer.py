@@ -34,7 +34,9 @@ class ResultStreamer:
             raise ValueError("Streaming URL cannot be empty")
 
         if not (self.url.startswith("http://") or self.url.startswith("https://")):
-            raise ValueError(f"Invalid URL scheme. Must be http:// or https://: {self.url}")
+            raise ValueError(
+                f"Invalid URL scheme. Must be http:// or https://: {self.url}"
+            )
 
     def stream_result(self, result: dict[str, Any]) -> bool:
         """Stream a single test result to the server.
@@ -80,7 +82,9 @@ class ResultStreamer:
             return True
 
         except ImportError:
-            logger.error("requests library not available. Install with: pip install requests")
+            logger.error(
+                "requests library not available. Install with: pip install requests"
+            )
             return False
         except Exception as e:
             logger.warning(f"Failed to stream result to {self.url}: {e}")
@@ -120,7 +124,9 @@ class ResultStreamer:
             return True
 
         except ImportError:
-            logger.error("requests library not available. Install with: pip install requests")
+            logger.error(
+                "requests library not available. Install with: pip install requests"
+            )
             return False
         except Exception as e:
             logger.warning(f"Failed to stream summary to {self.url}: {e}")

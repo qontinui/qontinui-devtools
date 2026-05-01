@@ -130,7 +130,9 @@ class RaceConditionDetector:
 
         # Filter to only race conditions from this specific file
         file_race_conditions = [
-            rc for rc in all_race_conditions if rc.shared_state.file_path == str(file_path)
+            rc
+            for rc in all_race_conditions
+            if rc.shared_state.file_path == str(file_path)
         ]
 
         # Update instance variable with all detected race conditions
@@ -237,7 +239,9 @@ class RaceConditionDetector:
 
             # Check if there are unprotected writes
             unprotected_writes = [
-                a for a in accesses if "write" in a.access_type and not a.in_lock_context
+                a
+                for a in accesses
+                if "write" in a.access_type and not a.in_lock_context
             ]
 
             if not unprotected_writes:
@@ -279,7 +283,9 @@ class RaceConditionDetector:
             )
 
             # Build access locations
-            access_locations = [(state.file_path, a.line_number, a.access_type) for a in accesses]
+            access_locations = [
+                (state.file_path, a.line_number, a.access_type) for a in accesses
+            ]
 
             race = RaceCondition(
                 shared_state=state,
@@ -351,9 +357,13 @@ class RaceConditionDetector:
 
         # Lock context
         if protected_accesses > 0:
-            parts.append(f"Some accesses ({protected_accesses}) are protected but not all")
+            parts.append(
+                f"Some accesses ({protected_accesses}) are protected but not all"
+            )
         elif context.locks:
-            parts.append(f"Locks available but not used: {[lock.name for lock in context.locks]}")
+            parts.append(
+                f"Locks available but not used: {[lock.name for lock in context.locks]}"
+            )
         else:
             parts.append("No locking mechanism found")
 
@@ -425,7 +435,9 @@ class RaceConditionDetector:
                 "low": "[LOW]",
             }
 
-            lines.append(f"{i}. {severity_badge[race.severity]} {race.shared_state.name}")
+            lines.append(
+                f"{i}. {severity_badge[race.severity]} {race.shared_state.name}"
+            )
             lines.append(f"   Type: {race.shared_state.inferred_type}")
             lines.append(
                 f"   Location: {race.shared_state.file_path}:{race.shared_state.line_number}"
@@ -478,11 +490,17 @@ class RaceConditionDetector:
             "files_analyzed": len(self.contexts),
             "shared_states_found": len(self.shared_states),
             "race_conditions_found": len(self.race_conditions),
-            "critical_issues": sum(1 for r in self.race_conditions if r.severity == "critical"),
+            "critical_issues": sum(
+                1 for r in self.race_conditions if r.severity == "critical"
+            ),
             "high_issues": sum(1 for r in self.race_conditions if r.severity == "high"),
-            "medium_issues": sum(1 for r in self.race_conditions if r.severity == "medium"),
+            "medium_issues": sum(
+                1 for r in self.race_conditions if r.severity == "medium"
+            ),
             "low_issues": sum(1 for r in self.race_conditions if r.severity == "low"),
             "locks_found": sum(len(c.locks) for c in self.contexts.values()),
             "protected_states": sum(1 for s in self.shared_states if s.is_protected),
-            "unprotected_states": sum(1 for s in self.shared_states if not s.is_protected),
+            "unprotected_states": sum(
+                1 for s in self.shared_states if not s.is_protected
+            ),
         }

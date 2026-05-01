@@ -116,7 +116,9 @@ class TestActionProfiler:
 
     def test_profiler_initialization(self) -> None:
         """Test profiler initialization."""
-        profiler = ActionProfiler(sample_interval=0.001, enable_memory=True, enable_cpu=True)
+        profiler = ActionProfiler(
+            sample_interval=0.001, enable_memory=True, enable_cpu=True
+        )
 
         assert profiler.sample_interval == 0.001
         assert profiler.enable_memory is True
@@ -370,7 +372,9 @@ class TestMetrics:
 
     def test_calculate_percentile_empty_raises(self) -> None:
         """Test that empty list raises error."""
-        with pytest.raises(ValueError, match="Cannot calculate percentile of empty list"):
+        with pytest.raises(
+            ValueError, match="Cannot calculate percentile of empty list"
+        ):
             calculate_percentile([], 50)
 
     def test_calculate_percentile_invalid_range_raises(self) -> None:

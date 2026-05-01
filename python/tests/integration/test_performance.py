@@ -64,7 +64,9 @@ class EventTracer:
 
     def trace_event(self, event_type: Any, data: Any) -> None:
         if self.is_running:
-            self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
+            self.events.append(
+                {"type": event_type, "data": data, "timestamp": time.time()}
+            )
 
     def get_events(self) -> Any:
         return self.events
@@ -124,7 +126,10 @@ class TestProfilerPerformance:
     """Performance tests for ActionProfiler."""
 
     def test_profiler_overhead(
-        self, sample_action_instance: Any, profiler_config: Any, performance_thresholds: Any
+        self,
+        sample_action_instance: Any,
+        profiler_config: Any,
+        performance_thresholds: Any,
     ) -> None:
         """Test that profiler overhead is below threshold."""
         # Baseline: measure without profiler
@@ -166,7 +171,9 @@ class TestProfilerPerformance:
             overhead_percent < performance_thresholds["max_overhead_percent"]
         ), f"Profiler overhead {overhead_percent:.2f}% exceeds threshold"
 
-    def test_profiler_scalability(self, sample_action_instance: Any, profiler_config: Any) -> None:
+    def test_profiler_scalability(
+        self, sample_action_instance: Any, profiler_config: Any
+    ) -> None:
         """Test profiler performance with increasing load."""
         profiler = ActionProfiler(profiler_config)
         profiler.start()
@@ -205,7 +212,10 @@ class TestProfilerPerformance:
         ), "Overhead increases too much with scale"
 
     def test_profiler_memory_usage(
-        self, sample_action_instance: Any, profiler_config: Any, performance_thresholds: Any
+        self,
+        sample_action_instance: Any,
+        profiler_config: Any,
+        performance_thresholds: Any,
     ) -> None:
         """Test profiler memory usage."""
         import sys
@@ -249,7 +259,10 @@ class TestEventTracerPerformance:
     """Performance tests for EventTracer."""
 
     def test_event_tracer_overhead(
-        self, sample_action_instance: Any, event_tracer_config: Any, performance_thresholds: Any
+        self,
+        sample_action_instance: Any,
+        event_tracer_config: Any,
+        performance_thresholds: Any,
     ) -> None:
         """Test that event tracer overhead is below threshold."""
         iterations = 100
@@ -358,7 +371,9 @@ class TestEventTracerPerformance:
 
         for i in range(num_threads):
             t = threading.Thread(
-                target=lambda tid=i: results.update({tid: worker(tid, events_per_thread)})
+                target=lambda tid=i: results.update(
+                    {tid: worker(tid, events_per_thread)}
+                )
             )
             threads.append(t)
             t.start()
@@ -389,7 +404,10 @@ class TestMemoryProfilerPerformance:
     """Performance tests for MemoryProfiler."""
 
     def test_memory_profiler_overhead(
-        self, memory_intensive_action: Any, memory_profiler_config: Any, performance_thresholds: Any
+        self,
+        memory_intensive_action: Any,
+        memory_profiler_config: Any,
+        performance_thresholds: Any,
     ) -> None:
         """Test memory profiler overhead."""
         # Baseline
@@ -417,7 +435,9 @@ class TestMemoryProfilerPerformance:
             overhead_percent < performance_thresholds["max_overhead_percent"]
         ), f"Memory profiler overhead {overhead_percent:.2f}% exceeds threshold"
 
-    def test_memory_profiler_sampling_performance(self, memory_profiler_config: Any) -> None:
+    def test_memory_profiler_sampling_performance(
+        self, memory_profiler_config: Any
+    ) -> None:
         """Test memory profiler sampling performance."""
         # Test with different sampling intervals
         intervals = [0.001, 0.01, 0.1]
@@ -507,7 +527,8 @@ class TestStressTests:
 
         for i in range(num_events):
             tracer.trace_event(
-                "stress_test", {"index": i, "timestamp": time.time(), "data": {"value": i * 2}}
+                "stress_test",
+                {"index": i, "timestamp": time.time(), "data": {"value": i * 2}},
             )
 
         elapsed = time.perf_counter() - start
@@ -547,8 +568,12 @@ class TestStressTests:
                 tracer.trace_event("thread_start", {"thread_id": thread_id})
 
                 for i in range(stress_test_config["iterations_per_thread"]):
-                    result = concurrent_action.execute_threaded(thread_id, iterations=10)
-                    tracer.trace_event("iteration", {"thread_id": thread_id, "iteration": i})
+                    result = concurrent_action.execute_threaded(
+                        thread_id, iterations=10
+                    )
+                    tracer.trace_event(
+                        "iteration", {"thread_id": thread_id, "iteration": i}
+                    )
 
                 tracer.trace_event("thread_end", {"thread_id": thread_id})
                 return result
@@ -590,7 +615,10 @@ class TestStressTests:
         assert len(events) > 0
 
     def test_long_running_monitoring(
-        self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any
+        self,
+        sample_action_instance: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
     ) -> None:
         """Test tools can handle long-running monitoring sessions."""
         profiler = ActionProfiler(profiler_config)
@@ -684,7 +712,9 @@ class TestMemoryLeakDetection:
 
         print(f"\nMemory growth: {growth_percent:.2f}%")
 
-        assert growth_percent < 10, f"Memory leak detected: {growth_percent:.2f}% growth"
+        assert (
+            growth_percent < 10
+        ), f"Memory leak detected: {growth_percent:.2f}% growth"
 
     def test_event_tracer_no_memory_leak(self, event_tracer_config: Any) -> None:
         """Test that event tracer doesn't leak memory."""
@@ -719,7 +749,9 @@ class TestMemoryLeakDetection:
 
         print(f"\nMemory growth: {growth_percent:.2f}%")
 
-        assert growth_percent < 10, f"Memory leak detected: {growth_percent:.2f}% growth"
+        assert (
+            growth_percent < 10
+        ), f"Memory leak detected: {growth_percent:.2f}% growth"
 
 
 @pytest.mark.integration

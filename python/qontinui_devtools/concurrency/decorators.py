@@ -11,7 +11,10 @@ from .race_tester import RaceConditionTester, RaceTestResult
 
 
 def concurrent_test(
-    threads: int = 10, iterations: int = 100, timeout: float = 30.0, track_state: bool = False
+    threads: int = 10,
+    iterations: int = 100,
+    timeout: float = 30.0,
+    track_state: bool = False,
 ) -> Callable:
     """Decorator to run test concurrently.
 
@@ -42,7 +45,10 @@ def concurrent_test(
     def decorator(func: Callable) -> Callable:
         def wrapper(*args: Any, **kwargs: Any) -> RaceTestResult:
             tester = RaceConditionTester(
-                threads=threads, iterations=iterations, timeout=timeout, track_state=track_state
+                threads=threads,
+                iterations=iterations,
+                timeout=timeout,
+                track_state=track_state,
             )
             return tester.test_function(func, *args, **kwargs)
 
@@ -56,7 +62,9 @@ def concurrent_test(
     return decorator
 
 
-def stress_test(threads: int = 50, iterations: int = 1000, timeout: float = 60.0) -> Callable:
+def stress_test(
+    threads: int = 50, iterations: int = 1000, timeout: float = 60.0
+) -> Callable:
     """Decorator for heavy stress testing.
 
     Similar to concurrent_test but with higher defaults for more
@@ -81,7 +89,9 @@ def stress_test(threads: int = 50, iterations: int = 1000, timeout: float = 60.0
     )
 
 
-def tracked_test(threads: int = 10, iterations: int = 100, timeout: float = 30.0) -> Callable:
+def tracked_test(
+    threads: int = 10, iterations: int = 100, timeout: float = 30.0
+) -> Callable:
     """Decorator for concurrent test with state tracking.
 
     This decorator enables state instrumentation to detect race conditions

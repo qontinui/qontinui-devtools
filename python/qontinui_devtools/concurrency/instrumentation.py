@@ -21,9 +21,7 @@ class Access:
 
     def __repr__(self) -> str:
         """String representation."""
-        return (
-            f"Access(thread={self.thread_id}, type={self.access_type}, time={self.timestamp:.6f})"
-        )
+        return f"Access(thread={self.thread_id}, type={self.access_type}, time={self.timestamp:.6f})"
 
 
 @dataclass
@@ -97,7 +95,10 @@ class SharedStateTracker:
             timestamp = time.time()
 
         access = Access(
-            thread_id=thread_id, timestamp=timestamp, access_type="read", location=location
+            thread_id=thread_id,
+            timestamp=timestamp,
+            access_type="read",
+            location=location,
         )
 
         with self._lock:
@@ -126,7 +127,10 @@ class SharedStateTracker:
             timestamp = time.time()
 
         access = Access(
-            thread_id=thread_id, timestamp=timestamp, access_type="write", location=location
+            thread_id=thread_id,
+            timestamp=timestamp,
+            access_type="write",
+            location=location,
         )
 
         with self._lock:
@@ -169,11 +173,20 @@ class SharedStateTracker:
 
                     # Determine conflict type
                     conflict_type = None
-                    if access_1.access_type == "write" and access_2.access_type == "write":
+                    if (
+                        access_1.access_type == "write"
+                        and access_2.access_type == "write"
+                    ):
                         conflict_type = "write-write"
-                    elif access_1.access_type == "write" and access_2.access_type == "read":
+                    elif (
+                        access_1.access_type == "write"
+                        and access_2.access_type == "read"
+                    ):
                         conflict_type = "write-read"
-                    elif access_1.access_type == "read" and access_2.access_type == "write":
+                    elif (
+                        access_1.access_type == "read"
+                        and access_2.access_type == "write"
+                    ):
                         conflict_type = "read-write"
 
                     if conflict_type:
@@ -219,7 +232,9 @@ class SharedStateTracker:
                 for a in accesses
                 if a.access_type == "write"
             )
-            threads = {a.thread_id for accesses in self._accesses.values() for a in accesses}
+            threads = {
+                a.thread_id for accesses in self._accesses.values() for a in accesses
+            }
 
             return {
                 "total_accesses": total_accesses,

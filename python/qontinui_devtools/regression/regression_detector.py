@@ -108,7 +108,9 @@ class RegressionDetector:
             baseline_version = baseline.metadata.get("version", "baseline")
 
         # Create current snapshot
-        self.current_snapshot = self.create_snapshot(source_path, current_version, save=True)
+        self.current_snapshot = self.create_snapshot(
+            source_path, current_version, save=True
+        )
 
         # Detect various types of regressions
         issues: list[RegressionIssue] = []
@@ -121,9 +123,15 @@ class RegressionDetector:
 
         # Count issue types
         breaking_count = sum(1 for i in issues if i.change_type == ChangeType.BREAKING)
-        behavioral_count = sum(1 for i in issues if i.change_type == ChangeType.BEHAVIORAL)
-        performance_count = sum(1 for i in issues if i.change_type == ChangeType.PERFORMANCE)
-        dependency_count = sum(1 for i in issues if i.change_type == ChangeType.DEPENDENCY)
+        behavioral_count = sum(
+            1 for i in issues if i.change_type == ChangeType.BEHAVIORAL
+        )
+        performance_count = sum(
+            1 for i in issues if i.change_type == ChangeType.PERFORMANCE
+        )
+        dependency_count = sum(
+            1 for i in issues if i.change_type == ChangeType.DEPENDENCY
+        )
 
         report = RegressionReport(
             baseline_version=baseline_version,
@@ -149,8 +157,8 @@ class RegressionDetector:
             return issues
 
         # Compare functions
-        added_funcs, removed_funcs, modified_funcs, _ = self.current_snapshot.compare_snapshots(
-            self.baseline_snapshot
+        added_funcs, removed_funcs, modified_funcs, _ = (
+            self.current_snapshot.compare_snapshots(self.baseline_snapshot)
         )
 
         # Removed functions are breaking changes
@@ -214,7 +222,9 @@ class RegressionDetector:
         if not self.baseline_snapshot or not self.current_snapshot:
             return issues
 
-        _, _, modified_funcs, _ = self.current_snapshot.compare_snapshots(self.baseline_snapshot)
+        _, _, modified_funcs, _ = self.current_snapshot.compare_snapshots(
+            self.baseline_snapshot
+        )
 
         for func_key in modified_funcs:
             old_sig = self.baseline_snapshot.get_function(func_key)
@@ -264,8 +274,12 @@ class RegressionDetector:
                     description=f"Function '{func_key}' signature changed",
                     old_signature=old_sig,
                     new_signature=new_sig,
-                    impact_description=self._describe_parameter_impact(old_sig, new_sig),
-                    migration_guide=self._generate_parameter_migration(old_sig, new_sig),
+                    impact_description=self._describe_parameter_impact(
+                        old_sig, new_sig
+                    ),
+                    migration_guide=self._generate_parameter_migration(
+                        old_sig, new_sig
+                    ),
                     severity=severity,
                     affected_modules=[new_sig.module_path],
                 )
@@ -484,16 +498,24 @@ class RegressionDetector:
             # Checkout baseline
             baseline_path = temp_path / "baseline"
             self._git_checkout(repo_path, baseline_ref, baseline_path)
-            baseline_source = baseline_path / source_subdir if source_subdir else baseline_path
-            baseline_snapshot = self.create_snapshot(baseline_source, baseline_ref, save=False)
+            baseline_source = (
+                baseline_path / source_subdir if source_subdir else baseline_path
+            )
+            baseline_snapshot = self.create_snapshot(
+                baseline_source, baseline_ref, save=False
+            )
 
             # Checkout current
             current_path = temp_path / "current"
             self._git_checkout(repo_path, current_ref, current_path)
-            current_source = current_path / source_subdir if source_subdir else current_path
+            current_source = (
+                current_path / source_subdir if source_subdir else current_path
+            )
 
             # Detect regressions
-            return self.detect_regressions(current_source, baseline_snapshot, current_ref)
+            return self.detect_regressions(
+                current_source, baseline_snapshot, current_ref
+            )
 
     def _git_checkout(self, repo_path: Path, ref: str, output_path: Path) -> None:
         """Checkout git reference to output path."""
@@ -551,7 +573,9 @@ class RegressionDetector:
             if pkg in baseline_deps:
                 old_version = baseline_deps[pkg]
                 if old_version != new_version:
-                    risk_level = self._assess_version_change_risk(old_version, new_version)
+                    risk_level = self._assess_version_change_risk(
+                        old_version, new_version
+                    )
 
                     issue = RegressionIssue(
                         change_type=ChangeType.DEPENDENCY,
@@ -575,18 +599,28 @@ class RegressionDetector:
 
         return issues
 
-    def _assess_version_change_risk(self, old_version: str, new_version: str) -> RiskLevel:
+    def _assess_version_change_risk(
+        self, old_version: str, new_version: str
+    ) -> RiskLevel:
         """Assess risk of dependency version change."""
         try:
             old_parts = [int(x) for x in old_version.split(".")[:3]]
             new_parts = [int(x) for x in new_version.split(".")[:3]]
 
             # Major version change
-            if len(old_parts) > 0 and len(new_parts) > 0 and old_parts[0] != new_parts[0]:
+            if (
+                len(old_parts) > 0
+                and len(new_parts) > 0
+                and old_parts[0] != new_parts[0]
+            ):
                 return RiskLevel.HIGH
 
             # Minor version change
-            if len(old_parts) > 1 and len(new_parts) > 1 and old_parts[1] != new_parts[1]:
+            if (
+                len(old_parts) > 1
+                and len(new_parts) > 1
+                and old_parts[1] != new_parts[1]
+            ):
                 return RiskLevel.MEDIUM
 
             # Patch version change

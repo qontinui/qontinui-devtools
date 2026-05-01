@@ -538,7 +538,11 @@ class IDTypeChecker:
                 by_severity[issue.severity] = []
             by_severity[issue.severity].append(issue)
 
-        for severity in [IssueSeverity.ERROR, IssueSeverity.WARNING, IssueSeverity.INFO]:
+        for severity in [
+            IssueSeverity.ERROR,
+            IssueSeverity.WARNING,
+            IssueSeverity.INFO,
+        ]:
             if severity not in by_severity:
                 continue
 
@@ -547,7 +551,9 @@ class IDTypeChecker:
 
             for issue in by_severity[severity]:
                 lines.append(f"\n  {issue.message}")
-                lines.append(f"    File: {issue.field.file_path}:{issue.field.line_number}")
+                lines.append(
+                    f"    File: {issue.field.file_path}:{issue.field.line_number}"
+                )
                 if issue.field.struct_or_interface:
                     lines.append(f"    In: {issue.field.struct_or_interface}")
                 lines.append(f"    Context: {issue.field.context}")
@@ -578,7 +584,9 @@ class IDTypeChecker:
         table.add_column("Issue")
         table.add_column("Suggestion")
 
-        for issue in sorted(self.issues, key=lambda i: (i.severity.value, str(i.field.file_path))):
+        for issue in sorted(
+            self.issues, key=lambda i: (i.severity.value, str(i.field.file_path))
+        ):
             severity_style = {
                 IssueSeverity.ERROR: "[red]ERROR[/red]",
                 IssueSeverity.WARNING: "[yellow]WARNING[/yellow]",
@@ -607,12 +615,16 @@ class IDTypeChecker:
         return {
             "total_issues": len(self.issues),
             "errors": sum(1 for i in self.issues if i.severity == IssueSeverity.ERROR),
-            "warnings": sum(1 for i in self.issues if i.severity == IssueSeverity.WARNING),
+            "warnings": sum(
+                1 for i in self.issues if i.severity == IssueSeverity.WARNING
+            ),
             "info": sum(1 for i in self.issues if i.severity == IssueSeverity.INFO),
             "id_fields_found": len(self.id_fields),
             "parseint_usages": len(self.parseint_usages),
             "by_category": {
-                "parseint_uuid": sum(1 for i in self.issues if i.category == "parseint_uuid"),
+                "parseint_uuid": sum(
+                    1 for i in self.issues if i.category == "parseint_uuid"
+                ),
                 "integer_id": sum(1 for i in self.issues if i.category == "integer_id"),
                 "cross_language_mismatch": sum(
                     1 for i in self.issues if i.category == "cross_language_mismatch"
@@ -622,7 +634,11 @@ class IDTypeChecker:
                 "typescript": sum(
                     1 for i in self.issues if i.field.language == Language.TYPESCRIPT
                 ),
-                "rust": sum(1 for i in self.issues if i.field.language == Language.RUST),
-                "python": sum(1 for i in self.issues if i.field.language == Language.PYTHON),
+                "rust": sum(
+                    1 for i in self.issues if i.field.language == Language.RUST
+                ),
+                "python": sum(
+                    1 for i in self.issues if i.field.language == Language.PYTHON
+                ),
             },
         }

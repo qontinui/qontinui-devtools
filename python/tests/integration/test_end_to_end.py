@@ -38,7 +38,11 @@ class ActionProfiler:
             result = func(*args, **kwargs)
             duration = time.perf_counter() - start
             self.profiles.append(
-                {"function": func.__name__, "duration": duration, "timestamp": time.time()}
+                {
+                    "function": func.__name__,
+                    "duration": duration,
+                    "timestamp": time.time(),
+                }
             )
             return result
 
@@ -70,7 +74,9 @@ class EventTracer:
 
     def trace_event(self, event_type: Any, data: Any) -> None:
         if self.is_running:
-            self.events.append({"type": event_type, "data": data, "timestamp": time.time()})
+            self.events.append(
+                {"type": event_type, "data": data, "timestamp": time.time()}
+            )
 
     def get_events(self, event_type: Any = None) -> Any:
         if event_type:
@@ -386,7 +392,11 @@ class TestFullMonitoringWorkflow:
             result = memory_intensive_action.execute(size_mb=5)
             tracer.trace_event(
                 "action",
-                {"name": "memory", "phase": "end", "memory": mem_profiler.get_memory_usage()},
+                {
+                    "name": "memory",
+                    "phase": "end",
+                    "memory": mem_profiler.get_memory_usage(),
+                },
             )
             return result
 
@@ -460,7 +470,9 @@ class TestCLIEndToEnd:
             data = json.load(f)
         assert "total_calls" in data
 
-    def test_runtime_trace_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
+    def test_runtime_trace_command(
+        self, sample_qontinui_project: Any, temp_test_dir: Any
+    ) -> None:
         """Test 'qontinui-devtools runtime trace' CLI command."""
         output_file = temp_test_dir / "trace_output.json"
 
@@ -511,7 +523,9 @@ class TestCLIEndToEnd:
         assert (temp_test_dir / "events.json").exists()
         assert (temp_test_dir / "memory.json").exists()
 
-    def test_runtime_report_command(self, sample_qontinui_project: Any, temp_test_dir: Any) -> None:
+    def test_runtime_report_command(
+        self, sample_qontinui_project: Any, temp_test_dir: Any
+    ) -> None:
         """Test 'qontinui-devtools runtime report' CLI command."""
         # Generate sample data
         profiler = ActionProfiler()

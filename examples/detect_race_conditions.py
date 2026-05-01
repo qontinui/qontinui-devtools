@@ -36,7 +36,15 @@ def analyze_directory(path: str, verbose: bool = True) -> None:
     # Create detector
     detector = RaceConditionDetector(
         root_path=path,
-        exclude_patterns=["test_", "__pycache__", ".git", "venv", ".venv", "build", "dist"],
+        exclude_patterns=[
+            "test_",
+            "__pycache__",
+            ".git",
+            "venv",
+            ".venv",
+            "build",
+            "dist",
+        ],
     )
 
     # Run analysis
@@ -92,7 +100,9 @@ def analyze_directory(path: str, verbose: bool = True) -> None:
             print(f"   Type: {race.shared_state.inferred_type}")
             if race.shared_state.class_name:
                 print(f"   Class: {race.shared_state.class_name}")
-            print(f"   Location: {race.shared_state.file_path}:{race.shared_state.line_number}")
+            print(
+                f"   Location: {race.shared_state.file_path}:{race.shared_state.line_number}"
+            )
             print()
 
             # Description
@@ -122,7 +132,9 @@ def analyze_directory(path: str, verbose: bool = True) -> None:
                 for _file_path, line_num, access_type in race.access_locations:
                     print(f"     - Line {line_num}: {access_type}")
             else:
-                print(f"   Access locations: {len(race.access_locations)} (showing first 5)")
+                print(
+                    f"   Access locations: {len(race.access_locations)} (showing first 5)"
+                )
                 for _file_path, line_num, access_type in race.access_locations[:5]:
                     print(f"     - Line {line_num}: {access_type}")
 
@@ -150,8 +162,7 @@ def analyze_example_code() -> None:
         tmppath = Path(tmpdir)
 
         # Example 1: Unprotected class variable
-        (tmppath / "bad_cache.py").write_text(
-            '''
+        (tmppath / "bad_cache.py").write_text('''
 class Cache:
     """Cache with race condition."""
     _data: dict[Any, Any] = {}
@@ -164,12 +175,10 @@ class Cache:
 
     def clear(self) -> None:
         self._data.clear()
-'''
-        )
+''')
 
         # Example 2: Check-then-act pattern
-        (tmppath / "singleton.py").write_text(
-            '''
+        (tmppath / "singleton.py").write_text('''
 class Singleton:
     """Singleton with race condition."""
     _instance = None
@@ -179,12 +188,10 @@ class Singleton:
         if cls._instance is None:  # Check
             cls._instance = Singleton()  # Act - RACE CONDITION!
         return cls._instance
-'''
-        )
+''')
 
         # Example 3: Properly protected (should not flag)
-        (tmppath / "safe_cache.py").write_text(
-            '''
+        (tmppath / "safe_cache.py").write_text('''
 import threading
 
 class SafeCache:
@@ -200,8 +207,7 @@ class SafeCache:
     def get(self, key) -> Any:
         with self._lock:
             return self._data.get(key)
-'''
-        )
+''')
 
         # Analyze
         analyze_directory(str(tmppath), verbose=True)

@@ -131,7 +131,9 @@ class DependencyGraphBuilder:
 
         return imports
 
-    def _resolve_import(self, import_name: str, from_file: str, root: Path) -> str | None:
+    def _resolve_import(
+        self, import_name: str, from_file: str, root: Path
+    ) -> str | None:
         """Resolve an import statement to a module name in our codebase.
 
         Args:
@@ -164,7 +166,9 @@ class DependencyGraphBuilder:
 
         return None
 
-    def calculate_afferent_coupling(self, module: str, graph: dict[str, set[str]]) -> int:
+    def calculate_afferent_coupling(
+        self, module: str, graph: dict[str, set[str]]
+    ) -> int:
         """Calculate afferent coupling (Ca) - how many modules depend on this module.
 
         Args:
@@ -180,7 +184,9 @@ class DependencyGraphBuilder:
                 count += 1
         return count
 
-    def calculate_efferent_coupling(self, module: str, graph: dict[str, set[str]]) -> int:
+    def calculate_efferent_coupling(
+        self, module: str, graph: dict[str, set[str]]
+    ) -> int:
         """Calculate efferent coupling (Ce) - how many modules this module depends on.
 
         Args:
@@ -256,7 +262,9 @@ class DependencyGraphBuilder:
         """
         return self.reverse_map.get(file_path, os.path.basename(file_path))
 
-    def calculate_fan_in_fan_out(self, module: str, graph: dict[str, set[str]]) -> tuple[int, int]:
+    def calculate_fan_in_fan_out(
+        self, module: str, graph: dict[str, set[str]]
+    ) -> tuple[int, int]:
         """Calculate fan-in and fan-out for a module.
 
         Fan-in: Number of modules that call this module

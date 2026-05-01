@@ -62,7 +62,9 @@ class TextReportFormatter(ReportFormatter):
         # Summary
         report_lines.append("FAILURE SUMMARY")
         report_lines.append("-" * 40)
-        report_lines.append(f"Migration Issue: {'YES' if analysis.is_migration_issue else 'NO'}")
+        report_lines.append(
+            f"Migration Issue: {'YES' if analysis.is_migration_issue else 'NO'}"
+        )
         report_lines.append(f"Code Issue: {'YES' if analysis.is_code_issue else 'NO'}")
         report_lines.append(f"Confidence: {analysis.confidence:.2%}")
         report_lines.append("")
@@ -85,9 +87,13 @@ class TextReportFormatter(ReportFormatter):
                 report_lines.append("MATCHED ERROR PATTERNS")
                 report_lines.append("-" * 30)
                 for i, pattern in enumerate(matched_patterns, 1):
-                    report_lines.append(f"{i}. {pattern.get('description', 'Unknown pattern')}")
+                    report_lines.append(
+                        f"{i}. {pattern.get('description', 'Unknown pattern')}"
+                    )
                     report_lines.append(f"   Pattern: {pattern.get('pattern', 'N/A')}")
-                    report_lines.append(f"   Confidence: {pattern.get('confidence', 0):.2%}")
+                    report_lines.append(
+                        f"   Confidence: {pattern.get('confidence', 0):.2%}"
+                    )
                 report_lines.append("")
 
         # Suggested fixes
@@ -176,7 +182,9 @@ class ReportFormatterFactory:
         return formatter_class()
 
     @classmethod
-    def register_formatter(cls, format_type: str, formatter_class: type[ReportFormatter]) -> None:
+    def register_formatter(
+        cls, format_type: str, formatter_class: type[ReportFormatter]
+    ) -> None:
         """
         Register a new formatter type.
 

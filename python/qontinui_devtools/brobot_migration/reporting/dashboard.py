@@ -75,7 +75,9 @@ class MigrationReportingDashboard:
             report_data["coverage"] = self._generate_coverage_report(test_directory)
 
         if include_diagnostics:
-            report_data["diagnostics"] = self._generate_diagnostic_report(test_directory)
+            report_data["diagnostics"] = self._generate_diagnostic_report(
+                test_directory
+            )
 
         return report_data
 
@@ -108,7 +110,9 @@ class MigrationReportingDashboard:
         else:
             raise ValueError(f"Unsupported format type: {format_type}")
 
-    def save_migration_report(self, report_data: dict[str, Any], output_file: Path) -> None:
+    def save_migration_report(
+        self, report_data: dict[str, Any], output_file: Path
+    ) -> None:
         """Save a migration-specific report."""
         with open(output_file, "w") as f:
             json.dump(report_data, f, indent=2, default=str)

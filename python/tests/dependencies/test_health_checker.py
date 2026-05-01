@@ -60,7 +60,10 @@ class TestPyPIClient:
         client = PyPIClient()
 
         assert client._normalize_package_name("Django") == "django"
-        assert client._normalize_package_name("django-rest-framework") == "django-rest-framework"
+        assert (
+            client._normalize_package_name("django-rest-framework")
+            == "django-rest-framework"
+        )
         assert client._normalize_package_name("Flask_SQLAlchemy") == "flask-sqlalchemy"
 
     def test_cache_file_generation(self) -> None:
@@ -460,16 +463,14 @@ class TestDependencyHealthChecker:
     def test_parse_requirements_txt(self, checker: Any, temp_project: Any) -> None:
         """Test parsing requirements.txt."""
         requirements_file = temp_project / "requirements.txt"
-        requirements_file.write_text(
-            """# Dependencies
+        requirements_file.write_text("""# Dependencies
 requests==2.31.0
 flask>=2.0.0
 django~=4.2.0
 
 # Development
 pytest>=7.0.0
-"""
-        )
+""")
 
         deps = checker._parse_requirements_txt(requirements_file)
 
@@ -483,8 +484,7 @@ pytest>=7.0.0
     def test_parse_pyproject_toml_poetry(self, checker: Any, temp_project: Any) -> None:
         """Test parsing pyproject.toml with Poetry format."""
         pyproject_file = temp_project / "pyproject.toml"
-        pyproject_file.write_text(
-            """[tool.poetry]
+        pyproject_file.write_text("""[tool.poetry]
 name = "test-project"
 version = "1.0.0"
 
@@ -496,8 +496,7 @@ flask = ">=2.0.0"
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.0"
 black = "^23.0.0"
-"""
-        )
+""")
 
         deps = checker._parse_pyproject_toml(pyproject_file, include_dev=True)
 
@@ -510,8 +509,7 @@ black = "^23.0.0"
     def test_parse_pyproject_toml_pep621(self, checker: Any, temp_project: Any) -> None:
         """Test parsing pyproject.toml with PEP 621 format."""
         pyproject_file = temp_project / "pyproject.toml"
-        pyproject_file.write_text(
-            """[project]
+        pyproject_file.write_text("""[project]
 name = "test-project"
 version = "1.0.0"
 dependencies = [
@@ -524,8 +522,7 @@ dev = [
     "pytest>=7.0.0",
     "black>=23.0.0",
 ]
-"""
-        )
+""")
 
         deps = checker._parse_pyproject_toml(pyproject_file, include_dev=True)
 
@@ -537,8 +534,7 @@ dev = [
     def test_parse_poetry_lock(self, checker: Any, temp_project: Any) -> None:
         """Test parsing poetry.lock."""
         poetry_lock = temp_project / "poetry.lock"
-        poetry_lock.write_text(
-            """[[package]]
+        poetry_lock.write_text("""[[package]]
 name = "requests"
 version = "2.31.0"
 category = "main"
@@ -547,8 +543,7 @@ category = "main"
 name = "pytest"
 version = "7.4.0"
 category = "dev"
-"""
-        )
+""")
 
         deps = checker._parse_poetry_lock(poetry_lock, include_dev=True)
 
@@ -561,8 +556,7 @@ category = "dev"
     def test_parse_setup_py(self, checker: Any, temp_project: Any) -> None:
         """Test parsing setup.py."""
         setup_py = temp_project / "setup.py"
-        setup_py.write_text(
-            """from setuptools import setup
+        setup_py.write_text("""from setuptools import setup
 
 setup(
     name='test-project',
@@ -573,8 +567,7 @@ setup(
         'django~=4.2.0',
     ],
 )
-"""
-        )
+""")
 
         deps = checker._parse_setup_py(setup_py)
 
@@ -652,7 +645,9 @@ setup(
 
     def test_determine_health_status_deprecated(self, checker: Any) -> None:
         """Test determining health status for deprecated package."""
-        status = checker._determine_health_status("1.0.0", "1.0.0", [], "Use pytest instead")
+        status = checker._determine_health_status(
+            "1.0.0", "1.0.0", [], "Use pytest instead"
+        )
         assert status == HealthStatus.DEPRECATED
 
     def test_determine_health_status_outdated(self, checker: Any) -> None:

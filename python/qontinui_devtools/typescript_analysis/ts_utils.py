@@ -214,7 +214,9 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
         # export default
         if "export default" in line:
             # Try to extract name
-            name_match = re.search(r"export\s+default\s+(?:function|class)?\s*(\w+)", line)
+            name_match = re.search(
+                r"export\s+default\s+(?:function|class)?\s*(\w+)", line
+            )
             name = name_match.group(1) if name_match else "default"
 
             exports.append(
@@ -227,7 +229,9 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
             )
 
         # export function/class/const/interface/type
-        elif (match := re.search(r"export\s+(?:async\s+)?function\s+(\w+)", line)) is not None:
+        elif (
+            match := re.search(r"export\s+(?:async\s+)?function\s+(\w+)", line)
+        ) is not None:
             exports.append(
                 ExportStatement(
                     name=match.group(1),
@@ -247,7 +251,9 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
                 )
             )
 
-        elif (match := re.search(r"export\s+(?:const|let|var)\s+(\w+)", line)) is not None:
+        elif (
+            match := re.search(r"export\s+(?:const|let|var)\s+(\w+)", line)
+        ) is not None:
             exports.append(
                 ExportStatement(
                     name=match.group(1),
@@ -270,7 +276,10 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
         elif (match := re.search(r"export\s+type\s+(\w+)", line)) is not None:
             exports.append(
                 ExportStatement(
-                    name=match.group(1), export_type="type", line_number=line_num, is_type_only=True
+                    name=match.group(1),
+                    export_type="type",
+                    line_number=line_num,
+                    is_type_only=True,
                 )
             )
 
@@ -294,7 +303,9 @@ def extract_exports(file_path: Path) -> list[ExportStatement]:
     return exports
 
 
-def resolve_import_path(import_source: str, from_file: Path, root_path: Path) -> Path | None:
+def resolve_import_path(
+    import_source: str, from_file: Path, root_path: Path
+) -> Path | None:
     """Resolve an import source to an actual file path.
 
     Args:

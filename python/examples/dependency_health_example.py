@@ -6,7 +6,11 @@ to analyze a Python project's dependencies.
 
 from pathlib import Path
 
-from qontinui_devtools.dependencies import DependencyHealthChecker, HealthStatus, UpdateType
+from qontinui_devtools.dependencies import (
+    DependencyHealthChecker,
+    HealthStatus,
+    UpdateType,
+)
 
 
 def main() -> None:
@@ -117,7 +121,9 @@ def main() -> None:
             print(f"   License: {dep.license} ({dep.license_category.value})")
 
         if dep.last_release_date:
-            age = (Path(__file__).stat().st_mtime - dep.last_release_date.timestamp()) / 86400
+            age = (
+                Path(__file__).stat().st_mtime - dep.last_release_date.timestamp()
+            ) / 86400
             print(f"   Last release: {int(age)} days ago")
 
     print("\n" + "=" * 70)

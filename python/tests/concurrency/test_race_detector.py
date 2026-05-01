@@ -426,26 +426,22 @@ class HALFactory:
     def test_multiple_files(self, tmp_path: Path) -> None:
         """Test analysis across multiple files."""
         file1 = tmp_path / "module1.py"
-        file1.write_text(
-            """
+        file1.write_text("""
 class Cache1:
     _data={},
 
     def set(self, k, v) -> None:
         self._data[k] = v
-"""
-        )
+""")
 
         file2 = tmp_path / "module2.py"
-        file2.write_text(
-            """
+        file2.write_text("""
 class Cache2:
     _data = []
 
     def append(self, item) -> None:
         self._data.append(item)
-"""
-        )
+""")
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=[])
         races = detector.analyze()
@@ -463,15 +459,13 @@ class TestExclusions:
     def test_exclude_test_files(self, tmp_path: Path) -> None:
         """Test that test files can be excluded."""
         test_file = tmp_path / "example.py"
-        test_file.write_text(
-            """
+        test_file.write_text("""
 class TestCache:
     _data={},
 
     def test_set(self) -> None:
         self._data['key'] = 'value'
-"""
-        )
+""")
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=["test_"])
         detector.analyze()
@@ -486,24 +480,20 @@ class TestCache:
         venv_dir.mkdir(parents=True)
 
         venv_file = venv_dir / "module.py"
-        venv_file.write_text(
-            """
+        venv_file.write_text("""
 _data = {}
 
 def unsafe() -> None:
     _data['key'] = 'value'
-"""
-        )
+""")
 
         main_file = tmp_path / "main.py"
-        main_file.write_text(
-            """
+        main_file.write_text("""
 _cache = {}
 
 def process() -> None:
     _cache['key'] = 'value'
-"""
-        )
+""")
 
         detector = RaceConditionDetector(tmp_path, exclude_patterns=[])
         detector.analyze()

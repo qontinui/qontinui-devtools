@@ -56,21 +56,29 @@ def main() -> None:
 
     # Generate class graph
     output_class_html = Path(__file__).parent / "qontinui_devtools_classes.html"
-    visualizer.generate_html_interactive(class_nodes, class_edges, str(output_class_html))
+    visualizer.generate_html_interactive(
+        class_nodes, class_edges, str(output_class_html)
+    )
     print(f"   📊 Class graph saved to: {output_class_html}")
 
     # 4. Function-level graph (might be large)
     print("\n4. Building function-level call graph...")
     print("-" * 80)
-    func_nodes, func_edges = visualizer.build_graph(str(devtools_path), level="function")
+    func_nodes, func_edges = visualizer.build_graph(
+        str(devtools_path), level="function"
+    )
     print(f"   Found {len(func_nodes)} functions with {len(func_edges)} calls")
 
     if len(func_nodes) < 200:  # Only generate if not too large
         output_func_html = Path(__file__).parent / "qontinui_devtools_functions.html"
-        visualizer.generate_html_interactive(func_nodes, func_edges, str(output_func_html))
+        visualizer.generate_html_interactive(
+            func_nodes, func_edges, str(output_func_html)
+        )
         print(f"   📊 Function graph saved to: {output_func_html}")
     else:
-        print(f"   ⚠️  Function graph too large ({len(func_nodes)} nodes), skipping HTML generation")
+        print(
+            f"   ⚠️  Function graph too large ({len(func_nodes)} nodes), skipping HTML generation"
+        )
 
     # 5. Apply different layouts
     print("\n5. Testing layout algorithms...")
@@ -112,10 +120,14 @@ def main() -> None:
         )
         print(f"   📊 SVG visualization saved to: {output_svg}")
     except ImportError:
-        print("   ⚠️  Graphviz Python package not installed, skipping static visualizations")
+        print(
+            "   ⚠️  Graphviz Python package not installed, skipping static visualizations"
+        )
         print("   💡 Install with: pip install graphviz")
     except Exception as e:
-        print("   ⚠️  Graphviz binaries not found on system PATH, skipping static visualizations")
+        print(
+            "   ⚠️  Graphviz binaries not found on system PATH, skipping static visualizations"
+        )
         print(
             "   💡 Install graphviz system package (apt install graphviz / brew install graphviz)"
         )

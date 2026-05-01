@@ -4,7 +4,11 @@ import ast
 from pathlib import Path
 
 import pytest
-from qontinui_devtools.architecture import ClassMetrics, ExtractionSuggestion, GodClassDetector
+from qontinui_devtools.architecture import (
+    ClassMetrics,
+    ExtractionSuggestion,
+    GodClassDetector,
+)
 from qontinui_devtools.architecture.ast_metrics import (
     calculate_complexity,
     count_attributes,
@@ -174,7 +178,9 @@ class TestClass:
 class TestGodClassDetector:
     """Tests for GodClassDetector."""
 
-    def test_detect_god_class(self, detector: GodClassDetector, god_class_file: Path) -> None:
+    def test_detect_god_class(
+        self, detector: GodClassDetector, god_class_file: Path
+    ) -> None:
         """Test detection of god class."""
         god_classes = detector.analyze_file(str(god_class_file))
 
@@ -203,7 +209,9 @@ class TestGodClassDetector:
                 # These are well-designed, so shouldn't meet multiple criteria
                 assert cls.method_count < 10 or cls.line_count < 100
 
-    def test_calculate_lcom(self, detector: GodClassDetector, god_class_file: Path) -> None:
+    def test_calculate_lcom(
+        self, detector: GodClassDetector, god_class_file: Path
+    ) -> None:
         """Test LCOM calculation."""
         with open(god_class_file) as f:
             source = f.read()
@@ -248,7 +256,9 @@ class TestGodClassDetector:
         assert any("validation" in r for r in resp_lower)
         assert any("persistence" in r for r in resp_lower)
 
-    def test_suggest_extractions(self, detector: GodClassDetector, god_class_file: Path) -> None:
+    def test_suggest_extractions(
+        self, detector: GodClassDetector, god_class_file: Path
+    ) -> None:
         """Test extraction suggestions."""
         god_classes = detector.analyze_file(str(god_class_file))
         huge_class = next((c for c in god_classes if c.name == "HugeClass"), None)
@@ -267,7 +277,9 @@ class TestGodClassDetector:
             assert len(suggestion.responsibility) > 0
             assert suggestion.estimated_lines > 0
 
-    def test_severity_calculation(self, detector: GodClassDetector, god_class_file: Path) -> None:
+    def test_severity_calculation(
+        self, detector: GodClassDetector, god_class_file: Path
+    ) -> None:
         """Test severity level calculation."""
         god_classes = detector.analyze_file(str(god_class_file))
         huge_class = next((c for c in god_classes if c.name == "HugeClass"), None)
@@ -275,7 +287,9 @@ class TestGodClassDetector:
         assert huge_class is not None
         assert huge_class.severity in ["critical", "high", "medium"]
 
-    def test_generate_report(self, detector: GodClassDetector, god_class_file: Path) -> None:
+    def test_generate_report(
+        self, detector: GodClassDetector, god_class_file: Path
+    ) -> None:
         """Test report generation."""
         god_classes = detector.analyze_file(str(god_class_file))
 
@@ -287,7 +301,9 @@ class TestGodClassDetector:
         assert "LCOM" in report
         assert "Recommendations" in report
 
-    def test_analyze_directory(self, detector: GodClassDetector, fixtures_dir: Path) -> None:
+    def test_analyze_directory(
+        self, detector: GodClassDetector, fixtures_dir: Path
+    ) -> None:
         """Test analyzing entire directory."""
         god_classes = detector.analyze_directory(str(fixtures_dir))
 

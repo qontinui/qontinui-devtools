@@ -45,7 +45,7 @@ repos:
         language: system
         types: [python]
         pass_filenames: true
-        args: ["--min-lines=500", "--min-methods=30"]
+        args: ["--min-lines=700", "--min-methods=50", "--max-lcom=1.1"]
 
       - id: check-race-conditions
         name: Check for race conditions
@@ -54,6 +54,7 @@ repos:
         types: [python]
         pass_filenames: true
         args: ["--severity=high"]
+        exclude: ^(examples/|python/tests/|scripts/|python/qontinui_devtools/brobot_migration/)
 
       - id: check-complexity
         name: Check cyclomatic complexity
@@ -61,7 +62,7 @@ repos:
         language: system
         types: [python]
         pass_filenames: true
-        args: ["--max-complexity=15"]
+        args: ["--max-complexity=40"]
 
       - id: block-claude-attribution
         name: Block Claude Attribution

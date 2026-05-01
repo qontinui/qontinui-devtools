@@ -26,7 +26,9 @@ class FixSuggestion:
     affected_files: list[str]
 
 
-def analyze_cycle(cycle: list[str], import_map: dict[str, list[ImportStatement]]) -> FixSuggestion:
+def analyze_cycle(
+    cycle: list[str], import_map: dict[str, list[ImportStatement]]
+) -> FixSuggestion:
     """Analyze a circular dependency cycle and suggest how to break it.
 
     Args:
@@ -236,7 +238,9 @@ def my_function() -> None:
     )
 
 
-def _suggest_restructure_fix(cycle: list[str], imports: list[ImportStatement]) -> FixSuggestion:
+def _suggest_restructure_fix(
+    cycle: list[str], imports: list[ImportStatement]
+) -> FixSuggestion:
     """Suggest restructuring to fix the cycle.
 
     Args:
@@ -286,7 +290,9 @@ def _suggest_restructure_fix(cycle: list[str], imports: list[ImportStatement]) -
     )
 
 
-def suggest_best_break_point(cycle: list[str], import_map: dict[str, list[ImportStatement]]) -> str:
+def suggest_best_break_point(
+    cycle: list[str], import_map: dict[str, list[ImportStatement]]
+) -> str:
     """Suggest the best place to break the cycle.
 
     Args:
@@ -309,7 +315,9 @@ def suggest_best_break_point(cycle: list[str], import_map: dict[str, list[Import
         if current in import_map:
             for imp in import_map[current]:
                 if next_module in imp.module:
-                    import_counts[current] += len(imp.imported_names) if imp.imported_names else 1
+                    import_counts[current] += (
+                        len(imp.imported_names) if imp.imported_names else 1
+                    )
 
     if not import_counts:
         return "Unable to determine best break point."

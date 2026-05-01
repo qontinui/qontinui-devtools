@@ -131,7 +131,9 @@ def test_image_with_text() -> Image.Image:
     Returns:
         PIL Image with test text
     """
-    return MockScreenCapture.create_test_image_with_text(text="Test Button", width=400, height=300)
+    return MockScreenCapture.create_test_image_with_text(
+        text="Test Button", width=400, height=300
+    )
 
 
 @pytest.fixture
@@ -151,7 +153,9 @@ def test_pattern() -> Image.Image:
     Returns:
         PIL Image with checkerboard pattern
     """
-    return MockScreenCapture.create_test_pattern(width=200, height=200, pattern_type="checkerboard")
+    return MockScreenCapture.create_test_pattern(
+        width=200, height=200, pattern_type="checkerboard"
+    )
 
 
 # Configuration fixtures
@@ -208,7 +212,9 @@ def test_images_dir(tmp_path_factory) -> str:  # type: ignore
 
 
 @pytest.fixture(autouse=True)
-def reset_mock_hal_between_tests(request: pytest.FixtureRequest) -> Generator[None, None, None]:
+def reset_mock_hal_between_tests(
+    request: pytest.FixtureRequest,
+) -> Generator[None, None, None]:
     """Automatically reset mock HAL components between tests.
 
     This fixture runs automatically for every test and ensures
@@ -235,7 +241,10 @@ def mock_hal_with_latency(request: pytest.FixtureRequest) -> MockHAL:
     """
     latency = request.param
     return MockHAL.create(
-        input_latency=latency, screen_latency=latency, pattern_latency=latency, ocr_latency=latency
+        input_latency=latency,
+        screen_latency=latency,
+        pattern_latency=latency,
+        ocr_latency=latency,
     )
 
 
@@ -280,7 +289,12 @@ def pytest_configure(config: pytest.Config) -> None:
         config: Pytest configuration
     """
     config.addinivalue_line(
-        "markers", "mock_hal: mark test as using mock HAL (deselect with '-m \"not mock_hal\"')"
+        "markers",
+        "mock_hal: mark test as using mock HAL (deselect with '-m \"not mock_hal\"')",
     )
-    config.addinivalue_line("markers", "slow_mock: mark test as using slow mock HAL with latencies")
-    config.addinivalue_line("markers", "unreliable_mock: mark test as using unreliable mock HAL")
+    config.addinivalue_line(
+        "markers", "slow_mock: mark test as using slow mock HAL with latencies"
+    )
+    config.addinivalue_line(
+        "markers", "unreliable_mock: mark test as using unreliable mock HAL"
+    )

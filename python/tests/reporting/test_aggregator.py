@@ -40,26 +40,22 @@ class TestReportAggregator:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create some Python files (NOT test files, as those are excluded)
             file1 = Path(tmpdir) / "module1.py"
-            file1.write_text(
-                """
+            file1.write_text("""
 def hello() -> None:
     pass
 
 class MyClass:
     def method1(self) -> None:
         pass
-"""
-            )
+""")
 
             file2 = Path(tmpdir) / "module2.py"
-            file2.write_text(
-                """
+            file2.write_text("""
 import os
 
 def world() -> None:
     pass
-"""
-            )
+""")
 
             aggregator = ReportAggregator(tmpdir, verbose=False)
             report_data = aggregator.run_all_analyses()
@@ -208,7 +204,9 @@ def world() -> None:
         """Test creating concurrency section with no race conditions."""
         with tempfile.TemporaryDirectory() as tmpdir:
             aggregator = ReportAggregator(tmpdir, verbose=False)
-            aggregator.results = {"concurrency": {"race_conditions": 0, "race_details": []}}
+            aggregator.results = {
+                "concurrency": {"race_conditions": 0, "race_details": []}
+            }
 
             section = aggregator._create_concurrency_section()
 
@@ -257,7 +255,9 @@ def world() -> None:
 
             assert section.id == "recommendations"
             assert section.severity == "success"
-            assert "Excellent" in section.content or "good work" in section.content.lower()
+            assert (
+                "Excellent" in section.content or "good work" in section.content.lower()
+            )
 
     def test_create_recommendations_section_with_issues(self) -> None:
         """Test recommendations with issues."""
@@ -289,8 +289,7 @@ class TestReportAggregatorIntegration:
             src_dir.mkdir()
 
             # Create main module
-            (src_dir / "main.py").write_text(
-                """
+            (src_dir / "main.py").write_text("""
 import helper
 
 def main() -> None:
@@ -298,12 +297,10 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-"""
-            )
+""")
 
             # Create helper module
-            (src_dir / "helper.py").write_text(
-                """
+            (src_dir / "helper.py").write_text("""
 import threading
 
 counter = 0
@@ -313,12 +310,10 @@ def do_something() -> None:
     global counter
     with lock:
         counter += 1
-"""
-            )
+""")
 
             # Create a large class
-            (src_dir / "big_class.py").write_text(
-                """
+            (src_dir / "big_class.py").write_text("""
 class BigClass:
     def method1(self): pass
     def method2(self): pass
@@ -330,8 +325,7 @@ class BigClass:
     def method8(self): pass
     def method9(self): pass
     def method10(self): pass
-"""
-            )
+""")
 
             # Run aggregator
             aggregator = ReportAggregator(str(src_dir), verbose=False)

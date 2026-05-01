@@ -27,8 +27,13 @@ class TestTestClassifier:
 
     def test_classifier_initialization(self) -> None:
         """Test classifier initializes with correct patterns."""
-        assert "integration" in self.classifier.integration_indicators["path_indicators"]
-        assert "@SpringBootTest" in self.classifier.integration_indicators["spring_annotations"]
+        assert (
+            "integration" in self.classifier.integration_indicators["path_indicators"]
+        )
+        assert (
+            "@SpringBootTest"
+            in self.classifier.integration_indicators["spring_annotations"]
+        )
         assert "BrobotMock" in self.classifier.mock_patterns["brobot_mocks"]
         assert "junit" in self.classifier.java_library_patterns
 
@@ -334,7 +339,9 @@ public class ServiceTest {
     def test_analyze_dependencies_mocking_frameworks(self) -> None:
         """Test analysis of mocking framework dependencies."""
         mockito_dependency = Dependency(java_import="org.mockito.Mock")
-        powermock_dependency = Dependency(java_import="org.powermock.api.mockito.PowerMockito")
+        powermock_dependency = Dependency(
+            java_import="org.powermock.api.mockito.PowerMockito"
+        )
 
         test_file = TestFile(
             path=Path("test.java"),
@@ -346,7 +353,9 @@ public class ServiceTest {
         analysis = self.classifier.analyze_dependencies(test_file)
 
         assert "org.mockito.Mock" in analysis["mocking_frameworks"]
-        assert "org.powermock.api.mockito.PowerMockito" in analysis["mocking_frameworks"]
+        assert (
+            "org.powermock.api.mockito.PowerMockito" in analysis["mocking_frameworks"]
+        )
 
     def test_analyze_dependencies_spring_testing(self) -> None:
         """Test analysis of Spring testing dependencies."""
@@ -363,7 +372,10 @@ public class ServiceTest {
 
         analysis = self.classifier.analyze_dependencies(test_file)
 
-        assert "org.springframework.boot.test.context.SpringBootTest" in analysis["spring_testing"]
+        assert (
+            "org.springframework.boot.test.context.SpringBootTest"
+            in analysis["spring_testing"]
+        )
 
     def test_analyze_dependencies_custom_libraries(self) -> None:
         """Test analysis of custom library dependencies."""
@@ -392,13 +404,17 @@ public class ServiceTest {
             class_name="UserServiceTest",
         )
 
-        e2e_file = TestFile(path=e2e_path, test_type=TestType.UNKNOWN, class_name="WorkflowTest")
+        e2e_file = TestFile(
+            path=e2e_path, test_type=TestType.UNKNOWN, class_name="WorkflowTest"
+        )
 
         unit_file = TestFile(
             path=unit_path, test_type=TestType.UNKNOWN, class_name="UserServiceTest"
         )
 
-        assert self.classifier._has_integration_path_indicators(integration_file) is True
+        assert (
+            self.classifier._has_integration_path_indicators(integration_file) is True
+        )
         assert self.classifier._has_integration_path_indicators(e2e_file) is True
         assert self.classifier._has_integration_path_indicators(unit_file) is False
 
@@ -422,7 +438,9 @@ public class ServiceTest {
             class_name="UserServiceTest",
         )
 
-        assert self.classifier._has_integration_class_indicators(integration_file) is True
+        assert (
+            self.classifier._has_integration_class_indicators(integration_file) is True
+        )
         assert self.classifier._has_integration_class_indicators(e2e_file) is True
         assert self.classifier._has_integration_class_indicators(unit_file) is False
 
@@ -436,7 +454,9 @@ public class ServiceTest {
         brobotMock.verify("successMessage");
         """
 
-        gui_model = self.classifier._extract_gui_model_from_content(content, "BrobotMock")
+        gui_model = self.classifier._extract_gui_model_from_content(
+            content, "BrobotMock"
+        )
 
         assert gui_model.model_name == "BrobotMock_model"
         assert "loginButton" in gui_model.elements
@@ -470,6 +490,15 @@ public class ServiceTest {
         }
         """
 
-        assert self.classifier._determine_simulation_scope(class_scope_content, "Mock") == "class"
-        assert self.classifier._determine_simulation_scope(method_scope_content, "Mock") == "method"
-        assert self.classifier._determine_simulation_scope(default_content, "Mock") == "method"
+        assert (
+            self.classifier._determine_simulation_scope(class_scope_content, "Mock")
+            == "class"
+        )
+        assert (
+            self.classifier._determine_simulation_scope(method_scope_content, "Mock")
+            == "method"
+        )
+        assert (
+            self.classifier._determine_simulation_scope(default_content, "Mock")
+            == "method"
+        )

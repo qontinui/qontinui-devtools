@@ -8,7 +8,11 @@ import threading
 import time
 from typing import Any
 
-from qontinui_devtools.concurrency import RaceConditionTester, concurrent_test, stress_test
+from qontinui_devtools.concurrency import (
+    RaceConditionTester,
+    concurrent_test,
+    stress_test,
+)
 
 
 def example_1_basic_usage() -> None:
@@ -197,8 +201,18 @@ def example_5_multiple_scenarios() -> None:
 
     scenarios = [
         {"name": "Light load", "args": ("light", 1), "threads": 5, "iterations": 10},
-        {"name": "Medium load", "args": ("medium", 10), "threads": 10, "iterations": 50},
-        {"name": "Heavy load", "args": ("heavy", 100), "threads": 20, "iterations": 100},
+        {
+            "name": "Medium load",
+            "args": ("medium", 10),
+            "threads": 10,
+            "iterations": 50,
+        },
+        {
+            "name": "Heavy load",
+            "args": ("heavy", 100),
+            "threads": 20,
+            "iterations": 100,
+        },
     ]
 
     tester = RaceConditionTester()

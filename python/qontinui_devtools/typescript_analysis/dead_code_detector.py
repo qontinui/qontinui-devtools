@@ -171,7 +171,9 @@ class DeadCodeDetector:
                 # If not used in any other file, it might be dead code
                 if not other_files_usage:
                     # Determine confidence
-                    confidence = self._calculate_confidence(export, file_path, used_in_files)
+                    confidence = self._calculate_confidence(
+                        export, file_path, used_in_files
+                    )
 
                     # Determine reason
                     if export.is_type_only:

@@ -126,7 +126,11 @@ def check_imports(path: str, strict: bool, output: str | None, format: str) -> N
 @click.option("--depth", type=int, default=None, help="Maximum depth to trace")
 @click.option("--exclude", multiple=True, help="Patterns to exclude from trace")
 def trace_imports(
-    module: str, visualize: bool, output: str, depth: int | None, exclude: tuple[str, ...]
+    module: str,
+    visualize: bool,
+    output: str,
+    depth: int | None,
+    exclude: tuple[str, ...],
 ) -> None:
     """Trace imports from a module at runtime.
 
@@ -228,7 +232,9 @@ def concurrency() -> None:
 )
 @click.option("--output", type=click.Path(), help="Save report to file")
 @click.option("--detailed", is_flag=True, help="Show detailed analysis")
-def check_concurrency(path: str, severity: str, output: str | None, detailed: bool) -> None:
+def check_concurrency(
+    path: str, severity: str, output: str | None, detailed: bool
+) -> None:
     """Check for race conditions and concurrency issues.
 
     Performs static analysis to detect potential race conditions, missing locks,
@@ -263,9 +269,16 @@ def check_concurrency(path: str, severity: str, output: str | None, detailed: bo
         races = [r for r in races if severity_order[r.severity] >= min_level]
 
         if races:
-            console.print(f"[red][WARN]  Found {len(races)} potential race conditions:[/red]\n")
+            console.print(
+                f"[red][WARN]  Found {len(races)} potential race conditions:[/red]\n"
+            )
 
-            severity_colors = {"critical": "red", "high": "yellow", "medium": "blue", "low": "dim"}
+            severity_colors = {
+                "critical": "red",
+                "high": "yellow",
+                "medium": "blue",
+                "low": "dim",
+            }
 
             for race in races:
                 color = severity_colors[race.severity]
@@ -277,7 +290,9 @@ def check_concurrency(path: str, severity: str, output: str | None, detailed: bo
                 ]
 
                 if detailed:
-                    panel_content.extend(["\n[green]Suggestion:[/green]", race.suggestion])
+                    panel_content.extend(
+                        ["\n[green]Suggestion:[/green]", race.suggestion]
+                    )
 
                 console.print(
                     Panel(
@@ -366,7 +381,9 @@ def test_race(threads: int, iterations: int, target: str, timeout: int) -> None:
     try:
         # Parse target
         if ":" not in target:
-            console.print("[red]Error: Target must be in format 'module:function'[/red]")
+            console.print(
+                "[red]Error: Target must be in format 'module:function'[/red]"
+            )
             sys.exit(1)
 
         module_name, func_name = target.rsplit(":", 1)
@@ -387,7 +404,9 @@ def test_race(threads: int, iterations: int, target: str, timeout: int) -> None:
         table.add_row("Total Iterations", str(result.total_iterations))
         table.add_row("Successful", str(result.successful))
         table.add_row("Failed", str(result.failed))
-        table.add_row("Success Rate", f"{result.successful / result.total_iterations * 100:.1f}%")
+        table.add_row(
+            "Success Rate", f"{result.successful / result.total_iterations * 100:.1f}%"
+        )
 
         console.print(table)
         console.print()
@@ -566,7 +585,9 @@ def profile_memory(
     )
 
     if leaks:
-        console.print(f"[red][WARN]  Detected {len(leaks)} potential memory leaks:[/red]")
+        console.print(
+            f"[red][WARN]  Detected {len(leaks)} potential memory leaks:[/red]"
+        )
         console.print()
 
         # Display top leaks
@@ -642,7 +663,9 @@ def _handle_flame_graph(
     if not flame_graph:
         return
     if not enable_stack_sampling:
-        console.print("[yellow]Warning: --enable-stack-sampling required for flame graphs[/yellow]")
+        console.print(
+            "[yellow]Warning: --enable-stack-sampling required for flame graphs[/yellow]"
+        )
         return
     try:
         profiler.generate_flame_graph(flame_graph, format=format)
@@ -658,13 +681,22 @@ def _handle_flame_graph(
 @profile.command("action")
 @click.argument("script_file", type=click.Path(exists=True))
 @click.option("--output", default="profile.json", help="Output JSON file")
-@click.option("--flame-graph", type=click.Path(), help="Generate flame graph (SVG or JSON)")
 @click.option(
-    "--format", type=click.Choice(["svg", "json"]), default="svg", help="Flame graph format"
+    "--flame-graph", type=click.Path(), help="Generate flame graph (SVG or JSON)"
 )
-@click.option("--sample-interval", default=0.001, help="Stack sampling interval in seconds")
 @click.option(
-    "--enable-stack-sampling", is_flag=True, help="Enable stack sampling for flame graphs"
+    "--format",
+    type=click.Choice(["svg", "json"]),
+    default="svg",
+    help="Flame graph format",
+)
+@click.option(
+    "--sample-interval", default=0.001, help="Stack sampling interval in seconds"
+)
+@click.option(
+    "--enable-stack-sampling",
+    is_flag=True,
+    help="Enable stack sampling for flame graphs",
 )
 def profile_actions(
     script_file: str,
@@ -732,7 +764,9 @@ def profile_actions(
 
     # Note: In a real implementation, you would integrate with the actual
     # workflow/action execution. For now, we'll provide a framework.
-    console.print("[yellow]Note: Integrate this with your action execution framework[/yellow]")
+    console.print(
+        "[yellow]Note: Integrate this with your action execution framework[/yellow]"
+    )
     console.print("[yellow]Example integration:[/yellow]")
     console.print()
 
@@ -768,13 +802,17 @@ with profiler.profile_action("click", "submit_button") as profile:
 
     # End session
     session = profiler.end_session()
-    console.print(f"[green]Session ended:[/green] {len(session.profiles)} actions profiled\n")
+    console.print(
+        f"[green]Session ended:[/green] {len(session.profiles)} actions profiled\n"
+    )
 
     # Calculate metrics
     metrics = calculate_metrics(session.profiles)
 
     # Display summary table
-    table = Table(title="Performance Summary", show_header=True, header_style="bold magenta")
+    table = Table(
+        title="Performance Summary", show_header=True, header_style="bold magenta"
+    )
     table.add_column("Metric", style="cyan", width=30)
     table.add_column("Value", justify="right", style="green")
 
@@ -873,7 +911,10 @@ def architecture() -> None:
 @click.option("--min-lines", default=500, help="Minimum lines to flag")
 @click.option("--min-methods", default=20, help="Minimum methods to flag")
 @click.option(
-    "--detail", type=click.Choice(["low", "medium", "high"]), default="medium", help="Detail level"
+    "--detail",
+    type=click.Choice(["low", "medium", "high"]),
+    default="medium",
+    help="Detail level",
 )
 @click.option("--output", type=click.Path(), help="Save report to file")
 def detect_god_classes(
@@ -905,7 +946,9 @@ def detect_god_classes(
         console.print("[red]Error: Architecture analysis module not available[/red]")
         sys.exit(1)
 
-    detector = GodClassDetector(min_lines=min_lines, min_methods=min_methods, verbose=True)
+    detector = GodClassDetector(
+        min_lines=min_lines, min_methods=min_methods, verbose=True
+    )
 
     with console.status("[bold green]Analyzing classes..."):
         god_classes = detector.analyze_directory(path)
@@ -951,7 +994,9 @@ def detect_god_classes(
 
 @architecture.command("srp")
 @click.argument("path", type=click.Path(exists=True))
-@click.option("--detail", type=click.Choice(["low", "high"]), default="low", help="Detail level")
+@click.option(
+    "--detail", type=click.Choice(["low", "high"]), default="low", help="Detail level"
+)
 @click.option("--min-methods", default=5, help="Minimum methods to analyze")
 @click.option("--output", type=click.Path(), help="Save report to file")
 def analyze_srp(path: str, detail: str, min_methods: int, output: str | None) -> None:
@@ -1002,7 +1047,9 @@ def analyze_srp(path: str, detail: str, min_methods: int, output: str | None) ->
         if not by_severity[severity]:
             continue
 
-        severity_color = {"critical": "red", "high": "yellow", "medium": "blue"}[severity]
+        severity_color = {"critical": "red", "high": "yellow", "medium": "blue"}[
+            severity
+        ]
         console.print(
             f"[{severity_color}]## {severity.upper()} SEVERITY ({len(by_severity[severity])})[/{severity_color}]"
         )
@@ -1076,7 +1123,9 @@ def analyze_srp(path: str, detail: str, min_methods: int, output: str | None) ->
     help="Dependency level to analyze",
 )
 @click.option(
-    "--highlight-cycles/--no-highlight-cycles", default=True, help="Highlight circular dependencies"
+    "--highlight-cycles/--no-highlight-cycles",
+    default=True,
+    help="Highlight circular dependencies",
 )
 def visualize_graph(
     path: str,
@@ -1120,14 +1169,18 @@ def visualize_graph(
             console.print(f"[red]Error building graph: {e}[/red]")
             sys.exit(1)
 
-    console.print(f"[green][OK] Graph built:[/green] {len(nodes)} nodes, {len(edges)} edges")
+    console.print(
+        f"[green][OK] Graph built:[/green] {len(nodes)} nodes, {len(edges)} edges"
+    )
 
     # Detect cycles if requested
     if highlight_cycles:
         with console.status("[bold green]Detecting circular dependencies..."):
             cycles = visualizer.detect_cycles(nodes, edges)
         if cycles:
-            console.print(f"[yellow][WARN]  Found {len(cycles)} circular dependencies[/yellow]")
+            console.print(
+                f"[yellow][WARN]  Found {len(cycles)} circular dependencies[/yellow]"
+            )
 
     # Generate visualization
     with console.status(f"[bold green]Generating {format} visualization..."):
@@ -1165,7 +1218,9 @@ def visualize_graph(
         console.print("[blue]   - Search and filter[/blue]")
 
 
-def _display_coupling_section(coupling: list[Any], threshold: int, show_all: bool) -> None:
+def _display_coupling_section(
+    coupling: list[Any], threshold: int, show_all: bool
+) -> None:
     """Display the coupling analysis table to the console."""
     console.print("\n[bold]Coupling Analysis:[/bold]\n")
     if not coupling:
@@ -1178,14 +1233,16 @@ def _display_coupling_section(coupling: list[Any], threshold: int, show_all: boo
             coupling_to_show = high_coupling
             console.print(f"[yellow]Modules with Ce > {threshold}:[/yellow]\n")
         else:
-            coupling_to_show = sorted(coupling, key=lambda x: x.efferent_coupling, reverse=True)[
-                :10
-            ]
+            coupling_to_show = sorted(
+                coupling, key=lambda x: x.efferent_coupling, reverse=True
+            )[:10]
             console.print(
                 f"[green]No modules exceed threshold of {threshold}. Showing top 10:[/green]\n"
             )
     else:
-        coupling_to_show = sorted(coupling, key=lambda x: x.efferent_coupling, reverse=True)
+        coupling_to_show = sorted(
+            coupling, key=lambda x: x.efferent_coupling, reverse=True
+        )
 
     table = Table(title="Module Coupling Metrics")
     table.add_column("Module", style="cyan")
@@ -1195,7 +1252,12 @@ def _display_coupling_section(coupling: list[Any], threshold: int, show_all: boo
     table.add_column("Distance", justify="right")
     table.add_column("Score", justify="center")
 
-    score_colors = {"excellent": "green", "good": "blue", "fair": "yellow", "poor": "red"}
+    score_colors = {
+        "excellent": "green",
+        "good": "blue",
+        "fair": "yellow",
+        "poor": "red",
+    }
     for c in coupling_to_show[:20]:
         color = score_colors[c.coupling_score]
         table.add_row(
@@ -1222,8 +1284,15 @@ def _display_cohesion_section(cohesion: list[Any]) -> None:
         console.print("[green][OK] All classes have good cohesion![/green]")
         return
 
-    console.print(f"[yellow]Found {len(poor_cohesion)} classes with poor cohesion:[/yellow]\n")
-    score_colors = {"excellent": "green", "good": "blue", "fair": "yellow", "poor": "red"}
+    console.print(
+        f"[yellow]Found {len(poor_cohesion)} classes with poor cohesion:[/yellow]\n"
+    )
+    score_colors = {
+        "excellent": "green",
+        "good": "blue",
+        "fair": "yellow",
+        "poor": "red",
+    }
     for cls in sorted(poor_cohesion, key=lambda x: x.lcom, reverse=True)[:10]:
         color = score_colors[cls.cohesion_score]
         console.print(f"[{color}]{cls.name}[/{color}]:")
@@ -1264,9 +1333,13 @@ def _display_coupling_summary(coupling: list[Any], cohesion: list[Any]) -> None:
 @architecture.command("coupling")
 @click.argument("path", type=click.Path(exists=True))
 @click.option("--threshold", default=10, help="Max efferent coupling threshold")
-@click.option("--show-all", is_flag=True, help="Show all modules, not just problematic ones")
+@click.option(
+    "--show-all", is_flag=True, help="Show all modules, not just problematic ones"
+)
 @click.option("--output", type=click.Path(), help="Save report to file")
-def analyze_coupling(path: str, threshold: int, show_all: bool, output: str | None) -> None:
+def analyze_coupling(
+    path: str, threshold: int, show_all: bool, output: str | None
+) -> None:
     """Analyze coupling and cohesion metrics.
 
     Measures how tightly modules are coupled (dependencies) and how cohesive
@@ -1301,7 +1374,9 @@ def analyze_coupling(path: str, threshold: int, show_all: bool, output: str | No
         console.print("[red]Error: Coupling analyzer module not available[/red]")
         sys.exit(1)
 
-    console.print(f"[bold cyan]Analyzing coupling and cohesion in:[/bold cyan] {path}\n")
+    console.print(
+        f"[bold cyan]Analyzing coupling and cohesion in:[/bold cyan] {path}\n"
+    )
 
     analyzer = CouplingCohesionAnalyzer(verbose=True)
 
@@ -1342,7 +1417,9 @@ def _display_dead_code_results(dead_code: list[Any], min_confidence: float) -> N
 
     console.print(f"\n[red]Found {len(dead_code)} pieces of dead code:[/red]\n")
 
-    summary_table = Table(title="Dead Code Summary", show_header=True, header_style="bold magenta")
+    summary_table = Table(
+        title="Dead Code Summary", show_header=True, header_style="bold magenta"
+    )
     summary_table.add_column("Type", style="cyan")
     summary_table.add_column("Count", justify="right", style="bold")
     summary_table.add_column("Avg Confidence", justify="right")
@@ -1352,7 +1429,9 @@ def _display_dead_code_results(dead_code: list[Any], min_confidence: float) -> N
         if dtype in by_type:
             items = by_type[dtype]
             avg_conf = sum(dc.confidence for dc in items) / len(items)
-            summary_table.add_row(dtype.capitalize() + "s", str(len(items)), f"{avg_conf:.2f}")
+            summary_table.add_row(
+                dtype.capitalize() + "s", str(len(items)), f"{avg_conf:.2f}"
+            )
 
     console.print(summary_table)
     console.print()
@@ -1364,7 +1443,9 @@ def _display_dead_code_results(dead_code: list[Any], min_confidence: float) -> N
         console.print(f"[bold cyan]{dtype.capitalize()}s ({len(items)}):[/bold cyan]")
         for dc in sorted(items, key=lambda x: x.confidence, reverse=True)[:10]:
             confidence_color = (
-                "red" if dc.confidence > 0.8 else "yellow" if dc.confidence > 0.6 else "blue"
+                "red"
+                if dc.confidence > 0.8
+                else "yellow" if dc.confidence > 0.6 else "blue"
             )
             console.print(
                 f"  [{confidence_color}]• {dc.name}[/{confidence_color}] "
@@ -1412,7 +1493,14 @@ def _save_dead_code_report(
             writer.writerow(["Type", "Name", "File", "Line", "Confidence", "Reason"])
             for dc in dead_code:
                 writer.writerow(
-                    [dc.type, dc.name, dc.file_path, dc.line_number, dc.confidence, dc.reason]
+                    [
+                        dc.type,
+                        dc.name,
+                        dc.file_path,
+                        dc.line_number,
+                        dc.confidence,
+                        dc.reason,
+                    ]
                 )
     else:  # text
         lines = ["Dead Code Report", "=" * 80, ""]
@@ -1441,7 +1529,9 @@ def _save_dead_code_report(
     default="all",
     help="Type of dead code to detect",
 )
-@click.option("--min-confidence", default=0.5, type=float, help="Minimum confidence level (0-1)")
+@click.option(
+    "--min-confidence", default=0.5, type=float, help="Minimum confidence level (0-1)"
+)
 @click.option("--output", type=click.Path(), help="Save report to file")
 @click.option(
     "--format",
@@ -1527,7 +1617,10 @@ def security() -> None:
 @click.argument("path", type=click.Path(exists=True))
 @click.option("--output", type=click.Path(), help="Output file path")
 @click.option(
-    "--format", type=click.Choice(["text", "json", "html"]), default="text", help="Output format"
+    "--format",
+    type=click.Choice(["text", "json", "html"]),
+    default="text",
+    help="Output format",
 )
 @click.option(
     "--severity",
@@ -1563,7 +1656,9 @@ def scan_security(path: str, output: str | None, format: str, severity: str) -> 
         console.print("[red]Error: Security analysis module not available[/red]")
         sys.exit(1)
 
-    console.print(f"[bold cyan]Scanning for security vulnerabilities:[/bold cyan] {path}\n")
+    console.print(
+        f"[bold cyan]Scanning for security vulnerabilities:[/bold cyan] {path}\n"
+    )
 
     analyzer = SecurityAnalyzer()
     with console.status("[bold green]Analyzing security..."):
@@ -1586,10 +1681,15 @@ def scan_security(path: str, output: str | None, format: str, severity: str) -> 
     if filtered_vulns:
         console.print(f"[red]Found {len(filtered_vulns)} security issues:[/red]\n")
         for vuln in filtered_vulns:
-            color = {"critical": "red", "high": "yellow", "medium": "blue", "low": "dim"}[
-                vuln.severity.value
-            ]
-            console.print(f"[{color}]• {vuln.type.value.replace('_', ' ').title()}[/{color}]")
+            color = {
+                "critical": "red",
+                "high": "yellow",
+                "medium": "blue",
+                "low": "dim",
+            }[vuln.severity.value]
+            console.print(
+                f"[{color}]• {vuln.type.value.replace('_', ' ').title()}[/{color}]"
+            )
             console.print(f"  {vuln.file_path}:{vuln.line_number}")
             console.print(f"  {vuln.description}\n")
     else:
@@ -1612,10 +1712,18 @@ def _generate_security_report(
             "summary": {
                 "total_files_scanned": report.total_files_scanned,
                 "total_vulnerabilities": len(vulnerabilities),
-                "critical_count": sum(1 for v in vulnerabilities if v.severity.value == "critical"),
-                "high_count": sum(1 for v in vulnerabilities if v.severity.value == "high"),
-                "medium_count": sum(1 for v in vulnerabilities if v.severity.value == "medium"),
-                "low_count": sum(1 for v in vulnerabilities if v.severity.value == "low"),
+                "critical_count": sum(
+                    1 for v in vulnerabilities if v.severity.value == "critical"
+                ),
+                "high_count": sum(
+                    1 for v in vulnerabilities if v.severity.value == "high"
+                ),
+                "medium_count": sum(
+                    1 for v in vulnerabilities if v.severity.value == "medium"
+                ),
+                "low_count": sum(
+                    1 for v in vulnerabilities if v.severity.value == "low"
+                ),
                 "scan_duration": report.scan_duration,
             },
             "vulnerabilities": [v.to_dict() for v in vulnerabilities],
@@ -1843,7 +1951,9 @@ def check_regression(path: str, baseline: str | None) -> None:
     if regressions:
         console.print(f"[red]Found {len(regressions)} regressions:[/red]\n")
         for reg in regressions:
-            console.print(f"[yellow]• {reg.change_type.value}: {reg.description}[/yellow]")
+            console.print(
+                f"[yellow]• {reg.change_type.value}: {reg.description}[/yellow]"
+            )
     else:
         console.print("[green]No regressions detected![/green]")
 
@@ -1889,7 +1999,9 @@ def type_coverage(path: str, suggest: bool) -> None:
 
     # Display coverage metrics
     cov = report.overall_coverage
-    console.print(f"\n[bold]Overall Type Coverage:[/bold] {cov.coverage_percentage:.1f}%")
+    console.print(
+        f"\n[bold]Overall Type Coverage:[/bold] {cov.coverage_percentage:.1f}%"
+    )
     console.print(
         f"  Fully typed functions: {cov.fully_typed_functions}/{cov.total_functions} ({cov.fully_typed_functions / cov.total_functions * 100 if cov.total_functions > 0 else 0:.1f}%)"
     )
@@ -2054,7 +2166,9 @@ def trace() -> None:
 @click.option("--output", default="events.json", help="Output file")
 @click.option("--timeline", type=click.Path(), help="Generate timeline visualization")
 @click.option("--html", type=click.Path(), help="Generate HTML timeline")
-def trace_events(duration: int, output: str, timeline: str | None, html: str | None) -> None:
+def trace_events(
+    duration: int, output: str, timeline: str | None, html: str | None
+) -> None:
     """Trace events for specified duration.
 
     This command traces events through the Qontinui system and provides
@@ -2139,7 +2253,9 @@ def trace_events(duration: int, output: str, timeline: str | None, html: str | N
     # Stage latencies
     if flow.stage_latencies:
         console.print("[bold]Stage Latencies:[/bold]")
-        sorted_stages = sorted(flow.stage_latencies.items(), key=lambda x: x[1], reverse=True)
+        sorted_stages = sorted(
+            flow.stage_latencies.items(), key=lambda x: x[1], reverse=True
+        )
         for stage, latency in sorted_stages[:5]:  # Top 5
             console.print(f"  {stage}: {latency * 1000:.2f}ms")
         console.print()
@@ -2158,7 +2274,9 @@ def trace_events(duration: int, output: str, timeline: str | None, html: str | N
 
 @trace.command("analyze")
 @click.argument("trace_file", type=click.Path(exists=True))
-@click.option("--threshold", default=2.0, help="Anomaly detection threshold (multiplier)")
+@click.option(
+    "--threshold", default=2.0, help="Anomaly detection threshold (multiplier)"
+)
 def analyze_trace(trace_file: str, threshold: float) -> None:
     """Analyze saved trace file.
 
@@ -2565,8 +2683,18 @@ def _display_analyze_summary(report_data: Any) -> dict[str, Any]:
     console.print(table)
 
     console.print("\n[bold]Section Results:[/bold]\n")
-    severity_icons = {"success": "[OK]", "warning": "[WARN]", "error": "[FAIL]", "info": "ℹ️"}
-    severity_colors = {"success": "green", "warning": "yellow", "error": "red", "info": "blue"}
+    severity_icons = {
+        "success": "[OK]",
+        "warning": "[WARN]",
+        "error": "[FAIL]",
+        "info": "ℹ️",
+    }
+    severity_colors = {
+        "success": "green",
+        "warning": "yellow",
+        "error": "red",
+        "info": "blue",
+    }
     for section in report_data.sections:
         icon = severity_icons[section.severity]
         color = severity_colors[section.severity]
@@ -2634,7 +2762,9 @@ def _print_analyze_next_steps(metrics: dict[str, Any]) -> None:
         )
         console.print("  [yellow]2. Review warnings and plan refactoring[/yellow]")
         console.print("  3. Run analysis again to track progress")
-    elif metrics.get("circular_dependencies", 0) > 0 or metrics.get("god_classes", 0) > 0:
+    elif (
+        metrics.get("circular_dependencies", 0) > 0 or metrics.get("god_classes", 0) > 0
+    ):
         console.print("  [yellow]1. Refactor identified issues[/yellow]")
         console.print("  2. Review architecture recommendations")
         console.print("  3. Run analysis again to verify improvements")
@@ -2647,16 +2777,22 @@ def _print_analyze_next_steps(metrics: dict[str, Any]) -> None:
 
 @main.command("analyze")
 @click.argument("path", type=click.Path(exists=True))
-@click.option("--report", type=click.Path(), help="Generate HTML report at specified path")
+@click.option(
+    "--report", type=click.Path(), help="Generate HTML report at specified path"
+)
 @click.option(
     "--format",
     type=click.Choice(["text", "json", "html"], case_sensitive=False),
     default="text",
     help="Output format (text: console output, json: JSON file, html: interactive report)",
 )
-@click.option("--output", type=click.Path(), help="Output file path (used with --format)")
+@click.option(
+    "--output", type=click.Path(), help="Output file path (used with --format)"
+)
 @click.option("--verbose", is_flag=True, help="Enable verbose output")
-def analyze(path: str, report: str | None, format: str, output: str | None, verbose: bool) -> None:
+def analyze(
+    path: str, report: str | None, format: str, output: str | None, verbose: bool
+) -> None:
     """Run comprehensive analysis and generate interactive HTML report.
 
     This command runs all available analysis tools (imports, architecture, quality,
@@ -2708,7 +2844,9 @@ def analyze(path: str, report: str | None, format: str, output: str | None, verb
 @main.command("dashboard")
 @click.option("--host", default="localhost", help="Server host address")
 @click.option("--port", default=8765, type=int, help="Server port number")
-@click.option("--interval", default=1.0, type=float, help="Metrics collection interval in seconds")
+@click.option(
+    "--interval", default=1.0, type=float, help="Metrics collection interval in seconds"
+)
 def start_dashboard(host: str, port: int, interval: float) -> None:
     """Start real-time performance dashboard.
 
@@ -2770,7 +2908,9 @@ def start_dashboard(host: str, port: int, interval: float) -> None:
     server = DashboardServer(host=host, port=port, metrics_collector=collector)
 
     try:
-        console.print(f"\n[green][OK] Dashboard running at http://{host}:{port}[/green]")
+        console.print(
+            f"\n[green][OK] Dashboard running at http://{host}:{port}[/green]"
+        )
         console.print("[dim]Waiting for connections...[/dim]\n")
         server.start()
     except KeyboardInterrupt:
@@ -2780,7 +2920,9 @@ def start_dashboard(host: str, port: int, interval: float) -> None:
     except OSError as e:
         if "Address already in use" in str(e):
             console.print(f"[red]Error: Port {port} is already in use[/red]")
-            console.print("[yellow]Try a different port with --port <port_number>[/yellow]")
+            console.print(
+                "[yellow]Try a different port with --port <port_number>[/yellow]"
+            )
         else:
             console.print(f"[red]Error starting server: {e}[/red]")
         sys.exit(1)
@@ -2806,7 +2948,9 @@ def validate() -> None:
 @click.argument("config_path", type=click.Path(exists=True))
 @click.option("--verbose", "-v", is_flag=True, help="Show detailed error information")
 @click.option("--strict", is_flag=True, help="Exit with error code if validation fails")
-@click.option("--qontinui-path", type=click.Path(exists=True), help="Path to qontinui library")
+@click.option(
+    "--qontinui-path", type=click.Path(exists=True), help="Path to qontinui library"
+)
 def validate_config(
     config_path: str, verbose: bool, strict: bool, qontinui_path: str | None
 ) -> None:
@@ -2851,11 +2995,15 @@ def validate_config(
         if strict and not report.is_valid:
             sys.exit(1)
         elif not report.is_valid:
-            console.print("\n[yellow]Tip: Use --strict to fail CI/CD on validation errors[/yellow]")
+            console.print(
+                "\n[yellow]Tip: Use --strict to fail CI/CD on validation errors[/yellow]"
+            )
 
     except FileNotFoundError as e:
         console.print(f"[red]Error: {e}[/red]")
-        console.print("\n[yellow]Tip: Specify qontinui library path with --qontinui-path[/yellow]")
+        console.print(
+            "\n[yellow]Tip: Specify qontinui library path with --qontinui-path[/yellow]"
+        )
         sys.exit(1)
     except Exception as e:
         console.print(f"[red]Unexpected error: {e}[/red]")
@@ -2951,9 +3099,14 @@ def ts_check_imports(path: str, strict: bool, output: str | None, format: str) -
 @click.option("--strict", is_flag=True, help="Exit with error code if issues found")
 @click.option("--output", type=click.Path(), help="Save report to file")
 @click.option(
-    "--min-confidence", type=float, default=0.7, help="Minimum confidence level (0-1) to report"
+    "--min-confidence",
+    type=float,
+    default=0.7,
+    help="Minimum confidence level (0-1) to report",
 )
-def ts_dead_code(path: str, strict: bool, output: str | None, min_confidence: float) -> None:
+def ts_dead_code(
+    path: str, strict: bool, output: str | None, min_confidence: float
+) -> None:
     """Find unused exports, functions, and code in TypeScript/JavaScript.
 
     Analyzes TS/JS files to detect potentially unused exports and code that
@@ -2981,7 +3134,9 @@ def ts_dead_code(path: str, strict: bool, output: str | None, min_confidence: fl
         dead_code = detector.analyze()
 
         # Filter by confidence
-        filtered_code = [code for code in dead_code if code.confidence >= min_confidence]
+        filtered_code = [
+            code for code in dead_code if code.confidence >= min_confidence
+        ]
 
         # Generate rich report
         detector.generate_rich_report(filtered_code)
@@ -3012,12 +3167,19 @@ def ts_dead_code(path: str, strict: bool, output: str | None, min_confidence: fl
 
 @ts.command("types")
 @click.argument("path", type=click.Path(exists=True))
-@click.option("--strict", is_flag=True, help="Exit with error code if coverage below threshold")
 @click.option(
-    "--threshold", type=float, default=80.0, help="Minimum type coverage percentage (0-100)"
+    "--strict", is_flag=True, help="Exit with error code if coverage below threshold"
+)
+@click.option(
+    "--threshold",
+    type=float,
+    default=80.0,
+    help="Minimum type coverage percentage (0-100)",
 )
 @click.option("--output", type=click.Path(), help="Save report to file")
-def ts_type_coverage(path: str, strict: bool, threshold: float, output: str | None) -> None:
+def ts_type_coverage(
+    path: str, strict: bool, threshold: float, output: str | None
+) -> None:
     """Analyze TypeScript type coverage.
 
     Measures how well TypeScript code is typed, including coverage of
@@ -3072,8 +3234,12 @@ def ts_type_coverage(path: str, strict: bool, threshold: float, output: str | No
 @click.argument("path", type=click.Path(exists=True))
 @click.option("--strict", is_flag=True, help="Exit with error code if issues found")
 @click.option("--max-file-lines", type=int, default=500, help="Maximum lines per file")
-@click.option("--max-function-lines", type=int, default=50, help="Maximum lines per function")
-@click.option("--max-complexity", type=int, default=10, help="Maximum cyclomatic complexity")
+@click.option(
+    "--max-function-lines", type=int, default=50, help="Maximum lines per function"
+)
+@click.option(
+    "--max-complexity", type=int, default=10, help="Maximum cyclomatic complexity"
+)
 @click.option("--output", type=click.Path(), help="Save report to file")
 def ts_complexity(
     path: str,
@@ -3178,7 +3344,9 @@ def ts_analyze(
         console.print("[red]Error: TypeScript analysis module not available[/red]")
         sys.exit(1)
 
-    console.print("\n[bold cyan]Running Comprehensive TypeScript/JavaScript Analysis[/bold cyan]\n")
+    console.print(
+        "\n[bold cyan]Running Comprehensive TypeScript/JavaScript Analysis[/bold cyan]\n"
+    )
 
     report_lines = [
         "=" * 80,
@@ -3218,7 +3386,9 @@ def ts_analyze(
             complexity_analyzer = ComplexityAnalyzer(path, verbose=False)
             complexity_results = complexity_analyzer.analyze()
             complexity_analyzer.generate_rich_report(complexity_results)
-            report_lines.append("\n" + complexity_analyzer.generate_report(complexity_results))
+            report_lines.append(
+                "\n" + complexity_analyzer.generate_report(complexity_results)
+            )
 
         # Save comprehensive report if requested
         if output:
@@ -3311,9 +3481,14 @@ def rust_import_check(path: str, verbose: bool, output: str | None) -> None:
 @click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
 @click.option("--output", type=click.Path(), help="Save report to file")
 @click.option(
-    "--min-confidence", type=float, default=0.5, help="Minimum confidence threshold (0-1)"
+    "--min-confidence",
+    type=float,
+    default=0.5,
+    help="Minimum confidence threshold (0-1)",
 )
-def rust_dead_code(path: str, verbose: bool, output: str | None, min_confidence: float) -> None:
+def rust_dead_code(
+    path: str, verbose: bool, output: str | None, min_confidence: float
+) -> None:
     """Find unused code in Rust projects.
 
     Detects unused functions, structs, enums, traits, and constants
@@ -3453,9 +3628,14 @@ def rust_unsafe(path: str, verbose: bool, output: str | None) -> None:
 @click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
 @click.option("--output", type=click.Path(), help="Save report to file")
 @click.option(
-    "--threshold", type=int, default=10, help="Complexity threshold for flagging functions"
+    "--threshold",
+    type=int,
+    default=10,
+    help="Complexity threshold for flagging functions",
 )
-def rust_complexity(path: str, verbose: bool, output: str | None, threshold: int) -> None:
+def rust_complexity(
+    path: str, verbose: bool, output: str | None, threshold: int
+) -> None:
     """Measure code complexity in Rust projects.
 
     Analyzes function complexity, file sizes, and complex match statements
@@ -3479,7 +3659,9 @@ def rust_complexity(path: str, verbose: bool, output: str | None, threshold: int
         sys.exit(1)
 
     try:
-        analyzer = ComplexityAnalyzer(path, verbose=verbose, complexity_threshold=threshold)
+        analyzer = ComplexityAnalyzer(
+            path, verbose=verbose, complexity_threshold=threshold
+        )
         metrics = analyzer.analyze()
 
         # Use the rich report from analyzer
@@ -3554,7 +3736,9 @@ def rust_analyze(path: str, verbose: bool, output_dir: str | None) -> None:
         if not dead_code:
             console.print("[green]  No dead code found[/green]")
         else:
-            console.print(f"[yellow]  Found {len(dead_code)} potentially unused items[/yellow]")
+            console.print(
+                f"[yellow]  Found {len(dead_code)} potentially unused items[/yellow]"
+            )
         if output_path:
             report_file = output_path / "dead_code.txt"
             report_file.write_text(dead_detector.generate_report(dead_code))
@@ -3628,7 +3812,9 @@ def cross_lang() -> None:
 @click.option("--verbose", "-v", is_flag=True, help="Show detailed progress")
 @click.option("--output", type=click.Path(), help="Save report to file")
 @click.option("--strict", is_flag=True, help="Exit with error code if issues found")
-def check_id_types(paths: tuple[str, ...], verbose: bool, output: str | None, strict: bool) -> None:
+def check_id_types(
+    paths: tuple[str, ...], verbose: bool, output: str | None, strict: bool
+) -> None:
     """Check for ID type inconsistencies across languages.
 
     Detects common issues where ID fields (projectId, user_id, etc.) are typed

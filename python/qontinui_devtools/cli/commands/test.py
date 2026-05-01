@@ -159,7 +159,9 @@ def test(
             try:
                 # Build streaming endpoint URL
                 if cloud_url:
-                    stream_url = f"{cloud_url.rstrip('/')}/api/v1/projects/{project_id}/results"
+                    stream_url = (
+                        f"{cloud_url.rstrip('/')}/api/v1/projects/{project_id}/results"
+                    )
                     streamer = ResultStreamer(stream_url, api_token=api_token)
                     click.echo(f"Cloud streaming enabled: {stream_url}")
                 else:
@@ -210,7 +212,9 @@ def test(
 
             # Check if we should continue
             if not result["success"] and not continue_on_failure:
-                print_warning("Test failed and --continue-on-failure not set. Stopping.")
+                print_warning(
+                    "Test failed and --continue-on-failure not set. Stopping."
+                )
                 break
 
         # Generate test report
@@ -386,7 +390,9 @@ def _run_with_timeout(
 
     def run_workflow() -> None:
         try:
-            result["success"] = runner.run(process_id=workflow_id, monitor_index=monitor)
+            result["success"] = runner.run(
+                process_id=workflow_id, monitor_index=monitor
+            )
         except Exception as e:
             result["error"] = e
 

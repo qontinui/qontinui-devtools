@@ -188,7 +188,9 @@ class CircularDependencyDetector:
                     for imp in self.import_map[from_module]:
                         # Check if this import leads to the target module
                         file_path = self.file_map[from_module]
-                        resolved = resolve_import_path(imp.source, file_path, self.root_path)
+                        resolved = resolve_import_path(
+                            imp.source, file_path, self.root_path
+                        )
                         if resolved:
                             target = module_path_from_file(resolved, self.root_path)
                             if target == to_module:
@@ -227,7 +229,9 @@ class CircularDependencyDetector:
             self.console.print("\n[green]No circular dependencies found![/green]")
             return
 
-        self.console.print(f"\n[bold red]Found {len(cycles)} circular dependencies:[/bold red]\n")
+        self.console.print(
+            f"\n[bold red]Found {len(cycles)} circular dependencies:[/bold red]\n"
+        )
 
         for i, cycle in enumerate(cycles, 1):
             # Determine color based on severity
@@ -297,7 +301,9 @@ class CircularDependencyDetector:
                 lines.append(f"  {module}")
                 if j < len(cycle.import_chain):
                     imp = cycle.import_chain[j]
-                    lines.append(f"    -> imports from '{imp.source}' (line {imp.line_number})")
+                    lines.append(
+                        f"    -> imports from '{imp.source}' (line {imp.line_number})"
+                    )
 
         lines.append("\n" + "=" * 80)
         stats = self.get_statistics()

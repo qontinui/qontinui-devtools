@@ -42,9 +42,7 @@ class AssertionSuggestionStrategy:
         suggestions: list[Any] = []
 
         # Find JUnit assertion methods
-        assertion_pattern = (
-            r"(assertEquals|assertTrue|assertFalse|assertNull|assertNotNull|assertThrows)\s*\("
-        )
+        assertion_pattern = r"(assertEquals|assertTrue|assertFalse|assertNull|assertNotNull|assertThrows)\s*\("
         assertion_matches = re.findall(
             assertion_pattern, error_message + stack_trace, re.IGNORECASE
         )

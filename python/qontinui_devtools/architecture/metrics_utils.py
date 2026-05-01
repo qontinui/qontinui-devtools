@@ -271,7 +271,10 @@ def find_method_call_connections(class_node: ast.ClassDef) -> dict[str, set[str]
             # Look for self.method() patterns
             if isinstance(child, ast.Call):
                 if isinstance(child.func, ast.Attribute):
-                    if isinstance(child.func.value, ast.Name) and child.func.value.id == "self":
+                    if (
+                        isinstance(child.func.value, ast.Name)
+                        and child.func.value.id == "self"
+                    ):
                         calls.add(child.func.attr)
 
         method_calls[method_name] = calls
@@ -387,7 +390,9 @@ def count_abstract_classes(module_path: str) -> tuple[int, int]:
     return (abstract_count, total_count)
 
 
-def classify_score(value: float, thresholds: dict[str, float], inverse: bool = False) -> str:
+def classify_score(
+    value: float, thresholds: dict[str, float], inverse: bool = False
+) -> str:
     """Classify a metric value into a quality score.
 
     Args:

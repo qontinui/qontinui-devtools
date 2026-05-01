@@ -55,7 +55,9 @@ def analyze_growth_trend(
     return is_growing, slope
 
 
-def find_reference_chains(obj: Any, max_depth: int = 5, max_chains: int = 10) -> list[list[str]]:
+def find_reference_chains(
+    obj: Any, max_depth: int = 5, max_chains: int = 10
+) -> list[list[str]]:
     """Find reference chains keeping an object alive.
 
     Uses gc.get_referrers() to trace back what's holding references.
@@ -71,7 +73,9 @@ def find_reference_chains(obj: Any, max_depth: int = 5, max_chains: int = 10) ->
     chains: list[list[str]] = []
     visited = set()
 
-    def _trace_referrers(current_obj: Any, current_chain: list[str], depth: int) -> None:
+    def _trace_referrers(
+        current_obj: Any, current_chain: list[str], depth: int
+    ) -> None:
         """Recursively trace referrers."""
         if depth >= max_depth or len(chains) >= max_chains:
             return
@@ -114,7 +118,9 @@ def find_reference_chains(obj: Any, max_depth: int = 5, max_chains: int = 10) ->
     return chains
 
 
-def find_leaked_objects(baseline_objects: set[int], current_objects: list[Any]) -> list[Any]:
+def find_leaked_objects(
+    baseline_objects: set[int], current_objects: list[Any]
+) -> list[Any]:
     """Find objects that were created after baseline.
 
     Args:
@@ -131,7 +137,9 @@ def find_leaked_objects(baseline_objects: set[int], current_objects: list[Any]) 
     return leaked
 
 
-def classify_leak_severity(count_increase: int, size_mb: float, growth_rate: float) -> str:
+def classify_leak_severity(
+    count_increase: int, size_mb: float, growth_rate: float
+) -> str:
     """Classify leak severity based on metrics.
 
     Args:
@@ -172,7 +180,9 @@ def analyze_object_retention(obj: Any) -> dict[str, Any]:
         "size": sys.getsizeof(obj),
         "referrer_count": len(gc.get_referrers(obj)),
         "is_tracked": gc.is_tracked(obj),
-        "referent_count": len(gc.get_referents(obj)) if hasattr(gc, "get_referents") else 0,
+        "referent_count": (
+            len(gc.get_referents(obj)) if hasattr(gc, "get_referents") else 0
+        ),
     }
 
     # Analyze referrers
@@ -259,7 +269,8 @@ def get_object_size_deep(obj: Any, seen: set[int] | None = None) -> int:
     # Recursively measure referenced objects
     if isinstance(obj, dict):
         size += sum(
-            get_object_size_deep(k, seen) + get_object_size_deep(v, seen) for k, v in obj.items()
+            get_object_size_deep(k, seen) + get_object_size_deep(v, seen)
+            for k, v in obj.items()
         )
     elif isinstance(obj, list | tuple | set | frozenset):
         size += sum(get_object_size_deep(item, seen) for item in obj)
@@ -288,18 +299,24 @@ def detect_common_leak_patterns(objects_by_type: dict[str, int]) -> list[str]:
 
     # Pattern 1: Excessive list/dict growth
     if objects_by_type.get("list", 0) > 10000:
-        patterns.append("Excessive list objects (possible unbounded cache or accumulator)")
+        patterns.append(
+            "Excessive list objects (possible unbounded cache or accumulator)"
+        )
 
     if objects_by_type.get("dict", 0) > 5000:
         patterns.append("Excessive dict objects (possible unbounded cache or mapping)")
 
     # Pattern 2: Frame leaks
     if objects_by_type.get("frame", 0) > 100:
-        patterns.append("Excessive frame objects (possible exception or generator leak)")
+        patterns.append(
+            "Excessive frame objects (possible exception or generator leak)"
+        )
 
     # Pattern 3: Closure/function leaks
     if objects_by_type.get("function", 0) > 1000:
-        patterns.append("Excessive function objects (possible closure or decorator leak)")
+        patterns.append(
+            "Excessive function objects (possible closure or decorator leak)"
+        )
 
     # Pattern 4: String accumulation
     if objects_by_type.get("str", 0) > 50000:
@@ -336,7 +353,9 @@ def suggest_fixes(leak_type: str, pattern: str | None = None) -> list[str]:
     if leak_type == "dict":
         suggestions.append("Consider using weakref.WeakValueDictionary for caches")
         suggestions.append("Implement cache size limits with LRU eviction")
-        suggestions.append("Ensure dict.clear() is called when data is no longer needed")
+        suggestions.append(
+            "Ensure dict.clear() is called when data is no longer needed"
+        )
 
     elif leak_type == "list":
         suggestions.append("Implement bounded collections with size limits")

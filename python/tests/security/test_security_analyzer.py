@@ -29,7 +29,9 @@ def temp_dir() -> Generator[Path, None, None]:
 # SQL Injection Tests
 
 
-def test_sql_injection_string_concatenation(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_sql_injection_string_concatenation(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of SQL injection via string concatenation."""
     code = """
 import sqlite3
@@ -96,7 +98,9 @@ def get_user(email) -> Any:
     assert len(sql_vulns) == 1
 
 
-def test_sql_safe_parameterized_query(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_sql_safe_parameterized_query(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test that safe parameterized queries are not flagged."""
     code = """
 import sqlite3
@@ -139,7 +143,9 @@ def get_all_users() -> Any:
 # Command Injection Tests
 
 
-def test_command_injection_os_system(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_command_injection_os_system(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of command injection via os.system."""
     code = """
 import os
@@ -220,7 +226,9 @@ def list_directory() -> None:
     assert len(cmd_vulns) == 0
 
 
-def test_command_subprocess_shell_false(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_command_subprocess_shell_false(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test that subprocess with shell=False and static args is safe."""
     code = """
 import subprocess
@@ -383,7 +391,9 @@ api_key = os.getenv("API_KEY")
 # Insecure Deserialization Tests
 
 
-def test_insecure_deserialization_pickle(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_insecure_deserialization_pickle(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of insecure pickle.loads."""
     code = """
 import pickle
@@ -396,14 +406,18 @@ def load_data(data) -> Any:
 
     vulns = analyzer.analyze_file(str(file_path))
 
-    deser_vulns = [v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION]
+    deser_vulns = [
+        v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION
+    ]
     assert len(deser_vulns) == 1
     assert deser_vulns[0].severity == Severity.CRITICAL
     assert "JSON" in deser_vulns[0].remediation
     assert deser_vulns[0].cwe_id == "CWE-502"
 
 
-def test_insecure_deserialization_yaml(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_insecure_deserialization_yaml(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of insecure yaml.load."""
     code = """
 import yaml
@@ -416,12 +430,16 @@ def load_config(config_str) -> Any:
 
     vulns = analyzer.analyze_file(str(file_path))
 
-    deser_vulns = [v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION]
+    deser_vulns = [
+        v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION
+    ]
     assert len(deser_vulns) == 1
     assert "safe_load" in deser_vulns[0].remediation.lower()
 
 
-def test_insecure_deserialization_eval(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_insecure_deserialization_eval(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of eval with user input."""
     code = """
 def calculate(expression) -> Any:
@@ -432,12 +450,16 @@ def calculate(expression) -> Any:
 
     vulns = analyzer.analyze_file(str(file_path))
 
-    deser_vulns = [v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION]
+    deser_vulns = [
+        v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION
+    ]
     assert len(deser_vulns) == 1
     assert "ast.literal_eval()" in deser_vulns[0].remediation
 
 
-def test_insecure_deserialization_exec(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_insecure_deserialization_exec(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test detection of exec with user input."""
     code = """
 def run_code(code_str) -> None:
@@ -448,7 +470,9 @@ def run_code(code_str) -> None:
 
     vulns = analyzer.analyze_file(str(file_path))
 
-    deser_vulns = [v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION]
+    deser_vulns = [
+        v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION
+    ]
     assert len(deser_vulns) == 1
 
 
@@ -465,11 +489,15 @@ def load_config(config_str) -> Any:
 
     vulns = analyzer.analyze_file(str(file_path))
 
-    deser_vulns = [v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION]
+    deser_vulns = [
+        v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION
+    ]
     assert len(deser_vulns) == 0
 
 
-def test_safe_yaml_explicit_safeloader(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_safe_yaml_explicit_safeloader(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test that yaml.load with SafeLoader is not flagged."""
     code = """
 import yaml
@@ -482,7 +510,9 @@ def load_config(config_str) -> Any:
 
     vulns = analyzer.analyze_file(str(file_path))
 
-    deser_vulns = [v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION]
+    deser_vulns = [
+        v for v in vulns if v.type == VulnerabilityType.INSECURE_DESERIALIZATION
+    ]
     assert len(deser_vulns) == 0
 
 
@@ -724,25 +754,19 @@ def parse_xml(xml_str) -> Any:
 def test_analyze_directory(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test analyzing an entire directory."""
     # Create multiple files with vulnerabilities
-    (temp_dir / "vuln1.py").write_text(
-        """
+    (temp_dir / "vuln1.py").write_text("""
 import os
 os.system("ls " + user_input)
-"""
-    )
+""")
 
-    (temp_dir / "vuln2.py").write_text(
-        """
+    (temp_dir / "vuln2.py").write_text("""
 password = "SuperSecret123!"
-"""
-    )
+""")
 
-    (temp_dir / "safe.py").write_text(
-        """
+    (temp_dir / "safe.py").write_text("""
 def hello() -> None:
     print("Hello, world!")
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -751,18 +775,18 @@ def hello() -> None:
     assert report.critical_count >= 1
 
 
-def test_analyze_directory_recursive(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_analyze_directory_recursive(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test recursive directory analysis."""
     subdir = temp_dir / "subdir"
     subdir.mkdir()
 
     (temp_dir / "file1.py").write_text("print('hello')")
-    (subdir / "file2.py").write_text(
-        """
+    (subdir / "file2.py").write_text("""
 import pickle
 pickle.loads(data)
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir), recursive=True)
 
@@ -770,18 +794,18 @@ pickle.loads(data)
     assert report.total_vulnerabilities >= 1
 
 
-def test_analyze_directory_non_recursive(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_analyze_directory_non_recursive(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test non-recursive directory analysis."""
     subdir = temp_dir / "subdir"
     subdir.mkdir()
 
     (temp_dir / "file1.py").write_text("print('hello')")
-    (subdir / "file2.py").write_text(
-        """
+    (subdir / "file2.py").write_text("""
 import pickle
 pickle.loads(data)
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir), recursive=False)
 
@@ -790,17 +814,13 @@ pickle.loads(data)
 
 def test_exclude_patterns(temp_dir: Path) -> None:
     """Test excluding files by pattern."""
-    (temp_dir / "test_file.py").write_text(
-        """
+    (temp_dir / "test_file.py").write_text("""
 password = "SuperSecret123!"
-"""
-    )
+""")
 
-    (temp_dir / "main.py").write_text(
-        """
+    (temp_dir / "main.py").write_text("""
 api_key = "sk_live_1234567890abcdefghij"
-"""
-    )
+""")
 
     analyzer = SecurityAnalyzer(exclude_patterns=["test_*.py"])
     report = analyzer.analyze_directory(str(temp_dir))
@@ -814,15 +834,13 @@ api_key = "sk_live_1234567890abcdefghij"
 
 def test_security_report_properties(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test SecurityReport properties and methods."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
 import hashlib
 hashlib.md5(data)
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -831,16 +849,16 @@ hashlib.md5(data)
     assert isinstance(report.has_high, bool)
 
 
-def test_security_report_get_by_severity(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_security_report_get_by_severity(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test filtering vulnerabilities by severity."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 os.system("ls " + user_input)
 import hashlib
 hashlib.md5(data)
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -851,15 +869,15 @@ hashlib.md5(data)
     assert all(v.severity == Severity.MEDIUM for v in medium_vulns)
 
 
-def test_security_report_get_by_type(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_security_report_get_by_type(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test filtering vulnerabilities by type."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir))
 
@@ -872,11 +890,9 @@ password = "SuperSecret123!"
 
 def test_security_report_to_dict(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test converting report to dictionary."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 password = "SuperSecret123!"
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir))
     report_dict = report.to_dict()
@@ -890,11 +906,9 @@ password = "SuperSecret123!"
 
 def test_vulnerability_to_dict(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test converting vulnerability to dictionary."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 password = "SuperSecret123!"
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0
@@ -922,13 +936,13 @@ def test_severity_comparison() -> None:
     assert Severity.MEDIUM > Severity.HIGH
 
 
-def test_vulnerability_str_representation(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_vulnerability_str_representation(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test string representation of vulnerability."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 password = "SuperSecret123!"
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0
@@ -941,11 +955,9 @@ password = "SuperSecret123!"
 
 def test_report_str_representation(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test string representation of report."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 password = "SuperSecret123!"
-"""
-    )
+""")
 
     report = analyzer.analyze_directory(str(temp_dir))
     report_str = str(report)
@@ -964,15 +976,15 @@ def test_analyze_nonexistent_file(analyzer: SecurityAnalyzer) -> None:
     assert len(vulns) == 0
 
 
-def test_analyze_file_with_syntax_error(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
+def test_analyze_file_with_syntax_error(
+    analyzer: SecurityAnalyzer, temp_dir: Path
+) -> None:
     """Test analyzing a file with syntax errors."""
-    (temp_dir / "syntax_error.py").write_text(
-        """
+    (temp_dir / "syntax_error.py").write_text("""
 def broken_function(
     # Missing closing parenthesis
     print("This won't parse")
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "syntax_error.py"))
     assert len(vulns) == 0  # Should handle gracefully
@@ -1016,12 +1028,10 @@ def unsafe_function(user_input, data) -> None:
 
 def test_confidence_score(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test that vulnerabilities have confidence scores."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 os.system("ls " + user_input)
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0
@@ -1033,15 +1043,13 @@ os.system("ls " + user_input)
 
 def test_cwe_mapping(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test that all vulnerabilities have CWE IDs."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
 import pickle
 pickle.loads(data)
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
 
@@ -1051,13 +1059,11 @@ pickle.loads(data)
 
 def test_owasp_mapping(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test that all vulnerabilities have OWASP categories."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 os.system("ls " + user_input)
 password = "SuperSecret123!"
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
 
@@ -1071,12 +1077,10 @@ password = "SuperSecret123!"
 
 def test_remediation_suggestions(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test that all vulnerabilities have remediation suggestions."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 os.system("ls " + user_input)
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
 
@@ -1087,14 +1091,12 @@ os.system("ls " + user_input)
 
 def test_code_snippet_extraction(analyzer: SecurityAnalyzer, temp_dir: Path) -> None:
     """Test that code snippets are properly extracted."""
-    (temp_dir / "vuln.py").write_text(
-        """
+    (temp_dir / "vuln.py").write_text("""
 import os
 
 def unsafe_function(user_input) -> None:
     os.system("ls " + user_input)
-"""
-    )
+""")
 
     vulns = analyzer.analyze_file(str(temp_dir / "vuln.py"))
     assert len(vulns) > 0

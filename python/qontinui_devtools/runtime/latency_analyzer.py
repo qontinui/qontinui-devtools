@@ -184,7 +184,9 @@ def calculate_throughput(
     return windows
 
 
-def compare_traces(trace1: "EventTrace", trace2: "EventTrace") -> dict[str, dict[str, float]]:
+def compare_traces(
+    trace1: "EventTrace", trace2: "EventTrace"
+) -> dict[str, dict[str, float]]:
     """Compare two traces and show latency differences.
 
     Args:
@@ -223,7 +225,12 @@ def compare_traces(trace1: "EventTrace", trace2: "EventTrace") -> dict[str, dict
         diff = lat2 - lat1
         diff_pct = (diff / lat1 * 100) if lat1 > 0 else 0.0
 
-        result[stage] = {"trace1": lat1, "trace2": lat2, "diff": diff, "diff_pct": diff_pct}
+        result[stage] = {
+            "trace1": lat1,
+            "trace2": lat2,
+            "diff": diff,
+            "diff_pct": diff_pct,
+        }
 
     return result
 
@@ -293,7 +300,9 @@ def generate_latency_report(traces: list["EventTrace"]) -> str:
             factor = stage_latency / avg_latency if avg_latency > 0 else 0
 
             lines.append(f"  {event_id}: {stage}")
-            lines.append(f"    Latency: {stage_latency * 1000:.2f}ms ({factor:.1f}x average)")
+            lines.append(
+                f"    Latency: {stage_latency * 1000:.2f}ms ({factor:.1f}x average)"
+            )
 
         if len(anomalies) > 10:
             lines.append(f"  ... and {len(anomalies) - 10} more")

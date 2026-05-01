@@ -10,7 +10,9 @@ from typing import Any
 from .race_tester import RaceConditionTester, RaceTestResult
 
 
-def test_dictionary_concurrent_access(threads: int = 10, iterations: int = 10) -> RaceTestResult:
+def test_dictionary_concurrent_access(
+    threads: int = 10, iterations: int = 10
+) -> RaceTestResult:
     """Test concurrent dictionary access.
 
     Tests if concurrent reads and writes to a dictionary without
@@ -62,7 +64,9 @@ def test_check_then_act(threads: int = 10, iterations: int = 100) -> RaceTestRes
     return tester.test_function(worker)
 
 
-def test_check_then_act_safe(threads: int = 10, iterations: int = 100) -> RaceTestResult:
+def test_check_then_act_safe(
+    threads: int = 10, iterations: int = 100
+) -> RaceTestResult:
     """Test thread-safe check-then-act pattern.
 
     Same as test_check_then_act but with proper synchronization.
@@ -164,7 +168,9 @@ def test_counter_increment_safe(
     return result
 
 
-def test_lazy_initialization(threads: int = 10, iterations: int = 100) -> RaceTestResult:
+def test_lazy_initialization(
+    threads: int = 10, iterations: int = 100
+) -> RaceTestResult:
     """Test lazy initialization pattern.
 
     Tests if lazy initialization without double-checked locking
@@ -204,7 +210,9 @@ def test_lazy_initialization(threads: int = 10, iterations: int = 100) -> RaceTe
     return result
 
 
-def test_lazy_initialization_safe(threads: int = 10, iterations: int = 100) -> RaceTestResult:
+def test_lazy_initialization_safe(
+    threads: int = 10, iterations: int = 100
+) -> RaceTestResult:
     """Test thread-safe lazy initialization.
 
     Same as test_lazy_initialization but with proper double-checked locking.

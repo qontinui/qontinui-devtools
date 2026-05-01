@@ -22,7 +22,9 @@ def main() -> Any:
 
     # Path to analyze (can be a file or directory)
     # For this example, analyze the test fixtures
-    fixtures_path = Path(__file__).parent.parent / "python" / "tests" / "fixtures" / "srp"
+    fixtures_path = (
+        Path(__file__).parent.parent / "python" / "tests" / "fixtures" / "srp"
+    )
 
     if not fixtures_path.exists():
         print(f"Error: Fixtures path not found: {fixtures_path}")
@@ -40,7 +42,9 @@ def main() -> Any:
 
     # Run analysis
     print("Running analysis...")
-    violations, execution_time = analyzer.analyze_with_timing(str(fixtures_path), min_methods=5)
+    violations, execution_time = analyzer.analyze_with_timing(
+        str(fixtures_path), min_methods=5
+    )
 
     print(f"\nAnalysis completed in {execution_time:.2f} seconds")
     print()

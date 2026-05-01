@@ -120,7 +120,9 @@ class UnsafeAnalyzer:
 
         return "other"
 
-    def _extract_context(self, lines: list[str], line_num: int, context_size: int = 2) -> str:
+    def _extract_context(
+        self, lines: list[str], line_num: int, context_size: int = 2
+    ) -> str:
         """Extract context around a line.
 
         Args:
@@ -229,7 +231,9 @@ class UnsafeAnalyzer:
 
         except (UnicodeDecodeError, PermissionError) as e:
             if self.verbose:
-                self.console.print(f"[yellow]Warning: Could not read {file_path}: {e}[/yellow]")
+                self.console.print(
+                    f"[yellow]Warning: Could not read {file_path}: {e}[/yellow]"
+                )
 
     def analyze(self) -> list[UnsafeBlock]:
         """Analyze all unsafe code in the project.
@@ -238,7 +242,9 @@ class UnsafeAnalyzer:
             List of UnsafeBlock objects
         """
         if self.verbose:
-            self.console.print(f"\n[bold]Analyzing unsafe code:[/bold] {self.root_path}")
+            self.console.print(
+                f"\n[bold]Analyzing unsafe code:[/bold] {self.root_path}"
+            )
 
         rust_files = self._find_rust_files()
 
@@ -337,7 +343,9 @@ class UnsafeAnalyzer:
         lines.append("\n" + "=" * 80)
         return "\n".join(lines)
 
-    def generate_rich_report(self, unsafe_blocks: list[UnsafeBlock] | None = None) -> None:
+    def generate_rich_report(
+        self, unsafe_blocks: list[UnsafeBlock] | None = None
+    ) -> None:
         """Generate a rich console report with colors and formatting.
 
         Args:

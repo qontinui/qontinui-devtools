@@ -69,7 +69,10 @@ def create_bar_chart(
 
 
 def create_pie_chart(
-    labels: list[str], data: list[int | float], title: str, colors: list[str] | None = None
+    labels: list[str],
+    data: list[int | float],
+    title: str,
+    colors: list[str] | None = None,
 ) -> dict[str, Any]:
     """
     Create Chart.js pie chart configuration.
@@ -129,7 +132,10 @@ def create_pie_chart(
 
 
 def create_doughnut_chart(
-    labels: list[str], data: list[int | float], title: str, colors: list[str] | None = None
+    labels: list[str],
+    data: list[int | float],
+    title: str,
+    colors: list[str] | None = None,
 ) -> dict[str, Any]:
     """
     Create Chart.js doughnut chart configuration.

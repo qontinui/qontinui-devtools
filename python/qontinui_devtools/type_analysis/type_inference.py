@@ -142,7 +142,11 @@ class TypeInferenceEngine:
 
         # Check suffix patterns
         for suffix, type_hint in self.type_mappings.items():
-            if suffix.startswith("_") and not suffix.endswith("_") and name.endswith(suffix):
+            if (
+                suffix.startswith("_")
+                and not suffix.endswith("_")
+                and name.endswith(suffix)
+            ):
                 return (type_hint, 0.5)
 
         # Check prefix patterns (like is_, has_, can_)
@@ -282,7 +286,14 @@ class TypeInferenceEngine:
         elif isinstance(expr, ast.BinOp):
             # Infer from binary operations
             if isinstance(
-                expr.op, ast.Add | ast.Sub | ast.Mult | ast.Div | ast.FloorDiv | ast.Mod | ast.Pow
+                expr.op,
+                ast.Add
+                | ast.Sub
+                | ast.Mult
+                | ast.Div
+                | ast.FloorDiv
+                | ast.Mod
+                | ast.Pow,
             ):
                 left_type = self._infer_expr_type(expr.left)
                 right_type = self._infer_expr_type(expr.right)
@@ -328,13 +339,21 @@ class TypeInferenceEngine:
         if args and defaults:
             # Match parameter with default
             default_offset = len(args) - len(defaults)
-            param_idx = next((i for i, arg in enumerate(args) if arg.arg == param_name), -1)
+            param_idx = next(
+                (i for i, arg in enumerate(args) if arg.arg == param_name), -1
+            )
             if param_idx >= default_offset:
                 default_idx = param_idx - default_offset
                 if default_idx < len(defaults):
-                    inferred_type, confidence = self.infer_from_default(defaults[default_idx])
+                    inferred_type, confidence = self.infer_from_default(
+                        defaults[default_idx]
+                    )
                     if inferred_type and inferred_type != "None":
-                        return (inferred_type, confidence, "Inferred from default value")
+                        return (
+                            inferred_type,
+                            confidence,
+                            "Inferred from default value",
+                        )
                     elif inferred_type == "None":
                         # Try to infer from usage
                         usage_type = self._infer_from_usage(param_name, function_node)
@@ -381,7 +400,10 @@ class TypeInferenceEngine:
             # Check method calls on the parameter
             if isinstance(node, ast.Call):
                 if isinstance(node.func, ast.Attribute):
-                    if isinstance(node.func.value, ast.Name) and node.func.value.id == param_name:
+                    if (
+                        isinstance(node.func.value, ast.Name)
+                        and node.func.value.id == param_name
+                    ):
                         method_name = node.func.attr
                         # String methods
                         if method_name in (
@@ -418,7 +440,13 @@ class TypeInferenceEngine:
                         ):
                             return "dict[str, Any]"
                         # Set methods
-                        elif method_name in ("add", "remove", "discard", "union", "intersection"):
+                        elif method_name in (
+                            "add",
+                            "remove",
+                            "discard",
+                            "union",
+                            "intersection",
+                        ):
                             return "set[Any]"
                         # Path methods
                         elif method_name in (
@@ -474,14 +502,20 @@ class TypeInferenceEngine:
         elif current_type == "set":
             suggestions.append("Use set[T] instead of bare set")
         elif current_type == "tuple":
-            suggestions.append("Use tuple[T, ...] or tuple[T1, T2, ...] instead of bare tuple")
+            suggestions.append(
+                "Use tuple[T, ...] or tuple[T1, T2, ...] instead of bare tuple"
+            )
 
         # Detect old-style Optional
         if "Optional[" in current_type:
-            suggestions.append("Consider using T | None instead of Optional[T] (PEP 604)")
+            suggestions.append(
+                "Consider using T | None instead of Optional[T] (PEP 604)"
+            )
 
         # Detect old-style Union
         if "Union[" in current_type:
-            suggestions.append("Consider using T1 | T2 instead of Union[T1, T2] (PEP 604)")
+            suggestions.append(
+                "Consider using T1 | T2 instead of Union[T1, T2] (PEP 604)"
+            )
 
         return suggestions

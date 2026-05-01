@@ -57,7 +57,9 @@ def analyze_project(project_path: str) -> None:
             print("\nImport Chain:")
             for imp in dep.import_chain:
                 try:
-                    rel_path = Path(imp.file_path).relative_to(Path(project_path).resolve())
+                    rel_path = Path(imp.file_path).relative_to(
+                        Path(project_path).resolve()
+                    )
                     print(f"  {rel_path}:{imp.line_number} - {imp}")
                 except ValueError:
                     print(f"  {imp.file_path}:{imp.line_number} - {imp}")
@@ -145,10 +147,14 @@ def main() -> None:
         print("  python analyze_circular_deps.py /path/to/qontinui/src")
         print()
         print("  # Save report to file")
-        print("  python analyze_circular_deps.py /path/to/qontinui/src --output report.txt")
+        print(
+            "  python analyze_circular_deps.py /path/to/qontinui/src --output report.txt"
+        )
         print()
         print("  # Export dependency graph")
-        print("  python analyze_circular_deps.py /path/to/qontinui/src --graph deps.json")
+        print(
+            "  python analyze_circular_deps.py /path/to/qontinui/src --graph deps.json"
+        )
         sys.exit(1)
 
     project_path = sys.argv[1]

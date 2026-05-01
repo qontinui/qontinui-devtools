@@ -97,7 +97,9 @@ class TestFixSuggestionEngine:
         assert len(suggestions) > 0
 
         # Should have annotation fix suggestion
-        annotation_fixes = [s for s in suggestions if s.fix_type == FixType.ANNOTATION_FIX]
+        annotation_fixes = [
+            s for s in suggestions if s.fix_type == FixType.ANNOTATION_FIX
+        ]
         assert len(annotation_fixes) > 0
 
         test_fix = annotation_fixes[0]
@@ -123,7 +125,9 @@ class TestFixSuggestionEngine:
         assert len(suggestions) > 0
 
         # Should have assertion fix suggestion
-        assertion_fixes = [s for s in suggestions if s.fix_type == FixType.ASSERTION_FIX]
+        assertion_fixes = [
+            s for s in suggestions if s.fix_type == FixType.ASSERTION_FIX
+        ]
         assert len(assertion_fixes) > 0
 
         assertion_fix = assertion_fixes[0]
@@ -149,7 +153,9 @@ class TestFixSuggestionEngine:
         assert len(suggestions) > 0
 
         # Should have annotation fix suggestion
-        annotation_fixes = [s for s in suggestions if s.fix_type == FixType.ANNOTATION_FIX]
+        annotation_fixes = [
+            s for s in suggestions if s.fix_type == FixType.ANNOTATION_FIX
+        ]
         assert len(annotation_fixes) > 0
 
         spring_fix = annotation_fixes[0]

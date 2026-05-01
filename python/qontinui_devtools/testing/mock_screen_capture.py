@@ -149,7 +149,9 @@ class MockScreenCapture(IScreenCapture):
         primary = self.get_primary_monitor()
         return (primary.width, primary.height)
 
-    def get_pixel_color(self, x: int, y: int, monitor: int | None = None) -> tuple[int, int, int]:
+    def get_pixel_color(
+        self, x: int, y: int, monitor: int | None = None
+    ) -> tuple[int, int, int]:
         """Get color of pixel at coordinates.
 
         Args:
@@ -294,7 +296,9 @@ class MockScreenCapture(IScreenCapture):
             # Add text marker
             try:
                 # Try to use a truetype font
-                font: FreeTypeFont | DefaultImageFont = ImageFont.truetype("arial.ttf", 36)
+                font: FreeTypeFont | DefaultImageFont = ImageFont.truetype(
+                    "arial.ttf", 36
+                )
             except OSError:
                 # Fall back to default font
                 font = ImageFont.load_default()
@@ -305,24 +309,33 @@ class MockScreenCapture(IScreenCapture):
             # Add corner markers
             marker_size = 50
             draw.rectangle([0, 0, marker_size, marker_size], fill="red")  # Top-left
-            draw.rectangle([width - marker_size, 0, width, marker_size], fill="green")  # Top-right
+            draw.rectangle(
+                [width - marker_size, 0, width, marker_size], fill="green"
+            )  # Top-right
             draw.rectangle(
                 [0, height - marker_size, marker_size, height], fill="blue"
             )  # Bottom-left
             draw.rectangle(
-                [width - marker_size, height - marker_size, width, height], fill="yellow"
+                [width - marker_size, height - marker_size, width, height],
+                fill="yellow",
             )  # Bottom-right
 
             # Add center crosshair
             center_x, center_y = width // 2, height // 2
             crosshair_size = 20
             draw.line(
-                [(center_x - crosshair_size, center_y), (center_x + crosshair_size, center_y)],
+                [
+                    (center_x - crosshair_size, center_y),
+                    (center_x + crosshair_size, center_y),
+                ],
                 fill="black",
                 width=2,
             )
             draw.line(
-                [(center_x, center_y - crosshair_size), (center_x, center_y + crosshair_size)],
+                [
+                    (center_x, center_y - crosshair_size),
+                    (center_x, center_y + crosshair_size),
+                ],
                 fill="black",
                 width=2,
             )
@@ -357,7 +370,9 @@ class MockScreenCapture(IScreenCapture):
         draw = ImageDraw.Draw(img)
 
         try:
-            font: FreeTypeFont | DefaultImageFont = ImageFont.truetype("arial.ttf", text_size)
+            font: FreeTypeFont | DefaultImageFont = ImageFont.truetype(
+                "arial.ttf", text_size
+            )
         except OSError:
             font = ImageFont.load_default()
 
@@ -386,12 +401,16 @@ class MockScreenCapture(IScreenCapture):
             for i in range(0, width, square_size):
                 for j in range(0, height, square_size):
                     if (i // square_size + j // square_size) % 2 == 0:
-                        draw.rectangle([i, j, i + square_size, j + square_size], fill="black")
+                        draw.rectangle(
+                            [i, j, i + square_size, j + square_size], fill="black"
+                        )
 
         elif pattern_type == "gradient":
             for i in range(width):
                 color_value = int(255 * i / width)
-                draw.line([(i, 0), (i, height)], fill=(color_value, color_value, color_value))
+                draw.line(
+                    [(i, 0), (i, height)], fill=(color_value, color_value, color_value)
+                )
 
         elif pattern_type == "grid":
             grid_size = 50

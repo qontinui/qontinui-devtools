@@ -1,7 +1,11 @@
 """Architecture analysis tools for detecting anti-patterns and design issues."""
 
 from .clustering import MethodCluster
-from .coupling_analyzer import CohesionMetrics, CouplingCohesionAnalyzer, CouplingMetrics
+from .coupling_analyzer import (
+    CohesionMetrics,
+    CouplingCohesionAnalyzer,
+    CouplingMetrics,
+)
 from .dependency_graph import DependencyGraphBuilder
 from .god_class_detector import ClassMetrics, ExtractionSuggestion, GodClassDetector
 from .graph_visualizer import DependencyGraphVisualizer, GraphEdge, GraphNode

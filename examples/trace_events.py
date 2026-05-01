@@ -40,7 +40,9 @@ def simulate_event_flow(tracer: EventTracer, event_id: str, event_type: str) -> 
     time.sleep(random.uniform(0.002, 0.005))
 
     # Python receives event
-    tracer.checkpoint(event_id, "python_receive", metadata={"handler": "event_dispatcher"})
+    tracer.checkpoint(
+        event_id, "python_receive", metadata={"handler": "event_dispatcher"}
+    )
 
     # Processing delay
     time.sleep(random.uniform(0.005, 0.015))
@@ -286,7 +288,9 @@ def main() -> None:
                 print(f"{stage}")
                 print(f"  Trace 1: {stats['trace1'] * 1000:.2f}ms")
                 print(f"  Trace 2: {stats['trace2'] * 1000:.2f}ms")
-                print(f"  Diff:    {stats['diff'] * 1000:+.2f}ms ({stats['diff_pct']:+.1f}%)")
+                print(
+                    f"  Diff:    {stats['diff'] * 1000:+.2f}ms ({stats['diff_pct']:+.1f}%)"
+                )
                 print()
 
     print("=" * 60)

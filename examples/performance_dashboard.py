@@ -22,7 +22,9 @@ from threading import Thread
 from qontinui_devtools.runtime import DashboardServer, MetricsCollector
 
 
-def simulate_application_activity(collector: MetricsCollector, duration: int = 300) -> None:
+def simulate_application_activity(
+    collector: MetricsCollector, duration: int = 300
+) -> None:
     """Simulate application activity for demo purposes.
 
     This generates realistic metrics by simulating:

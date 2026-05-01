@@ -103,8 +103,8 @@ class TypeHintVisitor(ast.NodeVisitor):
                     )
             else:
                 # Missing type hint - try to infer
-                suggested_type, confidence, reason = self.inference_engine.infer_parameter_type(
-                    param, node
+                suggested_type, confidence, reason = (
+                    self.inference_engine.infer_parameter_type(param, node)
                 )
 
                 self.untyped_items.append(
@@ -140,7 +140,9 @@ class TypeHintVisitor(ast.NodeVisitor):
                 )
         else:
             # Missing return type hint - try to infer
-            suggested_type, confidence, reason = self.inference_engine.infer_return_type(node)
+            suggested_type, confidence, reason = (
+                self.inference_engine.infer_return_type(node)
+            )
 
             self.untyped_items.append(
                 UntypedItem(
@@ -183,7 +185,9 @@ class TypeHintVisitor(ast.NodeVisitor):
             return self._contains_any(annotation.slice)
         elif isinstance(annotation, ast.BinOp):
             # Union types (T | U)
-            return self._contains_any(annotation.left) or self._contains_any(annotation.right)
+            return self._contains_any(annotation.left) or self._contains_any(
+                annotation.right
+            )
 
         return False
 
@@ -211,7 +215,10 @@ class TypeAnalyzer:
     """Analyzes type hint coverage in Python code."""
 
     def __init__(
-        self, run_mypy: bool = True, strict_mode: bool = False, mypy_config: str | None = None
+        self,
+        run_mypy: bool = True,
+        strict_mode: bool = False,
+        mypy_config: str | None = None,
     ) -> None:
         """Initialize the type analyzer.
 
@@ -427,7 +434,9 @@ class TypeAnalyzer:
                         # Extract error code
                         error_code = None
                         if "[" in message and "]" in message:
-                            error_code = message[message.rfind("[") + 1 : message.rfind("]")]
+                            error_code = message[
+                                message.rfind("[") + 1 : message.rfind("]")
+                            ]
 
                         mypy_errors.append(
                             MypyError(
@@ -485,7 +494,9 @@ class TypeAnalyzer:
         lines.append(
             f"Fully typed: {cov.fully_typed_functions} ({cov.fully_typed_functions / cov.total_functions * 100 if cov.total_functions > 0 else 0:.1f}%)"
         )
-        lines.append(f"Partially typed: {cov.typed_functions - cov.fully_typed_functions}")
+        lines.append(
+            f"Partially typed: {cov.typed_functions - cov.fully_typed_functions}"
+        )
         lines.append(f"Untyped: {cov.total_functions - cov.typed_functions}")
         lines.append("")
         lines.append(f"Total parameters: {cov.total_parameters}")

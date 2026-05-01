@@ -247,7 +247,9 @@ class TestSRPAnalyzer:
         """Get path to test fixtures."""
         return Path(__file__).parent.parent / "fixtures" / "srp"
 
-    def test_analyze_multi_responsibility_class(self, analyzer: Any, fixtures_path: Any) -> None:
+    def test_analyze_multi_responsibility_class(
+        self, analyzer: Any, fixtures_path: Any
+    ) -> None:
         """Test analyzing class with multiple responsibilities."""
         file_path = fixtures_path / "multi_responsibility.py"
 
@@ -260,7 +262,9 @@ class TestSRPAnalyzer:
         assert len(violation.clusters) >= 2  # Should detect multiple responsibilities
         assert violation.severity in ("critical", "high", "medium")
 
-    def test_analyze_single_responsibility_class(self, analyzer: Any, fixtures_path: Any) -> None:
+    def test_analyze_single_responsibility_class(
+        self, analyzer: Any, fixtures_path: Any
+    ) -> None:
         """Test analyzing class with single responsibility."""
         file_path = fixtures_path / "single_responsibility.py"
 
@@ -268,7 +272,9 @@ class TestSRPAnalyzer:
 
         # Should have few or no violations for single-responsibility classes
         # UserRepository should not violate SRP (all data access)
-        user_repo_violations = [v for v in violations if v.class_name == "UserRepository"]
+        user_repo_violations = [
+            v for v in violations if v.class_name == "UserRepository"
+        ]
         assert len(user_repo_violations) == 0
 
     def test_severity_calculation(self, analyzer: Any) -> None:
@@ -283,7 +289,9 @@ class TestSRPAnalyzer:
         """Test recommendation generation."""
         clusters = [
             MethodCluster("Data Access", ["get", "fetch"], {"get", "fetch"}, 0.8),
-            MethodCluster("Validation", ["validate", "check"], {"validate", "check"}, 0.7),
+            MethodCluster(
+                "Validation", ["validate", "check"], {"validate", "check"}, 0.7
+            ),
         ]
 
         recommendation = analyzer._generate_recommendation("UserManager", clusters)
@@ -293,18 +301,30 @@ class TestSRPAnalyzer:
 
     def test_suggest_class_name(self, analyzer: Any) -> None:
         """Test class name suggestions for extracted responsibilities."""
-        assert analyzer._suggest_class_name("UserManager", "Data Access") == "UserRepository"
-        assert analyzer._suggest_class_name("UserManager", "Validation") == "UserValidator"
-        assert analyzer._suggest_class_name("UserService", "Persistence") == "UserPersister"
+        assert (
+            analyzer._suggest_class_name("UserManager", "Data Access")
+            == "UserRepository"
+        )
+        assert (
+            analyzer._suggest_class_name("UserManager", "Validation") == "UserValidator"
+        )
+        assert (
+            analyzer._suggest_class_name("UserService", "Persistence")
+            == "UserPersister"
+        )
 
     def test_generate_refactoring_suggestions(self, analyzer: Any) -> None:
         """Test refactoring suggestion generation."""
         clusters = [
             MethodCluster("Data Access", ["get", "fetch"], {"get", "fetch"}, 0.8),
-            MethodCluster("Validation", ["validate", "check"], {"validate", "check"}, 0.7),
+            MethodCluster(
+                "Validation", ["validate", "check"], {"validate", "check"}, 0.7
+            ),
         ]
 
-        suggestions = analyzer._generate_refactoring_suggestions("UserManager", clusters)
+        suggestions = analyzer._generate_refactoring_suggestions(
+            "UserManager", clusters
+        )
 
         assert len(suggestions) >= 2
         assert any("Data Access" in s for s in suggestions)
@@ -332,7 +352,9 @@ class TestSRPAnalyzer:
 
     def test_analyze_with_timing(self, analyzer: Any, fixtures_path: Any) -> None:
         """Test analysis with timing measurement."""
-        violations, execution_time = analyzer.analyze_with_timing(str(fixtures_path), min_methods=5)
+        violations, execution_time = analyzer.analyze_with_timing(
+            str(fixtures_path), min_methods=5
+        )
 
         assert isinstance(violations, list)
         assert execution_time > 0
@@ -358,7 +380,9 @@ class TestIntegration:
         assert isinstance(report, str)
 
         # Check that multi-responsibility class is detected
-        user_manager_violations = [v for v in violations if v.class_name == "UserManager"]
+        user_manager_violations = [
+            v for v in violations if v.class_name == "UserManager"
+        ]
         assert len(user_manager_violations) > 0
 
         # Check violation has required fields

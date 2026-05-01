@@ -115,7 +115,9 @@ def verify_imports() -> tuple[bool, list[str]]:
         print_warning(error_msg)
 
     total_checks = len(modules) + len(classes) + 1
-    print(f"\n{Color.BOLD}Import checks: {success_count}/{total_checks} passed{Color.END}")
+    print(
+        f"\n{Color.BOLD}Import checks: {success_count}/{total_checks} passed{Color.END}"
+    )
 
     return len(errors) == 0, errors
 
@@ -151,7 +153,9 @@ def verify_cli_commands() -> tuple[bool, list[str]]:
             print_error(error_msg)
             errors.append(error_msg)
 
-    print(f"\n{Color.BOLD}CLI checks: {success_count}/{len(commands)} passed{Color.END}")
+    print(
+        f"\n{Color.BOLD}CLI checks: {success_count}/{len(commands)} passed{Color.END}"
+    )
 
     return len(errors) == 0, errors
 
@@ -170,9 +174,7 @@ def verify_version() -> tuple[bool, list[str]]:
         if __version__ == target_version:
             print_success(f"__init__.py version: {__version__}")
         else:
-            error_msg = (
-                f"__init__.py version mismatch: expected {target_version}, got {__version__}"
-            )
+            error_msg = f"__init__.py version mismatch: expected {target_version}, got {__version__}"
             print_error(error_msg)
             errors.append(error_msg)
     except ImportError as e:
@@ -198,7 +200,10 @@ def verify_version() -> tuple[bool, list[str]]:
     # Check CLI version
     try:
         result = subprocess.run(
-            ["qontinui-devtools", "--version"], capture_output=True, text=True, timeout=5
+            ["qontinui-devtools", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5,
         )
         if target_version in result.stdout:
             print_success(f"CLI version: {target_version}")
@@ -252,7 +257,9 @@ def verify_documentation() -> tuple[bool, list[str]]:
         found_keywords = [kw for kw in phase4_keywords if kw in content]
 
         if len(found_keywords) >= 4:
-            print_success(f"README contains Phase 4 information ({len(found_keywords)}/6 keywords)")
+            print_success(
+                f"README contains Phase 4 information ({len(found_keywords)}/6 keywords)"
+            )
             success_count += 1
         else:
             error_msg = "README missing Phase 4 information"
@@ -272,7 +279,9 @@ def verify_documentation() -> tuple[bool, list[str]]:
             errors.append(error_msg)
 
     total_checks = len(required_docs) + 2
-    print(f"\n{Color.BOLD}Documentation checks: {success_count}/{total_checks} passed{Color.END}")
+    print(
+        f"\n{Color.BOLD}Documentation checks: {success_count}/{total_checks} passed{Color.END}"
+    )
 
     return len(errors) == 0, errors
 
@@ -349,7 +358,9 @@ def run_smoke_tests() -> tuple[bool, list[str]]:
             print_error(error_msg)
             errors.append(error_msg)
 
-    print(f"\n{Color.BOLD}Smoke tests: {success_count}/{len(commands)} passed{Color.END}")
+    print(
+        f"\n{Color.BOLD}Smoke tests: {success_count}/{len(commands)} passed{Color.END}"
+    )
 
     return len(errors) == 0, errors
 

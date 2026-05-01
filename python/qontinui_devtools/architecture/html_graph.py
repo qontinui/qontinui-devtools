@@ -6,7 +6,9 @@ from .graph_visualizer import GraphEdge, GraphNode
 
 
 def generate_html_graph(
-    nodes: list[GraphNode], edges: list[GraphEdge], title: str = "Interactive Dependency Graph"
+    nodes: list[GraphNode],
+    edges: list[GraphEdge],
+    title: str = "Interactive Dependency Graph",
 ) -> str:
     """Generate HTML with embedded D3.js force-directed graph.
 

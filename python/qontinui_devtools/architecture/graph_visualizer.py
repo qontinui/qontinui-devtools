@@ -85,12 +85,16 @@ class DependencyGraphVisualizer:
         elif level == "function":
             nodes, edges = self._build_function_graph(path_obj)
         else:
-            raise ValueError(f"Invalid level: {level}. Choose 'module', 'class', or 'function'")
+            raise ValueError(
+                f"Invalid level: {level}. Choose 'module', 'class', or 'function'"
+            )
 
         self._log(f"Built graph with {len(nodes)} nodes and {len(edges)} edges")
         return nodes, edges
 
-    def _build_module_graph(self, path: Path) -> tuple[list[GraphNode], list[GraphEdge]]:
+    def _build_module_graph(
+        self, path: Path
+    ) -> tuple[list[GraphNode], list[GraphEdge]]:
         """Build a module-level dependency graph."""
         nodes: list[GraphNode] = []
         edges: list[GraphEdge] = []
@@ -207,14 +211,21 @@ class DependencyGraphVisualizer:
                 base_id = f"{info['module']}.{base}"
                 if base_id in class_info:
                     edges.append(
-                        GraphEdge(source=class_id, target=base_id, edge_type="inherits", weight=1)
+                        GraphEdge(
+                            source=class_id,
+                            target=base_id,
+                            edge_type="inherits",
+                            weight=1,
+                        )
                     )
 
         self._calculate_node_metrics(nodes, edges)
 
         return nodes, edges
 
-    def _build_function_graph(self, path: Path) -> tuple[list[GraphNode], list[GraphEdge]]:
+    def _build_function_graph(
+        self, path: Path
+    ) -> tuple[list[GraphNode], list[GraphEdge]]:
         """Build a function-level dependency graph."""
         nodes: list[GraphNode] = []
         edges: list[GraphEdge] = []
@@ -264,7 +275,12 @@ class DependencyGraphVisualizer:
                 # Check if called function is in our graph
                 if called_func in function_info:
                     edges.append(
-                        GraphEdge(source=func_id, target=called_func, edge_type="calls", weight=1)
+                        GraphEdge(
+                            source=func_id,
+                            target=called_func,
+                            edge_type="calls",
+                            weight=1,
+                        )
                     )
 
         self._calculate_node_metrics(nodes, edges)
@@ -296,7 +312,9 @@ class DependencyGraphVisualizer:
 
         return imports
 
-    def _extract_classes(self, tree: ast.AST, module_name: str) -> dict[str, dict[str, Any]]:
+    def _extract_classes(
+        self, tree: ast.AST, module_name: str
+    ) -> dict[str, dict[str, Any]]:
         """Extract class information from an AST."""
         classes: dict[str, dict[str, Any]] = {}
 
@@ -322,7 +340,9 @@ class DependencyGraphVisualizer:
 
         return classes
 
-    def _extract_functions(self, tree: ast.AST, module_name: str) -> dict[str, dict[str, Any]]:
+    def _extract_functions(
+        self, tree: ast.AST, module_name: str
+    ) -> dict[str, dict[str, Any]]:
         """Extract function information from an AST."""
         functions: dict[str, dict[str, Any]] = {}
 
@@ -351,7 +371,9 @@ class DependencyGraphVisualizer:
 
         return functions
 
-    def _calculate_node_metrics(self, nodes: list[GraphNode], edges: list[GraphEdge]) -> None:
+    def _calculate_node_metrics(
+        self, nodes: list[GraphNode], edges: list[GraphEdge]
+    ) -> None:
         """Calculate metrics for nodes based on the graph structure."""
         # Build a networkx graph for analysis
         G = nx.DiGraph()
@@ -367,12 +389,16 @@ class DependencyGraphVisualizer:
         for node in nodes:
             node.metrics["in_degree"] = in_degrees.get(node.id, 0)
             node.metrics["out_degree"] = out_degrees.get(node.id, 0)
-            node.metrics["total_degree"] = node.metrics["in_degree"] + node.metrics["out_degree"]
+            node.metrics["total_degree"] = (
+                node.metrics["in_degree"] + node.metrics["out_degree"]
+            )
 
             # Set size based on importance (total degree)
             node.size = max(10, min(50, node.metrics["total_degree"] * 5))
 
-    def detect_cycles(self, nodes: list[GraphNode], edges: list[GraphEdge]) -> list[list[str]]:
+    def detect_cycles(
+        self, nodes: list[GraphNode], edges: list[GraphEdge]
+    ) -> list[list[str]]:
         """Detect circular dependencies in the graph.
 
         Args:
@@ -417,7 +443,9 @@ class DependencyGraphVisualizer:
         if format == "html":
             self.generate_html_interactive(nodes, edges, output_path)
         else:
-            self._generate_static(nodes, edges, output_path, format, layout, highlight_cycles)
+            self._generate_static(
+                nodes, edges, output_path, format, layout, highlight_cycles
+            )
 
     def _generate_static(
         self,
@@ -470,7 +498,9 @@ class DependencyGraphVisualizer:
         """
         from .html_graph import generate_html_graph
 
-        html_content = generate_html_graph(nodes, edges, title="Interactive Dependency Graph")
+        html_content = generate_html_graph(
+            nodes, edges, title="Interactive Dependency Graph"
+        )
 
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(html_content)
@@ -501,7 +531,9 @@ class DependencyGraphVisualizer:
         else:
             raise ValueError(f"Unknown layout: {layout}")
 
-    def export_json(self, nodes: list[GraphNode], edges: list[GraphEdge], output_path: str) -> None:
+    def export_json(
+        self, nodes: list[GraphNode], edges: list[GraphEdge], output_path: str
+    ) -> None:
         """Export the graph to JSON format.
 
         Args:

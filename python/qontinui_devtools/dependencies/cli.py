@@ -115,7 +115,9 @@ Examples:
                         "latest_version": dep.latest_version,
                         "health_status": dep.health_status.value,
                         "health_score": dep.health_score,
-                        "update_type": dep.update_type.value if dep.update_type else None,
+                        "update_type": (
+                            dep.update_type.value if dep.update_type else None
+                        ),
                         "vulnerabilities": len(dep.vulnerabilities),
                     }
                     for dep in report.dependencies
@@ -157,7 +159,11 @@ Examples:
                     UpdateType.PATCH: "🟢",
                 }
                 for dep in report.get_outdated_dependencies():
-                    emoji = update_emoji.get(dep.update_type, "⚪") if dep.update_type else "⚪"
+                    emoji = (
+                        update_emoji.get(dep.update_type, "⚪")
+                        if dep.update_type
+                        else "⚪"
+                    )
                     print(
                         f"{emoji} {dep.name:25} {dep.current_version:12} → "
                         f"{dep.latest_version:12} ({dep.update_type.value if dep.update_type else 'unknown'})"

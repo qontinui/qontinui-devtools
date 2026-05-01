@@ -148,7 +148,9 @@ class TestQontinuiMockGenerator:
         ]
 
         for brobot_action, expected_qontinui_action in test_cases:
-            assert self.generator.action_mapping[brobot_action] == expected_qontinui_action
+            assert (
+                self.generator.action_mapping[brobot_action] == expected_qontinui_action
+            )
 
     def test_mock_class_mapping(self) -> None:
         """Test mock class mapping from Brobot to Qontinui."""
@@ -161,7 +163,10 @@ class TestQontinuiMockGenerator:
         ]
 
         for brobot_class, expected_qontinui_class in test_cases:
-            assert self.generator.mock_class_mapping[brobot_class] == expected_qontinui_class
+            assert (
+                self.generator.mock_class_mapping[brobot_class]
+                == expected_qontinui_class
+            )
 
     def test_generate_imports(self) -> None:
         """Test import generation for different mock types."""
@@ -194,7 +199,9 @@ class TestQontinuiMockGenerator:
         )
 
         qontinui_code = "mock_code_here"
-        behavior_mapping = self.generator.create_mock_behavior_mapping(mock_usage, qontinui_code)
+        behavior_mapping = self.generator.create_mock_behavior_mapping(
+            mock_usage, qontinui_code
+        )
 
         assert "setup" in behavior_mapping
         assert "actions" in behavior_mapping
@@ -206,7 +213,9 @@ class TestQontinuiMockGenerator:
 
     def test_map_setup_behavior(self) -> None:
         """Test mapping of setup behavior patterns."""
-        brobot_setup = "when(mock.performAction()).thenReturn(true); verify(mock).performAction();"
+        brobot_setup = (
+            "when(mock.performAction()).thenReturn(true); verify(mock).performAction();"
+        )
 
         qontinui_setup = self.generator._map_setup_behavior(brobot_setup)
 
@@ -233,7 +242,9 @@ class TestQontinuiMockGenerator:
 
     def test_generate_action_simulation(self) -> None:
         """Test generation of action simulation code."""
-        gui_model = GuiModel(model_name="TestModel", actions=["click", "doubleClick", "type"])
+        gui_model = GuiModel(
+            model_name="TestModel", actions=["click", "doubleClick", "type"]
+        )
 
         action_code = self.generator._generate_action_simulation(gui_model)
 
@@ -273,7 +284,9 @@ class TestQontinuiMockGenerator:
 
     def test_unknown_mock_type_handling(self) -> None:
         """Test handling of unknown mock types."""
-        unknown_mock = MockUsage(mock_type="unknown_mock_type", mock_class="UnknownClass")
+        unknown_mock = MockUsage(
+            mock_type="unknown_mock_type", mock_class="UnknownClass"
+        )
 
         mock_code = self.generator.create_equivalent_mock(unknown_mock)
 
@@ -330,11 +343,15 @@ class TestQontinuiMockGenerator:
 
     def test_assertion_behavior_mapping(self) -> None:
         """Test mapping of assertion behaviors."""
-        mock_usage = MockUsage(mock_type="brobot_programmatic_mock", mock_class="BrobotMock")
+        mock_usage = MockUsage(
+            mock_type="brobot_programmatic_mock", mock_class="BrobotMock"
+        )
 
         assertion_mapping = self.generator._map_assertion_behaviors(mock_usage)
 
         assert isinstance(assertion_mapping, dict)
         assert "verify(mock).method()" in assertion_mapping
-        assert assertion_mapping["verify(mock).method()"] == "mock.method.assert_called()"
+        assert (
+            assertion_mapping["verify(mock).method()"] == "mock.method.assert_called()"
+        )
         assert "when(mock.method()).thenReturn(value)" in assertion_mapping

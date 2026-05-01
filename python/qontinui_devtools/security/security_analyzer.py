@@ -26,7 +26,9 @@ class SecurityAnalyzer:
 
     # Patterns for detecting hardcoded secrets
     SECRET_PATTERNS = {
-        "password": re.compile(r'(?i)(password|passwd|pwd)["\']?\s*[:=]\s*["\']([^"\']{8,})["\']'),
+        "password": re.compile(
+            r'(?i)(password|passwd|pwd)["\']?\s*[:=]\s*["\']([^"\']{8,})["\']'
+        ),
         "api_key": re.compile(
             r'(?i)(api[_-]?key|apikey|api[_-]?secret)["\']?\s*[:=]\s*["\']([^"\']{16,})["\']'
         ),
@@ -184,7 +186,9 @@ class SecurityAnalyzer:
             # Skip files that can't be parsed
             return []
 
-    def analyze_directory(self, directory: str, recursive: bool = True) -> SecurityReport:
+    def analyze_directory(
+        self, directory: str, recursive: bool = True
+    ) -> SecurityReport:
         """
         Analyze all Python files in a directory.
 
@@ -339,7 +343,9 @@ class SecurityAnalyzer:
                                 )
                         else:
                             # shell=False but check for dynamic strings in list
-                            if node.args and self._contains_dynamic_elements(node.args[0]):
+                            if node.args and self._contains_dynamic_elements(
+                                node.args[0]
+                            ):
                                 self._add_vulnerability(
                                     VulnerabilityType.COMMAND_INJECTION,
                                     Severity.HIGH,
@@ -402,7 +408,9 @@ class SecurityAnalyzer:
 
                 # Skip common false positives (except AWS keys which have specific format)
                 matched_text = match.group(0)
-                if secret_type != "aws_key" and self._is_false_positive_secret(matched_text):
+                if secret_type != "aws_key" and self._is_false_positive_secret(
+                    matched_text
+                ):
                     continue
 
                 severity = Severity.CRITICAL
@@ -448,13 +456,17 @@ class SecurityAnalyzer:
                             "HMAC signature verification to ensure data integrity."
                         )
                     elif "yaml.load" in func_name and not self._uses_safe_loader(node):
-                        description = "yaml.load() without SafeLoader can execute arbitrary code"
+                        description = (
+                            "yaml.load() without SafeLoader can execute arbitrary code"
+                        )
                         remediation = (
                             "Use yaml.safe_load() instead of yaml.load(), or specify "
                             "Loader=yaml.SafeLoader explicitly."
                         )
                     elif func_name in ["eval", "exec"]:
-                        description = f"{func_name}() with user input can execute arbitrary code"
+                        description = (
+                            f"{func_name}() with user input can execute arbitrary code"
+                        )
                         remediation = (
                             f"Avoid {func_name}() with user input. Use ast.literal_eval() "
                             "for safe evaluation of Python literals, or implement proper "
@@ -462,7 +474,9 @@ class SecurityAnalyzer:
                         )
                     elif func_name == "compile":
                         description = "compile() with user input can create malicious code objects"
-                        remediation = "Avoid compile() with user input. Use safe alternatives."
+                        remediation = (
+                            "Avoid compile() with user input. Use safe alternatives."
+                        )
                     else:
                         continue
 
@@ -529,7 +543,9 @@ class SecurityAnalyzer:
                     # Check if URL is dynamic or from variable
                     if node.args:
                         url_arg = node.args[0]
-                        if self._is_dynamic_string(url_arg) or isinstance(url_arg, ast.Name):
+                        if self._is_dynamic_string(url_arg) or isinstance(
+                            url_arg, ast.Name
+                        ):
                             self._add_vulnerability(
                                 VulnerabilityType.SSRF,
                                 Severity.HIGH,
@@ -562,7 +578,13 @@ class SecurityAnalyzer:
                         # Verify it's actually from an XML module
                         if any(
                             func_name.startswith(prefix)
-                            for prefix in ["xml.", "lxml.", "ElementTree.", "etree.", "minidom."]
+                            for prefix in [
+                                "xml.",
+                                "lxml.",
+                                "ElementTree.",
+                                "etree.",
+                                "minidom.",
+                            ]
                         ):
                             is_xml_parser = True
                             break

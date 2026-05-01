@@ -306,8 +306,7 @@ class TestAPISnapshot:
         """Test creating API snapshot from source."""
         # Create test Python file
         test_file = tmp_path / "test_module.py"
-        test_file.write_text(
-            """
+        test_file.write_text("""
 def public_function(x: int, y: str) -> bool:
     '''Public function.'''
     return True
@@ -319,8 +318,7 @@ class PublicClass:
     '''Public class.'''
     def method1(self) -> None:
         pass
-"""
-        )
+""")
 
         snapshot = APISnapshot()
         snapshot.create_snapshot(tmp_path, "v1.0")
@@ -365,7 +363,10 @@ class PublicClass:
         # Create current snapshot
         current = APISnapshot()
         current.functions["test.func1"] = FunctionSignature(
-            name="func1", parameters=["x: int", "y: str"], return_type=None, module_path="test"
+            name="func1",
+            parameters=["x: int", "y: str"],
+            return_type=None,
+            module_path="test",
         )
         current.functions["test.func3"] = FunctionSignature(
             name="func3", parameters=[], return_type=None, module_path="test"
@@ -419,32 +420,30 @@ class TestRegressionDetector:
         # Create baseline
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def function_to_remove() -> None:
     pass
 
 def function_to_keep() -> None:
     pass
-"""
-        )
+""")
 
         # Create current version
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 def function_to_keep() -> None:
     pass
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
         report = detector.detect_regressions(current_dir, baseline_snapshot, "v2.0")
 
         assert report.breaking_count > 0
-        breaking_issues = [i for i in report.issues if i.change_type == ChangeType.BREAKING]
+        breaking_issues = [
+            i for i in report.issues if i.change_type == ChangeType.BREAKING
+        ]
         assert len(breaking_issues) > 0
         assert any("removed" in i.description.lower() for i in breaking_issues)
 
@@ -453,29 +452,27 @@ def function_to_keep() -> None:
         # Create baseline
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def test_func(x: int) -> None:
     pass
-"""
-        )
+""")
 
         # Create current version with changed parameters
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 def test_func(x: int, y: str) -> None:
     pass
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
         report = detector.detect_regressions(current_dir, baseline_snapshot, "v2.0")
 
         assert len(report.issues) > 0
-        param_issues = [i for i in report.issues if "signature changed" in i.description]
+        param_issues = [
+            i for i in report.issues if "signature changed" in i.description
+        ]
         assert len(param_issues) > 0
 
     def test_detect_return_type_change(self, tmp_path: Path) -> None:
@@ -483,29 +480,27 @@ def test_func(x: int, y: str) -> None:
         # Create baseline
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def test_func() -> int:
     return 1
-"""
-        )
+""")
 
         # Create current version with changed return type
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 def test_func() -> str:
     return "1"
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
         report = detector.detect_regressions(current_dir, baseline_snapshot, "v2.0")
 
         assert len(report.issues) > 0
-        return_issues = [i for i in report.issues if "return type" in i.description.lower()]
+        return_issues = [
+            i for i in report.issues if "return type" in i.description.lower()
+        ]
         assert len(return_issues) > 0
 
     def test_detect_async_change(self, tmp_path: Path) -> None:
@@ -513,22 +508,18 @@ def test_func() -> str:
         # Create baseline
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def test_func() -> None:
     pass
-"""
-        )
+""")
 
         # Create current version as async
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 async def test_func():
     pass
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
@@ -539,7 +530,9 @@ async def test_func():
         assert report.breaking_count > 0
         # The function should be reported as removed since changing async/sync
         # fundamentally changes the signature
-        removed_issues = [i for i in report.issues if "removed" in i.description.lower()]
+        removed_issues = [
+            i for i in report.issues if "removed" in i.description.lower()
+        ]
         assert len(removed_issues) > 0
 
     def test_detect_performance_regression(self) -> None:
@@ -561,7 +554,9 @@ async def test_func():
         }
 
         detector = RegressionDetector(performance_threshold=0.10)
-        issues = detector.detect_performance_regressions(baseline_metrics, current_metrics)
+        issues = detector.detect_performance_regressions(
+            baseline_metrics, current_metrics
+        )
 
         assert len(issues) > 0
         perf_issue = issues[0]
@@ -590,7 +585,9 @@ async def test_func():
         # Should detect removed pandas and upgraded requests
         assert len(issues) >= 2
         removed_issues = [i for i in issues if "removed" in i.description.lower()]
-        version_issues = [i for i in issues if "version changed" in i.description.lower()]
+        version_issues = [
+            i for i in issues if "version changed" in i.description.lower()
+        ]
         assert len(removed_issues) > 0
         assert len(version_issues) > 0
 
@@ -602,7 +599,9 @@ async def test_func():
         assert detector._assess_version_change_risk("1.0.0", "2.0.0") == RiskLevel.HIGH
 
         # Minor version change
-        assert detector._assess_version_change_risk("1.0.0", "1.1.0") == RiskLevel.MEDIUM
+        assert (
+            detector._assess_version_change_risk("1.0.0", "1.1.0") == RiskLevel.MEDIUM
+        )
 
         # Patch version change
         assert detector._assess_version_change_risk("1.0.0", "1.0.1") == RiskLevel.LOW
@@ -679,21 +678,17 @@ async def test_func():
         # Create test case with parameter changes
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def test_func(x: int) -> None:
     pass
-"""
-        )
+""")
 
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 def test_func(x: int, y: str = "default") -> None:
     pass
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
@@ -709,24 +704,20 @@ def test_func(x: int, y: str = "default") -> None:
         # Create baseline
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def test_func(x: int, y: str = "default") -> None:
     '''Docstring.'''
     pass
-"""
-        )
+""")
 
         # Create current with only docstring change
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 def test_func(x: int, y: str = "default") -> None:
     '''Updated docstring.'''
     pass
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
@@ -740,13 +731,11 @@ def test_func(x: int, y: str = "default") -> None:
         # Create baseline with class
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 class MyClass:
     def method1(self) -> None:
         pass
-"""
-        )
+""")
 
         # Create current without class
         current_dir = tmp_path / "current"
@@ -766,22 +755,18 @@ class MyClass:
         # Create baseline
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def test_func(x: int, y: str) -> None:
     pass
-"""
-        )
+""")
 
         # Create current with reordered parameters
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 def test_func(y: str, x: int) -> None:
     pass
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
@@ -829,8 +814,7 @@ def test_func(y: str, x: int) -> None:
         # Create complex scenario with multiple issue types
         baseline_dir = tmp_path / "baseline"
         baseline_dir.mkdir()
-        (baseline_dir / "test.py").write_text(
-            """
+        (baseline_dir / "test.py").write_text("""
 def removed_func() -> None:
     pass
 
@@ -839,13 +823,11 @@ def changed_func(x: int) -> str:
 
 def kept_func() -> None:
     pass
-"""
-        )
+""")
 
         current_dir = tmp_path / "current"
         current_dir.mkdir()
-        (current_dir / "test.py").write_text(
-            """
+        (current_dir / "test.py").write_text("""
 def changed_func(x: int, y: int) -> int:
     return x + y
 
@@ -854,8 +836,7 @@ def kept_func() -> None:
 
 def new_func() -> None:
     pass
-"""
-        )
+""")
 
         detector = RegressionDetector(snapshot_dir=tmp_path / "snapshots")
         baseline_snapshot = detector.create_snapshot(baseline_dir, "v1.0", save=False)
@@ -923,7 +904,9 @@ class TestEdgeCases:
         }
 
         detector = RegressionDetector()
-        issues = detector.detect_performance_regressions(baseline_metrics, current_metrics)
+        issues = detector.detect_performance_regressions(
+            baseline_metrics, current_metrics
+        )
 
         # Should not crash, func2 should be ignored
         assert all(i.description != "func2" for i in issues)

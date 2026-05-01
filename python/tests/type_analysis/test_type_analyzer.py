@@ -129,7 +129,7 @@ def func() -> None:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
-        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        assert isinstance(func_node, ast.FunctionDef | ast.AsyncFunctionDef)
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred == "None"
         assert confidence == 0.9
@@ -144,7 +144,7 @@ def func() -> None:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
-        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        assert isinstance(func_node, ast.FunctionDef | ast.AsyncFunctionDef)
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred == "None"
         assert confidence == 0.9
@@ -158,7 +158,7 @@ def func() -> Any:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
-        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        assert isinstance(func_node, ast.FunctionDef | ast.AsyncFunctionDef)
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred == "int"
         assert confidence == 0.7
@@ -174,7 +174,7 @@ def func(x) -> Any:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
-        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        assert isinstance(func_node, ast.FunctionDef | ast.AsyncFunctionDef)
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred is not None and "int" in inferred and "str" in inferred
         assert inferred is not None and "|" in inferred
@@ -190,7 +190,7 @@ def func(x) -> Any:
     """
         tree = ast.parse(code)
         func_node = tree.body[0]
-        assert isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        assert isinstance(func_node, ast.FunctionDef | ast.AsyncFunctionDef)
         inferred, confidence, reason = engine.infer_return_type(func_node)
         assert inferred is not None and "int" in inferred
         assert inferred is not None and "None" in inferred
@@ -214,7 +214,9 @@ def func(x) -> Any:
         """Test expression type inference for comparison."""
         engine = TypeInferenceEngine()
         node = ast.Compare(
-            left=ast.Constant(value=1), ops=[ast.Lt()], comparators=[ast.Constant(value=2)]
+            left=ast.Constant(value=1),
+            ops=[ast.Lt()],
+            comparators=[ast.Constant(value=2)],
         )
         result = engine._infer_expr_type(node)
         assert result == "bool"
@@ -386,7 +388,9 @@ def greet(name: str, greeting="Hello") -> Any:
         visitor.visit(tree)
 
         # Should suggest str for greeting based on default
-        untyped_params = [item for item in visitor.untyped_items if item.item_type == "parameter"]
+        untyped_params = [
+            item for item in visitor.untyped_items if item.item_type == "parameter"
+        ]
         assert len(untyped_params) == 1
         assert untyped_params[0].name == "greeting"
         assert untyped_params[0].suggested_type == "str"
@@ -544,20 +548,16 @@ def broken(
         """Test analyzing a directory."""
         # Create multiple files
         file1 = tmp_path / "module1.py"
-        file1.write_text(
-            """
+        file1.write_text("""
 def typed_func(x: int) -> int:
     return x * 2
-"""
-        )
+""")
 
         file2 = tmp_path / "module2.py"
-        file2.write_text(
-            """
+        file2.write_text("""
 def untyped_func(x, y) -> Any:
     return x + y
-"""
-        )
+""")
 
         analyzer = TypeAnalyzer(run_mypy=False)
         report = analyzer.analyze_directory(tmp_path)
@@ -678,8 +678,7 @@ class TestIntegration:
 
         (package / "__init__.py").write_text("")
 
-        (package / "math_utils.py").write_text(
-            """
+        (package / "math_utils.py").write_text("""
 def add(x: int, y: int) -> int:
     '''Add two numbers.'''
     return x + y
@@ -687,11 +686,9 @@ def add(x: int, y: int) -> int:
 def multiply(x, y) -> Any:
     '''Multiply two numbers (untyped).'''
     return x * y
-"""
-        )
+""")
 
-        (package / "string_utils.py").write_text(
-            """
+        (package / "string_utils.py").write_text("""
 def upper(s: str) -> str:
     '''Convert to uppercase.'''
     return s.upper()
@@ -699,8 +696,7 @@ def upper(s: str) -> str:
 def reverse(s) -> Any:
     '''Reverse string (untyped).'''
     return s[::-1]
-"""
-        )
+""")
 
         # Run analysis
         analyzer = TypeAnalyzer(run_mypy=False)
@@ -739,7 +735,9 @@ def process(count=10, name="default", items=[], enabled=True) -> Any:
         # Find specific parameters
         count_item = next((item for item in param_items if item.name == "count"), None)
         name_item = next((item for item in param_items if item.name == "name"), None)
-        enabled_item = next((item for item in param_items if item.name == "enabled"), None)
+        enabled_item = next(
+            (item for item in param_items if item.name == "enabled"), None
+        )
 
         assert count_item and count_item.suggested_type == "int"
         assert name_item and name_item.suggested_type == "str"
@@ -788,7 +786,9 @@ def maybe_value(exists) -> Any:
         # Find return type suggestions
         return_items = [item for item in untyped_items if item.item_type == "return"]
 
-        get_value_return = next((item for item in return_items if "get_value" in item.name), None)
+        get_value_return = next(
+            (item for item in return_items if "get_value" in item.name), None
+        )
         maybe_value_return = next(
             (item for item in return_items if "maybe_value" in item.name), None
         )
@@ -796,13 +796,16 @@ def maybe_value(exists) -> Any:
         # get_value should suggest union of int and str
         assert get_value_return
         assert (
-            get_value_return.suggested_type is not None and "|" in get_value_return.suggested_type
+            get_value_return.suggested_type is not None
+            and "|" in get_value_return.suggested_type
         )
         assert (
-            get_value_return.suggested_type is not None and "int" in get_value_return.suggested_type
+            get_value_return.suggested_type is not None
+            and "int" in get_value_return.suggested_type
         )
         assert (
-            get_value_return.suggested_type is not None and "str" in get_value_return.suggested_type
+            get_value_return.suggested_type is not None
+            and "str" in get_value_return.suggested_type
         )
 
         # maybe_value should suggest list with None

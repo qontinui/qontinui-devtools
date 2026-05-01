@@ -117,7 +117,9 @@ class ComplexityAnalyzer:
 
         return complexity
 
-    def _extract_function_body(self, lines: list[str], start_line: int) -> tuple[str, int]:
+    def _extract_function_body(
+        self, lines: list[str], start_line: int
+    ) -> tuple[str, int]:
         """Extract function body from lines.
 
         Args:
@@ -177,7 +179,9 @@ class ComplexityAnalyzer:
                 )
 
             # Find functions and analyze them
-            func_pattern = r"(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?(?:unsafe\s+)?fn\s+(\w+)\s*[<(]"
+            func_pattern = (
+                r"(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?(?:unsafe\s+)?fn\s+(\w+)\s*[<(]"
+            )
             for match in re.finditer(func_pattern, content):
                 func_name = match.group(1)
                 line_num = content[: match.start()].count("\n") + 1
@@ -214,7 +218,9 @@ class ComplexityAnalyzer:
                 line_num = content[: match.start()].count("\n") + 1
 
                 # Extract match body
-                match_body, match_lines = self._extract_function_body(lines, line_num - 1)
+                match_body, match_lines = self._extract_function_body(
+                    lines, line_num - 1
+                )
 
                 # Count match arms
                 arm_count = len(re.findall(r"=>", match_body))
@@ -235,7 +241,9 @@ class ComplexityAnalyzer:
 
         except (UnicodeDecodeError, PermissionError) as e:
             if self.verbose:
-                self.console.print(f"[yellow]Warning: Could not read {file_path}: {e}[/yellow]")
+                self.console.print(
+                    f"[yellow]Warning: Could not read {file_path}: {e}[/yellow]"
+                )
 
     def analyze(self) -> list[ComplexityMetrics]:
         """Analyze complexity across the project.
@@ -276,7 +284,9 @@ class ComplexityAnalyzer:
 
         # Calculate averages
         functions = [m for m in self._metrics if m.element_type == "function"]
-        avg_complexity = sum(f.complexity for f in functions) / len(functions) if functions else 0
+        avg_complexity = (
+            sum(f.complexity for f in functions) / len(functions) if functions else 0
+        )
         avg_lines = sum(f.lines for f in functions) / len(functions) if functions else 0
 
         # Top complex functions
@@ -288,7 +298,8 @@ class ComplexityAnalyzer:
             "avg_function_complexity": round(avg_complexity, 2),
             "avg_function_lines": round(avg_lines, 2),
             "most_complex": [
-                {"name": m.name, "complexity": m.complexity, "lines": m.lines} for m in top_complex
+                {"name": m.name, "complexity": m.complexity, "lines": m.lines}
+                for m in top_complex
             ],
         }
 
@@ -319,7 +330,9 @@ class ComplexityAnalyzer:
         # Statistics
         stats = self.get_statistics()
         lines.append("STATISTICS:")
-        lines.append(f"  Average function complexity: {stats['avg_function_complexity']}")
+        lines.append(
+            f"  Average function complexity: {stats['avg_function_complexity']}"
+        )
         lines.append(f"  Average function lines: {stats['avg_function_lines']}")
         lines.append("")
 
@@ -349,7 +362,9 @@ class ComplexityAnalyzer:
         lines.append("\n" + "=" * 80)
         return "\n".join(lines)
 
-    def generate_rich_report(self, metrics: list[ComplexityMetrics] | None = None) -> None:
+    def generate_rich_report(
+        self, metrics: list[ComplexityMetrics] | None = None
+    ) -> None:
         """Generate a rich console report with colors and formatting.
 
         Args:
@@ -359,10 +374,14 @@ class ComplexityAnalyzer:
             metrics = self._metrics
 
         if not metrics:
-            self.console.print("\n[bold green]No complexity issues found[/bold green]\n")
+            self.console.print(
+                "\n[bold green]No complexity issues found[/bold green]\n"
+            )
             return
 
-        self.console.print(f"\n[bold yellow]Found {len(metrics)} complexity issues[/bold yellow]\n")
+        self.console.print(
+            f"\n[bold yellow]Found {len(metrics)} complexity issues[/bold yellow]\n"
+        )
 
         # Statistics
         stats = self.get_statistics()
@@ -373,7 +392,9 @@ class ComplexityAnalyzer:
         summary_table.add_column("Value", justify="right", style="green")
 
         summary_table.add_row("Total Issues", str(stats["total_issues"]))
-        summary_table.add_row("Avg Function Complexity", str(stats["avg_function_complexity"]))
+        summary_table.add_row(
+            "Avg Function Complexity", str(stats["avg_function_complexity"])
+        )
         summary_table.add_row("Avg Function Lines", str(stats["avg_function_lines"]))
 
         self.console.print(summary_table)
@@ -387,7 +408,9 @@ class ComplexityAnalyzer:
             complex_table.add_column("Lines", justify="right", style="yellow")
 
             for item in stats["most_complex"][:10]:
-                complex_table.add_row(item["name"], str(item["complexity"]), str(item["lines"]))
+                complex_table.add_row(
+                    item["name"], str(item["complexity"]), str(item["lines"])
+                )
 
             self.console.print(complex_table)
             self.console.print()

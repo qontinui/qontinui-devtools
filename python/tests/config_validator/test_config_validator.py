@@ -13,7 +13,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from pydantic_core import InitErrorDetails
-from qontinui_devtools.config_validator import ConfigValidator, ValidationError, ValidationReport
+from qontinui_devtools.config_validator import (
+    ConfigValidator,
+    ValidationError,
+    ValidationReport,
+)
 
 
 @pytest.fixture
@@ -36,13 +40,21 @@ def valid_config_file(tmp_path: Path) -> Path:
                     "action1": {
                         "type": "Click",
                         "name": "Click Button",
-                        "searches": [{"type": "Match", "image": "button.png", "threshold": 0.8}],
+                        "searches": [
+                            {"type": "Match", "image": "button.png", "threshold": 0.8}
+                        ],
                         "coordinates": {"x": 100, "y": 200},
                     },
-                    "action2": {"type": "Wait", "name": "Wait for Element", "duration": 1.5},
+                    "action2": {
+                        "type": "Wait",
+                        "name": "Wait for Element",
+                        "duration": 1.5,
+                    },
                 },
                 "connections": {
-                    "action1": {"false": [[{"action": "action2", "type": "false", "index": 0}]]}
+                    "action1": {
+                        "false": [[{"action": "action2", "type": "false", "index": 0}]]
+                    }
                 },
                 "initial_action": "action1",
             }
@@ -70,9 +82,15 @@ def invalid_connections_file(tmp_path: Path) -> Path:
                     "action1": {
                         "type": "Click",
                         "name": "Click Button",
-                        "searches": [{"type": "Match", "image": "button.png", "threshold": 0.8}],
+                        "searches": [
+                            {"type": "Match", "image": "button.png", "threshold": 0.8}
+                        ],
                     },
-                    "action2": {"type": "Wait", "name": "Wait for Element", "duration": 1.5},
+                    "action2": {
+                        "type": "Wait",
+                        "name": "Wait for Element",
+                        "duration": 1.5,
+                    },
                 },
                 "connections": {"action1": ["action2:false"]},
                 "initial_action": "action1",
@@ -140,7 +158,9 @@ def multiple_workflows_file(tmp_path: Path) -> Path:
                     "action1": {
                         "type": "Click",
                         "name": "Click Button",
-                        "searches": [{"type": "Match", "image": "button.png", "threshold": 0.8}],
+                        "searches": [
+                            {"type": "Match", "image": "button.png", "threshold": 0.8}
+                        ],
                     }
                 },
                 "connections": {},
@@ -225,7 +245,9 @@ class TestConfigValidatorInitialization:
             patch.object(ConfigValidator, "_setup_imports"),
             patch("pathlib.Path.exists", return_value=False),
         ):
-            with pytest.raises(FileNotFoundError, match="Could not find qontinui library"):
+            with pytest.raises(
+                FileNotFoundError, match="Could not find qontinui library"
+            ):
                 ConfigValidator()
 
     def test_setup_imports_adds_to_sys_path(self) -> None:
@@ -236,7 +258,9 @@ class TestConfigValidatorInitialization:
         original_path = sys.path.copy()
 
         try:
-            with patch.object(ConfigValidator, "_find_qontinui_path", return_value=test_path):
+            with patch.object(
+                ConfigValidator, "_find_qontinui_path", return_value=test_path
+            ):
                 # Mock the actual imports to avoid ImportError
                 with patch("builtins.__import__"):
                     ConfigValidator()
@@ -375,7 +399,9 @@ class TestValidateInvalidConfigs:
                     "loc": ("actions", "action2", "type"),
                     "input": {},
                 }
-                raise PydanticValidationError.from_exception_data("ValidationError", [error_dict])
+                raise PydanticValidationError.from_exception_data(
+                    "ValidationError", [error_dict]
+                )
 
         mock_validator.Workflow.model_validate.side_effect = mock_validate  # type: ignore[attr-defined]
 
@@ -511,7 +537,10 @@ class TestValidationReportFormat:
         assert str(report.total_workflows) in captured.out
 
     def test_print_report_invalid_config(
-        self, invalid_connections_file: Path, mock_validator: ConfigValidator, capsys: Any
+        self,
+        invalid_connections_file: Path,
+        mock_validator: ConfigValidator,
+        capsys: Any,
     ) -> None:
         """Test print_report output for invalid config."""
         from pydantic import ValidationError as PydanticValidationError
@@ -534,7 +563,10 @@ class TestValidationReportFormat:
         assert "connections" in captured.out.lower()
 
     def test_print_report_verbose_mode(
-        self, invalid_connections_file: Path, mock_validator: ConfigValidator, capsys: Any
+        self,
+        invalid_connections_file: Path,
+        mock_validator: ConfigValidator,
+        capsys: Any,
     ) -> None:
         """Test print_report verbose output includes detailed info."""
         from pydantic import ValidationError as PydanticValidationError
@@ -575,14 +607,18 @@ class TestGetNestedValue:
         value = mock_validator._get_nested_value(data, ("items", 1, "name"))
         assert value == "item2"
 
-    def test_get_nested_value_missing_key(self, mock_validator: ConfigValidator) -> None:
+    def test_get_nested_value_missing_key(
+        self, mock_validator: ConfigValidator
+    ) -> None:
         """Test getting nested value with missing key."""
         data = {"level1": {"level2": "value"}}
 
         value = mock_validator._get_nested_value(data, ("level1", "missing", "key"))
         assert value is None
 
-    def test_get_nested_value_out_of_range(self, mock_validator: ConfigValidator) -> None:
+    def test_get_nested_value_out_of_range(
+        self, mock_validator: ConfigValidator
+    ) -> None:
         """Test getting nested value with out-of-range list index."""
         data = {"items": [1, 2, 3]}
 
@@ -593,7 +629,9 @@ class TestGetNestedValue:
 class TestEdgeCases:
     """Tests for edge cases and error conditions."""
 
-    def test_empty_config_file(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_empty_config_file(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of empty config file."""
         config_file = tmp_path / "empty.json"
         with open(config_file, "w", encoding="utf-8") as f:
@@ -604,9 +642,15 @@ class TestEdgeCases:
         assert report.is_valid is True
         assert report.total_workflows == 0
 
-    def test_config_with_unicode(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_config_with_unicode(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of config with unicode characters."""
-        config = {"name": "Unicode Config 你好", "default_workflow": "test", "workflows": []}
+        config = {
+            "name": "Unicode Config 你好",
+            "default_workflow": "test",
+            "workflows": [],
+        }
 
         config_file = tmp_path / "unicode.json"
         with open(config_file, "w", encoding="utf-8") as f:
@@ -617,7 +661,9 @@ class TestEdgeCases:
         assert report.config_path == config_file
         assert report.total_workflows == 0
 
-    def test_workflow_without_id(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_workflow_without_id(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of workflow without ID field."""
         from pydantic import ValidationError as PydanticValidationError
 
@@ -651,7 +697,9 @@ class TestEdgeCases:
         assert len(report.errors) > 0
         assert report.errors[0].workflow_id == "unknown"
 
-    def test_large_config_file(self, tmp_path: Path, mock_validator: ConfigValidator) -> None:
+    def test_large_config_file(
+        self, tmp_path: Path, mock_validator: ConfigValidator
+    ) -> None:
         """Test handling of large config file with many workflows."""
         config = {
             "name": "Large Config",
@@ -661,7 +709,8 @@ class TestEdgeCases:
                     "id": f"workflow_{i}",
                     "name": f"Workflow {i}",
                     "actions": {
-                        f"action_{j}": {"type": "Click", "name": f"Action {j}"} for j in range(10)
+                        f"action_{j}": {"type": "Click", "name": f"Action {j}"}
+                        for j in range(10)
                     },
                     "connections": {},
                     "initial_action": "action_0",

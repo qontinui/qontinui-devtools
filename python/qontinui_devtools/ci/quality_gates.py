@@ -19,7 +19,9 @@ console = Console()
 class QualityGate:
     """Represents a single quality gate check."""
 
-    def __init__(self, name: str, actual: int, threshold: int, severity: str = "error") -> None:
+    def __init__(
+        self, name: str, actual: int, threshold: int, severity: str = "error"
+    ) -> None:
         self.name = name
         self.actual = actual
         self.threshold = threshold
@@ -86,7 +88,9 @@ class QualityGateChecker:
         except json.JSONDecodeError:
             console.print(f"[yellow]Warning: {file_path} is not valid JSON[/yellow]")
 
-    def check_race_conditions(self, file_path: str, max_critical: int, max_high: int) -> None:
+    def check_race_conditions(
+        self, file_path: str, max_critical: int, max_high: int
+    ) -> None:
         """Check race condition count by severity."""
         try:
             data = json.loads(Path(file_path).read_text())
@@ -95,10 +99,14 @@ class QualityGateChecker:
             critical = len([r for r in races if r.get("severity") == "critical"])
             high = len([r for r in races if r.get("severity") == "high"])
 
-            critical_gate = QualityGate("Critical Race Conditions", critical, max_critical, "error")
+            critical_gate = QualityGate(
+                "Critical Race Conditions", critical, max_critical, "error"
+            )
             self.add_gate(critical_gate)
 
-            high_gate = QualityGate("High Severity Race Conditions", high, max_high, "error")
+            high_gate = QualityGate(
+                "High Severity Race Conditions", high, max_high, "error"
+            )
             self.add_gate(high_gate)
 
             if not critical_gate.passed:
@@ -152,7 +160,9 @@ class QualityGateChecker:
 
             if "average_complexity" in data:
                 avg = data["average_complexity"]
-                gate = QualityGate("Average Complexity", int(avg), max_average, "warning")
+                gate = QualityGate(
+                    "Average Complexity", int(avg), max_average, "warning"
+                )
                 self.add_gate(gate)
 
             if "functions" in data:
@@ -227,20 +237,39 @@ class QualityGateChecker:
     type=click.Path(exists=True),
     help="Path to circular dependencies JSON output",
 )
-@click.option("--god-classes", type=click.Path(exists=True), help="Path to god classes JSON output")
 @click.option(
-    "--race-conditions", type=click.Path(exists=True), help="Path to race conditions JSON output"
-)
-@click.option("--coverage", type=click.Path(exists=True), help="Path to coverage JSON output")
-@click.option("--complexity", type=click.Path(exists=True), help="Path to complexity JSON output")
-@click.option(
-    "--max-circular", type=int, default=0, help="Maximum allowed circular dependencies (default: 0)"
+    "--god-classes",
+    type=click.Path(exists=True),
+    help="Path to god classes JSON output",
 )
 @click.option(
-    "--max-god-classes", type=int, default=5, help="Maximum allowed god classes (default: 5)"
+    "--race-conditions",
+    type=click.Path(exists=True),
+    help="Path to race conditions JSON output",
 )
 @click.option(
-    "--max-race-critical", type=int, default=0, help="Maximum critical race conditions (default: 0)"
+    "--coverage", type=click.Path(exists=True), help="Path to coverage JSON output"
+)
+@click.option(
+    "--complexity", type=click.Path(exists=True), help="Path to complexity JSON output"
+)
+@click.option(
+    "--max-circular",
+    type=int,
+    default=0,
+    help="Maximum allowed circular dependencies (default: 0)",
+)
+@click.option(
+    "--max-god-classes",
+    type=int,
+    default=5,
+    help="Maximum allowed god classes (default: 5)",
+)
+@click.option(
+    "--max-race-critical",
+    type=int,
+    default=0,
+    help="Maximum critical race conditions (default: 0)",
 )
 @click.option(
     "--max-race-high",
@@ -266,8 +295,12 @@ class QualityGateChecker:
     default=5,
     help="Maximum functions over complexity threshold (default: 5)",
 )
-@click.option("--fail-on-warnings", is_flag=True, help="Fail on warnings in addition to errors")
-@click.option("--strict", is_flag=True, help="Enable strict mode (all thresholds set to 0)")
+@click.option(
+    "--fail-on-warnings", is_flag=True, help="Fail on warnings in addition to errors"
+)
+@click.option(
+    "--strict", is_flag=True, help="Enable strict mode (all thresholds set to 0)"
+)
 def check_gates(
     circular_deps: str | None,
     god_classes: str | None,

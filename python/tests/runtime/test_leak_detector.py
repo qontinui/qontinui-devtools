@@ -139,31 +139,41 @@ class TestClassifyLeakSeverity:
 
     def test_critical_severity_large_size(self) -> None:
         """Test critical severity with large size."""
-        severity = classify_leak_severity(count_increase=1000, size_mb=150.0, growth_rate=50.0)
+        severity = classify_leak_severity(
+            count_increase=1000, size_mb=150.0, growth_rate=50.0
+        )
 
         assert severity == "critical"
 
     def test_critical_severity_fast_growth(self) -> None:
         """Test critical severity with fast growth."""
-        severity = classify_leak_severity(count_increase=5000, size_mb=50.0, growth_rate=1500.0)
+        severity = classify_leak_severity(
+            count_increase=5000, size_mb=50.0, growth_rate=1500.0
+        )
 
         assert severity == "critical"
 
     def test_high_severity(self) -> None:
         """Test high severity."""
-        severity = classify_leak_severity(count_increase=2000, size_mb=25.0, growth_rate=200.0)
+        severity = classify_leak_severity(
+            count_increase=2000, size_mb=25.0, growth_rate=200.0
+        )
 
         assert severity == "high"
 
     def test_medium_severity(self) -> None:
         """Test medium severity."""
-        severity = classify_leak_severity(count_increase=500, size_mb=3.0, growth_rate=50.0)
+        severity = classify_leak_severity(
+            count_increase=500, size_mb=3.0, growth_rate=50.0
+        )
 
         assert severity == "medium"
 
     def test_low_severity(self) -> None:
         """Test low severity."""
-        severity = classify_leak_severity(count_increase=100, size_mb=0.5, growth_rate=5.0)
+        severity = classify_leak_severity(
+            count_increase=100, size_mb=0.5, growth_rate=5.0
+        )
 
         assert severity == "low"
 
@@ -368,7 +378,9 @@ class TestSuggestFixes:
         suggestions = suggest_fixes("frame")
 
         assert len(suggestions) > 0
-        assert any("generator" in s.lower() or "exception" in s.lower() for s in suggestions)
+        assert any(
+            "generator" in s.lower() or "exception" in s.lower() for s in suggestions
+        )
 
     def test_function_leak_suggestions(self) -> None:
         """Test suggestions for function leaks."""

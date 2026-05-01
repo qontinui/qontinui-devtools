@@ -194,7 +194,9 @@ class TestPythonTestGenerator:
 
     def test_translate_test_file_complete(self) -> None:
         """Test complete test file translation."""
-        test_method = TestMethod(name="shouldCreateUser", body='assertEquals("expected", actual);')
+        test_method = TestMethod(
+            name="shouldCreateUser", body='assertEquals("expected", actual);'
+        )
 
         test_file = TestFile(
             path=Path("UserServiceTest.java"),
@@ -347,7 +349,9 @@ assertEquals(expected, actual);"""
 
     def test_get_python_equivalent_with_explicit(self) -> None:
         """Test getting Python equivalent with explicit mapping."""
-        dependency = Dependency(java_import="com.example.Custom", python_equivalent="custom_module")
+        dependency = Dependency(
+            java_import="com.example.Custom", python_equivalent="custom_module"
+        )
         result = self.generator._get_python_equivalent(dependency)
         assert result == "custom_module"
 

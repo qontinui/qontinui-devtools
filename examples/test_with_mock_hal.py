@@ -214,7 +214,9 @@ def example_window_management() -> None:
     hal = MockHAL.create()
 
     # Add windows
-    window1 = hal.platform_specific.add_window("Browser", x=100, y=100, width=1200, height=800)
+    window1 = hal.platform_specific.add_window(
+        "Browser", x=100, y=100, width=1200, height=800
+    )
     hal.platform_specific.add_window("Editor", x=200, y=200, width=800, height=600)
 
     print(f"Created {len(hal.platform_specific.get_all_windows())} windows")

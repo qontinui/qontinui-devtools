@@ -76,7 +76,9 @@ class CircularDependencyDetector:
             List of RustCircularDependency objects, one per detected cycle
         """
         if self.verbose:
-            self.console.print(f"\n[bold]Analyzing Rust project:[/bold] {self.root_path}")
+            self.console.print(
+                f"\n[bold]Analyzing Rust project:[/bold] {self.root_path}"
+            )
 
         # Step 1: Scan directory for Rust files
         self._scan_directory()
@@ -92,7 +94,9 @@ class CircularDependencyDetector:
 
         if self.verbose:
             self.console.print(f"Files scanned: {len(self.file_map)}")
-            self.console.print(f"Dependencies: {sum(len(deps) for deps in self.graph.values())}")
+            self.console.print(
+                f"Dependencies: {sum(len(deps) for deps in self.graph.values())}"
+            )
             self.console.print(f"Cycles found: {len(circular_deps)}")
 
         return circular_deps
@@ -132,7 +136,9 @@ class CircularDependencyDetector:
 
         except (UnicodeDecodeError, PermissionError) as e:
             if self.verbose:
-                self.console.print(f"[yellow]Warning: Could not read {file_path}: {e}[/yellow]")
+                self.console.print(
+                    f"[yellow]Warning: Could not read {file_path}: {e}[/yellow]"
+                )
 
     def _get_module_name(self, file_path: Path) -> str | None:
         """Get module name from file path.
@@ -236,7 +242,9 @@ class CircularDependencyDetector:
 
             for child in children:
                 # Construct full child module name
-                child_full = f"{parent}::{child}" if parent not in ("main", "lib") else child
+                child_full = (
+                    f"{parent}::{child}" if parent not in ("main", "lib") else child
+                )
 
                 # Check if child exists as a module
                 if child_full in self.file_map or child in self.file_map:
@@ -404,13 +412,19 @@ class CircularDependencyDetector:
             cycles: List of detected circular dependencies
         """
         if not cycles:
-            self.console.print("\n[bold green]No circular dependencies found[/bold green]\n")
+            self.console.print(
+                "\n[bold green]No circular dependencies found[/bold green]\n"
+            )
             return
 
-        self.console.print(f"\n[bold red]Found {len(cycles)} circular dependencies[/bold red]\n")
+        self.console.print(
+            f"\n[bold red]Found {len(cycles)} circular dependencies[/bold red]\n"
+        )
 
         for idx, cycle in enumerate(cycles, 1):
-            severity_color = {"high": "red", "medium": "yellow", "low": "blue"}[cycle.severity]
+            severity_color = {"high": "red", "medium": "yellow", "low": "blue"}[
+                cycle.severity
+            ]
 
             self.console.print(
                 f"[bold {severity_color}]Cycle #{idx} "

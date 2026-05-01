@@ -61,11 +61,15 @@ class ValidationReport:
         if self.is_valid:
             summary_parts = [f"All {self.total_workflows} workflows are valid"]
             if self.total_inline_workflows > 0:
-                summary_parts.append(f"{self.total_inline_workflows} inline workflows are valid")
+                summary_parts.append(
+                    f"{self.total_inline_workflows} inline workflows are valid"
+                )
             print(f"✅ PASSED - {', '.join(summary_parts)}\n")
             return
 
-        print(f"❌ FAILED - {self.invalid_workflows}/{self.total_workflows} workflows have errors")
+        print(
+            f"❌ FAILED - {self.invalid_workflows}/{self.total_workflows} workflows have errors"
+        )
         if self.total_inline_workflows > 0:
             print(
                 f"           {self.invalid_inline_workflows}/{self.total_inline_workflows} inline workflows have errors"
@@ -113,7 +117,9 @@ class ValidationReport:
             print("  New format (qontinui library v2.0):")
             print('    "connections": {')
             print('      "action1": {')
-            print('        "false": [[{"action": "action2", "type": "false", "index": 0}]]')
+            print(
+                '        "false": [[{"action": "action2", "type": "false", "index": 0}]]'
+            )
             print("      }")
             print("    }")
             print()
@@ -301,7 +307,9 @@ class ConfigValidator:
                             error_type=error["type"],
                             message=error["msg"],
                             current_value=current_value,
-                            expected_type=str(expected) if expected is not None else "unknown",
+                            expected_type=(
+                                str(expected) if expected is not None else "unknown"
+                            ),
                             location=field_location,
                         )
                     )
@@ -345,7 +353,9 @@ class ConfigValidator:
                     field_name = ".".join(field_location)
 
                     # Get current value at error location
-                    current_value = self._get_nested_value(inline_workflow, error["loc"])
+                    current_value = self._get_nested_value(
+                        inline_workflow, error["loc"]
+                    )
 
                     expected = error.get("expected", "unknown")
                     inline_errors.append(
@@ -356,7 +366,9 @@ class ConfigValidator:
                             error_type=error["type"],
                             message=error["msg"],
                             current_value=current_value,
-                            expected_type=str(expected) if expected is not None else "unknown",
+                            expected_type=(
+                                str(expected) if expected is not None else "unknown"
+                            ),
                             location=field_location,
                             is_inline=True,
                             parent_action_id=action_id,
@@ -392,7 +404,9 @@ class ConfigValidator:
                 return None
         return current
 
-    def _find_inline_workflows(self, workflows: list[dict]) -> list[tuple[str, str, str, dict]]:
+    def _find_inline_workflows(
+        self, workflows: list[dict]
+    ) -> list[tuple[str, str, str, dict]]:
         """Find inline workflows embedded in action configs.
 
         Args:
@@ -426,7 +440,9 @@ class ConfigValidator:
 
                 # Pattern 2: IF action with inline workflow in then/else branches
                 if action.get("type") == "IF":
-                    if "thenWorkflow" in config and isinstance(config["thenWorkflow"], dict):
+                    if "thenWorkflow" in config and isinstance(
+                        config["thenWorkflow"], dict
+                    ):
                         if "actions" in config["thenWorkflow"]:
                             inline_workflows.append(
                                 (
@@ -436,7 +452,9 @@ class ConfigValidator:
                                     config["thenWorkflow"],
                                 )
                             )
-                    if "elseWorkflow" in config and isinstance(config["elseWorkflow"], dict):
+                    if "elseWorkflow" in config and isinstance(
+                        config["elseWorkflow"], dict
+                    ):
                         if "actions" in config["elseWorkflow"]:
                             inline_workflows.append(
                                 (
@@ -462,7 +480,9 @@ class ConfigValidator:
 
                 # Pattern 4: TRY_CATCH action with inline workflows
                 if action.get("type") == "TRY_CATCH":
-                    if "tryWorkflow" in config and isinstance(config["tryWorkflow"], dict):
+                    if "tryWorkflow" in config and isinstance(
+                        config["tryWorkflow"], dict
+                    ):
                         if "actions" in config["tryWorkflow"]:
                             inline_workflows.append(
                                 (
@@ -472,7 +492,9 @@ class ConfigValidator:
                                     config["tryWorkflow"],
                                 )
                             )
-                    if "catchWorkflow" in config and isinstance(config["catchWorkflow"], dict):
+                    if "catchWorkflow" in config and isinstance(
+                        config["catchWorkflow"], dict
+                    ):
                         if "actions" in config["catchWorkflow"]:
                             inline_workflows.append(
                                 (
@@ -482,7 +504,9 @@ class ConfigValidator:
                                     config["catchWorkflow"],
                                 )
                             )
-                    if "finallyWorkflow" in config and isinstance(config["finallyWorkflow"], dict):
+                    if "finallyWorkflow" in config and isinstance(
+                        config["finallyWorkflow"], dict
+                    ):
                         if "actions" in config["finallyWorkflow"]:
                             inline_workflows.append(
                                 (
@@ -507,7 +531,9 @@ class ConfigValidator:
                                         case["workflow"],
                                     )
                                 )
-                    if "defaultWorkflow" in config and isinstance(config["defaultWorkflow"], dict):
+                    if "defaultWorkflow" in config and isinstance(
+                        config["defaultWorkflow"], dict
+                    ):
                         if "actions" in config["defaultWorkflow"]:
                             inline_workflows.append(
                                 (

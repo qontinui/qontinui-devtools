@@ -32,7 +32,10 @@ class EventTrace:
     total_latency: float = 0.0
 
     def add_checkpoint(
-        self, name: str, timestamp: float | None = None, metadata: dict[str, Any] | None = None
+        self,
+        name: str,
+        timestamp: float | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """Add a checkpoint to the trace.
 
@@ -45,7 +48,10 @@ class EventTrace:
             timestamp = time.time()
 
         checkpoint = Checkpoint(
-            name=name, timestamp=timestamp, metadata=metadata or {}, thread_id=threading.get_ident()
+            name=name,
+            timestamp=timestamp,
+            metadata=metadata or {},
+            thread_id=threading.get_ident(),
         )
 
         self.checkpoints.append(checkpoint)
@@ -173,10 +179,14 @@ class EventTracer:
         with self._lock:
             # Evict oldest trace if at capacity
             if len(self._traces) >= self._max_traces:
-                oldest_id = min(self._traces.keys(), key=lambda k: self._traces[k].created_at)
+                oldest_id = min(
+                    self._traces.keys(), key=lambda k: self._traces[k].created_at
+                )
                 del self._traces[oldest_id]
 
-            trace = EventTrace(event_id=event_id, event_type=event_type, created_at=time.time())
+            trace = EventTrace(
+                event_id=event_id, event_type=event_type, created_at=time.time()
+            )
 
             self._traces[event_id] = trace
 
@@ -187,7 +197,10 @@ class EventTracer:
             return trace
 
     def checkpoint(
-        self, event_id: str, checkpoint_name: str, metadata: dict[str, Any] | None = None
+        self,
+        event_id: str,
+        checkpoint_name: str,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """Record a checkpoint for an event.
 
@@ -285,8 +298,12 @@ class EventTracer:
             sorted_latencies = sorted(latencies)
             p95_idx = int(len(sorted_latencies) * 0.95)
             p99_idx = int(len(sorted_latencies) * 0.99)
-            p95_latency = sorted_latencies[p95_idx] if p95_idx < len(sorted_latencies) else 0.0
-            p99_latency = sorted_latencies[p99_idx] if p99_idx < len(sorted_latencies) else 0.0
+            p95_latency = (
+                sorted_latencies[p95_idx] if p95_idx < len(sorted_latencies) else 0.0
+            )
+            p99_latency = (
+                sorted_latencies[p99_idx] if p99_idx < len(sorted_latencies) else 0.0
+            )
         else:
             avg_latency = 0.0
             p95_latency = 0.0
@@ -375,7 +392,9 @@ class EventTracer:
         """
         pass
 
-    def trace_event(self, event_name: str, metadata: dict[str, Any] | None = None) -> None:
+    def trace_event(
+        self, event_name: str, metadata: dict[str, Any] | None = None
+    ) -> None:
         """Trace an event (for compatibility with tests).
 
         Args:

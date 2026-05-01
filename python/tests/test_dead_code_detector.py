@@ -409,7 +409,9 @@ def regular_function() -> None:
         # Find each function
         main_dead = next((dc for dc in dead_code if dc.name == "main"), None)
         test_dead = next((dc for dc in dead_code if dc.name == "test_something"), None)
-        regular_dead = next((dc for dc in dead_code if dc.name == "regular_function"), None)
+        regular_dead = next(
+            (dc for dc in dead_code if dc.name == "regular_function"), None
+        )
 
         # main should have lower confidence (common entry point)
         if main_dead:
@@ -463,24 +465,20 @@ def unused_function() -> None:
     def test_multiple_files(self, temp_project: Path) -> None:
         """Test analysis across multiple files."""
         # File 1
-        (temp_project / "file1.py").write_text(
-            """
+        (temp_project / "file1.py").write_text("""
 def func1() -> None:
     pass
 
 def func2() -> None:
     pass
-"""
-        )
+""")
 
         # File 2
-        (temp_project / "file2.py").write_text(
-            """
+        (temp_project / "file2.py").write_text("""
 from file1 import func1
 
 result = func1()
-"""
-        )
+""")
 
         detector = DeadCodeDetector(str(temp_project))
         dead_code = detector.find_unused_functions()
@@ -520,8 +518,7 @@ def sample_project(tmp_path: Path) -> Path:
     project.mkdir()
 
     # Module with unused code
-    (project / "main.py").write_text(
-        """
+    (project / "main.py").write_text("""
 import os
 import sys
 import json
@@ -557,28 +554,23 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-"""
-    )
+""")
 
     # Helper module
-    (project / "helpers.py").write_text(
-        """
+    (project / "helpers.py").write_text("""
 def used_helper() -> Any:
     return "helper"
 
 def unused_helper() -> Any:
     return "dead"
-"""
-    )
+""")
 
     # Module that uses helpers
-    (project / "user.py").write_text(
-        """
+    (project / "user.py").write_text("""
 from helpers import used_helper
 
 result = used_helper()
-"""
-    )
+""")
 
     return project
 

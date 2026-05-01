@@ -133,7 +133,9 @@ class DependencyHealthChecker:
         max_depth = max((dep.tree_depth for dep in analyzed_deps), default=0)
 
         # Generate statistics
-        healthy = sum(1 for dep in analyzed_deps if dep.health_status == HealthStatus.HEALTHY)
+        healthy = sum(
+            1 for dep in analyzed_deps if dep.health_status == HealthStatus.HEALTHY
+        )
         outdated = sum(1 for dep in analyzed_deps if dep.is_outdated)
         vulnerable = sum(1 for dep in analyzed_deps if dep.has_vulnerabilities)
         deprecated = sum(1 for dep in analyzed_deps if dep.is_deprecated)
@@ -179,7 +181,9 @@ class DependencyHealthChecker:
 
         return report
 
-    def _parse_dependencies(self, project_path: Path, include_dev: bool) -> dict[str, str | bool]:
+    def _parse_dependencies(
+        self, project_path: Path, include_dev: bool
+    ) -> dict[str, str | bool]:
         """Parse dependencies from all available sources.
 
         Args:
@@ -217,7 +221,9 @@ class DependencyHealthChecker:
 
         return dependencies
 
-    def _parse_pyproject_toml(self, file_path: Path, include_dev: bool) -> dict[str, str | bool]:
+    def _parse_pyproject_toml(
+        self, file_path: Path, include_dev: bool
+    ) -> dict[str, str | bool]:
         """Parse dependencies from pyproject.toml.
 
         Args:
@@ -300,7 +306,9 @@ class DependencyHealthChecker:
 
         return dependencies
 
-    def _parse_poetry_lock(self, file_path: Path, include_dev: bool) -> dict[str, str | bool]:
+    def _parse_poetry_lock(
+        self, file_path: Path, include_dev: bool
+    ) -> dict[str, str | bool]:
         """Parse dependencies from poetry.lock.
 
         Args:
@@ -345,7 +353,9 @@ class DependencyHealthChecker:
             content = f.read()
 
         # Look for install_requires
-        install_requires_match = re.search(r"install_requires\s*=\s*\[(.*?)\]", content, re.DOTALL)
+        install_requires_match = re.search(
+            r"install_requires\s*=\s*\[(.*?)\]", content, re.DOTALL
+        )
 
         if install_requires_match:
             requires_str = install_requires_match.group(1)
@@ -531,7 +541,9 @@ class DependencyHealthChecker:
 
         return None
 
-    def _check_vulnerabilities(self, package_name: str, version: str) -> list[VulnerabilityInfo]:
+    def _check_vulnerabilities(
+        self, package_name: str, version: str
+    ) -> list[VulnerabilityInfo]:
         """Check for security vulnerabilities.
 
         Args:
@@ -679,7 +691,9 @@ class DependencyHealthChecker:
 
         return cycles
 
-    def _check_license_conflicts(self, dependencies: list[DependencyInfo]) -> list[LicenseConflict]:
+    def _check_license_conflicts(
+        self, dependencies: list[DependencyInfo]
+    ) -> list[LicenseConflict]:
         """Check for license compatibility conflicts.
 
         Args:
@@ -692,10 +706,14 @@ class DependencyHealthChecker:
 
         # Check for GPL + proprietary/permissive conflicts
         copyleft_deps = [
-            dep for dep in dependencies if dep.license_category == LicenseCategory.COPYLEFT
+            dep
+            for dep in dependencies
+            if dep.license_category == LicenseCategory.COPYLEFT
         ]
         permissive_deps = [
-            dep for dep in dependencies if dep.license_category == LicenseCategory.PERMISSIVE
+            dep
+            for dep in dependencies
+            if dep.license_category == LicenseCategory.PERMISSIVE
         ]
 
         # GPL requires all linked code to be GPL
@@ -774,7 +792,9 @@ class DependencyHealthChecker:
             )
 
         # Outdated packages
-        major_updates = [dep for dep in dependencies if dep.update_type == UpdateType.MAJOR]
+        major_updates = [
+            dep for dep in dependencies if dep.update_type == UpdateType.MAJOR
+        ]
         if major_updates:
             recommendations.append(
                 f"Consider upgrading {len(major_updates)} package(s) with major updates available"
@@ -782,7 +802,9 @@ class DependencyHealthChecker:
 
         # Circular dependencies
         if circular_deps:
-            recommendations.append(f"Resolve {len(circular_deps)} circular dependency chain(s)")
+            recommendations.append(
+                f"Resolve {len(circular_deps)} circular dependency chain(s)"
+            )
 
         # License conflicts
         if license_conflicts:

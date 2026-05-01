@@ -310,7 +310,9 @@ def suggest_fix(
             "or consider using a concurrent data structure."
         )
     elif state_type == "list":
-        suggestions.append("Alternative: Use queue.Queue for thread-safe list operations.")
+        suggestions.append(
+            "Alternative: Use queue.Queue for thread-safe list operations."
+        )
 
     # Check for double-checked locking
     if is_double_checked_locking(accesses):
@@ -319,7 +321,9 @@ def suggest_fix(
             "broken in Python. Use a single lock acquisition."
         )
 
-    return " ".join(suggestions) if suggestions else "Add appropriate locking mechanism."
+    return (
+        " ".join(suggestions) if suggestions else "Add appropriate locking mechanism."
+    )
 
 
 def get_false_positive_indicators(
@@ -351,7 +355,11 @@ def get_false_positive_indicators(
 
     # Check if state is only accessed in __init__
     init_only = all(
-        "init" in context.current_function.lower() if context.current_function else False
+        (
+            "init" in context.current_function.lower()
+            if context.current_function
+            else False
+        )
         for _ in [1]  # Simplified check
     )
     if init_only:

@@ -66,7 +66,9 @@ Exit codes:
         help="Path to qontinui library (default: auto-detect)",
     )
 
-    parser.add_argument("--json", action="store_true", help="Output results in JSON format")
+    parser.add_argument(
+        "--json", action="store_true", help="Output results in JSON format"
+    )
 
     args = parser.parse_args()
 
@@ -126,7 +128,9 @@ Exit codes:
                     "all_valid": all_valid,
                     "total_files": len(args.config_files),
                     "valid_files": sum(1 for r in results if r.get("is_valid", False)),
-                    "invalid_files": sum(1 for r in results if not r.get("is_valid", False)),
+                    "invalid_files": sum(
+                        1 for r in results if not r.get("is_valid", False)
+                    ),
                     "results": results,
                 },
                 indent=2,

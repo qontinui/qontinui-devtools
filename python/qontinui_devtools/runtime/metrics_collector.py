@@ -211,7 +211,9 @@ class MetricsCollector:
 
             # Filter recent actions
             recent_actions = [
-                action for action in self._action_history if action.timestamp >= window_start
+                action
+                for action in self._action_history
+                if action.timestamp >= window_start
             ]
 
             # Calculate metrics
@@ -220,7 +222,9 @@ class MetricsCollector:
 
             # Calculate average duration
             if recent_actions:
-                avg_duration = sum(a.duration for a in recent_actions) / len(recent_actions)
+                avg_duration = sum(a.duration for a in recent_actions) / len(
+                    recent_actions
+                )
             else:
                 avg_duration = 0.0
 

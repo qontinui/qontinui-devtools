@@ -63,7 +63,10 @@ def export_chrome_trace(traces: list["EventTrace"], output_path: str) -> None:
                         "cat": trace.event_type,
                         "ph": "X",  # Complete event
                         "ts": int(checkpoint.timestamp * 1_000_000),  # microseconds
-                        "dur": int((next_checkpoint.timestamp - checkpoint.timestamp) * 1_000_000),
+                        "dur": int(
+                            (next_checkpoint.timestamp - checkpoint.timestamp)
+                            * 1_000_000
+                        ),
                         "pid": 0,
                         "tid": checkpoint.thread_id,
                         "args": checkpoint.metadata,

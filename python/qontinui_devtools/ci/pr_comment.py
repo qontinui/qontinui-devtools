@@ -341,17 +341,27 @@ def generate_pr_comment(
     recommendations: list[Any] = []
 
     if circular_deps and len(circular_deps.get("cycles", [])) > 0:
-        recommendations.append("- 🔄 **Refactor circular dependencies** to improve modularity")
+        recommendations.append(
+            "- 🔄 **Refactor circular dependencies** to improve modularity"
+        )
 
     if god_classes and len(god_classes.get("god_classes", [])) > 5:
-        recommendations.append("- 🏗️ **Split god classes** into smaller, focused components")
+        recommendations.append(
+            "- 🏗️ **Split god classes** into smaller, focused components"
+        )
 
     if race_conditions:
         critical = len(
-            [r for r in race_conditions.get("races", []) if r.get("severity") == "critical"]
+            [
+                r
+                for r in race_conditions.get("races", [])
+                if r.get("severity") == "critical"
+            ]
         )
         if critical > 0:
-            recommendations.append("- 🚨 **Fix critical race conditions** before merging")
+            recommendations.append(
+                "- 🚨 **Fix critical race conditions** before merging"
+            )
 
     if coverage and coverage.get("totals", {}).get("percent_covered", 100) < 80:
         recommendations.append("- 🧪 **Increase test coverage** to at least 80%")
@@ -375,14 +385,22 @@ def generate_pr_comment(
 
 @click.command()
 @click.option(
-    "--circular-deps", type=click.Path(exists=True), help="Path to circular dependencies JSON"
+    "--circular-deps",
+    type=click.Path(exists=True),
+    help="Path to circular dependencies JSON",
 )
-@click.option("--god-classes", type=click.Path(exists=True), help="Path to god classes JSON")
 @click.option(
-    "--race-conditions", type=click.Path(exists=True), help="Path to race conditions JSON"
+    "--god-classes", type=click.Path(exists=True), help="Path to god classes JSON"
+)
+@click.option(
+    "--race-conditions",
+    type=click.Path(exists=True),
+    help="Path to race conditions JSON",
 )
 @click.option("--coverage", type=click.Path(exists=True), help="Path to coverage JSON")
-@click.option("--complexity", type=click.Path(exists=True), help="Path to complexity JSON")
+@click.option(
+    "--complexity", type=click.Path(exists=True), help="Path to complexity JSON"
+)
 @click.option(
     "--previous-results",
     type=click.Path(exists=True),
@@ -396,7 +414,9 @@ def generate_pr_comment(
 )
 @click.option("--pr-number", type=int, help="Pull request number")
 @click.option("--pr-title", type=str, help="Pull request title")
-@click.option("--base-branch", type=str, default="main", help="Base branch name (default: main)")
+@click.option(
+    "--base-branch", type=str, default="main", help="Base branch name (default: main)"
+)
 def generate_comment(
     circular_deps: str | None,
     god_classes: str | None,

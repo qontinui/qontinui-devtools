@@ -214,6 +214,8 @@ class SecurityReport:
         ]
 
         if self.errors:
-            lines.extend(["", f"Errors: {len(self.errors)} files could not be analyzed"])
+            lines.extend(
+                ["", f"Errors: {len(self.errors)} files could not be analyzed"]
+            )
 
         return "\n".join(lines)

@@ -62,7 +62,13 @@ class FunctionSignature:
     def __hash__(self) -> int:
         """Generate hash for signature."""
         return hash(
-            (self.name, tuple(self.parameters), self.return_type, self.module_path, self.is_async)
+            (
+                self.name,
+                tuple(self.parameters),
+                self.return_type,
+                self.module_path,
+                self.is_async,
+            )
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -191,15 +197,23 @@ class RegressionIssue:
             "change_type": self.change_type.value,
             "risk_level": self.risk_level.value,
             "description": self.description,
-            "old_signature": self.old_signature.to_dict() if self.old_signature else None,
-            "new_signature": self.new_signature.to_dict() if self.new_signature else None,
+            "old_signature": (
+                self.old_signature.to_dict() if self.old_signature else None
+            ),
+            "new_signature": (
+                self.new_signature.to_dict() if self.new_signature else None
+            ),
             "impact_description": self.impact_description,
             "migration_guide": self.migration_guide,
             "severity": self.severity.value,
             "affected_modules": self.affected_modules,
             "performance_delta": self.performance_delta,
-            "old_performance": (self.old_performance.to_dict() if self.old_performance else None),
-            "new_performance": (self.new_performance.to_dict() if self.new_performance else None),
+            "old_performance": (
+                self.old_performance.to_dict() if self.old_performance else None
+            ),
+            "new_performance": (
+                self.new_performance.to_dict() if self.new_performance else None
+            ),
         }
 
     @classmethod

@@ -96,7 +96,9 @@ def main() -> None:
 
     # End session and get results
     session = profiler.end_session()
-    console.print(f"[green]Session ended:[/green] {len(session.profiles)} actions profiled\n")
+    console.print(
+        f"[green]Session ended:[/green] {len(session.profiles)} actions profiled\n"
+    )
 
     # Calculate metrics
     metrics = calculate_metrics(session.profiles)

@@ -72,7 +72,9 @@ class TypeCoverage:
 
         # Parameter coverage
         if self.total_parameters > 0:
-            self.parameter_coverage = (self.typed_parameters / self.total_parameters) * 100
+            self.parameter_coverage = (
+                self.typed_parameters / self.total_parameters
+            ) * 100
         else:
             self.parameter_coverage = 100.0
 
@@ -226,7 +228,11 @@ class TypeAnalysisReport:
 
         sorted_items = sorted(
             self.untyped_items,
-            key=lambda x: (priority_order.get(x.item_type, 99), x.file_path, x.line_number),
+            key=lambda x: (
+                priority_order.get(x.item_type, 99),
+                x.file_path,
+                x.line_number,
+            ),
         )
 
         if limit:

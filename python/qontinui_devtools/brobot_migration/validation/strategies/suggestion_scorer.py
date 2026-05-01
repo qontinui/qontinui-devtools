@@ -99,7 +99,9 @@ class SuggestionScorer:
         combined_text = f"{error_message}\n{stack_trace}"
         return bool(re.search(pattern.pattern_regex, combined_text, re.IGNORECASE))
 
-    def recognize_common_patterns(self, error_message: str, stack_trace: str) -> list[str]:
+    def recognize_common_patterns(
+        self, error_message: str, stack_trace: str
+    ) -> list[str]:
         """
         Recognize common migration issue patterns from error messages and stack traces.
 
@@ -122,4 +124,6 @@ class SuggestionScorer:
 
     def sort_suggestions(self, suggestions: list[FixSuggestion]) -> list[FixSuggestion]:
         """Sort suggestions by confidence and complexity."""
-        return sorted(suggestions, key=lambda x: (x.confidence, x.complexity.value), reverse=True)
+        return sorted(
+            suggestions, key=lambda x: (x.confidence, x.complexity.value), reverse=True
+        )

@@ -21,8 +21,7 @@ def sample_qontinui_action(temp_test_dir: Path) -> Path:
     This simulates a real qontinui action with HAL interactions.
     """
     action_file = temp_test_dir / "sample_action.py"
-    action_file.write_text(
-        """
+    action_file.write_text("""
 import time
 from typing import Optional
 
@@ -146,8 +145,7 @@ class ConcurrentAction:
             'iterations': iterations,
             'results': results
         }
-"""
-    )
+""")
     return action_file
 
 
@@ -162,8 +160,7 @@ def sample_qontinui_project(temp_test_dir: Path) -> Path:
 
     # Create main module
     main_file = project_dir / "main.py"
-    main_file.write_text(
-        """
+    main_file.write_text("""
 from actions import action_a, action_b
 from utils import helper
 
@@ -178,16 +175,14 @@ def main() -> Any:
 
 if __name__ == '__main__':
     main()
-"""
-    )
+""")
 
     # Create actions module
     actions_dir = project_dir / "actions"
     actions_dir.mkdir()
     (actions_dir / "__init__.py").write_text("")
 
-    (actions_dir / "action_a.py").write_text(
-        """
+    (actions_dir / "action_a.py").write_text("""
 import time
 
 
@@ -195,11 +190,9 @@ def execute() -> Any:
     '''Execute action A.'''
     time.sleep(0.01)
     return {'status': 'success', 'action': 'A'}
-"""
-    )
+""")
 
-    (actions_dir / "action_b.py").write_text(
-        """
+    (actions_dir / "action_b.py").write_text("""
 import time
 
 
@@ -207,21 +200,18 @@ def execute() -> Any:
     '''Execute action B.'''
     time.sleep(0.02)
     return {'status': 'success', 'action': 'B'}
-"""
-    )
+""")
 
     # Create utils module
     utils_dir = project_dir / "utils"
     utils_dir.mkdir()
     (utils_dir / "__init__.py").write_text("")
 
-    (utils_dir / "helper.py").write_text(
-        """
+    (utils_dir / "helper.py").write_text("""
 def setup() -> Any:
     '''Setup helper.'''
     print("Setup complete")
-"""
-    )
+""")
 
     return project_dir
 
@@ -283,7 +273,9 @@ def sample_action_instance(sample_qontinui_action: Path) -> Any:
     import importlib.util
     import sys
 
-    spec = importlib.util.spec_from_file_location("sample_action", sample_qontinui_action)
+    spec = importlib.util.spec_from_file_location(
+        "sample_action", sample_qontinui_action
+    )
     if spec is None or spec.loader is None:
         raise ImportError("Failed to load sample_action module")
     module = importlib.util.module_from_spec(spec)
@@ -299,7 +291,9 @@ def memory_intensive_action(sample_qontinui_action: Path) -> Any:
     import importlib.util
     import sys
 
-    spec = importlib.util.spec_from_file_location("sample_action", sample_qontinui_action)
+    spec = importlib.util.spec_from_file_location(
+        "sample_action", sample_qontinui_action
+    )
     if spec is None or spec.loader is None:
         raise ImportError("Failed to load sample_action module")
     module = importlib.util.module_from_spec(spec)
@@ -315,7 +309,9 @@ def concurrent_action(sample_qontinui_action: Path) -> Any:
     import importlib.util
     import sys
 
-    spec = importlib.util.spec_from_file_location("sample_action", sample_qontinui_action)
+    spec = importlib.util.spec_from_file_location(
+        "sample_action", sample_qontinui_action
+    )
     if spec is None or spec.loader is None:
         raise ImportError("Failed to load sample_action module")
     module = importlib.util.module_from_spec(spec)

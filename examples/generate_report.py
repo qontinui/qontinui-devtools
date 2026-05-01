@@ -44,14 +44,20 @@ def main() -> None:
 
     # Display summary
     print("\n2. Analysis Summary:")
-    print(f"   - Files analyzed: {report_data.summary_metrics.get('files_analyzed', 0)}")
+    print(
+        f"   - Files analyzed: {report_data.summary_metrics.get('files_analyzed', 0)}"
+    )
     print(f"   - Total lines: {report_data.summary_metrics.get('total_lines', 0):,}")
     print(
         f"   - Circular dependencies: {report_data.summary_metrics.get('circular_dependencies', 0)}"
     )
     print(f"   - God classes: {report_data.summary_metrics.get('god_classes', 0)}")
-    print(f"   - Race conditions: {report_data.summary_metrics.get('race_conditions', 0)}")
-    print(f"   - Critical issues: {report_data.summary_metrics.get('critical_issues', 0)}")
+    print(
+        f"   - Race conditions: {report_data.summary_metrics.get('race_conditions', 0)}"
+    )
+    print(
+        f"   - Critical issues: {report_data.summary_metrics.get('critical_issues', 0)}"
+    )
 
     # Generate HTML report
     print(f"\n3. Generating HTML report: {output_path}")

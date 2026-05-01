@@ -51,7 +51,11 @@ def create_test_config_with_inline_workflow() -> Any:
                                         "id": "inline_action_1",
                                         "type": "CLICK",
                                         "config": {
-                                            "target": {"type": "coordinates", "x": 100, "y": 200}
+                                            "target": {
+                                                "type": "coordinates",
+                                                "x": 100,
+                                                "y": 200,
+                                            }
                                         },
                                     }
                                 ],
@@ -63,7 +67,9 @@ def create_test_config_with_inline_workflow() -> Any:
                 "connections": {
                     "if_action_1": {
                         "true": [[{"action": "action_2", "type": "true", "index": 0}]],
-                        "false": [[{"action": "action_3", "type": "false", "index": 0}]],
+                        "false": [
+                            [{"action": "action_3", "type": "false", "index": 0}]
+                        ],
                     }
                 },
             }
@@ -105,7 +111,9 @@ def main() -> None:
         print(f"Inline workflows detected: {report.total_inline_workflows}")
         print(f"Valid inline workflows: {report.valid_inline_workflows}")
         print(f"Invalid inline workflows: {report.invalid_inline_workflows}")
-        print(f"Total errors: {len(report.errors) + len(report.inline_workflow_errors or [])}")
+        print(
+            f"Total errors: {len(report.errors) + len(report.inline_workflow_errors or [])}"
+        )
         print()
 
         if report.is_valid:
@@ -113,7 +121,9 @@ def main() -> None:
         else:
             print("❌ Validation failed - errors detected in workflows")
             if report.inline_workflow_errors:
-                print(f"   - {len(report.inline_workflow_errors)} errors in inline workflows")
+                print(
+                    f"   - {len(report.inline_workflow_errors)} errors in inline workflows"
+                )
 
     except Exception as e:
         print(f"❌ Error during validation: {e}")

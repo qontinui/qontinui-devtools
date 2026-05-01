@@ -237,7 +237,9 @@ class TestCouplingMetrics:
         analyzer = CouplingCohesionAnalyzer()
 
         # I = 0.5, A = 0.5 -> D = |0.5 + 0.5 - 1| = 0
-        distance = analyzer.calculate_distance_from_main(instability=0.5, abstractness=0.5)
+        distance = analyzer.calculate_distance_from_main(
+            instability=0.5, abstractness=0.5
+        )
         assert distance == 0.0
 
     def test_calculate_distance_from_main_zone_of_pain(self) -> None:
@@ -245,7 +247,9 @@ class TestCouplingMetrics:
         analyzer = CouplingCohesionAnalyzer()
 
         # I = 0.0, A = 0.0 -> D = |0 + 0 - 1| = 1
-        distance = analyzer.calculate_distance_from_main(instability=0.0, abstractness=0.0)
+        distance = analyzer.calculate_distance_from_main(
+            instability=0.0, abstractness=0.0
+        )
         assert distance == 1.0
 
     def test_calculate_distance_from_main_zone_of_uselessness(self) -> None:
@@ -253,7 +257,9 @@ class TestCouplingMetrics:
         analyzer = CouplingCohesionAnalyzer()
 
         # I = 1.0, A = 1.0 -> D = |1 + 1 - 1| = 1
-        distance = analyzer.calculate_distance_from_main(instability=1.0, abstractness=1.0)
+        distance = analyzer.calculate_distance_from_main(
+            instability=1.0, abstractness=1.0
+        )
         assert distance == 1.0
 
 
@@ -263,8 +269,7 @@ class TestAbstractnessCalculation:
     def test_count_abstract_classes_abc(self) -> None:
         """Test counting abstract classes using ABC."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(
-                """
+            f.write("""
 from abc import ABC, abstractmethod
 
 class AbstractBase(ABC):
@@ -275,8 +280,7 @@ class AbstractBase(ABC):
 class ConcreteClass:
     def method(self) -> None:
         pass
-"""
-            )
+""")
             f.flush()
 
             try:
@@ -289,8 +293,7 @@ class ConcreteClass:
     def test_count_abstract_classes_decorator_only(self) -> None:
         """Test counting abstract classes using only decorator."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(
-                """
+            f.write("""
 from abc import abstractmethod
 
 class SemiAbstract:
@@ -300,8 +303,7 @@ class SemiAbstract:
 
     def concrete_method(self) -> None:
         pass
-"""
-            )
+""")
             f.flush()
 
             try:
@@ -314,8 +316,7 @@ class SemiAbstract:
     def test_count_abstract_classes_no_abstract(self) -> None:
         """Test counting when there are no abstract classes."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(
-                """
+            f.write("""
 class ConcreteA:
     def method(self) -> None:
         pass
@@ -323,8 +324,7 @@ class ConcreteA:
 class ConcreteB:
     def method(self) -> None:
         pass
-"""
-            )
+""")
             f.flush()
 
             try:
@@ -415,7 +415,9 @@ class TestCouplingCohesionAnalyzer:
         fixtures_dir = Path(__file__).parent.parent / "fixtures"
 
         analyzer = CouplingCohesionAnalyzer(verbose=False)
-        coupling, cohesion = analyzer.analyze_directory(str(fixtures_dir / "low_cohesion.py"))
+        coupling, cohesion = analyzer.analyze_directory(
+            str(fixtures_dir / "low_cohesion.py")
+        )
 
         # Should find at least one module and classes
         assert len(coupling) >= 1
@@ -430,7 +432,9 @@ class TestCouplingCohesionAnalyzer:
         coupling, cohesion = analyzer.analyze_directory(str(low_cohesion_file))
 
         # Find the LowCohesionClass
-        low_cohesion_class = next((c for c in cohesion if c.name == "LowCohesionClass"), None)
+        low_cohesion_class = next(
+            (c for c in cohesion if c.name == "LowCohesionClass"), None
+        )
 
         assert low_cohesion_class is not None
         # Should have poor cohesion
@@ -447,7 +451,9 @@ class TestCouplingCohesionAnalyzer:
         coupling, cohesion = analyzer.analyze_directory(str(low_cohesion_file))
 
         # Find the HighCohesionClass
-        high_cohesion_class = next((c for c in cohesion if c.name == "HighCohesionClass"), None)
+        high_cohesion_class = next(
+            (c for c in cohesion if c.name == "HighCohesionClass"), None
+        )
 
         assert high_cohesion_class is not None
         # Should have good cohesion
@@ -460,7 +466,9 @@ class TestCouplingCohesionAnalyzer:
         fixtures_dir = Path(__file__).parent.parent / "fixtures"
 
         analyzer = CouplingCohesionAnalyzer(verbose=False)
-        coupling, cohesion = analyzer.analyze_directory(str(fixtures_dir / "low_cohesion.py"))
+        coupling, cohesion = analyzer.analyze_directory(
+            str(fixtures_dir / "low_cohesion.py")
+        )
 
         report = analyzer.generate_report(coupling, cohesion)
 
@@ -530,5 +538,7 @@ class TestIntegration:
         assert len(coupling) >= 1
 
         # The HighlyCoupledClass should be in cohesion results
-        highly_coupled = next((c for c in cohesion if c.name == "HighlyCoupledClass"), None)
+        highly_coupled = next(
+            (c for c in cohesion if c.name == "HighlyCoupledClass"), None
+        )
         assert highly_coupled is not None

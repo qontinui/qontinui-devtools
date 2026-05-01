@@ -20,8 +20,7 @@ def create_sample_brobot_tests(test_dir: Path) -> None:
 
     # Simple unit test
     unit_test = test_dir / "CalculatorTest.java"
-    unit_test.write_text(
-        """
+    unit_test.write_text("""
 package com.example.calculator;
 
 import org.junit.jupiter.api.Test;
@@ -49,13 +48,11 @@ public class CalculatorTest {
         Assertions.assertEquals(2, result);
     }
 }
-"""
-    )
+""")
 
     # Integration test with Spring
     integration_test = test_dir / "DatabaseIntegrationTest.java"
-    integration_test.write_text(
-        """
+    integration_test.write_text("""
 package com.example.integration;
 
 import org.junit.jupiter.api.Test;
@@ -78,13 +75,11 @@ public class DatabaseIntegrationTest {
         Assertions.assertTrue(connected);
     }
 }
-"""
-    )
+""")
 
     # Brobot mock test
     brobot_test = test_dir / "BrobotGuiTest.java"
-    brobot_test.write_text(
-        """
+    brobot_test.write_text("""
 package com.example.gui;
 
 import org.junit.jupiter.api.Test;
@@ -115,8 +110,7 @@ public class BrobotGuiTest {
         Assertions.assertTrue(loginSuccessful);
     }
 }
-"""
-    )
+""")
 
 
 def test_cli_discovery() -> Any:

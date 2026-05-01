@@ -29,8 +29,7 @@ def test_minimal_orchestrator() -> bool:
 
             # Create a sample Java test file
             java_test = source_dir / "SampleTest.java"
-            java_test.write_text(
-                """
+            java_test.write_text("""
 package com.example;
 
 import org.junit.jupiter.api.Test;
@@ -43,8 +42,7 @@ public class SampleTest {
         Assertions.assertEquals(1, 1);
     }
 }
-"""
-            )
+""")
 
             config = MigrationConfig(
                 source_directories=[source_dir],
@@ -70,12 +68,10 @@ public class SampleTest {
 
             # Create a simple Python test for validation
             python_test = target_dir / "test_sample.py"
-            python_test.write_text(
-                """
+            python_test.write_text("""
 def test_sample() -> None:
     assert 1 == 1
-"""
-            )
+""")
 
             # Test validation
             results = orchestrator.validate_migration(target_dir)

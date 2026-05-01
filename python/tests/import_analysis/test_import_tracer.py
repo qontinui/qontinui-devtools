@@ -245,13 +245,18 @@ class TestImportTracer(unittest.TestCase):
                     break
 
             self.assertTrue(
-                found_ab_cycle, f"Should detect circular_a <-> circular_b cycle. Found: {cycles}"
+                found_ab_cycle,
+                f"Should detect circular_a <-> circular_b cycle. Found: {cycles}",
             )
 
     def test_detect_circular_import_complex(self) -> None:
         """Test detecting complex three-way circular dependency C -> D -> E -> C."""
         # Remove modules if they exist
-        for mod in ["fixtures.circular_c", "fixtures.circular_d", "fixtures.circular_e"]:
+        for mod in [
+            "fixtures.circular_c",
+            "fixtures.circular_d",
+            "fixtures.circular_e",
+        ]:
             if mod in sys.modules:
                 del sys.modules[mod]
 
@@ -269,12 +274,16 @@ class TestImportTracer(unittest.TestCase):
             found_cde_cycle = False
             for cycle in cycles:
                 cycle_str = "->".join(cycle)
-                if all(name in cycle_str for name in ["circular_c", "circular_d", "circular_e"]):
+                if all(
+                    name in cycle_str
+                    for name in ["circular_c", "circular_d", "circular_e"]
+                ):
                     found_cde_cycle = True
                     break
 
             self.assertTrue(
-                found_cde_cycle, f"Should detect C -> D -> E -> C cycle. Found: {cycles}"
+                found_cde_cycle,
+                f"Should detect C -> D -> E -> C cycle. Found: {cycles}",
             )
 
     def test_generate_report(self) -> None:
@@ -358,7 +367,9 @@ class TestImportTracer(unittest.TestCase):
         # There should be no cycles for a simple module
         # (Note: There might be cycles in stdlib or other dependencies,
         # but not in our simple_module itself)
-        simple_cycles = [c for c in cycles if any("simple_module" in node for node in c)]
+        simple_cycles = [
+            c for c in cycles if any("simple_module" in node for node in c)
+        ]
 
         self.assertEqual(
             len(simple_cycles),

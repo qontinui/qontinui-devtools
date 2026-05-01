@@ -210,7 +210,9 @@ def main() -> None:
         print("=" * 80)
         print("\nKey Findings:")
         print("  • Unsafe factory creates multiple instances under concurrent load")
-        print("  • Safe factory with double-checked locking creates exactly one instance")
+        print(
+            "  • Safe factory with double-checked locking creates exactly one instance"
+        )
         print("  • Minimal performance overhead for thread safety")
         print("  • Race condition tester successfully detects the issue")
         print("\n" + "=" * 80)

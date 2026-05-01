@@ -184,7 +184,9 @@ class ComplexityAnalyzer:
             func_lines = func_end - func_start + 1
 
             if func_lines > self.max_function_lines:
-                severity = "high" if func_lines > self.max_function_lines * 2 else "medium"
+                severity = (
+                    "high" if func_lines > self.max_function_lines * 2 else "medium"
+                )
                 self.issues.append(
                     ComplexityIssue(
                         type="large_function",
@@ -331,7 +333,9 @@ class ComplexityAnalyzer:
                 if return_match:
                     # Count JSX lines (very rough estimate)
                     jsx_content = content[start_pos:]
-                    jsx_lines = jsx_content[:1000].count("\n")  # Sample first 1000 chars
+                    jsx_lines = jsx_content[:1000].count(
+                        "\n"
+                    )  # Sample first 1000 chars
 
                     # If component appears to be very large
                     if jsx_lines > 100:

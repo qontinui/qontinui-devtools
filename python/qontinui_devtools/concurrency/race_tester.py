@@ -153,7 +153,9 @@ class RaceConditionTester:
         if track_state:
             self._tracker = SharedStateTracker()
 
-    def test_function(self, func: Callable, *args: Any, **kwargs: Any) -> RaceTestResult:
+    def test_function(
+        self, func: Callable, *args: Any, **kwargs: Any
+    ) -> RaceTestResult:
         """Test a function for race conditions.
 
         Runs the function concurrently with multiple threads and analyzes
@@ -208,7 +210,9 @@ class RaceConditionTester:
 
         # Run concurrent test
         start_time = time.time()
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.threads) as executor:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.threads
+        ) as executor:
             futures = [executor.submit(worker) for _ in range(self.threads)]
 
             try:
@@ -253,7 +257,11 @@ class RaceConditionTester:
         )
 
     def _detect_race(
-        self, failed: int, timing_variance: float, execution_times: list[float], results: list[Any]
+        self,
+        failed: int,
+        timing_variance: float,
+        execution_times: list[float],
+        results: list[Any],
     ) -> bool:
         """Detect if race condition occurred based on heuristics.
 
@@ -360,7 +368,10 @@ class RaceConditionTester:
                 i = iterations if iterations is not None else self.iterations
 
                 tester = RaceConditionTester(
-                    threads=t, iterations=i, timeout=self.timeout, track_state=self.track_state
+                    threads=t,
+                    iterations=i,
+                    timeout=self.timeout,
+                    track_state=self.track_state,
                 )
 
                 return tester.test_function(func, *args, **kwargs)
@@ -405,7 +416,13 @@ def compare_results(results: list[RaceTestResult]) -> dict[str, Any]:
         "race_rate": (races_detected / total_tests * 100) if total_tests > 0 else 0,
         "total_iterations": total_iterations,
         "total_failures": total_failures,
-        "failure_rate": (total_failures / total_iterations * 100) if total_iterations > 0 else 0,
-        "worst_by_failures": worst_by_failures[0].test_name if worst_by_failures else None,
-        "worst_by_variance": worst_by_variance[0].test_name if worst_by_variance else None,
+        "failure_rate": (
+            (total_failures / total_iterations * 100) if total_iterations > 0 else 0
+        ),
+        "worst_by_failures": (
+            worst_by_failures[0].test_name if worst_by_failures else None
+        ),
+        "worst_by_variance": (
+            worst_by_variance[0].test_name if worst_by_variance else None
+        ),
     }

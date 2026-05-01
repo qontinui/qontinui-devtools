@@ -49,10 +49,14 @@ class CoverageStats:
             if m.migration_status == MigrationStatus.COMPLETED
         )
         failed = sum(
-            1 for m in self.test_mappings.values() if m.migration_status == MigrationStatus.FAILED
+            1
+            for m in self.test_mappings.values()
+            if m.migration_status == MigrationStatus.FAILED
         )
         skipped = sum(
-            1 for m in self.test_mappings.values() if m.migration_status == MigrationStatus.SKIPPED
+            1
+            for m in self.test_mappings.values()
+            if m.migration_status == MigrationStatus.SKIPPED
         )
         in_progress = sum(
             1
@@ -76,7 +80,9 @@ class CoverageStats:
             CoverageMetrics object with coverage statistics
         """
         java_tests = len(self.test_mappings)
-        python_tests = sum(1 for m in self.test_mappings.values() if m.python_test_path is not None)
+        python_tests = sum(
+            1 for m in self.test_mappings.values() if m.python_test_path is not None
+        )
         mapped_tests = sum(1 for m in self.test_mappings.values() if m.is_migrated)
         unmapped_java = java_tests - mapped_tests
 
@@ -89,7 +95,9 @@ class CoverageStats:
             len([method for method in m.test_methods.values() if method])
             for m in self.test_mappings.values()
         )
-        method_coverage = (mapped_methods / total_methods * 100) if total_methods > 0 else 0.0
+        method_coverage = (
+            (mapped_methods / total_methods * 100) if total_methods > 0 else 0.0
+        )
 
         return CoverageMetrics(
             java_test_count=java_tests,

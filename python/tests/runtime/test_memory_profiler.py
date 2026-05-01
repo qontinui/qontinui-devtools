@@ -174,7 +174,9 @@ class TestMemoryProfiler:
             time.sleep(0.2)
 
         # Detect leaks
-        leaks = profiler.detect_leaks(min_samples=3, growth_threshold=1.0, min_increase=100)
+        leaks = profiler.detect_leaks(
+            min_samples=3, growth_threshold=1.0, min_increase=100
+        )
 
         profiler.stop()
 
@@ -401,7 +403,9 @@ class TestMemoryProfilerIntegration:
             assert snapshot.timestamp > baseline.timestamp
 
             # Do some work
-            cache.extend([{"iteration": iteration, "data": "x" * 1000} for _ in range(200)])
+            cache.extend(
+                [{"iteration": iteration, "data": "x" * 1000} for _ in range(200)]
+            )
             time.sleep(0.2)
 
         # Final snapshot

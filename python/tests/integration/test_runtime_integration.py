@@ -48,7 +48,11 @@ class ActionProfiler:
             result = func(*args, **kwargs)
             duration = time.perf_counter() - start
             self.profiles.append(
-                {"function": func.__name__, "duration": duration, "timestamp": time.time()}
+                {
+                    "function": func.__name__,
+                    "duration": duration,
+                    "timestamp": time.time(),
+                }
             )
             return result
 
@@ -147,7 +151,11 @@ class MemoryProfiler:
         current = self.snapshots[-1]["memory_mb"]
         peak = max(s["memory_mb"] for s in self.snapshots)
 
-        return {"current_mb": current, "peak_mb": peak, "snapshots": len(self.snapshots)}
+        return {
+            "current_mb": current,
+            "peak_mb": peak,
+            "snapshots": len(self.snapshots),
+        }
 
     def export(self, output_path: Path, format: str = "json") -> None:
         """Export memory profile data."""
@@ -185,7 +193,10 @@ class TestProfilerEventTracerIntegration:
     """Test integration between ActionProfiler and EventTracer."""
 
     def test_profiler_and_tracer_together(
-        self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any
+        self,
+        sample_action_instance: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
     ) -> None:
         """Test that profiler and tracer can run simultaneously."""
         # Initialize tools
@@ -227,7 +238,10 @@ class TestProfilerEventTracerIntegration:
             tracer.stop()
 
     def test_profiler_captures_tracer_overhead(
-        self, profiler_config: Any, event_tracer_config: Any, sample_action_instance: Any
+        self,
+        profiler_config: Any,
+        event_tracer_config: Any,
+        sample_action_instance: Any,
     ) -> None:
         """Test that profiler can measure tracer overhead."""
         profiler = ActionProfiler(profiler_config)
@@ -265,7 +279,9 @@ class TestProfilerEventTracerIntegration:
         time_with = data_with["total_time"]
 
         overhead_percent = ((time_with - time_without) / time_without) * 100
-        assert overhead_percent < 10, f"Tracer overhead too high: {overhead_percent:.2f}%"
+        assert (
+            overhead_percent < 10
+        ), f"Tracer overhead too high: {overhead_percent:.2f}%"
 
     def test_concurrent_profiling_and_tracing(
         self, concurrent_action: Any, profiler_config: Any, event_tracer_config: Any
@@ -283,7 +299,9 @@ class TestProfilerEventTracerIntegration:
             @profiler.profile
             def execute() -> Any:
                 result = concurrent_action.execute_threaded(thread_id, iterations=5)
-                tracer.trace_event("thread_complete", {"thread_id": thread_id, "result": result})
+                tracer.trace_event(
+                    "thread_complete", {"thread_id": thread_id, "result": result}
+                )
                 return result
 
             return execute()
@@ -310,7 +328,10 @@ class TestProfilerEventTracerIntegration:
         assert len(tracer.get_events("thread_complete")) == 5
 
     def test_event_tracer_during_profiled_error(
-        self, sample_action_instance: Any, profiler_config: Any, event_tracer_config: Any
+        self,
+        sample_action_instance: Any,
+        profiler_config: Any,
+        event_tracer_config: Any,
     ) -> None:
         """Test that tracer captures events when profiled function errors."""
         profiler = ActionProfiler(profiler_config)
@@ -325,7 +346,9 @@ class TestProfilerEventTracerIntegration:
             try:
                 sample_action_instance.execute_with_error()
             except RuntimeError as e:
-                tracer.trace_event("action_error", {"error": str(e), "type": type(e).__name__})
+                tracer.trace_event(
+                    "action_error", {"error": str(e), "type": type(e).__name__}
+                )
                 raise
             finally:
                 tracer.trace_event("action_end", {"action": "error_test"})
@@ -351,7 +374,10 @@ class TestMemoryProfilerIntegration:
     """Test integration of MemoryProfiler with other tools."""
 
     def test_memory_profiler_with_action_profiler(
-        self, memory_intensive_action: Any, profiler_config: Any, memory_profiler_config: Any
+        self,
+        memory_intensive_action: Any,
+        profiler_config: Any,
+        memory_profiler_config: Any,
     ) -> None:
         """Test memory profiler alongside action profiler."""
         profiler = ActionProfiler(profiler_config)
@@ -378,7 +404,10 @@ class TestMemoryProfilerIntegration:
         assert memory_data["snapshots"] >= 2  # Start and stop snapshots
 
     def test_memory_profiler_with_event_tracer(
-        self, memory_intensive_action: Any, memory_profiler_config: Any, event_tracer_config: Any
+        self,
+        memory_intensive_action: Any,
+        memory_profiler_config: Any,
+        event_tracer_config: Any,
     ) -> None:
         """Test memory profiler with event tracer."""
         mem_profiler = MemoryProfiler(memory_profiler_config)
@@ -532,7 +561,9 @@ class TestDashboardIntegration:
             def execute() -> Any:
                 result = concurrent_action.execute_threaded(thread_id, iterations=10)
                 # Each thread updates dashboard
-                dashboard.update_metrics({f"thread_{thread_id}": profiler.get_profile_data()})
+                dashboard.update_metrics(
+                    {f"thread_{thread_id}": profiler.get_profile_data()}
+                )
                 return result
 
             return execute()
@@ -660,7 +691,9 @@ class TestAllToolsConcurrently:
                 # Since we can't profile async directly, wrap it
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
-                result = loop.run_until_complete(sample_action_instance.execute_async(iterations=5))
+                result = loop.run_until_complete(
+                    sample_action_instance.execute_async(iterations=5)
+                )
                 loop.close()
                 return result
 
@@ -707,7 +740,8 @@ class TestAllToolsConcurrently:
                 sample_action_instance.execute_with_error()
             except RuntimeError as e:
                 tracer.trace_event(
-                    "error_caught", {"error": str(e), "memory": mem_profiler.get_memory_usage()}
+                    "error_caught",
+                    {"error": str(e), "memory": mem_profiler.get_memory_usage()},
                 )
                 raise
 

@@ -47,7 +47,12 @@ from .metrics import (
     format_duration,
     format_memory,
 )
-from .metrics_collector import ActionMetrics, EventMetrics, MetricsCollector, SystemMetrics
+from .metrics_collector import (
+    ActionMetrics,
+    EventMetrics,
+    MetricsCollector,
+    SystemMetrics,
+)
 from .timeline import export_chrome_trace, export_timeline_html
 
 __all__ = [

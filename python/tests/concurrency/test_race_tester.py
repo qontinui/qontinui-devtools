@@ -4,7 +4,11 @@ import threading
 import time
 from typing import Any
 
-from qontinui_devtools.concurrency import RaceConditionTester, RaceTestResult, concurrent_test
+from qontinui_devtools.concurrency import (
+    RaceConditionTester,
+    RaceTestResult,
+    concurrent_test,
+)
 
 
 def test_detect_race_in_dictionary() -> None:
@@ -319,10 +323,18 @@ def test_compare_results() -> None:
 
     results = [
         RaceTestResult(
-            test_name="test1", total_iterations=100, successful=90, failed=10, race_detected=True
+            test_name="test1",
+            total_iterations=100,
+            successful=90,
+            failed=10,
+            race_detected=True,
         ),
         RaceTestResult(
-            test_name="test2", total_iterations=100, successful=100, failed=0, race_detected=False
+            test_name="test2",
+            total_iterations=100,
+            successful=100,
+            failed=0,
+            race_detected=False,
         ),
     ]
 
