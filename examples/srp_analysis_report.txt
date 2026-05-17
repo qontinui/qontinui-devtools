@@ -14,7 +14,7 @@ CRITICAL SEVERITY VIOLATIONS
 --------------------------------------------------------------------------------
 
 Class: UserManager
-File:  /mnt/c/Users/jspin/Documents/qontinui_parent/qontinui-devtools/python/tests/fixtures/srp/multi_responsibility.py:4
+File:  /mnt/c/Users/jspin/Documents/qontinui-root/qontinui-devtools/python/tests/fixtures/srp/multi_responsibility.py:4
 Responsibilities: 5
 
   1. Data Access (6 methods, confidence: 0.42)

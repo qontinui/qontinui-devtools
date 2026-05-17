@@ -19,7 +19,7 @@ Found 6 god classes violating Single Responsibility Principle.
 
 ### 1. PixelLocation [MEDIUM]
 
-**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/pixel_location.py:30`
+**File**: `/mnt/c/Users/jspin/Documents/qontinui-root/qontinui/src/qontinui/semantic/core/pixel_location.py:30`
 
 **Metrics**:
 - Lines of Code: 271
@@ -45,7 +45,7 @@ Found 6 god classes violating Single Responsibility Principle.
 
 ### 2. SemanticObject [MEDIUM]
 
-**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/semantic_object.py:38`
+**File**: `/mnt/c/Users/jspin/Documents/qontinui-root/qontinui/src/qontinui/semantic/core/semantic_object.py:38`
 
 **Metrics**:
 - Lines of Code: 235
@@ -70,7 +70,7 @@ Found 6 god classes violating Single Responsibility Principle.
 
 ### 3. SemanticScene [MEDIUM]
 
-**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/semantic_scene.py:26`
+**File**: `/mnt/c/Users/jspin/Documents/qontinui-root/qontinui/src/qontinui/semantic/core/semantic_scene.py:26`
 
 **Metrics**:
 - Lines of Code: 201
@@ -95,7 +95,7 @@ Found 6 god classes violating Single Responsibility Principle.
 
 ### 4. SceneAnalyzer [MEDIUM]
 
-**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/scene_analyzer.py:13`
+**File**: `/mnt/c/Users/jspin/Documents/qontinui-root/qontinui/src/qontinui/semantic/core/scene_analyzer.py:13`
 
 **Metrics**:
 - Lines of Code: 156
@@ -108,7 +108,7 @@ Found 6 god classes violating Single Responsibility Principle.
 
 ### 5. SceneQueryService [MEDIUM]
 
-**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/scene_query_service.py:13`
+**File**: `/mnt/c/Users/jspin/Documents/qontinui-root/qontinui/src/qontinui/semantic/core/scene_query_service.py:13`
 
 **Metrics**:
 - Lines of Code: 154
@@ -133,7 +133,7 @@ Found 6 god classes violating Single Responsibility Principle.
 
 ### 6. SceneObjectStore [MEDIUM]
 
-**File**: `/mnt/c/Users/jspin/Documents/qontinui_parent/qontinui/src/qontinui/semantic/core/scene_object_store.py:11`
+**File**: `/mnt/c/Users/jspin/Documents/qontinui-root/qontinui/src/qontinui/semantic/core/scene_object_store.py:11`
 
 **Metrics**:
 - Lines of Code: 100
