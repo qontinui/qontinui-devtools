@@ -1,11 +1,7 @@
 name: Code Quality Analysis
 
 on:
-  pull_request:
-    branches: [main, develop]
-  push:
-    branches: [main, develop]
-  workflow_dispatch:
+  workflow_dispatch:  # disabled push+PR triggers until eager-import refactor lands
 
 permissions:
   contents: read
