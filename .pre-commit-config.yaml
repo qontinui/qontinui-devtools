@@ -64,12 +64,6 @@ repos:
         pass_filenames: true
         args: ["--max-complexity=40"]
 
-      - id: block-claude-attribution
-        name: Block Claude Attribution
-        entry: bash .pre-commit-hooks/block-claude-attribution.sh
-        language: system
-        stages: [commit-msg]
-
 # Global settings
 default_language_version:
   python: python3.13
