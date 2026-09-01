@@ -1,0 +1,79 @@
+name: CI
+
+# Replaces test.yml and code-quality.yml, both retired in this change because
+# neither had ever produced a green run (0/48 and 0/49 respectively) and both
+# still failed at the tip when dispatched manually on 2026-09-01:
+#
+#   * code-quality.yml did `pip install qontinui-devtools` from PyPI, where the
+#     package has never been published:
+#       ERROR: Could not find a version that satisfies the requirement
+#       qontinui-devtools (from versions: none)
+#     Structurally unfixable as written.
+#
+#   * test.yml died in `poetry install --with dev` on three stacked defects:
+#       Path /home/runner/work/qontinui-devtools/qontinui for qontinui does not exist
+#       Path /home/runner/work/qontinui-devtools/qontinui-schemas for qontinui-schemas does not exist
+#       The currently activated Python version 3.11.16 is not supported by the project
+#       pyproject.toml changed significantly since poetry.lock was last generated.
+#
+# Restoring the full test/type/format suite is real but larger work, tracked as
+# follow-up. It needs, at minimum:
+#   1. Sibling checkouts in CI for the path dependencies — qontinui-devtools
+#      depends on ../qontinui and ../qontinui-schemas, and ../qontinui in turn
+#      depends on ../qontinui-schemas and ../multistate (a four-repo checkout).
+#   2. A regenerated poetry.lock (the committed one no longer matches
+#      pyproject.toml; resolution of the full path-dep chain takes >9 minutes).
+#   3. Dropping Python 3.11 from the matrix — pyproject requires >=3.12.
+#   4. The eager-import refactor: qontinui_devtools/__init__.py imports
+#      .testing -> mock_hal -> qontinui.hal at module scope, so *any* import of
+#      the package drags in the full qontinui HAL stack.
+#   5. `ruff format` reconciliation — 172 of 289 files are currently unformatted.
+#   6. A measurement of the mypy-strict and pytest surfaces, neither of which has
+#      ever run green here.
+#
+# Until then this workflow runs only what is verified to pass, so that every push
+# and pull request produces an honest green/red signal instead of a permanent red.
+
+on:
+  push:
+    branches: [main]
+  # Deliberately unfiltered so stacked PRs onto non-main bases also get a signal.
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  # Only ever cancel superseded PR runs. A push to main must always reach a
+  # verdict: a cancelled run reaches none, and the merge train reads a missing
+  # verdict as unresolved rather than as green.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  static-checks:
+    name: Static checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          # pyproject requires >=3.12; 3.11 is not a supported target.
+          python-version: '3.12'
+
+      - name: Install Ruff
+        # Pinned exactly for reproducibility. Keep in sync with the `ruff`
+        # constraint in pyproject.toml's dev dependency group.
+        run: pip install ruff==0.14.14
+
+      - name: Lint with Ruff
+        run: ruff check python/
+
+      - name: Byte-compile all sources
+        # Catches syntax errors across every tracked module without importing
+        # them, which the eager-import cascade currently makes impossible.
+        run: python -m compileall -q python/
