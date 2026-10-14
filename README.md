@@ -46,7 +46,15 @@ poetry add qontinui-devtools --group dev
 git clone https://github.com/qontinui/qontinui-devtools.git
 cd qontinui-devtools
 poetry install
+poetry run python ../qontinui/scripts/enforce_package_owners.py --lock poetry.lock
 ```
+
+Run `enforce_package_owners.py` after every `poetry install`. This project's lock
+carries two distributions that write `Xlib/` (`python-xlib`, `python3-xlib`) and
+two that write `cv2/` (`opencv-python-headless`, `opencv-python`), and Poetry's
+parallel install can leave those files mixed or torn, so `import qontinui` or
+`import cv2` fails. The script ships with qontinui (the `../qontinui` path
+dependency) and reinstalls the locked owner; its docstring explains why.
 
 ### Basic Usage
 
@@ -312,8 +320,9 @@ Available examples:
 git clone https://github.com/qontinui/qontinui-devtools.git
 cd qontinui-devtools
 
-# Install dependencies
+# Install dependencies, then repair Xlib/ and cv2/ (see Installation above)
 poetry install
+poetry run python ../qontinui/scripts/enforce_package_owners.py --lock poetry.lock
 
 # Install pre-commit hooks (optional)
 poetry run pre-commit install
